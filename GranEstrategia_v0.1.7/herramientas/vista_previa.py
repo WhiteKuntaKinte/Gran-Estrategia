@@ -25,7 +25,7 @@ ax = fig.add_axes([0, 0, 1, 1])
 ax.set_facecolor((0.02, 0.06, 0.13))
 tri = V[I]
 col = C[I[:, 0]]
-ax.add_collection(PolyCollection(tri, facecolors=col, edgecolors=col, linewidths=0.4, antialiaseds=True))
+ax.add_collection(PolyCollection(tri, facecolors=col, edgecolors='none', linewidths=0.0, antialiaseds=True))
 # bordes (según zoom)
 def cargar_segs(cat):
     v = np.fromfile(os.path.join(D, 'malla_%s_v.bin' % cat), dtype='<f4').reshape(-1, 4, 2)
