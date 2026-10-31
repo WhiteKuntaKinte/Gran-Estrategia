@@ -64,12 +64,10 @@ def calcular(rings, texto, tipo):
     cov = np.cov(np.vstack([px - mu[0], py - mu[1]]))
     vals, vecs = np.linalg.eigh(cov)
     u = vecs[:, int(np.argmax(vals))]
-    if texto == 'AMÉRICA DEL SUR' and abs(u[1]) > abs(u[0]):
-        # En Sudamérica, la etiqueta vertical se ordena de norte a sur,
-        # igual que una lectura natural del rótulo.
-        if u[1] < 0:
-            u = -u
-    elif u[0] < 0 or (abs(u[0]) < 1e-3 and u[1] > 0):
+    # Todas las etiquetas continentales siguen la misma regla de lectura:
+    # eje principal de izquierda a derecha; si es casi vertical, de abajo hacia arriba.
+    # Esto evita que América del Sur quede invertida respecto al resto del mapa.
+    if u[0] < 0 or (abs(u[0]) < 1e-3 and u[1] > 0):
         u = -u
     v = np.array([-u[1], u[0]])
     sp = (px - mu[0]) * u[0] + (py - mu[1]) * u[1]
