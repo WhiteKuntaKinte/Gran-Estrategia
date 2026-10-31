@@ -1,12 +1,12 @@
 extends Node2D
-## Gran Estrategia - mapa mundial (v0.1.7)
+## Gran Estrategia - mapa mundial (v0.1.8)
 ##
 ## IDEA CLAVE DE RENDIMIENTO:
 ## Todo lo pesado (triangulación, colores, bordes, posición de los nombres) se calcula UNA vez fuera de Godot
 ## con herramientas/construir_mapa.py y se guarda en la carpeta datos/. Aquí solo se cargan mallas ya hechas.
 ## Hacer zoom NO recalcula nada: solo cambia la transparencia de unas pocas capas y el grosor de los bordes.
 
-const VERSION := "0.1.7"
+const VERSION := "0.1.8"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -46,11 +46,10 @@ void vertex() {
 	y_mapa = VERTEX.y;
 }
 void fragment() {
-	float valor_base = max(max(COLOR.r, COLOR.g), COLOR.b);
-	vec3 color_normalizado = COLOR.rgb / max(valor_base, 0.001);
 	float distancia = clamp(abs(y_mapa - y_ecuador) / rango_latitud, 0.0, 1.0);
 	float brillo = mix(brillo_minimo, 1.0, pow(distancia, 0.85));
-	COLOR = vec4(color_normalizado * brillo, COLOR.a);
+	// Conserva el valor propio de cada país y aplica el oscurecimiento ecuatorial encima.
+	COLOR = vec4(COLOR.rgb * brillo, COLOR.a);
 }
 """
 
@@ -67,6 +66,7 @@ var indices_fill := PackedInt32Array()
 
 # Capas del mapa (cada una tiene 3 copias para el mundo infinito: izquierda, centro, derecha)
 var capa_pais: Array = []
+var capa_agua: Array = []
 var capa_costa: Array = []
 var capa_frontera: Array = []
 var capa_prov: Array = []
@@ -298,12 +298,19 @@ func _construir_mapa() -> void:
 	var malla_pais := _crear_malla(vertices_fill, indices_fill, col_pais)
 	var shader_gradiente := Shader.new()
 	shader_gradiente.code = SHADER_GRADIENTE_PAIS
-	var material_gradiente_cont := ShaderMaterial.new()
-	material_gradiente_cont.shader = shader_gradiente
+	# El gradiente latitudinal se aplica a la capa de países, no a la paleta continental.
 	var material_gradiente_pais := ShaderMaterial.new()
 	material_gradiente_pais.shader = shader_gradiente
-	_instanciar(malla_cont, material_gradiente_cont, 0)
+	_instanciar(malla_cont, null, 0)
 	capa_pais = _instanciar(malla_pais, material_gradiente_pais, 1)
+
+	# Banda de agua costera precalculada: solo aparece con zoom cercano.
+	var agua_v := _a_vec2(_leer_bytes("malla_agua_v.bin"))
+	var agua_i := _leer_bytes("malla_agua_i.bin").to_int32_array()
+	var agua_c := _a_colores(_leer_bytes("malla_agua_c.bin"))
+	if agua_v.size() > 0 and agua_i.size() > 0 and agua_c.size() == agua_v.size():
+		var malla_agua := _crear_malla(agua_v, agua_i, agua_c)
+		capa_agua = _instanciar(malla_agua, null, -1)
 
 	# Bordes: mallas de franjas cuyo grosor se ajusta en el shader (siempre se ven del mismo grosor en pantalla)
 	var sh := Shader.new()
@@ -451,6 +458,7 @@ func _actualizar_zoom() -> void:
 	var z := camara.zoom.x
 	var t := smoothstep(ZOOM_PAISES_INI, ZOOM_PAISES_FIN, z)
 
+	_poner_alfa(capa_agua, smoothstep(3.0, 4.5, z) * (1.0 - smoothstep(8.0, 10.0, z)))
 	_poner_alfa(capa_pais, t)                                           # colores por país (zoom in)
 	_poner_borde(capa_costa, mat_costa, lerpf(1.7, 1.0, smoothstep(1.0, 2.5, z)), z, 1.0)
 	_poner_borde(capa_cont, mat_cont, 1.7, z, 1.0 - t)                  # contorno continental (zoom out)
