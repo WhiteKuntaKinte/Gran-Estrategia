@@ -28,9 +28,26 @@ jobs:
         working-directory: GranEstrategia_v0.1.7
         run: python -m py_compile herramientas/*.py
 
-      - name: Regenerar y validar datos cartográficos
+      - name: Comprobar que están los datos precalculados
         working-directory: GranEstrategia_v0.1.7
-        run: python herramientas/construir_mapa.py
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          required = [
+              "datos/provincias_juego.json", "datos/etiquetas.json",
+              "datos/malla_fill_v.bin", "datos/malla_fill_i.bin",
+              "datos/malla_fill_cc.bin", "datos/malla_fill_cp.bin",
+              "datos/malla_costa_v.bin", "datos/malla_costa_uv.bin",
+              "datos/malla_costa_i.bin", "datos/malla_frontera_v.bin",
+              "datos/malla_frontera_uv.bin", "datos/malla_frontera_i.bin",
+              "datos/malla_prov_v.bin", "datos/malla_prov_uv.bin",
+              "datos/malla_prov_i.bin"
+          ]
+          missing = [name for name in required if not Path(name).is_file() or Path(name).stat().st_size == 0]
+          if missing:
+              raise SystemExit("Faltan archivos cartográficos: " + ", ".join(missing))
+          print(f"OK: {len(required)} archivos cartográficos presentes")
+          PY
 
       - name: Instalar Godot 4.7
         uses: chickensoft-games/setup-godot@v2
