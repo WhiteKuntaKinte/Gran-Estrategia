@@ -1,0 +1,58 @@
+{
+  "archivo": "profundidad_maritima.png",
+  "ancho_px": 4800,
+  "alto_px": 2400,
+  "escala": 2,
+  "proyeccion": "cilindrica_equivalente_50_46",
+  "origen": "Natural Earth 10m bathymetry 4.1.0 (SRTM Plus)",
+  "capas": [
+    {
+      "depth_m": 0,
+      "features_poligonales": 22
+    },
+    {
+      "depth_m": 200,
+      "features_poligonales": 522
+    },
+    {
+      "depth_m": 1000,
+      "features_poligonales": 158
+    },
+    {
+      "depth_m": 2000,
+      "features_poligonales": 217
+    },
+    {
+      "depth_m": 3000,
+      "features_poligonales": 711
+    },
+    {
+      "depth_m": 4000,
+      "features_poligonales": 1950
+    },
+    {
+      "depth_m": 5000,
+      "features_poligonales": 2094
+    },
+    {
+      "depth_m": 6000,
+      "features_poligonales": 562
+    },
+    {
+      "depth_m": 7000,
+      "features_poligonales": 61
+    },
+    {
+      "depth_m": 8000,
+      "features_poligonales": 15
+    },
+    {
+      "depth_m": 9000,
+      "features_poligonales": 22
+    },
+    {
+      "depth_m": 10000,
+      "features_poligonales": 3
+    }
+  ]
+}

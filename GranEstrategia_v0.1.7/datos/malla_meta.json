@@ -1,1 +1,1 @@
-{"fill": {"verts": 100179, "indices": 256713}, "costa": {"verts": 134892, "indices": 202338}, "frontera": {"verts": 27076, "indices": 40614}, "prov": {"verts": 68264, "indices": 102396}, "cont": {"verts": 48, "indices": 72}}
+{"proyeccion": "cilindrica_equivalente_50_46", "ancho_mapa": 2400.0, "alto_mapa": 1200.0, "ecuador_y": 600.0, "fill": {"verts": 99140, "indices": 256875}, "costa": {"verts": 135548, "indices": 203322}, "frontera": {"verts": 26256, "indices": 39384}, "prov": {"verts": 68184, "indices": 102276}, "cont": {"verts": 44, "indices": 66}}
