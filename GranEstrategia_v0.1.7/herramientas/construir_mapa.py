@@ -289,7 +289,7 @@ def main():
             # exterior es la perpendicular derecha del segmento.
             if L > 1e-6:
                 nx, ny = (b[1] - a[1]) / L, -(b[0] - a[0]) / L
-                ancho_agua = 5.0
+                ancho_agua = 6.0
                 base_agua = len(agua_v)
                 agua_v.extend([
                     a, b,
@@ -400,8 +400,9 @@ def main():
         return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
     for lab in etiquetas:
         if lab['g'] == 'c':
-            xm = lab['p'][len(lab['p']) // 2 - (len(lab['p']) // 2) % 2]
-            col = color_continental(lab['k'], xm, lab['p'][(len(lab['p']) // 4) * 2 + 1])
+            indice_medio = (len(lab['p']) // 4) * 2
+            xm, ym = lab['p'][indice_medio], lab['p'][indice_medio + 1]
+            col = color_continental(lab['k'], xm, ym)
         else:
             pi = lab['pi'] if 'pi' in lab else lab['pi0']
             col = anillos[provincias[pi]['r'][0]]['col_pais']
