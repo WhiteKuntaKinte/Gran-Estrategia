@@ -28,6 +28,10 @@ jobs:
         working-directory: GranEstrategia_v0.1.7
         run: python -m py_compile herramientas/*.py
 
+      - name: Regenerar datos cartográficos
+        working-directory: GranEstrategia_v0.1.7
+        run: python herramientas/construir_mapa.py
+
       - name: Comprobar que están los datos precalculados
         working-directory: GranEstrategia_v0.1.7
         run: |
