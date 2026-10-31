@@ -69,7 +69,7 @@ jobs:
 
           root = Path(".")
           meta = json.loads((root / "datos/malla_meta.json").read_text(encoding="utf-8"))
-          assert meta["proyeccion"] == "cilindrica_equivalente_50_46", meta
+          assert meta["proyeccion"] == "cea_lambert_2_1", meta
           assert meta["ecuador_y"] == 600.0
           data = json.loads((root / "datos/provincias_juego.json").read_text(encoding="utf-8"))
           assert len(data["provincias"]) == 480, len(data["provincias"])
