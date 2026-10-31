@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Genera los datos de mapa para Gran Estrategia v0.1.7 (fuera de Godot) para que el juego cargue rápido y corra fluido.
+Genera los datos de mapa para Gran Estrategia v0.1.8 (fuera de Godot) para que el juego cargue rápido y corra fluido.
 
 Uso (desde la carpeta del proyecto):
     python herramientas/construir_mapa.py
@@ -44,11 +44,32 @@ def smooth(a, b, x):
     t = max(0.0, min(1.0, (x - a) / (b - a)))
     return t * t * (3 - 2 * t)
 
-def color_continental(cont, x):
-    if cont in ('Europa', 'Asia'):
+def mezclar_colores(a, b, t):
+    return tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
+
+def color_continental(cont, x, y):
+    # América: transición norte-sur en la zona del istmo centroamericano.
+    if cont in ('América del Norte', 'América del Sur'):
+        t = smooth(430.0, 610.0, y)
+        return mezclar_colores(COLOR_CONT['América del Norte'], COLOR_CONT['América del Sur'], t)
+
+    # África y Europa: transición latitudinal alrededor del Mediterráneo.
+    if cont == 'África':
+        t = smooth(350.0, 500.0, y)
+        return mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['África'], t)
+
+    if cont == 'Europa':
+        # Europa conserva su azul central, se funde con África al sur
+        # y con Asia al este; nunca se introduce blanco como color intermedio.
+        sur = smooth(410.0, 530.0, y) * 0.62
+        este = smooth(1230.0, 1900.0, x)
+        color_sur = mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['África'], sur)
+        return mezclar_colores(color_sur, COLOR_CONT['Asia'], este)
+
+    if cont == 'Asia':
         t = smooth(1230.0, 1900.0, x)
-        a, b = COLOR_CONT['Europa'], COLOR_CONT['Asia']
-        return tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
+        return mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['Asia'], t)
+
     return COLOR_CONT[cont]
 
 def jitter(txt, n):
@@ -151,7 +172,7 @@ def main():
         r['col_pais'] = cpais
         for (x, y) in pts:
             V.append((x, y))
-            CC.append(color_continental(cont_ring, x))
+            CC.append(color_continental(cont_ring, x, y))
             CP.append(cpais)
         r['i0'] = len(I)
         for (a, b, c) in tris:
@@ -180,6 +201,7 @@ def main():
         return (a[0] <= 0.02 and b[0] <= 0.02) or (a[0] >= ANCHO_MAPA - 0.02 and b[0] >= ANCHO_MAPA - 0.02)
 
     cats = {'costa': [], 'frontera': [], 'prov': [], 'cont': []}
+    agua_v, agua_i, agua_c = [], [], []
     singles = []
     for k, lst in aristas.items():
         provs = []
@@ -257,6 +279,25 @@ def main():
                 break
         if cercano is None:
             cats['costa'].append((a, b))
+            # Banda de agua: se extiende hacia el exterior del anillo.
+            # Los anillos se normalizan a área positiva, por lo que su normal
+            # exterior es la perpendicular derecha del segmento.
+            if L > 1e-6:
+                nx, ny = (b[1] - a[1]) / L, -(b[0] - a[0]) / L
+                ancho_agua = 12.0
+                base_agua = len(agua_v)
+                agua_v.extend([
+                    a, b,
+                    (a[0] + nx * ancho_agua, a[1] + ny * ancho_agua),
+                    (b[0] + nx * ancho_agua, b[1] + ny * ancho_agua)
+                ])
+                color_orilla = (0.10, 0.30, 0.44)
+                color_mar = (0.02, 0.06, 0.13)
+                agua_c.extend([color_orilla, color_orilla, color_mar, color_mar])
+                agua_i.extend([
+                    base_agua, base_agua + 2, base_agua + 1,
+                    base_agua + 1, base_agua + 2, base_agua + 3
+                ])
         else:
             seal.append((e[0], a, b))
             # dibuja solo una vez (la provincia con índice menor)
@@ -285,7 +326,7 @@ def main():
         b0 = len(V)
         for q in quad:
             V.append(q)
-            CC.append(color_continental(r['cont'], q[0]))
+            CC.append(color_continental(r['cont'], q[0], q[1]))
             CP.append(r['col_pais'])
         I.extend((b0, b0 + 1, b0 + 2, b0 + 1, b0 + 3, b0 + 2))
 
@@ -317,7 +358,11 @@ def main():
     guardar('malla_fill_i.bin', np.array(I, dtype='<i4'))
     guardar('malla_fill_cc.bin', (np.array(CC) * 255).round().astype('u1').reshape(-1))
     guardar('malla_fill_cp.bin', (np.array(CP) * 255).round().astype('u1').reshape(-1))
+    guardar('malla_agua_v.bin', np.array(agua_v, dtype='<f4').reshape(-1))
+    guardar('malla_agua_i.bin', np.array(agua_i, dtype='<i4'))
+    guardar('malla_agua_c.bin', (np.array(agua_c) * 255).round().astype('u1').reshape(-1))
     meta['fill'] = {'verts': len(V), 'indices': len(I)}
+    meta['agua'] = {'verts': len(agua_v), 'indices': len(agua_i)}
     for cat, segs in cats.items():
         v, uv, ids = malla_borde(segs)
         guardar('malla_%s_v.bin' % cat, v)
@@ -351,7 +396,7 @@ def main():
     for lab in etiquetas:
         if lab['g'] == 'c':
             xm = lab['p'][len(lab['p']) // 2 - (len(lab['p']) // 2) % 2]
-            col = color_continental(lab['k'], xm)
+            col = color_continental(lab['k'], xm, lab['p'][len(lab['p']) // 2 + 1])
         else:
             pi = lab['pi'] if 'pi' in lab else lab['pi0']
             col = anillos[provincias[pi]['r'][0]]['col_pais']
