@@ -396,7 +396,7 @@ def main():
     for lab in etiquetas:
         if lab['g'] == 'c':
             xm = lab['p'][len(lab['p']) // 2 - (len(lab['p']) // 2) % 2]
-            col = color_continental(lab['k'], xm, lab['p'][len(lab['p']) // 2 + 1])
+            col = color_continental(lab['k'], xm, lab['p'][(len(lab['p']) // 4) * 2 + 1])
         else:
             pi = lab['pi'] if 'pi' in lab else lab['pi0']
             col = anillos[provincias[pi]['r'][0]]['col_pais']
