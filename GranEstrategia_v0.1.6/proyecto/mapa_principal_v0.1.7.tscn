@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://MapaPrincipal_v0.1.7.gd" id="1_map"]
+
+[node name="MapaPrincipal" type="Node2D"]
+script = ExtResource("1_map")
+
+[node name="OceanoFondo" type="ColorRect" parent="."]
+z_index = -10
+offset_left = -12000.0
+offset_top = -2000.0
+offset_right = 16000.0
+offset_bottom = 3500.0
+mouse_filter = 2
+color = Color(0.02, 0.06, 0.13, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1200, 600)
+zoom = Vector2(0.6, 0.6)
+
+[node name="ResourcePreloader" type="ResourcePreloader" parent="."]
