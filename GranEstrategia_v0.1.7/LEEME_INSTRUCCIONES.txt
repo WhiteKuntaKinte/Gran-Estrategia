@@ -1,25 +1,25 @@
-GRAN ESTRATEGIA — 0.1.7
+GRAN ESTRATEGIA — 0.1.8 (DESARROLLO)
 
-Esta carpeta, una vez descomprimido el ZIP, es directamente la raíz del proyecto. Debe contener project.godot, mapa_principal.tscn y MapaPrincipal.gd.
+La carpeta descomprimida que contiene project.godot es la raíz del proyecto.
 
 INICIO
 1. Descomprime el ZIP.
 2. En Godot, pulsa Importar/Abrir.
-3. Selecciona la carpeta que acabas de descomprimir, donde está project.godot.
+3. Selecciona la carpeta donde está project.godot.
 4. Ejecuta con F5.
 
-No abras una subcarpeta de versiones anteriores ni cambies nombres de archivos.
+CAMBIOS VISUALES EN DESARROLLO
+- Gradiente ecuatorial sobre los colores propios de cada país.
+- Gradientes continentales entre América del Norte y América del Sur, y entre África, Europa y Asia.
+- Sin punto blanco en el degradado euroasiático.
+- Banda de agua que aclara cerca de las costas con zoom cercano.
+- Orientación corregida de América del Sur y letras de etiquetas siempre legibles.
 
-ARCHIVOS PRINCIPALES
-- project.godot: configuración de Gran Estrategia 0.1.7.
-- mapa_principal.tscn: escena principal con nodo raíz MapaPrincipal.
-- MapaPrincipal.gd: script asociado al nodo raíz.
-- datos/: mallas y datos cartográficos.
-- herramientas/: scripts de generación.
+GENERACIÓN DE DATOS
+Desde la raíz del proyecto, ejecuta:
+python herramientas/construir_mapa.py
 
-La escena principal carga res://MapaPrincipal.gd. No se utiliza gdscripts.gd.
+El generador crea las mallas de agua y los demás datos cartográficos. No edites manualmente los archivos generados.
 
-VALIDACIÓN
-Godot 4.7 importó el proyecto y ejecutó la escena principal en modo headless mediante GitHub Actions. También pasaron las comprobaciones de sintaxis Python y presencia de datos cartográficos.
-
-Esta versión conserva la geometría cartográfica anterior. La mejora completa de fronteras y la ampliación de subdivisiones administrativas siguen pendientes.
+ESTADO
+Esta es una versión de desarrollo. Aún debe pasar la validación automatizada y una inspección visual en Godot 4.7.
