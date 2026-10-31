@@ -464,7 +464,7 @@ func _actualizar_zoom() -> void:
 	var z := camara.zoom.x
 	var t := smoothstep(ZOOM_PAISES_INI, ZOOM_PAISES_FIN, z)
 
-	_poner_alfa(capa_agua, smoothstep(3.0, 4.5, z))
+	_poner_alfa(capa_agua, smoothstep(3.0, 4.5, z) * (1.0 - smoothstep(8.0, 10.0, z)))
 	_poner_alfa(capa_pais, t)                                           # colores por país (zoom in)
 	_poner_borde(capa_costa, mat_costa, lerpf(1.7, 1.0, smoothstep(1.0, 2.5, z)), z, 1.0)
 	_poner_borde(capa_cont, mat_cont, 1.7, z, 1.0 - t)                  # contorno continental (zoom out)
