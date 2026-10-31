@@ -3,7 +3,7 @@
   "ancho_px": 4800,
   "alto_px": 2400,
   "escala": 2,
-  "proyeccion": "cilindrica_equivalente_50_46",
+  "proyeccion": "cea_lambert_2_1",
   "origen": "Natural Earth 10m bathymetry 4.1.0 (SRTM Plus)",
   "capas": [
     {
