@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Genera los datos de mapa para Gran Estrategia v0.1.7 (fuera de Godot) para que el juego cargue rápido y corra fluido.
+Genera los datos cartográficos de Gran Estrategia v0.1.7.6 fuera de Godot.
 
 Uso (desde la carpeta del proyecto):
     python herramientas/construir_mapa.py
@@ -21,7 +21,16 @@ from nombres_es import PAISES_ES, PROVINCIAS_ES
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATOS = os.path.join(RAIZ, 'datos')
 ANCHO_MAPA = 2400.0
-Y_ECUADOR = 580.0
+ALTO_MAPA = 1200.0
+Y_ECUADOR = 600.0
+
+# Proyección cilíndrica equivalente ajustada al formato 2:1 del mapa.
+# Mantiene X periódico para el mundo horizontal infinito y corrige la
+# exageración de superficie de la proyección equirectangular en altas latitudes.
+def proyectar_punto(p):
+    x, y = float(p[0]), float(p[1])
+    lat = math.radians(90.0 - (y / ALTO_MAPA) * 180.0)
+    return (x, 600.0 * (1.0 - math.sin(lat)))
 
 # ───────────────────────── Colores ─────────────────────────
 def hexc(h):
@@ -109,7 +118,8 @@ def main():
         provincias.append({'id': p['id'], 'n': nom_es, 'c': pais_es, 'pais_en': p['country'],
                            'm': cuenta_pais[p['country']] > 1, 'cont': p['continent'], 'r': []})
         for r in p['polygons']:
-            pts = limpiar(r)
+            # Reproyectar todas las provincias con la misma función preserva sus fronteras compartidas.
+            pts = [proyectar_punto(q) for q in limpiar(r)]
             if len(pts) < 3:
                 continue
             for lazo in dividir_autointersecciones(pts):
@@ -308,7 +318,8 @@ def main():
         return (np.array(vs, dtype='<f4').reshape(-1), np.array(uvs, dtype='<f4').reshape(-1),
                 np.array(ids, dtype='<i4'))
 
-    meta = {}
+    meta = {'proyeccion': 'cilindrica_equivalente_50_46', 'ancho_mapa': ANCHO_MAPA,
+            'alto_mapa': ALTO_MAPA, 'ecuador_y': Y_ECUADOR}
     os.makedirs(DATOS, exist_ok=True)
     def guardar(nombre, arr):
         arr.tofile(os.path.join(DATOS, nombre))
