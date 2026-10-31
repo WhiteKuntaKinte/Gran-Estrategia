@@ -318,7 +318,7 @@ def main():
         return (np.array(vs, dtype='<f4').reshape(-1), np.array(uvs, dtype='<f4').reshape(-1),
                 np.array(ids, dtype='<i4'))
 
-    meta = {'proyeccion': 'cilindrica_equivalente_50_46', 'ancho_mapa': ANCHO_MAPA,
+    meta = {'proyeccion': 'cea_lambert_2_1', 'ancho_mapa': ANCHO_MAPA,
             'alto_mapa': ALTO_MAPA, 'ecuador_y': Y_ECUADOR}
     os.makedirs(DATOS, exist_ok=True)
     def guardar(nombre, arr):
