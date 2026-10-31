@@ -1,28 +1,32 @@
-GRAN ESTRATEGIA — VERSION 0.1.7
+GRAN ESTRATEGIA — VERSION 0.1.8 (DESARROLLO)
 
 ABRIR EL PROYECTO
 1. Descomprime el ZIP.
-2. Abre en Godot la carpeta que acabas de descomprimir: es la que contiene directamente project.godot.
+2. Abre en Godot la carpeta que contiene directamente project.godot.
 3. Pulsa F5 para ejecutar.
 
-No busques una subcarpeta llamada GranEstrategia_v0.1.7: el ZIP ya contiene los archivos del proyecto directamente en su raíz. No renombres archivos.
+No busques una subcarpeta adicional: el ZIP contiene los archivos del proyecto directamente en su raíz.
+
+CAMBIOS VISUALES EN DESARROLLO
+- El oscurecimiento ecuatorial se aplica a los colores originales de los países, sin normalizar ni borrar sus diferencias de luminosidad.
+- El degradado continental incluye la transición entre América del Norte y América del Sur, además de las transiciones entre África, Europa y Asia.
+- Se elimina el blanco como color intermedio del degradado euroasiático.
+- Se genera una banda de agua costera con transición de color hacia el océano, visible únicamente con zoom cercano.
+- Se corrige la dirección de la etiqueta de América del Sur y se evita que las letras de las etiquetas queden invertidas en curvas.
 
 ARCHIVOS PRINCIPALES
-- project.godot: configuración de la versión 0.1.7.
-- mapa_principal.tscn: escena inicial con el nodo raíz MapaPrincipal, fondo oceánico y cámara.
-- MapaPrincipal.gd: controlador del mapa, HUD, menú y selección.
-- datos/: geometría precalculada y datos cartográficos.
-- herramientas/: generadores y utilidades.
+- project.godot: configuración de Gran Estrategia 0.1.8.
+- mapa_principal.tscn: escena inicial.
+- MapaPrincipal.gd: capas, shaders, zoom, HUD y selección.
+- datos/: geometría y datos cartográficos generados.
+- herramientas/construir_mapa.py: generador de mallas y colores.
+- herramientas/etiquetas.py: cálculo de las etiquetas.
 
-La escena principal carga res://MapaPrincipal.gd. No existe ni se utiliza gdscripts.gd.
+IMPORTANTE
+Los archivos malla_agua_*.bin se generan automáticamente al ejecutar:
+python herramientas/construir_mapa.py
 
-VALIDACION
-La compilación superó en GitHub Actions:
-- comprobación de sintaxis de los scripts Python;
-- comprobación de los archivos cartográficos requeridos;
-- importación del proyecto con Godot 4.7 en modo headless;
-- arranque de la escena principal con Godot 4.7 en modo headless.
+No edites manualmente los archivos .bin ni los JSON generados.
 
-PENDIENTE
-- La topología de fronteras sigue siendo la existente; el rediseño completo está pendiente.
-- No se añadieron subdivisiones administrativas nuevas porque deben proceder de límites oficiales.
+ESTADO DE VALIDACIÓN
+Esta rama está en desarrollo. La validación de sintaxis, generación de datos e importación/arranque en Godot debe completarse antes de considerar la versión lista. La comprobación headless no sustituye la inspección visual dentro de Godot.
