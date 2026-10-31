@@ -71,7 +71,9 @@ def color_pais(cont, pais, cy, prov_id, es_provincia_extra):
 def continente_anillo(p, cx, cy):
     c = p['continent']
     pais = p['country']
-    if p.get('name') == 'Chukchi Autonomous Okrug' or 'chukchi' in str(p.get('id', '')).lower():
+    nombre = str(p.get('name', '')).lower()
+    identificador = str(p.get('id', '')).lower()
+    if 'chukchi' in nombre or 'chukotka' in nombre or 'chukchi' in identificador or 'chukotka' in identificador:
         return 'Asia'
     if pais == 'France':
         if cx < 1000 and cy > 450:
