@@ -1,32 +1,22 @@
-GRAN ESTRATEGIA - v0.1.6  (Godot 4.x)
+GRAN ESTRATEGIA — 0.1.7
 
-ABRIR: Godot -> Importar -> elige project.godot -> Importar y editar -> F5.
-(El proyecto usa el renderizador "Compatibilidad", el más liviano para PCs modestos.)
+Esta carpeta contiene el proyecto completo de la versión 0.1.7.
 
-NOVEDAD 0.1.6: menú principal (mapa de fondo solo con colores, sin nombres, y botón JUGAR).
+INICIO
+1. Descomprime el ZIP.
+2. En Godot, pulsa Importar/Abrir.
+3. Selecciona esta carpeta, la que contiene project.godot.
+4. Ejecuta con F5.
 
-QUÉ CAMBIÓ EN LA 0.1.5 (base)
-- Rendimiento: el zoom ya no recolorea ni redibuja nada. Todo lo pesado se pre-calcula en datos/ y el juego solo
-  carga mallas listas. Arriba a la izquierda ves versión, FPS y zoom para reportar rendimiento.
-- Sudán, España, Santa Catarina y Washington: los polígonos dañados (autointersecciones) se repararon en el origen.
-- Colores: Europa azul, África amarillo, Asia rojo, Sudamérica naranja, Norteamérica verde, Oceanía morado
-  (Papúa y Papúa Nueva Guinea ahora iguales). Guayana Francesa = Sudamérica, Trinidad y Tobago = Sudamérica.
-- Zoom out: sin fronteras de países, solo contorno de continente y degradado Europa->Asia continuo (por vértice).
-- Zoom in: color por país dentro de la gama de su continente; más cerca del ecuador = más oscuro.
-- Nombres: letras que siguen la forma del territorio, dentro de sus fronteras, nítidas (MSDF), en español.
-  Países con provincias (Rusia, EE.UU., India, Canadá, Brasil, España, Australia, Indonesia, China, Sudáfrica):
-  el nombre del país se ve primero y al acercarte se reemplaza por el nombre real de cada provincia.
-- HUD abajo a la izquierda: nombre de la provincia, "Provincia"/"País", país dueño, continente, coordenadas.
-- Zoom hacia el cursor, zoom máximo 32x, fronteras con grosor constante en pantalla.
+No abras una subcarpeta de versiones anteriores ni cambies nombres de archivos.
 
-ESTRUCTURA
-- MapaPrincipal.gd ...... lógica del juego (cámara, capas, nombres, selección, HUD)
-- datos/ ................ mallas y etiquetas ya calculadas (NO editar a mano los .bin)
-- datos/fuente_provincias.json ... datos originales del mapa
-- herramientas/construir_mapa.py . regenera todo lo de datos/ (python3 + numpy, scipy, pillow)
-- herramientas/nombres_es.py ..... traducciones de países/provincias
-- herramientas/vista_previa.py ... imágenes de prueba sin abrir Godot
+ARCHIVOS PRINCIPALES
+- project.godot: configuración de Gran Estrategia 0.1.7.
+- mapa_principal.tscn: escena principal.
+- MapaPrincipal.gd: script asociado al nodo raíz MapaPrincipal.
+- datos/: mallas y datos cartográficos.
+- herramientas/: scripts de generación.
 
-LIMITACIÓN CONOCIDA
-La definición de costas y fronteras la fija el archivo fuente (escala ~16 km por unidad). Para islas pequeñas
-y fronteras más detalladas hay que reemplazar la fuente por datos de Natural Earth 1:10m / 1:50m.
+La escena principal carga res://MapaPrincipal.gd. No se utiliza gdscripts.gd.
+
+Esta versión conserva la geometría cartográfica anterior. La mejora completa de fronteras y la ampliación de subdivisiones administrativas siguen pendientes.
