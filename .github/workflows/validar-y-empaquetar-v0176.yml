@@ -1,5 +1,9 @@
 name: Validar y empaquetar Gran Estrategia 0.1.7.6
 
+concurrency:
+  group: validar-empaquetar-0176-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
