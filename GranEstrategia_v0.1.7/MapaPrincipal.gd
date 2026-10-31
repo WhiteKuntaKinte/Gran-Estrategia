@@ -96,8 +96,10 @@ var lbl_fps: Label
 
 # Menú principal
 var en_menu := true
+var en_pausa := false
 var menu: CanvasLayer
 var menu_contenido: VBoxContainer
+var menu_pausa: CanvasLayer
 
 
 # ─────────────────────────────────────────────────────────────
@@ -129,6 +131,7 @@ class CapaTexto extends Node2D:
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_configurar_fuente()
 	_configurar_oceano()
 	camara.enabled = true
@@ -289,15 +292,18 @@ func _construir_mapa() -> void:
 	indices_fill = _leer_bytes("malla_fill_i.bin").to_int32_array()
 	var col_cont := _a_colores(_leer_bytes("malla_fill_cc.bin"))
 	var col_pais := _a_colores(_leer_bytes("malla_fill_cp.bin"))
+	_corregir_color_chukotka(col_cont)
 	_corregir_color_chukotka(col_pais)
 	var malla_cont := _crear_malla(vertices_fill, indices_fill, col_cont)
 	var malla_pais := _crear_malla(vertices_fill, indices_fill, col_pais)
 	var shader_gradiente := Shader.new()
 	shader_gradiente.code = SHADER_GRADIENTE_PAIS
-	var material_gradiente := ShaderMaterial.new()
-	material_gradiente.shader = shader_gradiente
-	_instanciar(malla_cont, null, 0)
-	capa_pais = _instanciar(malla_pais, material_gradiente, 1)
+	var material_gradiente_cont := ShaderMaterial.new()
+	material_gradiente_cont.shader = shader_gradiente
+	var material_gradiente_pais := ShaderMaterial.new()
+	material_gradiente_pais.shader = shader_gradiente
+	_instanciar(malla_cont, material_gradiente_cont, 0)
+	capa_pais = _instanciar(malla_pais, material_gradiente_pais, 1)
 
 	# Bordes: mallas de franjas cuyo grosor se ajusta en el shader (siempre se ven del mismo grosor en pantalla)
 	var sh := Shader.new()
@@ -496,7 +502,16 @@ func _zoom_en_cursor(factor: float) -> void:
 # Entrada
 # ─────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
-	if en_menu:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		if en_menu:
+			return
+		if en_pausa:
+			_reanudar_juego()
+		else:
+			_mostrar_menu_pausa()
+		get_viewport().set_input_as_handled()
+		return
+	if en_menu or en_pausa:
 		return
 	if event is InputEventMouseButton:
 		if event.pressed:
@@ -590,7 +605,7 @@ func _resaltar(pi: int, continente: String, p: Vector2) -> void:
 		lbl_tipo.text = "Provincia"
 	else:
 		lbl_tipo.text = "País"
-	lbl_pais.text = "País / Soberanía: " + String(prov["c"])
+	lbl_pais.text = "Soberanía: " + String(prov["c"])
 	lbl_cont.text = "Continente: " + continente
 	lbl_coord.text = "Coordenadas: (X: %s, Y: %s)" % [snappedf(p.x, 0.1), snappedf(p.y, 0.1)]
 	panel.visible = true
@@ -724,6 +739,7 @@ func _mostrar_menu_principal() -> void:
 	_titulo_menu("GRAN ESTRATEGIA")
 	_boton_menu("JUGAR", _on_jugar)
 	_boton_menu("OPCIONES", _mostrar_opciones)
+	_boton_menu("SALIR", _salir_juego)
 
 
 func _mostrar_opciones() -> void:
@@ -759,3 +775,93 @@ func _on_jugar() -> void:
 	hud.visible = true
 	_actualizar_zoom()
 
+
+
+# ─────────────────────────────────────────────────────────────
+# Pausa
+# ─────────────────────────────────────────────────────────────
+func _mostrar_menu_pausa() -> void:
+	if en_menu or en_pausa:
+		return
+	en_pausa = true
+	arrastrando = false
+	get_tree().paused = true
+
+	menu_pausa = CanvasLayer.new()
+	menu_pausa.layer = 20
+	menu_pausa.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(menu_pausa)
+
+	var centro := CenterContainer.new()
+	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	menu_pausa.add_child(centro)
+
+	var panel_pausa := PanelContainer.new()
+	panel_pausa.custom_minimum_size = Vector2(390.0, 250.0)
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = Color(0.035, 0.055, 0.11, 0.96)
+	estilo.border_color = Color(0.9, 0.75, 0.2, 1.0)
+	estilo.set_border_width_all(2)
+	estilo.set_corner_radius_all(12)
+	estilo.content_margin_left = 26.0
+	estilo.content_margin_top = 24.0
+	estilo.content_margin_right = 26.0
+	estilo.content_margin_bottom = 24.0
+	panel_pausa.add_theme_stylebox_override("panel", estilo)
+	centro.add_child(panel_pausa)
+
+	var contenido := VBoxContainer.new()
+	contenido.add_theme_constant_override("separation", 14)
+	panel_pausa.add_child(contenido)
+
+	var titulo := Label.new()
+	titulo.text = "JUEGO EN PAUSA"
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.add_theme_font_override("font", fuente)
+	titulo.add_theme_font_size_override("font_size", 27)
+	titulo.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
+	contenido.add_child(titulo)
+
+	_boton_pausa(contenido, "CONTINUAR", _reanudar_juego)
+	_boton_pausa(contenido, "MENÚ PRINCIPAL", _volver_menu_principal)
+	_boton_pausa(contenido, "SALIR", _salir_juego)
+
+
+func _boton_pausa(contenedor: VBoxContainer, texto: String, accion: Callable) -> void:
+	var boton := Button.new()
+	boton.text = texto
+	boton.custom_minimum_size = Vector2(0.0, 44.0)
+	boton.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	boton.add_theme_font_override("font", fuente)
+	boton.add_theme_font_size_override("font_size", 18)
+	boton.add_theme_color_override("font_color", Color(0.94, 0.95, 1.0))
+	boton.pressed.connect(accion)
+	contenedor.add_child(boton)
+
+
+func _reanudar_juego() -> void:
+	get_tree().paused = false
+	en_pausa = false
+	if is_instance_valid(menu_pausa):
+		menu_pausa.queue_free()
+	menu_pausa = null
+	hud.visible = true
+	_actualizar_zoom()
+
+
+func _volver_menu_principal() -> void:
+	get_tree().paused = false
+	en_pausa = false
+	if is_instance_valid(menu_pausa):
+		menu_pausa.queue_free()
+	menu_pausa = null
+	_limpiar_seleccion()
+	panel.visible = false
+	hud.visible = false
+	en_menu = true
+	_crear_menu()
+	_actualizar_zoom()
+
+
+func _salir_juego() -> void:
+	get_tree().quit()
