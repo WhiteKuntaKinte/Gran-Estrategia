@@ -1,25 +1,25 @@
-GRAN ESTRATEGIA — 0.1.7
+GRAN ESTRATEGIA — 0.1.7.6
 
 Esta carpeta, una vez descomprimido el ZIP, es directamente la raíz del proyecto. Debe contener project.godot, mapa_principal.tscn y MapaPrincipal.gd.
 
 INICIO
 1. Descomprime el ZIP.
-2. En Godot, pulsa Importar/Abrir.
-3. Selecciona la carpeta que acabas de descomprimir, donde está project.godot.
-4. Ejecuta con F5.
+2. En Godot 4.7, pulsa Importar.
+3. Selecciona la carpeta que contiene project.godot.
+4. Pulsa Importar y editar.
+5. Ejecuta con F5.
 
 No abras una subcarpeta de versiones anteriores ni cambies nombres de archivos.
 
-ARCHIVOS PRINCIPALES
-- project.godot: configuración de Gran Estrategia 0.1.7.
-- mapa_principal.tscn: escena principal con nodo raíz MapaPrincipal.
-- MapaPrincipal.gd: script asociado al nodo raíz.
-- datos/: mallas y datos cartográficos.
-- herramientas/: scripts de generación.
+NOVEDADES
+- Revisión de la representación de los 480 territorios mediante proyección cilíndrica equivalente.
+- Recalculado de mallas, fronteras y etiquetas con las mismas coordenadas nuevas.
+- Relieve marítimo con 12 niveles de profundidad y viñeta costera suavizada.
+- La textura oceánica se activa al acercarse con el zoom.
 
-La escena principal carga res://MapaPrincipal.gd. No se utiliza gdscripts.gd.
+La cantidad de territorios no cambia en esta versión: se conserva el inventario de 480 territorios y 177 países.
 
-VALIDACIÓN
-Godot 4.7 importó el proyecto y ejecutó la escena principal en modo headless mediante GitHub Actions. También pasaron las comprobaciones de sintaxis Python y presencia de datos cartográficos.
+RECONSTRUIR DATOS
+Los datos generados ya se incluyen en el ZIP. Para volver a generarlos se requiere Python 3.12 (numpy, scipy, pillow, pyshp) y Natural Earth 10m Bathymetry 4.1.0. Véase datos/FUENTES_CARTOGRAFICAS.txt.
 
-Esta versión conserva la geometría cartográfica anterior. La mejora completa de fronteras y la ampliación de subdivisiones administrativas siguen pendientes.
+La comprobación automática de Godot 4.7 se ejecuta en GitHub Actions en modo headless. La verificación visual final corresponde a la prueba del juego en Godot.
