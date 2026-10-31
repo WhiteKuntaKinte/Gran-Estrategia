@@ -1,12 +1,12 @@
 extends Node2D
-## Gran Estrategia - mapa mundial (v0.1.7)
+## Gran Estrategia - mapa mundial (v0.1.7.6)
 ##
 ## IDEA CLAVE DE RENDIMIENTO:
 ## Todo lo pesado (triangulación, colores, bordes, posición de los nombres) se calcula UNA vez fuera de Godot
 ## con herramientas/construir_mapa.py y se guarda en la carpeta datos/. Aquí solo se cargan mallas ya hechas.
 ## Hacer zoom NO recalcula nada: solo cambia la transparencia de unas pocas capas y el grosor de los bordes.
 
-const VERSION := "0.1.7"
+const VERSION := "0.1.7.6"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -38,8 +38,6 @@ void fragment() {
 # Degradado continuo por latitud. Normaliza el valor previo para quitar el centroide 0.1.6.
 const SHADER_GRADIENTE_PAIS := """
 shader_type canvas_item;
-uniform float y_ecuador = 580.0;
-uniform float rango_latitud = 330.0;
 uniform float brillo_minimo = 0.50;
 varying float y_mapa;
 void vertex() {
@@ -48,7 +46,11 @@ void vertex() {
 void fragment() {
 	float valor_base = max(max(COLOR.r, COLOR.g), COLOR.b);
 	vec3 color_normalizado = COLOR.rgb / max(valor_base, 0.001);
-	float distancia = clamp(abs(y_mapa - y_ecuador) / rango_latitud, 0.0, 1.0);
+	// En la proyección equivalente y = 600 * (1 - sin(latitud)).
+	// Recuperar latitud mantiene el gradiente uniforme pese a la nueva proyección.
+	float seno_latitud = clamp(1.0 - y_mapa / 600.0, -1.0, 1.0);
+	float latitud_abs = asin(abs(seno_latitud));
+	float distancia = clamp(latitud_abs / 1.57079632679, 0.0, 1.0);
 	float brillo = mix(brillo_minimo, 1.0, pow(distancia, 0.85));
 	COLOR = vec4(color_normalizado * brillo, COLOR.a);
 }
@@ -68,6 +70,7 @@ var indices_fill := PackedInt32Array()
 # Capas del mapa (cada una tiene 3 copias para el mundo infinito: izquierda, centro, derecha)
 var capa_pais: Array = []
 var capa_costa: Array = []
+var capa_profundidad: Array = []
 var capa_frontera: Array = []
 var capa_prov: Array = []
 var capa_cont: Array = []
@@ -286,7 +289,25 @@ func _malla_borde(cat: String) -> ArrayMesh:
 	return _crear_malla(v, idx, PackedColorArray(), uv)
 
 
+func _crear_capa_profundidad() -> void:
+	var textura := load("res://datos/profundidad_maritima.png") as Texture2D
+	if textura == null:
+		push_warning("No se encontró datos/profundidad_maritima.png; se usará el océano plano.")
+		return
+	for dx in [-ANCHO_MAPA, 0.0, ANCHO_MAPA]:
+		var agua := Sprite2D.new()
+		agua.texture = textura
+		agua.centered = false
+		agua.position = Vector2(dx, 0.0)
+		agua.scale = Vector2(0.5, 0.5) # La textura tiene resolución 2x del mapa.
+		agua.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		agua.z_index = -1 # Siempre debajo de la tierra.
+		add_child(agua)
+		capa_profundidad.append(agua)
+
+
 func _construir_mapa() -> void:
+	_crear_capa_profundidad()
 	# Relleno: una malla para la vista continental y otra (encima) para la vista de países.
 	vertices_fill = _a_vec2(_leer_bytes("malla_fill_v.bin"))
 	indices_fill = _leer_bytes("malla_fill_i.bin").to_int32_array()
@@ -452,6 +473,7 @@ func _actualizar_zoom() -> void:
 	var t := smoothstep(ZOOM_PAISES_INI, ZOOM_PAISES_FIN, z)
 
 	_poner_alfa(capa_pais, t)                                           # colores por país (zoom in)
+	_poner_alfa(capa_profundidad, smoothstep(1.15, 2.0, z) * (1.0 - smoothstep(9.0, 12.0, z)))
 	_poner_borde(capa_costa, mat_costa, lerpf(1.7, 1.0, smoothstep(1.0, 2.5, z)), z, 1.0)
 	_poner_borde(capa_cont, mat_cont, 1.7, z, 1.0 - t)                  # contorno continental (zoom out)
 	_poner_borde(capa_frontera, mat_frontera, 1.1, z, t)                # fronteras entre países
