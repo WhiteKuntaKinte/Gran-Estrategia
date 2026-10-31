@@ -432,7 +432,13 @@ func _colocar_texto(lab: Dictionary, capa: CapaTexto) -> void:
 			var a := _posicion_en_linea(P, cum, c0 - w * 0.5)
 			var b := _posicion_en_linea(P, cum, c0 + w * 0.5)
 			var c := _posicion_en_linea(P, cum, c0)
-			capa.agregar(texto[i], c, (b - a).angle(), k, anchos[i], color_texto)
+			var angulo := (b - a).angle()
+			# Evita que las letras queden invertidas cuando la curva cambia de dirección.
+			if angulo > PI * 0.5:
+				angulo -= PI
+			elif angulo < -PI * 0.5:
+				angulo += PI
+			capa.agregar(texto[i], c, angulo, k, anchos[i], color_texto)
 		s += w + extra
 
 
