@@ -48,27 +48,32 @@ def mezclar_colores(a, b, t):
     return tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
 
 def color_continental(cont, x, y):
-    # América: transición norte-sur en la zona del istmo centroamericano.
+    """
+    Campo cromático continuo para el zoom continental.
+
+    La fórmula depende de la posición geográfica y no de una paleta distinta
+    para cada lado de una frontera. Por eso dos vértices contiguos reciben
+    el mismo color aunque pertenezcan a continentes diferentes.
+    """
+    # América: verde al norte y naranja al sur, con transición en Centroamérica.
     if cont in ('América del Norte', 'América del Sur'):
         t = smooth(430.0, 610.0, y)
         return mezclar_colores(COLOR_CONT['América del Norte'], COLOR_CONT['América del Sur'], t)
 
-    # África y Europa: transición latitudinal alrededor del Mediterráneo.
-    if cont == 'África':
-        t = smooth(350.0, 500.0, y)
-        return mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['África'], t)
+    # Afro-Eurasia: azul europeo -> rojo asiático en dirección oeste-este.
+    # África introduce el amarillo desde el sur, con una máscara espacial
+    # amplia para que el cambio también se funda a través del Mediterráneo.
+    if cont in ('África', 'Europa', 'Asia'):
+        t_este = smooth(1350.0, 2050.0, x)
+        color_eurasia = mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['Asia'], t_este)
 
-    if cont == 'Europa':
-        # Europa conserva su azul central, se funde con África al sur
-        # y con Asia al este; nunca se introduce blanco como color intermedio.
-        sur = smooth(410.0, 530.0, y) * 0.62
-        este = smooth(1230.0, 1900.0, x)
-        color_sur = mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['África'], sur)
-        return mezclar_colores(color_sur, COLOR_CONT['Asia'], este)
+        peso_oeste_africa = smooth(1000.0, 1120.0, x)
+        peso_este_africa = 1.0 - smooth(1400.0, 1530.0, x)
+        peso_sur_africa = smooth(390.0, 530.0, y)
+        peso_africa = max(0.0, min(1.0,
+            peso_oeste_africa * peso_este_africa * peso_sur_africa))
 
-    if cont == 'Asia':
-        t = smooth(1230.0, 1900.0, x)
-        return mezclar_colores(COLOR_CONT['Europa'], COLOR_CONT['Asia'], t)
+        return mezclar_colores(color_eurasia, COLOR_CONT['África'], peso_africa)
 
     return COLOR_CONT[cont]
 
