@@ -144,7 +144,7 @@ def crear(source_dir: Path, output: Path):
     relieve.save(output, optimize=True)
     meta = {
         "archivo": output.name, "ancho_px": ANCHO, "alto_px": ALTO,
-        "escala": ESCALA, "proyeccion": "cilindrica_equivalente_50_46",
+        "escala": ESCALA, "proyeccion": "cea_lambert_2_1",
         "origen": "Natural Earth 10m bathymetry 4.1.0 (SRTM Plus)",
         "capas": resumen,
     }
