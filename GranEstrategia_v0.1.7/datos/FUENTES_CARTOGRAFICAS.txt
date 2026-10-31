@@ -1,0 +1,30 @@
+FUENTES CARTOGRÁFICAS — GRAN ESTRATEGIA 0.1.7.6
+
+1. GEOMETRÍA DE TERRITORIOS Y PROVINCIAS
+Archivo de entrada: fuente_provincias.json
+Inventario conservado en 0.1.7.6: 480 territorios distribuidos en 177 países.
+La fuente se conserva en coordenadas geográficas de mapa anteriores para no destruir el dato de origen. construir_mapa.py transforma todos los vértices mediante una única función de proyección antes de crear mallas, fronteras y etiquetas.
+
+Proyección de salida:
+- Tipo: cilíndrica equivalente (equivalente de áreas), con paralelo estándar aproximado de 50,46° para ajustar el mapa al formato 2:1.
+- x = (longitud + 180) * 2400 / 360
+- y = 600 * (1 - sin(latitud))
+- Mantiene el eje X periódico del mapa mundial y comprime las regiones polares en relación con las latitudes bajas.
+
+2. BATIMETRÍA
+Fuente: Natural Earth 10m Bathymetry, versión 4.1.0.
+Datos base: SRTM Plus.
+Página de origen:
+https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-bathymetry/
+
+Capas usadas (metros): 0, 200, 1.000, 2.000, 3.000, 4.000, 5.000, 6.000, 7.000, 8.000, 9.000 y 10.000.
+Los polígonos anidados se combinan desde las zonas superficiales hacia las profundas. Después se aplica un suavizado de varias escalas para evitar bandas rígidas y lograr una transición de profundidad más orgánica.
+
+La textura se guarda a 4800 x 2400 px (2x respecto al espacio del mapa), en proyección idéntica a la geometría terrestre.
+
+3. REPRODUCCIÓN
+- Python: numpy, scipy, pillow, pyshp.
+- Generación del mar: python herramientas/construir_profundidad.py --source-dir RUTA_BATIMETRIA --output datos/profundidad_maritima.png
+- Generación terrestre: python herramientas/construir_mapa.py
+
+Los binarios, JSON generados y PNG son salidas del proceso de generación; no se editan manualmente.
