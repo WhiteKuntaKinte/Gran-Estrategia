@@ -6,10 +6,11 @@ Inventario conservado en 0.1.7.6: 480 territorios distribuidos en 177 países.
 La fuente se conserva en coordenadas geográficas de mapa anteriores para no destruir el dato de origen. construir_mapa.py transforma todos los vértices mediante una única función de proyección antes de crear mallas, fronteras y etiquetas.
 
 Proyección de salida:
-- Tipo: cilíndrica equivalente (equivalente de áreas), con paralelo estándar aproximado de 50,46° para ajustar el mapa al formato 2:1.
+- Tipo: cilíndrica equivalente de Lambert, normalizada al lienzo mundial 2:1.
 - x = (longitud + 180) * 2400 / 360
 - y = 600 * (1 - sin(latitud))
 - Mantiene el eje X periódico del mapa mundial y comprime las regiones polares en relación con las latitudes bajas.
+- La normalización al lienzo conserva los límites 2400 x 1200; no se atribuye un paralelo estándar distinto al que realmente codifica la transformación.
 
 2. BATIMETRÍA
 Fuente: Natural Earth 10m Bathymetry, versión 4.1.0.
