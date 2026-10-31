@@ -284,7 +284,7 @@ def main():
             # exterior es la perpendicular derecha del segmento.
             if L > 1e-6:
                 nx, ny = (b[1] - a[1]) / L, -(b[0] - a[0]) / L
-                ancho_agua = 12.0
+                ancho_agua = 5.0
                 base_agua = len(agua_v)
                 agua_v.extend([
                     a, b,
