@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://c6xk3m2x78y1"]
 
-[ext_resource type="Script" uid="uid://b7c8ba26jkqx8" path="res://gdscripts.gd" id="1_xsog4"]
+[ext_resource type="Script" path="res://MapaPrincipal.gd" id="1_map"]
 
 [node name="MapaPrincipal" type="Node2D" unique_id=1371087574]
-script = ExtResource("1_xsog4")
+script = ExtResource("1_map")
 
 [node name="OceanoFondo" type="ColorRect" parent="." unique_id=1219486195]
 z_index = -10
