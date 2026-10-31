@@ -1,0 +1,25 @@
+GRAN ESTRATEGIA — 0.1.7
+
+Esta carpeta, una vez descomprimido el ZIP, es directamente la raíz del proyecto. Debe contener project.godot, mapa_principal.tscn y MapaPrincipal.gd.
+
+INICIO
+1. Descomprime el ZIP.
+2. En Godot, pulsa Importar/Abrir.
+3. Selecciona la carpeta que acabas de descomprimir, donde está project.godot.
+4. Ejecuta con F5.
+
+No abras una subcarpeta de versiones anteriores ni cambies nombres de archivos.
+
+ARCHIVOS PRINCIPALES
+- project.godot: configuración de Gran Estrategia 0.1.7.
+- mapa_principal.tscn: escena principal con nodo raíz MapaPrincipal.
+- MapaPrincipal.gd: script asociado al nodo raíz.
+- datos/: mallas y datos cartográficos.
+- herramientas/: scripts de generación.
+
+La escena principal carga res://MapaPrincipal.gd. No se utiliza gdscripts.gd.
+
+VALIDACIÓN
+Godot 4.7 importó el proyecto y ejecutó la escena principal en modo headless mediante GitHub Actions. También pasaron las comprobaciones de sintaxis Python y presencia de datos cartográficos.
+
+Esta versión conserva la geometría cartográfica anterior. La mejora completa de fronteras y la ampliación de subdivisiones administrativas siguen pendientes.

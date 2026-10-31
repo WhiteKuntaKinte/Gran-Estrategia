@@ -1,0 +1,28 @@
+GRAN ESTRATEGIA — VERSION 0.1.7
+
+ABRIR EL PROYECTO
+1. Descomprime el ZIP.
+2. Abre en Godot la carpeta que acabas de descomprimir: es la que contiene directamente project.godot.
+3. Pulsa F5 para ejecutar.
+
+No busques una subcarpeta llamada GranEstrategia_v0.1.7: el ZIP ya contiene los archivos del proyecto directamente en su raíz. No renombres archivos.
+
+ARCHIVOS PRINCIPALES
+- project.godot: configuración de la versión 0.1.7.
+- mapa_principal.tscn: escena inicial con el nodo raíz MapaPrincipal, fondo oceánico y cámara.
+- MapaPrincipal.gd: controlador del mapa, HUD, menú y selección.
+- datos/: geometría precalculada y datos cartográficos.
+- herramientas/: generadores y utilidades.
+
+La escena principal carga res://MapaPrincipal.gd. No existe ni se utiliza gdscripts.gd.
+
+VALIDACION
+La compilación superó en GitHub Actions:
+- comprobación de sintaxis de los scripts Python;
+- comprobación de los archivos cartográficos requeridos;
+- importación del proyecto con Godot 4.7 en modo headless;
+- arranque de la escena principal con Godot 4.7 en modo headless.
+
+PENDIENTE
+- La topología de fronteras sigue siendo la existente; el rediseño completo está pendiente.
+- No se añadieron subdivisiones administrativas nuevas porque deben proceder de límites oficiales.

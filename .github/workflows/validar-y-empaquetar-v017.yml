@@ -1,0 +1,79 @@
+name: Validar y empaquetar Gran Estrategia 0.1.7
+
+on:
+  push:
+    branches:
+      - v0.1.7-development
+    paths:
+      - "GranEstrategia_v0.1.7/**"
+      - ".github/workflows/validar-y-empaquetar-v017.yml"
+  workflow_dispatch:
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias del generador
+        run: python -m pip install numpy scipy pillow
+
+      - name: Comprobar sintaxis del generador
+        working-directory: GranEstrategia_v0.1.7
+        run: python -m py_compile herramientas/*.py
+
+      - name: Regenerar datos cartográficos
+        working-directory: GranEstrategia_v0.1.7
+        run: python herramientas/construir_mapa.py
+
+      - name: Comprobar que están los datos precalculados
+        working-directory: GranEstrategia_v0.1.7
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          required = [
+              "datos/provincias_juego.json", "datos/etiquetas.json",
+              "datos/malla_fill_v.bin", "datos/malla_fill_i.bin",
+              "datos/malla_fill_cc.bin", "datos/malla_fill_cp.bin",
+              "datos/malla_costa_v.bin", "datos/malla_costa_uv.bin",
+              "datos/malla_costa_i.bin", "datos/malla_frontera_v.bin",
+              "datos/malla_frontera_uv.bin", "datos/malla_frontera_i.bin",
+              "datos/malla_prov_v.bin", "datos/malla_prov_uv.bin",
+              "datos/malla_prov_i.bin"
+          ]
+          missing = [name for name in required if not Path(name).is_file() or Path(name).stat().st_size == 0]
+          if missing:
+              raise SystemExit("Faltan archivos cartográficos: " + ", ".join(missing))
+          print(f"OK: {len(required)} archivos cartográficos presentes")
+          PY
+
+      - name: Instalar Godot 4.7
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.0
+          use-dotnet: false
+
+      - name: Importar proyecto y validar scripts
+        run: godot --headless --editor --path GranEstrategia_v0.1.7 --quit
+
+      - name: Probar arranque headless
+        run: godot --headless --path GranEstrategia_v0.1.7 --quit-after 10
+
+      - name: Crear ZIP limpio
+        run: |
+          cd GranEstrategia_v0.1.7
+          zip -r ../GranEstrategia_v0.1.7.zip . -x ".godot/*"
+
+      - name: Publicar ZIP como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: GranEstrategia_v0.1.7
+          path: GranEstrategia_v0.1.7.zip
+          if-no-files-found: error
+          retention-days: 30

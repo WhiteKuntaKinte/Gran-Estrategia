@@ -1,12 +1,12 @@
 extends Node2D
-## Gran Estrategia - mapa mundial (v0.1.6)
+## Gran Estrategia - mapa mundial (v0.1.7)
 ##
 ## IDEA CLAVE DE RENDIMIENTO:
 ## Todo lo pesado (triangulación, colores, bordes, posición de los nombres) se calcula UNA vez fuera de Godot
 ## con herramientas/construir_mapa.py y se guarda en la carpeta datos/. Aquí solo se cargan mallas ya hechas.
 ## Hacer zoom NO recalcula nada: solo cambia la transparencia de unas pocas capas y el grosor de los bordes.
 
-const VERSION := "0.1.6"
+const VERSION := "0.1.7"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -32,6 +32,25 @@ void vertex() {
 }
 void fragment() {
 	COLOR = vec4(col.rgb, col.a * alfa);
+}
+"""
+
+# Degradado continuo por latitud. Normaliza el valor previo para quitar el centroide 0.1.6.
+const SHADER_GRADIENTE_PAIS := """
+shader_type canvas_item;
+uniform float y_ecuador = 580.0;
+uniform float rango_latitud = 330.0;
+uniform float brillo_minimo = 0.50;
+varying float y_mapa;
+void vertex() {
+	y_mapa = VERTEX.y;
+}
+void fragment() {
+	float valor_base = max(max(COLOR.r, COLOR.g), COLOR.b);
+	vec3 color_normalizado = COLOR.rgb / max(valor_base, 0.001);
+	float distancia = clamp(abs(y_mapa - y_ecuador) / rango_latitud, 0.0, 1.0);
+	float brillo = mix(brillo_minimo, 1.0, pow(distancia, 0.85));
+	COLOR = vec4(color_normalizado * brillo, COLOR.a);
 }
 """
 
@@ -77,7 +96,10 @@ var lbl_fps: Label
 
 # Menú principal
 var en_menu := true
+var en_pausa := false
 var menu: CanvasLayer
+var menu_contenido: VBoxContainer
+var menu_pausa: CanvasLayer
 
 
 # ─────────────────────────────────────────────────────────────
@@ -109,6 +131,7 @@ class CapaTexto extends Node2D:
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_configurar_fuente()
 	_configurar_oceano()
 	camara.enabled = true
@@ -230,6 +253,23 @@ func _cargar_datos_provincias() -> void:
 	anillos = d["anillos"]
 
 
+func _corregir_color_chukotka(colores: PackedColorArray) -> void:
+	var desplazamiento := 0
+	for anillo in anillos:
+		var pi := int(anillo["p"])
+		var es_chukotka := false
+		if pi >= 0 and pi < provincias.size():
+			var provincia: Dictionary = provincias[pi]
+			var nombre := String(provincia.get("n", "")).to_lower()
+			var identificador := String(provincia.get("id", "")).to_lower()
+			es_chukotka = nombre.contains("chukotka") or identificador.contains("chukotka") or identificador.contains("chukchi")
+		var cantidad := int(anillo["v"].size() / 2)
+		if es_chukotka:
+			for i in range(desplazamiento, mini(desplazamiento + cantidad, colores.size())):
+				colores[i] = Color(0.86, 0.14, 0.12, 1.0)
+		desplazamiento += cantidad
+
+
 func _material_borde(sh: Shader, color: Color) -> ShaderMaterial:
 	var m := ShaderMaterial.new()
 	m.shader = sh
@@ -252,10 +292,18 @@ func _construir_mapa() -> void:
 	indices_fill = _leer_bytes("malla_fill_i.bin").to_int32_array()
 	var col_cont := _a_colores(_leer_bytes("malla_fill_cc.bin"))
 	var col_pais := _a_colores(_leer_bytes("malla_fill_cp.bin"))
+	_corregir_color_chukotka(col_cont)
+	_corregir_color_chukotka(col_pais)
 	var malla_cont := _crear_malla(vertices_fill, indices_fill, col_cont)
 	var malla_pais := _crear_malla(vertices_fill, indices_fill, col_pais)
-	_instanciar(malla_cont, null, 0)
-	capa_pais = _instanciar(malla_pais, null, 1)
+	var shader_gradiente := Shader.new()
+	shader_gradiente.code = SHADER_GRADIENTE_PAIS
+	var material_gradiente_cont := ShaderMaterial.new()
+	material_gradiente_cont.shader = shader_gradiente
+	var material_gradiente_pais := ShaderMaterial.new()
+	material_gradiente_pais.shader = shader_gradiente
+	_instanciar(malla_cont, material_gradiente_cont, 0)
+	capa_pais = _instanciar(malla_pais, material_gradiente_pais, 1)
 
 	# Bordes: mallas de franjas cuyo grosor se ajusta en el shader (siempre se ven del mismo grosor en pantalla)
 	var sh := Shader.new()
@@ -454,7 +502,16 @@ func _zoom_en_cursor(factor: float) -> void:
 # Entrada
 # ─────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
-	if en_menu:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		if en_menu:
+			return
+		if en_pausa:
+			_reanudar_juego()
+		else:
+			_mostrar_menu_pausa()
+		get_viewport().set_input_as_handled()
+		return
+	if en_menu or en_pausa:
 		return
 	if event is InputEventMouseButton:
 		if event.pressed:
@@ -548,7 +605,7 @@ func _resaltar(pi: int, continente: String, p: Vector2) -> void:
 		lbl_tipo.text = "Provincia"
 	else:
 		lbl_tipo.text = "País"
-	lbl_pais.text = "País / Soberanía: " + String(prov["c"])
+	lbl_pais.text = "Soberanía: " + String(prov["c"])
 	lbl_cont.text = "Continente: " + continente
 	lbl_coord.text = "Coordenadas: (X: %s, Y: %s)" % [snappedf(p.x, 0.1), snappedf(p.y, 0.1)]
 	panel.visible = true
@@ -627,37 +684,89 @@ func _crear_menu() -> void:
 	menu = CanvasLayer.new()
 	menu.layer = 10
 	add_child(menu)
+	var centro := CenterContainer.new()
+	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	menu.add_child(centro)
+	var panel_menu := PanelContainer.new()
+	panel_menu.custom_minimum_size = Vector2(390.0, 280.0)
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = Color(0.035, 0.055, 0.11, 0.94)
+	estilo.border_color = Color(0.9, 0.75, 0.2, 1.0)
+	estilo.set_border_width_all(2)
+	estilo.set_corner_radius_all(12)
+	estilo.content_margin_left = 26.0
+	estilo.content_margin_top = 24.0
+	estilo.content_margin_right = 26.0
+	estilo.content_margin_bottom = 24.0
+	panel_menu.add_theme_stylebox_override("panel", estilo)
+	centro.add_child(panel_menu)
+	menu_contenido = VBoxContainer.new()
+	menu_contenido.add_theme_constant_override("separation", 14)
+	panel_menu.add_child(menu_contenido)
+	_mostrar_menu_principal()
 
+
+func _limpiar_menu() -> void:
+	for hijo in menu_contenido.get_children():
+		menu_contenido.remove_child(hijo)
+		hijo.queue_free()
+
+
+func _titulo_menu(texto: String) -> void:
+	var titulo := Label.new()
+	titulo.text = texto
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.add_theme_font_override("font", fuente)
+	titulo.add_theme_font_size_override("font_size", 27)
+	titulo.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
+	menu_contenido.add_child(titulo)
+
+
+func _boton_menu(texto: String, accion: Callable) -> void:
 	var boton := Button.new()
-	boton.text = "JUGAR"
+	boton.text = texto
+	boton.custom_minimum_size = Vector2(0.0, 44.0)
+	boton.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	boton.add_theme_font_override("font", fuente)
-	boton.add_theme_font_size_override("font_size", 30)
-	boton.add_theme_color_override("font_color", Color(1.0, 0.92, 0.6))
-	boton.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0))
-	boton.anchor_left = 0.5
-	boton.anchor_right = 0.5
-	boton.anchor_top = 0.82
-	boton.anchor_bottom = 0.82
-	boton.offset_left = -130.0
-	boton.offset_right = 130.0
-	boton.offset_top = -34.0
-	boton.offset_bottom = 34.0
+	boton.add_theme_font_size_override("font_size", 18)
+	boton.add_theme_color_override("font_color", Color(0.94, 0.95, 1.0))
+	boton.pressed.connect(accion)
+	menu_contenido.add_child(boton)
 
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(0.04, 0.07, 0.14, 0.88)
-	normal.border_color = Color(0.9, 0.75, 0.2, 1.0)
-	normal.set_border_width_all(2)
-	normal.set_corner_radius_all(10)
-	var encima := normal.duplicate()
-	encima.bg_color = Color(0.10, 0.16, 0.30, 0.95)
-	var presionado := normal.duplicate()
-	presionado.bg_color = Color(0.02, 0.04, 0.09, 0.98)
-	boton.add_theme_stylebox_override("normal", normal)
-	boton.add_theme_stylebox_override("hover", encima)
-	boton.add_theme_stylebox_override("pressed", presionado)
-	boton.add_theme_stylebox_override("focus", normal)
-	boton.pressed.connect(_on_jugar)
-	menu.add_child(boton)
+
+func _mostrar_menu_principal() -> void:
+	_limpiar_menu()
+	_titulo_menu("GRAN ESTRATEGIA")
+	_boton_menu("JUGAR", _on_jugar)
+	_boton_menu("OPCIONES", _mostrar_opciones)
+	_boton_menu("SALIR", _salir_juego)
+
+
+func _mostrar_opciones() -> void:
+	_limpiar_menu()
+	_titulo_menu("DATOS DEL MAPA")
+	var paises := {}
+	var cantidad_provincias := 0
+	for provincia in provincias:
+		paises[String(provincia.get("c", ""))] = true
+		if bool(provincia.get("m", false)):
+			cantidad_provincias += 1
+	var texto_datos := Label.new()
+	texto_datos.add_theme_font_override("font", fuente)
+	texto_datos.add_theme_font_size_override("font_size", 17)
+	texto_datos.add_theme_color_override("font_color", Color(0.91, 0.93, 0.98))
+	texto_datos.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto_datos.text = "Países / soberanías: %d\nProvincias administrativas: %d\nUnidades territoriales representadas: %d" % [paises.size(), cantidad_provincias, provincias.size()]
+	menu_contenido.add_child(texto_datos)
+	var nota := Label.new()
+	nota.text = "Las provincias son subdivisiones de los países; no se cuentan como países independientes."
+	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	nota.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	nota.add_theme_font_override("font", fuente)
+	nota.add_theme_font_size_override("font_size", 12)
+	nota.add_theme_color_override("font_color", Color(0.67, 0.72, 0.82))
+	menu_contenido.add_child(nota)
+	_boton_menu("VOLVER", _mostrar_menu_principal)
 
 
 func _on_jugar() -> void:
@@ -665,3 +774,94 @@ func _on_jugar() -> void:
 	menu.queue_free()
 	hud.visible = true
 	_actualizar_zoom()
+
+
+
+# ─────────────────────────────────────────────────────────────
+# Pausa
+# ─────────────────────────────────────────────────────────────
+func _mostrar_menu_pausa() -> void:
+	if en_menu or en_pausa:
+		return
+	en_pausa = true
+	arrastrando = false
+	get_tree().paused = true
+
+	menu_pausa = CanvasLayer.new()
+	menu_pausa.layer = 20
+	menu_pausa.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(menu_pausa)
+
+	var centro := CenterContainer.new()
+	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	menu_pausa.add_child(centro)
+
+	var panel_pausa := PanelContainer.new()
+	panel_pausa.custom_minimum_size = Vector2(390.0, 250.0)
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = Color(0.035, 0.055, 0.11, 0.96)
+	estilo.border_color = Color(0.9, 0.75, 0.2, 1.0)
+	estilo.set_border_width_all(2)
+	estilo.set_corner_radius_all(12)
+	estilo.content_margin_left = 26.0
+	estilo.content_margin_top = 24.0
+	estilo.content_margin_right = 26.0
+	estilo.content_margin_bottom = 24.0
+	panel_pausa.add_theme_stylebox_override("panel", estilo)
+	centro.add_child(panel_pausa)
+
+	var contenido := VBoxContainer.new()
+	contenido.add_theme_constant_override("separation", 14)
+	panel_pausa.add_child(contenido)
+
+	var titulo := Label.new()
+	titulo.text = "JUEGO EN PAUSA"
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.add_theme_font_override("font", fuente)
+	titulo.add_theme_font_size_override("font_size", 27)
+	titulo.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
+	contenido.add_child(titulo)
+
+	_boton_pausa(contenido, "CONTINUAR", _reanudar_juego)
+	_boton_pausa(contenido, "MENÚ PRINCIPAL", _volver_menu_principal)
+	_boton_pausa(contenido, "SALIR", _salir_juego)
+
+
+func _boton_pausa(contenedor: VBoxContainer, texto: String, accion: Callable) -> void:
+	var boton := Button.new()
+	boton.text = texto
+	boton.custom_minimum_size = Vector2(0.0, 44.0)
+	boton.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	boton.add_theme_font_override("font", fuente)
+	boton.add_theme_font_size_override("font_size", 18)
+	boton.add_theme_color_override("font_color", Color(0.94, 0.95, 1.0))
+	boton.pressed.connect(accion)
+	contenedor.add_child(boton)
+
+
+func _reanudar_juego() -> void:
+	get_tree().paused = false
+	en_pausa = false
+	if is_instance_valid(menu_pausa):
+		menu_pausa.queue_free()
+	menu_pausa = null
+	hud.visible = true
+	_actualizar_zoom()
+
+
+func _volver_menu_principal() -> void:
+	get_tree().paused = false
+	en_pausa = false
+	if is_instance_valid(menu_pausa):
+		menu_pausa.queue_free()
+	menu_pausa = null
+	_limpiar_seleccion()
+	panel.visible = false
+	hud.visible = false
+	en_menu = true
+	_crear_menu()
+	_actualizar_zoom()
+
+
+func _salir_juego() -> void:
+	get_tree().quit()

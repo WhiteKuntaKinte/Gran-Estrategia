@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Genera TODO lo pesado del mapa una sola vez (fuera de Godot) para que el juego cargue rápido y corra fluido.
+Genera los datos de mapa para Gran Estrategia v0.1.7 (fuera de Godot) para que el juego cargue rápido y corra fluido.
 
 Uso (desde la carpeta del proyecto):
     python herramientas/construir_mapa.py
@@ -56,10 +56,9 @@ def jitter(txt, n):
     return [h[i] / 127.5 - 1.0 for i in range(n)]
 
 def color_pais(cont, pais, cy, prov_id, es_provincia_extra):
-    """Regla del ecuador: cuanto más cerca del ecuador, más oscuro. Solo afecta el zoom-in."""
+    """Color base estable. El degradado latitudinal se aplica por fragmento en Godot."""
     h, s, dh = BASE_PAIS[cont]
-    dist = min(1.0, abs(cy - Y_ECUADOR) / 330.0)
-    v = 0.50 + 0.50 * (dist ** 0.85)
+    v = 0.82
     j = jitter(pais, 3)
     h = (h + dh * j[0]) % 1.0
     s = max(0.05, min(1.0, s + 0.12 * j[1] * (s > 0.2)))
@@ -72,6 +71,10 @@ def color_pais(cont, pais, cy, prov_id, es_provincia_extra):
 def continente_anillo(p, cx, cy):
     c = p['continent']
     pais = p['country']
+    nombre = str(p.get('name', '')).lower()
+    identificador = str(p.get('id', '')).lower()
+    if 'chukchi' in nombre or 'chukotka' in nombre or 'chukchi' in identificador or 'chukotka' in identificador:
+        return 'Asia'
     if pais == 'France':
         if cx < 1000 and cy > 450:
             return 'América del Sur'      # Guayana Francesa
@@ -123,15 +126,6 @@ def main():
         provincias[r['pi']]['r'].append(ri)
     print('anillos', len(anillos), 'provincias', len(provincias), '%.1fs' % (time.time() - t0))
 
-    # centroides por país (ponderados por área) para la regla del ecuador
-    acc = {}
-    for r in anillos:
-        pais = provincias[r['pi']]['pais_en']
-        cy = sum(q[1] for q in r['pts']) / len(r['pts'])
-        a = acc.setdefault(pais, [0.0, 0.0])
-        a[0] += cy * r['area']
-        a[1] += r['area']
-    cy_pais = {k: v[0] / v[1] for k, v in acc.items()}
     cont_main_pais = {}
     for r in anillos:                      # ya ordenados: el primero es el anillo más grande
         cont_main_pais.setdefault(provincias[r['pi']]['pais_en'], r['cont'])
@@ -150,12 +144,10 @@ def main():
             print('AVISO: triangulación incompleta', pr['id'], r['area'], cub)
         cont_ring = r['cont']
         if cont_ring != cont_main_pais[pr['pais_en']]:
-            cy_ref = sum(q[1] for q in pts) / len(pts)
             clave = pr['pais_en'] + '|' + cont_ring
         else:
-            cy_ref = cy_pais[pr['pais_en']]
             clave = pr['pais_en']
-        cpais = color_pais(cont_ring, clave, cy_ref, pr['id'], pr['m'])
+        cpais = color_pais(cont_ring, clave, 0.0, pr['id'], pr['m'])
         r['col_pais'] = cpais
         for (x, y) in pts:
             V.append((x, y))
