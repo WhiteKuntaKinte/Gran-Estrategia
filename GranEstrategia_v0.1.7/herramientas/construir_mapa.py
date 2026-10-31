@@ -124,7 +124,7 @@ def main():
         provincias[r['pi']]['r'].append(ri)
     print('anillos', len(anillos), 'provincias', len(provincias), '%.1fs' % (time.time() - t0))
 
-remove centroid map    cont_main_pais = {}
+    cont_main_pais = {}
     for r in anillos:                      # ya ordenados: el primero es el anillo más grande
         cont_main_pais.setdefault(provincias[r['pi']]['pais_en'], r['cont'])
     # continente "principal" de cada provincia = el de su anillo más grande

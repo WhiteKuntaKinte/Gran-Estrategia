@@ -1,0 +1,27 @@
+GRAN ESTRATEGIA — VERSION 0.1.7
+
+ABRIR EL PROYECTO
+1. Descomprime el ZIP.
+2. Entra en GranEstrategia_v0.1.7.
+3. Abre ESA carpeta en Godot: dentro está project.godot.
+4. Pulsa F5.
+
+No renombres archivos. project.godot ya apunta a mapa_principal.tscn y esa escena carga MapaPrincipal.gd.
+
+ESTRUCTURA
+- project.godot: configuración 0.1.7.
+- mapa_principal.tscn: escena principal con nodo raíz MapaPrincipal, fondo y cámara.
+- MapaPrincipal.gd: controlador del mapa, HUD, menú y selección.
+- datos/: geometría precalculada y datos.
+- herramientas/: generadores y utilidades.
+
+El proyecto está empaquetado en una sola carpeta, sin subcarpetas 0.1.6/0.1.5a ni scripts alternativos.
+
+GENERADOR
+Desde esta carpeta: python herramientas/construir_mapa.py
+Requiere Python 3, numpy, scipy y pillow. Sobrescribe datos/: haz copia de seguridad antes de ejecutarlo.
+
+PENDIENTE
+- La topología de fronteras sigue siendo la existente; el rediseño completo está pendiente.
+- No se añadieron subdivisiones administrativas nuevas porque deben proceder de límites oficiales.
+- No se pudo ejecutar Godot en este entorno; esta compilación aún necesita prueba de arranque en el equipo de destino.
