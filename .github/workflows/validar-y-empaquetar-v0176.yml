@@ -120,17 +120,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add GranEstrategia_v0.1.7/datos
+          if git diff --cached --quiet; then
+            echo "Los datos generados ya están guardados en la rama."
+            exit 0
+          fi
+          git commit -m "Generar cartografía 0.1.7.6 [skip ci]"
           for intento in 1 2 3; do
             git fetch origin v0.1.7.6-development
-            git pull --rebase origin v0.1.7.6-development
-            git add GranEstrategia_v0.1.7/datos
-            if git diff --cached --quiet; then
-              echo "Los datos generados ya están guardados en la rama."
-              exit 0
-            fi
-            git commit -m "Generar cartografía 0.1.7.6 [skip ci]"
-            if git push origin HEAD:v0.1.7.6-development; then
-              exit 0
+            if git pull --rebase origin v0.1.7.6-development; then
+              if git push origin HEAD:v0.1.7.6-development; then
+                exit 0
+              fi
+            else
+              git rebase --abort || true
             fi
             echo "La rama avanzó en paralelo; se reintentará integrando el nuevo HEAD."
           done
