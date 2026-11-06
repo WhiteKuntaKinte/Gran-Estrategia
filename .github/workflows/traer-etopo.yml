@@ -1,0 +1,40 @@
+name: Traer ETOPO 2022 (datos de relieve)
+
+# Descarga el GeoTIFF global ETOPO 2022 (60 segundos de arco, superficie con hielo) directo
+# desde NOAA hacia los servidores de GitHub y lo publica como Release "datos-etopo".
+# Así nadie tiene que bajar ni subir los 444 MB a mano. No toca el juego.
+# Se ejecuta solo cuando se sube este mismo archivo a la rama v0.1.8-development.
+on:
+  push:
+    branches: [v0.1.8-development]
+    paths: ['.github/workflows/traer-etopo.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  traer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Descargar ETOPO 2022 60s superficie (GeoTIFF, ~444 MB)
+        run: |
+          mkdir -p datos
+          curl -fL --retry 5 --retry-delay 15 --retry-all-errors \
+            -o datos/ETOPO_2022_v1_60s_N90W180_surface.tif \
+            "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif"
+          ls -l datos
+          test "$(stat -c%s datos/ETOPO_2022_v1_60s_N90W180_surface.tif)" -gt 400000000
+          (cd datos && sha256sum *.tif | tee sha256.txt)
+
+      - name: Publicar como Release datos-etopo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete datos-etopo --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create datos-etopo \
+            datos/ETOPO_2022_v1_60s_N90W180_surface.tif datos/sha256.txt \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Datos ETOPO 2022 (60 s, superficie)" \
+            --notes "NOAA NCEI, ETOPO 2022 global relief model, 60 arc-second, ice surface (GeoTIFF). Fuente: https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ . Insumo para la vista de relieve; no es parte del juego."
