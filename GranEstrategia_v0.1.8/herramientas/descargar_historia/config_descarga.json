@@ -1,0 +1,14 @@
+{
+  "_ayuda": "Todo es opcional: lo que no pongas aqui usa el valor por defecto (ver descargar_historia.gd). Lo que empieza con _ se ignora.",
+  "_agente": "Wikimedia pide que quien descarga se identifique. Si quieres, pon aqui el nombre de tu proyecto y un contacto (correo o pagina), por ejemplo: GranEstrategia/0.1 (mi juego; contacto: tu@correo.com)",
+  "agente": "GranEstrategia/0.1 (juego personal de estrategia hecho en Godot; herramienta de descarga historica)",
+  "limite_prueba": 50,
+  "paises_prueba": 12,
+  "descargar_banderas": true,
+  "banderas_paises_actuales": true,
+  "gobernantes": true,
+  "quitar_semilla": true,
+  "ancho_bandera": 96,
+  "pausa_sparql_ms": 1500,
+  "pausa_imagen_ms": 300
+}

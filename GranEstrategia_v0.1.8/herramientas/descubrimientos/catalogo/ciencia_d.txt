@@ -1,0 +1,49 @@
+## CIE|REC|Recursos del territorio|Materiales que solo existen en ciertos territorios (sal, hierro, carbón, petróleo, uranio, litio…). El yacimiento ya está ahí desde el inicio, pero solo se puede aprovechar cuando se descubren la técnica para encontrarlo y la técnica para sacarlo. Subrama con énfasis propio.|@rec
+### Prospección y hallazgo
+prospeccion_empirica|Prospección por indicios del terreno|2|T|observacion_naturaleza,mineria_subterranea
+mapas_geologicos|Mapas geológicos|7|T|geologia_estratigrafia,mapas_administrativos
+prospeccion_sismica|Prospección sísmica de yacimientos|8|T|geofisica_prospeccion,sismografo
+teledeteccion_recursos|Teledetección de recursos|9|T|satelite_artificial,fotogrametria_aerea
+sig_recursos|Inventario digital de recursos|10|T|sig_geografico,big_data
+exploracion_automatizada|Exploración autónoma con drones e IA|10|T|drones_civiles,aprendizaje_profundo
+prospeccion_espacial|Prospección espacial|11|T|sondas_planetarias,exploracion_automatizada
+### Piedra, arcilla, sal y agua
+rec_silex|Sílex y obsidiana|0|R|herramientas_piedra
+rec_arcilla|Arcilla de alfarería|1|R|ceramica_alfareria
+rec_sal|Sal (salinas y minas)|1|R|cocina_fuego,lena_carbon_vegetal
+rec_madera_bosque|Madera de bosque maduro|1|R|carpinteria,hacha_piedra
+rec_acuiferos|Acuíferos y pozos|2|R|riego_canales
+rec_arena_cuarzo|Arena de sílice y cuarzo|2|R|ceramica_alfareria,horno_tiro
+rec_caliza_yeso|Caliza y yeso|2|R|cal_yeso
+rec_piedra_cantera|Piedra de cantera y mármol|2|R|construccion_piedra
+### Metales
+rec_cobre|Cobre|1|R|metalurgia_cobre
+rec_estano|Estaño|2|R|metalurgia_cobre,comercio_larga_distancia
+rec_oro_plata|Oro y plata|2|R|metalurgia_cobre,prospeccion_empirica
+rec_hierro|Mineral de hierro|3|R|mineria_subterranea,horno_tiro,prospeccion_empirica
+rec_plomo|Plomo|3|R|mineria_subterranea,horno_tiro
+rec_bauxita|Bauxita (aluminio)|7|R|electrolisis,mineria_subterranea,mapas_geologicos
+rec_aleantes|Níquel, cromo y manganeso|7|R|quimica_analitica,mapas_geologicos
+### Materias primas
+rec_salitre_azufre|Salitre y azufre|4|R|alquimia,mineria_subterranea
+rec_carbon|Carbón mineral|4|R|carbon_mineral_uso
+rec_caucho|Caucho (árbol de hevea)|6|R|cultivos_plantacion,navegacion_oceanica
+rec_fosfatos_nitratos|Fosfatos y nitratos|7|R|agricultura_cientifica,mapas_geologicos
+### Hidrocarburos y combustibles nucleares
+rec_petroleo|Petróleo|7|R|petroleo_perforacion,mapas_geologicos
+rec_gas_natural|Gas natural|8|R|petroleo_perforacion,prospeccion_sismica
+rec_uranio|Uranio|8|R|fision_nuclear,radiactividad,mineria_subterranea
+rec_torio|Torio|9|R|reactor_nuclear,rec_uranio
+rec_petroleo_marino|Petróleo y gas marinos|9|R|rec_petroleo,oceanografia,prospeccion_sismica
+rec_esquisto|Gas y petróleo de esquisto|10|R|rec_gas_natural,prospeccion_sismica,computadora_digital
+### Minerales estratégicos modernos
+rec_litio|Litio|9|R|tabla_periodica,quimica_analitica,teledeteccion_recursos
+rec_tierras_raras|Tierras raras|9|R|tabla_periodica,quimica_analitica,teledeteccion_recursos
+rec_helio|Helio y gases nobles|9|R|criogenia,rec_gas_natural
+rec_cobalto_coltan|Cobalto y coltán|10|R|rec_litio,microprocesador,sig_recursos
+### Frontera: mar profundo y espacio
+rec_nodulos_polimetalicos|Nódulos del fondo marino|10|R|oceanografia,robotica_autonoma,exploracion_automatizada
+rec_hidratos_metano|Hidratos de metano|11|R|rec_petroleo_marino,robotica_autonoma
+rec_hielo_lunar_marte|Hielo de agua en la Luna y Marte|11|R|sondas_planetarias,cohete_reutilizable,prospeccion_espacial
+rec_helio3_lunar|Helio-3 lunar|11|R|fusion_experimental,vuelo_espacial_tripulado,prospeccion_espacial
+rec_asteroides|Minería de asteroides|11|R|sondas_planetarias,cohete_reutilizable,robotica_autonoma

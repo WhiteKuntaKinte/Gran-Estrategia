@@ -1,0 +1,77 @@
+DESCARGADOR DE HISTORIA — GRAN ESTRATEGIA 0.1.7.9.9C
+=====================================================
+
+QUÉ HACE
+Se conecta a Internet (Wikidata y Wikimedia Commons, que son libres) y llena el juego con datos históricos REALES:
+- estados que han existido (imperios, repúblicas, virreinatos...) con fecha de inicio y fin, capital, quién les sucedió
+- todos los nombres que han tenido (en varios idiomas) y los nombres antiguos de los países actuales
+- sus banderas, escudos y estandartes (como imágenes pequeñas) y la LICENCIA de cada imagen
+- quién los gobernó y cuándo
+
+No instala nada. Es una escena de Godot; no necesitas saber programar.
+
+CÓMO USARLO (la primera vez, en 5 pasos)
+1. Abre el proyecto en Godot 4 (la carpeta donde está project.godot).
+2. En el panel "Sistema de archivos" abre:  herramientas > descargar_historia > descargar_historia.tscn
+3. Pulsa F6 (ejecutar la escena actual). Sale una ventana con botones y un cuadro de texto (el registro).
+4. Pulsa PRUEBA. Descarga unos 50 estados y sus banderas (unos minutos). Es para comprobar que todo funciona.
+5. Cuando diga "FIN OK", cierra la ventana, abre el juego normal (F5) y mira Debug (F1) > pestaña Historia.
+   El registro se guarda solo en herramientas/descargar_historia/ultimo_registro.txt (también sale en el panel "Salida" de
+   Godot). Mándamelo aunque haya salido bien: así veo qué dijeron los servidores reales.
+
+LOS BOTONES
+- PRUEBA ........ ~50 estados y sus banderas. Úsalo primero. Cada PRUEBA reemplaza los estados de la PRUEBA anterior para no
+                  mezclar muestras ("limpiar_en_prueba" en la configuración); la COMPLETA sí conserva todo lo que ya había.
+- COMPLETA ...... todo lo que encuentre. Puede tardar MUCHO (no sé cuánto: depende de cuántas cosas haya en Wikidata y de
+                  lo rápido que respondan; se pausa a propósito para no saturar a Wikimedia). NO la uses hasta que la
+                  PRUEBA salga bien. Puedes dejarla trabajando y volver luego.
+- SOLO CONVERTIR  vuelve a crear los archivos del juego usando lo que ya se descargó (sin Internet). Útil si cambias
+                  una opción del archivo de configuración.
+- DETENER ....... para entre una petición y otra (no se estropea nada).
+
+SI SE CORTA O FALLA
+- Puedes volver a pulsar el botón: lo que ya se descargó se guarda en una caché y no se vuelve a pedir.
+- Antes de escribir los archivos nuevos, el programa guarda una COPIA de los anteriores en la carpeta de usuario de Godot
+  (user://historia_respaldo/). Si algo sale mal, ahí están.
+- Si no hay Internet o Wikimedia no responde, lo dice en el registro y NO toca tus archivos.
+
+DÓNDE QUEDA LO DESCARGADO
+- datos/historico/  ->  entidades.json, nombres.json, banderas.json, personas.json, cargos.json
+- banderas_hist/    ->  las imágenes PNG (96 px de ancho)
+- La licencia de cada imagen está en banderas.json (columna "licencia"). Si el registro avisa "licencia sin verificar",
+  esa imagen hay que revisarla antes de publicar el juego.
+
+LICENCIAS Y CRÉDITOS (importante si vas a vender el juego)
+- Cada imagen se baja con su licencia y su autor (desde Wikimedia Commons). El descargador las clasifica:
+    libre ........... dominio público / CC0
+    atribucion ...... CC BY / CC BY-SA: se pueden usar comercialmente, pero hay que dar crédito
+    revisar ......... GFDL y otras: se usan, pero hay que mirarlas a mano (salen marcadas [REVISAR])
+    no_comercial .... NC, ND, uso legítimo, derechos reservados: se DESCARTAN (no se copian al juego)
+    sin_verificar ... Commons no devolvió licencia: se DESCARTAN
+- Resultado en datos/historico/: creditos_banderas.txt (autor, licencia y enlace de cada imagen que quedó) y
+  banderas_descartadas.txt (las que se dejaron fuera y por qué). Lo de las licencias es una ayuda, no asesoría legal:
+  antes de lanzar el juego conviene que alguien las revise.
+- Otros filtros: solo entran estados con al menos 10 páginas de Wikipedia en distintos idiomas ("min_sitelinks"; en
+  PRUEBA 40, para que salgan los más importantes), y los nombres comunes solo en los idiomas de la lista "idiomas_comun".
+
+AJUSTES (opcional): config_descarga.json, en esta misma carpeta
+- Se puede dejar tal cual. Todo lo que pongas ahí cambia un valor por defecto.
+- "agente": Wikimedia pide que quien descarga diga quién es. Si quieres, pon el nombre de tu proyecto y un contacto tuyo
+  (un correo o una página). Es opcional y lo decides tú; no lo escribí por ti.
+- "limite_prueba", "paises_prueba": tamaño de la PRUEBA.
+- "descargar_banderas": false = solo texto, sin imágenes.
+- "min_sitelinks": más alto = menos estados pero más importantes (10 por defecto). "idiomas_comun": idiomas de los nombres.
+- "descartar_licencias": clases de licencia que se dejan fuera (por defecto no_comercial y sin_verificar).
+- "quitar_semilla": true = al llegar datos reales se borran los 16 estados de ejemplo.
+- "pausa_sparql_ms", "pausa_imagen_ms": pausas entre peticiones (no las bajes mucho: pueden bloquearte).
+
+AVISOS HONESTOS
+- La PRUEBA y la descarga COMPLETA ya se corrieron contra Wikidata y Commons reales (1-nov-2026). La COMPLETA tardó unos 97
+  minutos y dejó 1.902 estados, 7.236 nombres, 3.087 banderas/escudos y 2.488 personas. Wikimedia pidió esperar (error 429) varias veces
+  y se resolvió solo. Unas pocas imágenes (.gif y alguna .jpg) no se pudieron leer; se reintentan si vuelves a pulsar COMPLETA.
+- Lo que NO se ha probado con datos reales: el descubrimiento de estados en dos pasos (la COMPLETA se corrió con la versión anterior).
+- Lo más probable que haya que ajustar tras tu primera prueba: una consulta que tarde demasiado, algún tipo de entidad
+  que Wikidata clasifique distinto, o el año exacto de fechas antes de Cristo (puede haber un año de diferencia).
+- Los gobernantes salen incompletos para estados antiguos: Wikidata no tiene todo. Se pueden completar a mano o en otra pasada.
+- Las imágenes se cargan desde disco al jugar desde el editor de Godot. Para exportar el juego a un .exe habrá que
+  incluir la carpeta banderas_hist en la exportación (te lo preparo cuando lleguemos ahí).

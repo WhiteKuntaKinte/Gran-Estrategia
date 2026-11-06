@@ -1,0 +1,55 @@
+---
+title: Base de datos 0.1.8.2 — modelo general (cada ID, cada variable, cada historial)
+---
+erDiagram
+    TERRITORIO {
+        int id PK "ID único; nunca se reutiliza"
+        string tipo "mundo, continente, pais, estado, provincia, ciudad, entidad, ejercito, peloton, regimiento, guerra, batalla"
+        string nombre
+        int padre_id FK "ID del territorio que lo contiene"
+        string clave "nombre de origen para enlazar con los datos"
+        bool activo "0 = dado de baja (el ID se conserva)"
+    }
+    VARIABLE {
+        int id_var PK
+        string nombre "poblacion, tesoreria, tasa_fiscal..."
+        string categoria "demografia, economia, desarrollo..."
+        string tipo "numero, texto o id"
+        string unidad
+        string historial "cambio, mensual, anual o ninguno"
+        string agregacion "suma, media_ponderada o ninguna"
+        bool afecta_economia
+    }
+    VARIABLE_APLICA_A {
+        int id_var FK
+        string tipo_territorio "a qué tipos de territorio se aplica"
+    }
+    VALOR_ACTUAL {
+        int id_territorio PK, FK
+        int id_var PK, FK
+        any valor "UN solo dato por ID y variable"
+        int desde "fecha en que empezó este valor"
+    }
+    HISTORIAL {
+        int fila PK
+        int id_territorio FK
+        int id_var FK
+        any valor_anterior
+        int desde
+        int hasta
+        string motivo "Conquista, Debug, cierre mensual..."
+    }
+    DIVISA {
+        string codigo PK "COP, USD, EUR..."
+        string nombre
+        string simbolo
+        float por_usd "unidades por 1 US$"
+    }
+    TERRITORIO ||--o{ TERRITORIO : "contiene (padre_id)"
+    TERRITORIO ||--o{ VALOR_ACTUAL : "tiene (1 a 1 por variable)"
+    VARIABLE ||--o{ VALOR_ACTUAL : "define"
+    TERRITORIO ||--o{ HISTORIAL : "acumula"
+    VARIABLE ||--o{ HISTORIAL : "registra"
+    VARIABLE ||--|{ VARIABLE_APLICA_A : "aplica a"
+    TERRITORIO ||..o{ TERRITORIO : "propietario (provincia > pais o entidad)"
+    DIVISA ||--o{ TERRITORIO : "divisa (pais)"

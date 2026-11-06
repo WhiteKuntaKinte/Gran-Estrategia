@@ -1,0 +1,486 @@
+GRAN ESTRATEGIA — VERSION 0.1.8.36 (DESARROLLO)
+Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
+Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
+con sus provincias · Ctrl + clic en cuadros de tropas = selección múltiple · V = cambiar de vista · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
+F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña).
+
+NUEVO EN 0.1.8.36 — LA RAMA DE DESCUBRIMIENTOS, ENLAZADA CON EL RELOJ
+(Guía en docs/DESCUBRIMIENTOS.md, detalle técnico y rendimiento en NOTAS_TECNICAS_0.1.8.36.md. El número de versión lo elegí yo.)
+- 1.730 DESCUBRIMIENTOS (Militar, Científica, Sociedad; 12 eras, de la Prehistoria al futuro hipotético) en un catálogo NUEVO, datos/descubrimientos.json. No van en la base de datos de
+  territorios porque esa guarda «un valor por lugar y por fecha» y un descubrimiento es un dato fijo del juego.
+- CADA DESCUBRIMIENTO TIENE UN AÑO (a. C. en negativo): un país lo conoce cuando el año del reloj es igual o mayor. Así cualquier partida arranca con lo que la historia ya sabía: el año 1 con 353,
+  2026 con 1.699. El reloj los va metiendo mes a mes y el Debug > fecha (viaje en el tiempo) deja a todos los países con la historia de esa fecha.
+- Un país que nunca se toca no gasta memoria (lee la historia); el que se aparta (conceder / quitar, la futura investigación) recibe su propia copia.
+- F1 > pestaña «Descub.»: año del reloj, cuántos conoce la historia y tu país, por era, últimos y próximos en llegar, lista alrededor de la fecha, buscador, ficha con año, ruta y
+  prerrequisitos, y los botones CONCEDER A MI PAÍS / QUITAR A MI PAÍS / MI PAÍS = HISTORIA.
+- Para cambiar el catálogo: herramientas/descubrimientos/catalogo/*.txt y anios.tsv + herramientas/construir_descubrimientos.py (comprueba prerrequisitos, ciclos, años y eras antes de escribir).
+- TODAVÍA NO: todos los países comparten la misma historia (sin difusión regional ni retraso), no hay investigación ni costes, y los descubrimientos aún no desbloquean unidades ni edificios.
+  Los años de la prehistoria son muy aproximados y los de la última era (hipotética) están inventados.
+
+NUEVO EN 0.1.8.35 — EL MAPA EN CELDAS: LAS PROVINCIAS PUEDEN CAMBIAR DE FORMA + RESOLUCIÓN EN PANTALLA COMPLETA
+(Guía del sistema en docs/MAPA_CELDAS.md, revisión de Natural Earth en docs/NATURAL_EARTH.md, detalle técnico y tablas de rendimiento en NOTAS_TECNICAS_0.1.8.35.md. El número de versión lo elegí yo.)
+- PANTALLA COMPLETA Y RESOLUCIÓN: Godot no puede cambiar la resolución real del monitor (en pantalla completa usa la del escritorio), pero ahora en OPCIONES > PANTALLA, con pantalla
+  completa, eliges la RESOLUCIÓN INTERNA a la que se dibuja el juego (se estira a toda la pantalla): «Nativa» o una menor, que da más FPS en un PC modesto. En modo ventana todo sigue igual.
+- EL MAPA SE REHIZO EN CELDAS: el mundo está cortado en 16.056 celdas fijas y UNA PROVINCIA ES UN GRUPO DE CELDAS. Lo que cambia es qué provincia es dueña de cada celda, así que
+  la forma de una provincia puede cambiar en pleno juego (cederle territorio a una vecina, fusionar dos, dividir una) sin regenerar nada, y cada época (2026, año 1 d. C., las que vengan)
+  es solo una tabla distinta de «qué celdas tiene cada provincia»; la geometría es una sola para todas (el paquete del año 1 pasó de 46 MB a 4,3 MB).
+- CÓMO VERLO: F1 (Debug) > Provincia > «Forma del territorio»: elige una provincia, elige una vecina y pulsa «Cederle ¼», «Cederle ½», «Absorberla toda» o «Fusionarme en ella»;
+  «Deshacer» y «Restablecer forma» lo devuelven. El mapa, las fronteras, el clic y los nombres de país se ponen al día al instante (un cambio cuesta ~12–40 ms).
+- LO QUE TODAVÍA NO HACE (a propósito, son decisiones de reglas de juego): mover la población, los edificios o las tropas junto con las celdas, crear provincias que no existen en la época,
+  recalcular los kilómetros de las rutas de marcha, ni mover los nombres de provincia o la línea de estados que ya vienen dibujados. Hay un aviso (`forma_cambiada`) para engancharlos.
+- TEXTURAS FUTURAS: si pones una imagen del mundo en datos/texturas/relieve.png (la prepara herramientas/preparar_relieve.py), el juego la mezcla sobre los colores de los países sin añadir
+  capas ni triángulos; sin la imagen no cambia nada ni cuesta nada, y la calidad Baja la apaga.
+- NATURAL EARTH: revisado y documentado (qué capas se usan, cuáles existen y no se usan: ríos, áreas urbanas, relieve, infraestructura…, y cómo se traducirían a variables por celda).
+- ARREGLADO EN EL CAMINO: una lista interna de celdas por provincia quedaba vacía y el mapa no se repintaba al cambiar de dueño (lo cazó la prueba de anexión); corregido y con prueba nueva.
+- CLIC Y RENDIMIENTO: buscar la celda bajo el cursor usa una rejilla (6 µs en vez de 7,8 ms). Frente a la 0.1.8.34 el mapa en celdas cuesta +7–18 % de triángulos en vista lejana (igual con zoom cercano),
+  ~+39 MB de memoria y ~0,1–0,2 s más al abrir; a cambio la carpeta datos/ baja de 113 a 80 MB. Tablas en NOTAS_TECNICAS_0.1.8.35.md.
+- PRUEBAS: 35 pruebas en los datos reales (1.373 comprobaciones «OK», 0 fallos) con los datos reales y 8 con los de semilla (697 «OK», 0 fallos); la nueva runner76 (territorio) y runner15 (anexión) adaptada a celdas.
+NO SE PROBÓ: tu PC real (FPS y tiempo de arranque con tus datos), cómo se ve el relieve (no hay imagen incluida), el balance de reglas cuando una provincia cambia de forma.
+
+NUEVO EN 0.1.8.34 — EL AÑO 1 d. C. ES EL MISMO JUEGO QUE 2026 (OTROS DATOS, MISMAS MECÁNICAS)
+(Detalle técnico, método del mapa y tablas de rendimiento en NOTAS_TECNICAS_0.1.8.34.md. El número de versión lo elegí yo. Reemplaza el «año 1 solo mapa» de la 0.1.8.33.)
+- UN SOLO JUEGO, DOS ESCENARIOS: 2026 y el año 1 d. C. son escenarios de inicio (carpetas de datos: datos/ y datos/epocas/1dc/) del MISMO código. Todo lo que se cambie en la jugabilidad
+  vale para los dos. En el año 1 hay: HUD con sus cinco pestañas (General · Diplomacia · Militar · Política · Economía) al elegir una nación, el reloj corriendo (empieza el 1/1/1),
+  economía por provincia y por nación, ejércitos con sus pelotones y mandos, guerra, diplomacia, IA, ciudades, Debug, el botón de vista (sin estados que agrupar en esa época) y pausa/opciones.
+- EL MAPA DEL AÑO 1 SE REHIZO: 186 naciones con tierra (45 estados con las fronteras de Cliopatria / Seshat Global History Databank, CC BY 4.0, y 141 pueblos y culturas que dibujé a mano:
+  caledonios, brigantes, germanos por tribu, dacios, sármatas, bereberes, bantúes, mayas, moche, hohokam, aborígenes, polinesios…) más «Tierras sin reclamar» de cada continente.
+  4.110 PROVINCIAS (en vez de las 7.653 de hoy): cada nación tiene sus provincias, con bordes irregulares y sin los cuadrados y óvalos de la 0.1.8.33. El 31 % de la tierra (desiertos, selvas
+  y tundra sin gente organizada, los polos) queda SIN RECLAMAR: no todo el planeta estaba ocupado.
+- TIERRAS SIN RECLAMAR: son territorio inerte. No tienen gobierno, ejército ni IA, no se pueden controlar ni conquistar ni declararles la guerra; las tropas pueden caminar por ellas sin guerra.
+- POBLACIÓN Y ECONOMÍA DEL AÑO 1: 237,5 millones en el mundo (Han 58 M, Roma 55 M, Satavahana 14 M, Partia 10 M…), repartidos según la habitabilidad de cada región. Ejércitos con tasas
+  de la época (el ejército romano ≈ 300.000). Banderas: de relleno, generadas por programa (el color de cada nación con una forma simple); no son las reales.
+- MENÚ: JUGAR > MODO DEV > ESCENARIO: «2026» o «AÑO 1 d. C.». Elegir otro escenario recarga el mundo (otros datos). La CAMPAÑA sigue siendo la de Europa de 2026.
+- OPCIONES > INFORMACIÓN cita las fuentes del escenario (Cliopatria, CC BY 4.0).
+- LAS FRONTERAS Y LOS PUEBLOS SON APROXIMADOS: ubicaciones, extensiones y números son estimaciones razonables, no un atlas. Dime qué zona está mal y se corrige en una tabla
+  (herramientas/epoca/: datos_1dc_estados.py, datos_1dc_pueblos_a.py y _b.py; construir_epoca.py regenera todo el escenario en ~2,5 min).
+- ARREGLADO EN EL CAMINO: rayas negras dentro de las naciones (uniones en T entre provincias vecinas: ahora el generador «noda» las aristas).
+- RENDIMIENTO REVISADO (regla permanente): ver NOTAS_TECNICAS_0.1.8.34.md. 0 funciones y 0 variables sin uso.
+- PRUEBAS: 34 pruebas con los datos reales (1.265 comprobaciones, 0 fallos) y 8 con los de semilla, 0 fallos (la antigua runner75 se reemplazó por una de paridad de escenarios con 144 comprobaciones).
+NO SE PROBÓ: tu PC real, la exactitud histórica de cada frontera y de cada pueblo, el balance de la IA y de la guerra con los ejércitos del año 1 (jugando).
+
+NUEVO EN 0.1.8.33 — OPCIONES EN LA PAUSA, PANTALLA VERIFICADA Y (DESPUÉS REEMPLAZADO) MODO DEV CON DOS ÉPOCAS
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.33.md. El año 1 de esta versión era solo un mapa aproximado; lo reemplaza la 0.1.8.34.)
+- OPCIONES TAMBIÉN EN LA PAUSA: Esc > CONTINUAR · OPCIONES · DEBUG · MENÚ PRINCIPAL · SALIR. VOLVER en OPCIONES regresa a la pausa.
+- «CAMBIÉ LA RESOLUCIÓN Y NO PASÓ NADA»: ahora, tras APLICAR, el juego comprueba si la ventana cambió de verdad y lo escribe debajo de los botones («Aplicado: ventana 1280 × 720…» o un AVISO).
+  Causa más probable: ejecutar con F5 en Godot 4.4+ con «Embed Game on Next Start» (pestaña Juego del editor) activado: el juego queda dentro de una ventana del editor, que manda sobre su tamaño.
+  Desactívalo (o ejecuta el juego exportado) y la resolución sí cambia. Las opciones gráficas del mapa (calidad, mar, costas…) no dependen de eso.
+NO SE PROBÓ: tu PC real (ni la ventana del editor incrustado, ni FPS con tu GPU).
+
+NUEVO EN 0.1.8.32 (sobre 0.1.8.25; incluida en la 0.1.8.33) — RENDIMIENTO (REVISIÓN DE TODO EL CÓDIGO) Y OPCIONES GRÁFICAS
+(Detalle técnico y tablas antes/después en NOTAS_TECNICAS_0.1.8.32.md. El número de versión lo elegí yo: la 0.1.8.31 se construyó pero no se entregó, y esta la incluye.)
+- RENDIMIENTO MEDIDO (campaña de España, mismo equipo, sin tarjeta gráfica: solo cuenta el código del juego): guerra a x6 de 19 a ~96 FPS y el peor fotograma de 150 a ~60 ms;
+  guerra a x4 de 89 a 125 FPS; paz a x6 de 78 a 122 FPS; a x1–x3 no cambia (ya iba bien). Tu PC no está medido: dime cuántos FPS marca la esquina antes y después.
+- LO QUE SE ARREGLÓ: el cierre del año (45–70 ms de golpe) ahora va por trozos; el repintado tras una conquista (hasta 130 ms) va por etapas de un fotograma cada una, con las
+  fronteras hechas de forma incremental; las batallas grandes se reparten entre fotogramas; a x4–x6 el desarrollo mensual de las provincias se hace por grupos de meses;
+  elegir dónde va cada pila de tropas pasó de ~14 a ~3,5 ms; el panel de país ya no se rehace entero cuando no cambió nada que se vea.
+- CÓDIGO SOBRANTE FUERA: 5 funciones y 6 variables que nadie usaba (y contadores de depuración de la capa de tropas). Auditoría: 0 funciones o variables duplicadas.
+  El tamaño total del código no baja (18.070 → 18.627 líneas) porque entran las opciones gráficas nuevas y el trabajo por trozos; lo que baja es lo que se ejecuta por segundo.
+- OPCIONES > PANTALLA tiene ahora tres partes: PANTALLA (modo, resolución, sin bordes, VSync, límite de FPS, contador de FPS), GRÁFICOS DEL MAPA (Calidad Alta / Media / Baja /
+  Personalizada, suavizado de bordes, mar con profundidad o liso, detalle de las costas, líneas de provincia, ciudades, lagos) y SIMULACIÓN (Prioridad: Fluidez / Equilibrada /
+  Velocidad del tiempo). Por defecto el juego se ve igual que siempre (calidad Alta). Para un PC flojo: Calidad Baja + VSync desactivado + prioridad Fluidez.
+- EL JUEGO: a x1–x3 es idéntico (huella determinista igual a la 0.1.8.31). A x4–x6 la tesorería total difiere ~2 diezmillonésimas por el desarrollo mensual por grupos de meses.
+  Tras una conquista, nombres y fronteras pueden tardar unos fotogramas en actualizarse.
+- PRUEBAS: regresión completa en 0 fallos: 38 pruebas con los datos reales (1.148 comprobaciones, incluidas las 4 unitarias de test/: 181 + 121 + 84 + 176) y 4 con los datos de semilla. La huella determinista de 2 años
+  da lo mismo que la 0.1.8.31 a x1–x3. Capturas de la ventana PANTALLA revisadas.
+NO SE PROBÓ: tu PC real (FPS con tu GPU, VSync, pantalla completa, resolución con tu monitor), dos monitores ni el escalado de Windows.
+
+NUEVO EN 0.1.8.31 (sobre 0.1.8.25; incluida en la 0.1.8.32) — OPCIONES: VENTANAS «PANTALLA» E «INFORMACIÓN»
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.31.md.)
+- OPCIONES (menú principal) ahora abre un submenú con dos ventanas: PANTALLA e INFORMACIÓN.
+- INFORMACIÓN: lo que ya existía (países, provincias y unidades territoriales del mapa), más la versión.
+- PANTALLA: modo (ventana / pantalla completa), resolución de la ventana (solo las que caben en tu pantalla), ventana sin bordes, VSync (desactivado / activado /
+  adaptativo), límite de FPS (sin límite hasta 240), suavizado de bordes del mapa (sin / 2x / 4x) y mostrar u ocultar el contador de FPS.
+  APLICAR aplica los cambios; RESTABLECER vuelve a los valores por defecto.
+- SEGURIDAD: si el cambio mueve o redimensiona la ventana sale «¿Mantener estos cambios?» con 10 segundos; si no confirmas, vuelve solo a lo anterior.
+- SE GUARDA: lo confirmado queda en %APPDATA%\GranEstrategia\ajustes.cfg y se aplica al abrir el juego (sin archivo, el juego arranca como siempre).
+- Tip para PCs flojos: VSync desactivado + suavizado desactivado + una ventana más pequeña suben los FPS.
+- PRUEBAS: 124 comprobaciones nuevas (test/runner74.tscn, F6 en Godot): ajustes, ventana real, pantalla completa, confirmar/revertir y el menú.
+NO SE PROBÓ: tu PC real (monitor, driver, VSync y FPS reales), dos monitores ni el escalado de Windows.
+
+NUEVO EN 0.1.8.25 (sobre 0.1.8.3) — LIMPIEZA DE CÓDIGO, COMENTARIOS Y PRUEBAS UNITARIAS (EL JUEGO NO CAMBIA)
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.25.md.)
+- CÓDIGO REPETIDO UNIFICADO: la regla «entrar con tropas al territorio de otro país exige guerra» estaba escrita 3 veces; ahora es una sola función que usan la orden de marcha, el aviso del mapa y el bloqueo de órdenes.
+  También se unificaron el contador de tiempos, el cambio de mes, la medida del texto de las etiquetas del mapa y otras cuentas repetidas.
+- CÓDIGO MUERTO FUERA: 13 funciones y varias constantes y variables que nadie usaba. 17.644 → 17.574 líneas, 0 funciones o variables duplicadas.
+- FUNCIONES LARGAS PARTIDAS en piezas con nombre (el fotograma del mapa, el combate por tramos, la cola de decisiones de la IA) y comentarios `##` en todas las funciones nuevas.
+- PRUEBAS UNITARIAS: 381 comprobaciones nuevas (carpeta `test/`: abre `runner71.tscn`, `72` o `73` en Godot y pulsa F6) sobre las 92 funciones añadidas o cambiadas desde la 0.1.8.2a.
+- PRUEBA DE QUE NADA CAMBIÓ: una campaña con semilla fija de 2 años da exactamente los mismos números antes y después de la limpieza, y las 38 pruebas de siempre siguen en 0 fallos.
+NO SE PROBÓ: jugar a mano ni tu PC. Si notas cualquier diferencia con la 0.1.8.3, dímela: no debería haberla.
+
+NUEVO EN 0.1.8.3 (sobre 0.1.8.2a) — DECLARAR LA GUERRA DESDE EL MENÚ, IA CON EJÉRCITOS ACOTADOS, TREGUA LARGA, OBSERVADOR, TIEMPO NUEVO, DEBUG REDIMENSIONABLE Y HUD MÁS LIGERO
+(Todos los números son PROVISIONALES. Detalle técnico en NOTAS_TECNICAS_0.1.8.3.md.)
+- DECLARAR LA GUERRA: pestaña DIPLOMACIA del país que elijas > «Declarar la guerra a …» (dos pulsaciones: la 2.ª confirma). Mandar tropas al territorio de un país con el que no estás en guerra YA NO
+  declara la guerra solo: la orden se bloquea y el aviso te dice dónde declararla. Si hay tregua se muestra cuánto queda (tú sí puedes romperla). En la campaña solo se declara a países con IA.
+- EJÉRCITOS DE LA IA ACOTADOS: antes reclutaban hasta el 1,5 % de la población en pocos días (en 2 años pasaban de 21 M a 136 M de soldados y había más de 100 guerras). Ahora cada país tiene un tope
+  (1,3 × su ejército inicial en paz, 2,5 × en guerra), un ritmo máximo de reclutamiento (5 % al año en paz, 50 % en guerra) y las guerras simultáneas del mundo no pasan del 10 % de los países con IA.
+- TREGUA: tras una paz, esa pareja de países no vuelve a la guerra por decisión de la IA durante 5 años, y la IA que firmó la paz no declara ninguna otra guerra durante 1 año.
+- AL DEJAR UN PAÍS, LO LLEVA LA IA: si sueltas tu país o eliges otro en Debug > Jugador, el que dejas pasa a la IA. En la campaña la IA lleva a todos los países menos el tuyo (ya no se elige).
+- OBSERVADOR: en el menú de campaña elige «— Ninguno: solo observar —»: ves el movimiento de TODAS las tropas (también en el modo dev si no controlas ningún país) y puedes dejar correr los años. En la campaña de
+  observador no se dan órdenes a ningún país.
+- TIEMPO NUEVO: x1 = 1 día/s · x2 = 2,5 · x3 = 8 · x4 = 25 · x5 = 83 · x6 = 370 días/s (un año por segundo). El reloj simula varios días de un tirón (hasta 31, sin cruzar el fin de mes) y a x4 o más usa un modo
+  de ahorro (balances cada 3 meses). En mi servidor: campaña con 50 IA a x6 ≈ 330 días/s; dev con 249 IA ≈ 216 días/s.
+- DEBUG REDIMENSIONABLE: botones « » en la barra de título y agarradera ◢ abajo a la derecha. Arranca más chico.
+- HUD MENOS INVASIVO: el panel de la izquierda pasó de 500 px a ~30 % del ancho (372–420 px) y ya no llega casi hasta abajo; botón ▾/▸ para encogerlo a solo el nombre; en las pestañas solo la abierta lleva texto;
+  panel de detalle más angosto; el botón «Ranking» ya no lo tapa.
+- RENDIMIENTO CON IA EN TODOS LOS PAÍSES: la IA decide por prioridad y con tope de tiempo, los frentes se calculan bajo demanda, el cambio de mes trabaja por grupos de países y el repintado del mapa tiene límite
+  de frecuencia a velocidades altas. Quedan picos aislados de un fotograma.
+- BUGS ARREGLADOS DE PASO: la campaña de observador fallaba al centrar la cámara; la barra superior decía «Observador» al empezar con país hasta que pasaba el primer día.
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real; los FPS de tu tarjeta gráfica; si ahora la IA es jugable y suficientemente guerrera. Todo se midió en mi servidor (CPU lenta, sin tarjeta gráfica) con clics y teclas simulados.
+Pendiente tuyo: el estilo de las líneas de provincia / estado / costura, y el informe de Debug > «Rend.» en tu PC.
+
+NUEVO EN 0.1.8.2a (sobre 0.1.8.2) — EJÉRCITOS INICIALES, RUTAS NUEVAS, AVISOS DE GUERRA, NEGOCIACIÓN DE PAZ, COLORES, PROVINCIAS CON UN CLIC Y RENDIMIENTO
+(Todos los números son PROVISIONALES. Detalle técnico en NOTAS_TECNICAS_0.1.8.2a.md y el informe completo en INFORME_0.1.8.2a.md.)
+- AL EMPEZAR, CADA PAÍS TIENE UN SOLO REGIMIENTO en su capital con todo su ejército (antes había uno por provincia).
+- SELECCIÓN MÚLTIPLE ARREGLADA: Ctrl + clic solo elige o quita (ya no arrastra el grupo si el ratón se mueve un poco) y soltar un cuadro en su misma provincia no hace nada.
+  Un clic derecho largo es mover la cámara, no una orden.
+- RUTAS POR ISLAS: ahora cada provincia costera se enlaza por mar con la más cercana de cada otra masa de tierra (917 → 4.725 enlaces marítimos): las tropas cruzan el mar en vez de dar la vuelta.
+- RUTAS REDISEÑADAS: cada columna en marcha tiene su color (paleta de 12, luego tonos oscuros y claros); línea fina (3 px) de un solo color, sin contorno; las flechas son del color de su línea e
+  incrustadas en ella; las columnas que comparten camino van en carriles paralelos que se juntan y separan como en un mapa de metro.
+- POP-UP «TE HAN DECLARADO LA GUERRA»: pausa el tiempo, dice quién, por qué, cómo están las fuerzas y cuánto falta para el primer contacto (días de juego y segundos reales a tu velocidad).
+  Ninguna IA declara guerras en sus primeros 120 días y ninguna ataca al jugador en los primeros 240.
+- POP-UP DE FIN DE GUERRA: cuando una IA quiere la paz contigo te dice el motivo y negocias con solo dos monedas, PROVINCIAS y DINERO, combinables; el rival evalúa en vivo y la barra dice si acepta.
+- COLORES: en la campaña cada país tiene SIEMPRE su color de identidad; en Modo Dev cada país usa el color de su continente en un tono propio, más oscuro cerca del ecuador, sin degradado.
+- PROVINCIAS CON UN CLIC: un clic en un país muestra sus provincias (antes doble clic); los países vecinos muestran solo el contorno de sus provincias, sin nombres; en la campaña los contornos de
+  todos los países se ven siempre.
+- RENDIMIENTO: el día de juego se reparte en pasos cortos entre fotogramas (los FPS se mantienen al subir la velocidad; en un PC flojo con muchas guerras el tiempo puede avanzar más lento que el nominal),
+  la IA y las batallas deciden por lotes, hay caché de rutas, el panel abierto no se rehace en cada cambio y las rutas se dibujan a 25 Hz como máximo. En mi servidor un día de campaña con 54 guerras pasó de ~115 ms a ~62 ms (a velocidad 6 con tantas guerras sigue siendo pesado).
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real; los FPS de tu tarjeta gráfica; cómo se ven los colores y las rutas en tu pantalla. Todo se midió en mi servidor (CPU lenta, sin tarjeta gráfica) con clics y teclas simulados.
+Pendiente tuyo: el estilo de las líneas de provincia / estado / costura, y el informe de Debug > «Rend.» en tu PC.
+
+NUEVO EN 0.1.8.2 (sobre 0.1.8.1) — PRIMERA IA DE PAÍSES, MODO CAMPAÑA (EUROPA), RANKING, VER AL ENEMIGO, WASD Y RECLUTAR LO QUE QUIERAS
+(Todos los números de la IA son PROVISIONALES: están como constantes al principio de scripts/ia.gd. Detalle técnico en NOTAS_TECNICAS_0.1.8.2.md.)
+- AL PULSAR «JUGAR» HAY UNA SEGUNDA CAPA con dos botones gigantes:
+  · MODO DEV: el mapa del mundo entero, como hasta ahora. No hay IA salvo la que actives tú en Debug.
+  · CAMPAÑA: solo Europa (49 países) + Rusia y Turquía ENTERAS = 51 países y 1.716 provincias. Fuera de eso no existe nada: el resto del mundo es un vacío oscuro
+    sin nombres, sin ciudades y sin nada que elegir, y la cámara no sale de ese territorio. Eliges tu país (España por defecto) y qué países tendrán IA:
+    «los vecinos de mi país» (recomendado, ligero) · «todos» (50 IA, más lento) · «ninguno».
+  Si ya tenías una partida en curso, el menú muestra CONTINUAR y NUEVA PARTIDA; una partida nueva recarga el mundo limpio (tarda unos segundos).
+- LA IA (cada país con IA decide cada 4 días; el tuyo nunca tiene):
+  · DINERO: mantiene un ejército que su economía aguante (en paz gasta hasta ~14 % de sus ingresos en mantenerlo, en guerra ~32 %, más si tiene mucha caja), guarda
+    una reserva de ~15 días de ingresos y gasta el resto en reclutar, sobre todo en la provincia de la que saldrá su próximo ataque. Los regimientos que arma son de hasta 30.000
+    soldados. Si el mantenimiento supera sus ingresos y la caja no aguanta, licencia soldados antes de que deserten.
+  · GUERRA: ataca al vecino (por tierra o por un estrecho) al que le gana por bastante en soldados y que más produce; como mucho 2 guerras a la vez, nunca con la caja en rojo, y tregua de 365 días
+    después de cada paz. Cada IA tiene su «cautela» (unas son más decididas que otras).
+  · OPERACIONES: elige provincias enemigas pegadas a su frente (las suyas ocupadas valen el doble) y manda los regimientos libres más cercanos, solo si suman bastante más que los defensores.
+  · PAZ: cobra la victoria (paz quedándose con lo ocupado, con indemnización si ganó de sobra), acepta tablas si la guerra se estanca y se rinde si va perdiendo claramente.
+    Al jugador NUNCA le propone la paz: la propones tú desde Diplomacia.
+- SOLO SE CONQUISTA A QUIEN TIENE IA (campaña): un país sin IA no compite y sus provincias no se pueden conquistar; si intentas mandarle tropas, el juego te dice que le actives la IA en Debug > IA.
+  La conquista es como en Age of History: ocupas provincias y luego hay acuerdos de paz (los tres botones de Diplomacia). Cada provincia da ingresos a su dueño.
+- DEBUG > pestaña IA (nueva): una casilla por país (con buscador), botones rápidos «Todas · Vecinas de mi país · Ninguna», un resumen (decisiones, guerras, paces y cuántos ms cuesta la IA)
+  y, al elegir un país en el mapa, qué está haciendo su IA. Apagar la IA de un país cierra sus guerras en paz blanca (en campaña).
+- RANKING (solo campaña): botón «Ranking» arriba a la izquierda (o la tecla R): países con IA y el tuyo, con provincias, soldados, ingresos por día y un puntaje
+  (40 % provincias + 30 % soldados + 30 % ingresos, cada uno frente al mejor). Se actualiza solo. Ojo: «provincias» cuenta unidades del mapa, que son muy desiguales (Alemania ≈ 16, Eslovenia ≈ 190).
+- VES AL ENEMIGO: si estás en guerra, ves sus regimientos y columnas dentro de tu campo de visión (tu territorio, donde tienes tropas y las provincias vecinas, y adonde van tus columnas),
+  con un filo rojo. Mientras eliges el destino de un movimiento, también ves qué hay en esa provincia aunque todavía no haya guerra. Así ves qué defiende la provincia que quieres tomar y qué viene hacia ti.
+- WASD (o flechas) mueve la cámara; Shift = más rápido; no se mueve si estás escribiendo en un campo.
+- RECLUTAR LA CANTIDAD QUE QUIERAS: escribe el número (con o sin puntos) en el campo; el tope es el dinero de tu caja (se ve «Máx.»). Se probó con 1.500.000.
+- RENDIMIENTO DE LA IA: 50 IA a la vez cuestan ~25 ms por día de juego en mi servidor (antes ~106); con las 8 IA de un país típico (Francia + vecinos), unos 2–3 ms. Detalle en las notas técnicas.
+CÓMO PROBAR LA IA (5 minutos): Jugar > Campaña > elige un país > Comenzar (con «vecinos»). Pulsa R para el Ranking, pon velocidad 3–4 y mira cómo suben los soldados de las IA y empiezan las
+  guerras entre ellas (el panel Diplomacia de un país vecino muestra sus guerras; Debug > IA dice qué hace cada una). Para probar la regla «sin IA no se conquista»: manda tropas tuyas a un país sin IA.
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real. Todo se midió en mi servidor (CPU lenta, sin tarjeta gráfica) con simulaciones de hasta 3 años con 50 IA, clics y teclas simuladas y capturas de
+las pruebas anteriores. Cómo se ve el vacío oscuro fuera de Europa, si las IA son demasiado agresivas o pasivas, y si el ranking te sirve, lo juzgas tú jugando.
+Pendiente tuyo: el estilo de las líneas de provincia / estado / costura, y el informe de Debug > «Rend.» en tu PC.
+
+NUEVO EN 0.1.8.1 (sobre 0.1.8) — ECONOMÍA PARA TODOS, CONQUISTA, RETIRADA, PAZ CON CONDICIONES Y DOS PRUEBAS DE RENDIMIENTO
+(Todos los números de abajo son PROVISIONALES: están como constantes al principio de guerra.gd y entidades.gd para que los cambies.)
+- PASO 1 — ECONOMÍA SIMULADA PARA TODOS LOS PAÍSES. Antes solo tu país tenía caja. Ahora cada país con provincias arranca con 60 días de sus
+  ingresos y cada día suma ingresos − mantenimiento de su ejército, igual que el tuyo. Reclutar cuesta dinero para todos (si la caja no alcanza, no se recluta).
+  Al anexar un país, su caja pasa al que lo anexa. El cierre mensual guarda la tesorería de TODOS en el historial de la base de datos.
+  · QUIEBRA: con la tesorería en negativo, cada día desertan el 0,4 % de los soldados (se pierden de verdad; NO cuentan como bajas de combate), hasta que el
+    gasto cae por debajo de los ingresos o el país vuelve a números positivos. Sale un suceso «está en rojo» una sola vez y otro al salir del rojo.
+    Así una guerra larga puede romper a un país que gasta más de lo que ingresa. (Con los datos de hoy, el único país con ejército mayor que su economía es
+    Corea del Norte: pierde ~29 % de sus soldados en dos años de paz hasta equilibrarse. Es un resultado de los datos, no un error.)
+  · SUCESOS: lista corta de hechos (ocupó, liberó, paz, en rojo) por país, en Diplomacia > «Sucesos recientes».
+  · La pestaña ECONOMÍA de cualquier país muestra ahora su Tesorería (con aviso «EN ROJO»), el Gasto del ejército por día y el Balance por día;
+    la ficha de Tesorería trae entra/sale/balance y la foto mensual.
+- PASO 2 — CONQUISTA, RETIRADA Y PAZ.
+  · OCUPACIÓN: si un ejército enemigo se queda SOLO en una provincia durante 3 días (guerra abierta), la ocupa. El dueño legal NO cambia, pero la provincia deja de
+    rendirle ingresos y en el mapa se pinta mezclando el color del dueño (30 %) y el del ocupante (70 %). Las tropas del dueño que se quedan solas 3 días la LIBERAN.
+    Su panel dice «OCUPADA por …». Variable nueva de la base de datos: «ocupante» (id 56, historial por cambio).
+  · RETIRADA: el bando que baja de 35 % de su fuerza inicial en la batalla y va peor que el rival NO pelea hasta la aniquilación: se retira marchando al refugio propio
+    más cercano (hasta 5 provincias por tierra sin enemigos). La batalla termina «por retirada» y el ganador puede ocupar. (Antes todo terminaba con uno aniquilado.)
+  · PUNTAJE DE GUERRA = parte de la producción del rival que ocupas − parte de la tuya que él ocupa. Se ve en Diplomacia en cada guerra.
+  · PAZ CON CONDICIONES (Diplomacia > guerra > «Proponer la paz a X»), tres botones; el rival decide al instante y el botón dice «(rechazaría)» si hoy diría que no:
+      1. «Paz blanca»: todo vuelve a su dueño. La acepta el rival si tu puntaje no es peor que −2 %.
+      2. «Cada uno se queda con lo ocupado»: las provincias ocupadas CAMBIAN DE DUEÑO de verdad, en los dos sentidos. Siempre se acepta (el rival se queda con lo que ya tiene).
+      3. «Quedarse con lo ocupado + indemnización»: además cobras hasta 90 días de ingresos del rival (sin pasar de lo que tenga en caja). La acepta si le ocupaste
+         al menos ~8 % de su producción.
+    Al firmar la paz las batallas terminan, las ocupaciones a medias se cancelan y las tropas que quedaron en territorio ajeno salen marchando a casa.
+- DOS PRUEBAS DE RENDIMIENTO («para pulir»), con 40 guerras simultáneas durante 2 años, y lo que arreglé (números en NOTAS_TECNICAS_0.1.8.1.md):
+  · el día de juego en un mundo de 249 países bajó de 49 ms a ~5 ms con 40 guerras (y de 7 ms a 0,1 ms en paz); el cambio de mes, de 119 ms a ~48 ms;
+  · la pestaña Economía de EE. UU. (3.222 provincias) tardaba ~160 ms por refresco: ahora ~2 ms; la diplomacia se calcula una sola vez por cambio y no en cada refresco.
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real. Todo se midió en mi servidor (CPU lenta, sin tarjeta gráfica): los milisegundos de aquí sirven para
+COMPARAR antes y después, no para predecir tus FPS. Cómo se siente la ocupación pintada en el mapa y si los umbrales de retirada y paz son buenos lo juzgas tú jugando.
+Pendiente tuyo: el estilo de las líneas de provincia / estado / costura, y el informe de Debug > «Rend.» en tu PC. Siguiente en la hoja de ruta: la IA de los países (NPC).
+
+NUEVO EN 0.1.8 (sobre 0.1.7.9.9F2) — OVERHAUL DEL HUD, DIPLOMACIA, SELECCIÓN MÚLTIPLE Y FRONTERAS TRANSPARENTES
+- HUD DE PAÍS REDISEÑADO: arriba la cabecera (bandera, nombre, cerrar), debajo una FILA DE PESTAÑAS (General · Diplomacia · Militar · Política · Economía) y
+  debajo una sección con TODA la información de la pestaña abierta. Un continente muestra General · Militar · Economía; un estado, provincia o ciudad
+  General · Militar · Política · Economía; el mar solo General.
+- LA VENTANA FLOTANTE DE EJÉRCITO YA NO EXISTE: el manejo de tropas está DENTRO de la pestaña Militar del país (sub-pestañas Resumen · Regimientos ·
+  Reclutar · Batallas). Un clic en un cuadro de tropas o en una provincia tuya abre tu país en Militar > Regimientos. (La pestaña «Guerras» de 9F2
+  pasó a Diplomacia.)
+- PESTAÑA DIPLOMACIA (nueva): situación del país, sus guerras abiertas (rival, si es agresor o defensor, causa, fechas, batallas y bajas de cada lado,
+  y el botón «Firmar la paz» si es tu país), tropas extranjeras en su territorio y tropas propias afuera, aliados y vasallos (el hueco ya está, por
+  ahora no hay ninguno), vecinos por tierra (con aviso si hay guerra) y el historial de guerras pasadas.
+- BARRA SUPERIOR: clic en el nombre/bandera de tu país → pestaña General; clic en el dinero → pestaña Economía.
+- NUEVO ASPECTO: azul acero más oscuro, apagado y algo metálico (paneles con degradado y esquinas cortadas), también en el menú principal, el de pausa y las
+  ventanas de Debug y «Mi país». La letra es INTER (licencia libre SIL OFL, en fuentes/): neutral, clara y que cansa menos la vista.
+- CTRL + CLIC = SELECCIÓN MÚLTIPLE de tropas, como en el explorador de archivos: Ctrl+clic en un cuadro del mapa (o en una fila de la lista) lo añade o lo
+  quita de la selección. Con varios elegidos, Mover (botón, clic derecho o arrastrar un cuadro elegido), Detener, Unir y Disolver valen para todos a la vez.
+  Los elegidos salen arriba en la lista y se resaltan con marco dorado en el mapa. (El rango con Shift todavía no existe.)
+- DISOLVER SIN CONFIRMACIÓN: un clic y los soldados vuelven a casa. (Lo entendí como «ese doble check es INnecesario»; si querías lo contrario, dímelo.)
+- CUADROS DE TROPAS SIEMPRE ENCIMA: la etiqueta con la cantidad de soldados se dibuja por encima de TODO lo demás del mapa (ciudades, nombres, rutas,
+  flechas, líneas doradas); las columnas en marcha, encima de las pilas quietas.
+- FRONTERAS ENTRE PAÍSES CON FRANJAS TRANSPARENTES: la línea es NEGRA y entre franja y franja queda un hueco TRANSPARENTE por donde asoma el color del
+  país (antes los huecos eran crema). Las costas siguen siendo negro sólido.
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real; todo se probó en mi servidor (sin tarjeta gráfica) con clics y teclas simulados y capturas que
+revisé yo. Cómo se ven y se sienten el nuevo azul y la fuente Inter en tu pantalla lo juzgas tú. (Conquista, retirada y quiebra llegaron en 0.1.8.1.)
+Pendiente tuyo: el estilo de las líneas de provincia / estado / costura, y el informe de Debug > «Rend.» en tu PC.
+
+QUÉ CAMBIÓ EN 0.1.7.9.9F2 — las menciones al «HUD de tropas flotante», a «Disolver (pide confirmación)» y a la pestaña «Guerras» están SUPERADAS por 0.1.8.
+
+NUEVO EN 0.1.7.9.9F2 (sobre 0.1.7.9.9F) — TROPAS: REGIMIENTOS, PRECIOS, GUERRA AL ATACAR Y BATALLAS
+- LAS TROPAS YA NO SE FUNDEN SOLAS. Mandar tropas a una provincia donde ya hay otras solo hace que COMPARTAN provincia: cada grupo sigue siendo su
+  propio REGIMIENTO. Para juntarlos hay que hacerlo A PROPÓSITO (HUD de tropas > «Unir»). Un REGIMIENTO es un grupo de pelotones (hasta 1.000
+  soldados cada uno) que se mueve, pelea y se dibuja como UN solo cuadro. Al empezar hay un regimiento por país y provincia. Es una entidad nueva
+  de la base de datos (tipo «regimiento», IDs desde 12.000.000, hijo de su ejército).
+- HUD DE TROPAS (reemplaza a «Órdenes de tropas»): ventana flotante, no pausa el juego. Se abre con clic en un cuadro de tropas o en una provincia
+  tuya. Arriba, FINANZAS MILITARES (caja, balance diario, precio de la unidad). Cuatro pestañas:
+    · Regimientos: la lista (de la provincia o de todo el país), la ficha y las órdenes: Mover… · Dividir (parte un regimiento en dos) · Unir
+      (con otro regimiento tuyo de la misma provincia) · Disolver (pide confirmación; no devuelve dinero) · Detener.
+    · Reclutar: eliges cuántos y si forman un regimiento NUEVO o refuerzan uno; muestra cuánto cuesta y cuánto sube el mantenimiento.
+    · Guerras: tus guerras (abiertas y pasadas) y rivales. · Batallas: HISTORIAL DE ESTADÍSTICAS DE BATALLA (fuerzas, bajas día por día, ganador).
+  Es la base para todo lo que venga del manejo de tropas: una mecánica nueva (moral, mandos, suministros…) se agrega como pestaña u orden aquí.
+- PRECIOS POR UNIDAD (1.000 soldados) — primer sistema económico militar. Cada ejército tiene dos precios, guardados en la base de datos y
+  recalculados cada mes con el PIB por habitante del país: MANTENIMIENTO (US$ al año por unidad) y COSTO DE RECLUTAMIENTO (pago único).
+  Factores provisionales: mantenimiento = 6 × PIB por habitante × 1.000; reclutamiento = 4 × PIB por habitante × 1.000 (se editan por país en la
+  base de datos: factor_mantenimiento y factor_reclutamiento). Cada día el mantenimiento de tu ejército se RESTA de tu caja junto con el ingreso:
+  la barra de arriba muestra el BALANCE (ingreso − mantenimiento) y se pone en rojo si pierdes dinero. Reclutar se paga de la caja. Una nación
+  con ejército demasiado grande para su economía tiene balance NEGATIVO: ya no hace profit, pierde dinero.
+- GUERRA AL ATACAR: ordenar una marcha hacia una provincia que es de OTRO país (que no sea aliado) DECLARA LA GUERRA automáticamente (la vista previa
+  del destino avisa «¡GUERRA con …!» antes de confirmar). Es la base de la RIVALIDAD: cada país lleva la cuenta de sus guerras abiertas y de sus rivales.
+  Las guerras son entidades de la base de datos (tipo «guerra», IDs desde 13.000.000) con agresor, defensor, fechas y causa.
+- BATALLAS: cuando regimientos de dos países EN GUERRA coinciden en una provincia empieza una batalla (cuadro con borde rojo y espadas); se pelea
+  un asalto por día hasta que un bando se queda sin tropas allí. Cada batalla es una entidad (tipo «batalla», IDs desde 14.000.000) y cada día
+  deja una fila de historial (días, bajas del atacante y del defensor), que es lo que ve la pestaña Batallas. Fórmula provisional.
+- CUADROS DE TROPAS MÁS GRANDES Y CON NÚMEROS COMPLETOS: ahora dicen 25000, no 25k, y se ve cuántos mueren de uno en uno. Varios regimientos en
+  una provincia se APILAN en columna (hasta 4; el resto se resume en un cuadro «+N»).
+- NOMBRES DE PROVINCIA Y CUADROS NO SE SUPERPONEN: el cuadro de tropas se corre (arriba, abajo o de lado) al hueco libre más cercano para no tapar
+  ningún nombre de provincia que se esté leyendo.
+- DEBUG > Ejército: «Mover aquí» ahora mueve REGIMIENTOS completos (cada uno con todos sus pelotones) como teletransporte de prueba.
+- LÍNEAS DE BORDE REDISEÑADAS (pedido tuyo por voz): 
+    · ZOOM LEJOS: el contorno de los continentes es una línea NEGRA más gruesa (2,8 px; antes 2,2) en todo el contorno; la línea ENTRE continentes
+      (la rayada, p. ej. Panamá, Sinaí, Nueva Guinea) es un poco más angosta (1,8 px; antes 2,2).
+    · ZOOM CERCA: el contorno del continente/costas se queda IGUAL de grueso que lejos (2,8 px, siempre el mismo grosor en pantalla), y la frontera
+      entre países ahora es una LÍNEA NEGRA FRANJADA (2,6 px; franjas negro/crema que siguen la línea, 62 % negro). Las costas siguen siendo solo
+      línea negra por ahora; queda abierta la idea de un estilo de costa más detallado.
+    · Europa–Asia: se cuentan como un solo bloque (Eurasia), así que con zoom LEJOS no hay línea entre ellas (solo el cambio de color); al ACERCAR aparece
+      la línea rayada que las divide (mismo estilo y grosor que la línea entre continentes, 1,8 px). Eso ya era así y se mantiene.
+    · Para dibujar las franjas a lo largo de la línea el generador de mapa (herramientas/construir_mapa.py) ahora ordena cada frontera en cadenas y
+      guarda la distancia recorrida en datos/malla_par_c.bin (archivo nuevo; malla_par_v/uv se reordenaron; los demás archivos salen idénticos).
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real; la fórmula de batalla, los precios y los factores son PROVISIONALES. Todavía NO hay
+conquista ni ocupación de provincias, ni retirada, ni quiebra (con caja negativa no pasa nada); la guerra se declara solo por el DESTINO de la
+marcha (no por provincias ajenas por las que se pasa); la paz es un botón; solo tu caja se simula (los demás países no tienen tesorería).
+
+QUÉ CAMBIÓ EN 0.1.7.9.9F  (FUSIÓN DE PROVINCIAS Y LEYES DE FRONTERA RECONSTRUIDAS; sin guerra todavía)
+- «PEGAR» UN PAÍS A OTRO = CAMBIAR EL ID DE DUEÑO DE SUS PROVINCIAS. Debug (F1) > pestaña «Anexar»: eliges país A y país B y todas las provincias
+  (y ciudades) de A pasan a ser de B. Quedan con favorabilidad 35 (recién conquistadas). Todo queda en el historial.
+- COLOR EXACTO: las provincias anexadas toman el MISMO color del país que las conquistó (no un tono parecido). No hay capas encima ni
+  transparencias: se recolorean las mismas mallas del mapa. Si una provincia vuelve a su dueño original, el mapa queda idéntico al de fábrica.
+- FRONTERAS RECALCULADAS: la frontera de país se dibuja solo entre provincias con dueño distinto. Al anexar Francia a España desaparece la línea
+  Francia–España y aparece la de España con Alemania, Bélgica, etc. Con un país enfocado (doble clic) se ven TODAS sus líneas de provincia, también
+  la antigua costura entre las dos mitades.
+- EL PAÍS ANEXADO CAMBIA DE ESTADO: Francia se queda SIN provincias, su estado es «anexado a España» (en el HUD, en la ficha y en Debug), ya no se
+  puede enfocar ni aparece su nombre en el mapa, y su EJÉRCITO pasa a España. Si lo controlabas tú, pasas a controlar a España.
+  Si le devuelves una provincia (Debug > Provincia > TRANSFERIR) Francia vuelve a existir.
+- NOMBRES: los nombres de los países involucrados se ocultan y se calcula uno nuevo para el país dueño (España cubre ahora España + Francia).
+- CORREGIDO: Francia estaba como país de AMÉRICA DEL SUR (color y continente equivocados). Ahora es Europa, con su azul.
+- TROPAS: SOLO SE VEN LAS TUYAS. En el mapa se dibujan únicamente las tropas del país que controlas (con cualquier zoom); las de los demás países no se
+  ven ni como cuadritos ni como columnas en marcha. Sin país elegido (observador) no se ve ninguna. Dejé listo el gancho para el futuro: cuando existan
+  vasallos y aliados bastará con rellenar Mundo.relacionados_de(país) y sus tropas aparecerán igual que las tuyas. Si anexas un país, su ejército pasa
+  a ser tuyo y desde ese momento sí se ve. (El panel de información de una provincia todavía lista los pelotones que haya en ella, también los extranjeros.)
+- MOVER TROPAS SIN MENÚ: clic izquierdo en un cuadrito de tropas (queda con marco dorado) y CLIC DERECHO en la provincia de destino: salen hacia allá
+  (con la cantidad de la ventana «Órdenes» si pusiste una; si no, todas). La otra forma: ARRASTRAR el cuadrito con el izquierdo hasta la provincia y
+  soltar (el cuadrito te sigue como fantasma y se ve la ruta con los días; Esc cancela; soltar en el mar no hace nada). Mantener el derecho y
+  arrastrar sigue moviendo la cámara (solo cuenta como orden un clic derecho que casi no se movió: menos de 6 px). Clic derecho en el mar o en la
+  misma provincia no ordena. Solo se pueden mover las tropas de tu país.
+- LÍNEA DORADA REDISEÑADA: borde oscuro, cuerpo dorado y un hilo de luz, trazada a tamaño constante en pantalla (queda nítida con cualquier zoom), con
+  FLECHAS que se deslizan hacia el destino y un anillo que late en el destino. Por mar va rayada. Sin ruta (sin selección) todo desaparece.
+- RENDIMIENTO DEL ZOOM (medido en mi servidor, que no tiene GPU; sirve para comparar antes/después, NO son tus FPS):
+    · Costa con 3 niveles de detalle (completo / intermedio / lejano, simplificada por Douglas-Peucker con error máximo ≤ 1 px en pantalla). Alejando se
+      dibujan 18–36 mil segmentos en vez de 106 mil. Las islas pequeñas conservan su marca. Archivos nuevos: malla_costa1_*.bin y malla_costa2_*.bin.
+    · Nombres de ciudades: solo se calculan los que caen en pantalla (con margen), y panear casi nunca redibuja; antes cada tesela de 300×300 calculaba
+      todos los suyos en cada paso de zoom (decenas de ms por tirón).
+    · Mundo entero a zoom mínimo: ~220–280 ms → ~105–120 ms por fotograma en el servidor. Ciudades a zoom 20–31: ~40–60 ms → ~4 ms por paso.
+    · Lo que sigue pesando al alejar es el relleno de países (~360 mil triángulos): reducirlo exige simplificar las provincias de forma coherente (una
+      sola frontera compartida) y es la siguiente tarea de rendimiento.
+- DEBUG (F1) > «Rend.» (pestaña nueva): tu tarjeta gráfica, FPS en vivo, llamadas de dibujo y triángulos; casillas para APAGAR capas del mapa una por
+  una (relleno, mar, lagos, costa, fronteras, nombres, ciudades, tropas) y ver cuál pesa más en tu PC; y un botón «Prueba de zoom» que recorre el zoom
+  de punta a punta (~25 s) midiendo FPS y arma un INFORME que queda copiado para pegármelo en el chat (Ctrl+V).
+- Se eliminaron del juego los archivos de fronteras/líneas de provincia viejos (malla_frontera_*, malla_prov_*, prov_rangos.json); los reemplaza una
+  tabla por PAR de provincias vecinas (malla_par_*, 19.504 pares). Ver NOTAS_TECNICAS_0.1.7.9.9F.md.
+
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real (lo pruebas tú), FPS, Windows. Probado en el servidor (sin GPU, con tus datos históricos reales):
+anexar Francia → España (101 provincias, 35 ms), Colombia → España, EE. UU. → España (3.222 provincias, ~125 ms), devolver todo y volver al mapa original.
+Limitaciones: las franjas de color por continente son geográficas y estáticas (no siguen al dueño); las líneas de estado se dibujan por país original;
+el nombre nuevo del país es aproximado; todavía no hay conquista real (hoy el único disparador es Debug > Anexar).
+La máquina del tiempo pasa a la versión 9G.
+
+QUÉ CAMBIÓ EN 0.1.7.9.9E  (TROPAS EN EL MAPA: RECLUTAR EN UNA PROVINCIA Y MOVERLAS PROVINCIA A PROVINCIA; sin guerra todavía)
+- LAS TROPAS SE VEN EN EL MAPA: un cuadrito con la bandera del país y el número de soldados en cada provincia donde hay tropas
+  (68k = 68.000). (Desde 0.1.7.9.9F solo se ven las de tu país; ver más arriba.) Si dos cuadritos se tapan, gana el que tiene
+  más soldados (el tuyo y el elegido siempre ganan). Tamaño constante en pantalla. Con un país «enfocado» (doble clic) sus
+  cuadritos siguen el salto de su silueta.
+- VENTANA «ÓRDENES DE TROPAS» (flotante, no pausa el juego). Se abre al pulsar un cuadrito de tropas, al elegir una provincia tuya,
+  o con el botón «Órdenes de tropas…» de la pestaña Ejército de una provincia.
+    · RECLUTAR: eliges cuántos soldados (barra o número exacto; botones 500 / 1.000 / 5.000 / Máx) y aparecen en esa provincia.
+      Máximo por orden: 2 % de la población de la provincia (mínimo 500). TODAVÍA NO CUESTA DINERO NI QUITA POBLACIÓN.
+    · MOVER: eliges cuántos de los que hay en la provincia (¼, ½, Todo o exacto), pulsas «Mover…» y haces clic en la provincia de
+      destino. Al pasar el cursor se dibuja la RUTA en dorado con los días que tardaría; Esc cancela.
+- LA COLUMNA MARCHA CON EL TIEMPO DEL JUEGO: sale por el camino más barato, provincia a provincia, a ~30 km equivalentes por día
+  (velocidad PROVISIONAL). Se dibuja como un cuadrito con una flecha que se desliza por el mapa, con su ruta pendiente (línea
+  continua por tierra, rayada por mar). Cruzar mar corto (estrechos e islas a menos de ~200 km) cuesta el doble. Las islas
+  lejanas NO tienen ruta (todavía no hay barcos). Puedes «Parar» una columna (se detiene en la próxima provincia) o «Ver» cuál es.
+- (CAMBIÓ después, ver arriba) Al llegar, las tropas YA NO se juntan solas: llegan como su propio regimiento. Para mover una cantidad exacta el
+  juego parte el regimiento en dos.
+- Solo ordenas a las tropas de TU país; sin país elegido (observador) puedes ordenar a cualquiera. Las tropas ajenas solo se miran.
+- La vecindad entre provincias (datos/vecinos_prov.json: 19.448 fronteras por tierra y 917 enlaces por mar corto) la calcula
+  herramientas/construir_vecinos.py a partir de los polígonos. Ver NOTAS_TECNICAS_0.1.7.9.9E.md.
+- Debug > Ejército: «Mover aquí» sigue siendo un teletransporte de prueba (no marcha).
+
+NO SE PROBÓ (decirlo claro): jugar a mano ni tu PC real (lo pruebas tú); los FPS con muchas columnas a velocidad 6; Windows.
+Limitaciones: no hay costo ni población al reclutar, no hay barcos, las columnas solo existen en memoria (no hay guardar partida
+todavía), los tramos son líneas rectas entre centros de provincia, y la velocidad de marcha es provisional.
+
+QUÉ CAMBIÓ EN 0.1.7.9.9D  (EL EJÉRCITO; todavía no hay guerra: las tropas existen y se pueden mirar y probar con Debug)
+- EJÉRCITO Y PELOTONES DENTRO DE LA BASE DE DATOS PRINCIPAL: cada país tiene un ejército (ID desde 10.000.000) y cada ejército sus
+  pelotones (ID desde 11.000.000). Cadena completa: Mundo > Continente > País > Ejército > Pelotón. No hay otra base de datos: son
+  territorios nuevos con sus variables (soldados, edad media, experiencia, familiaridad, forma física, bajas del mes, bajas
+  acumuladas, ubicación) y su historial. Las reglas están en scripts/ejercito.gd.
+- PELOTÓN = grupo de hasta 1.000 soldados con los mismos datos (el juego calcula ~21.600 pelotones, no 21,5 millones de soldados).
+  Al empezar 2026 hay 249 ejércitos con ~21,5 millones de soldados en total (tasa de soldados por habitante de cada país en
+  datos/ejercito.json: son ESTIMACIONES MÍAS escritas de memoria, no datos verificados; hay que revisarlas).
+- PESTAÑA «EJÉRCITO» en el panel de información (la 5.ª): para un país muestra soldados, % de la población, edad, experiencia,
+  familiaridad, forma física, bajas, dónde está su ejército y el mando supremo; para un continente, los países con más tropas; para
+  una provincia o ciudad, los pelotones que hay en ella (con los EXTRANJEROS marcados), la devastación y el riesgo de motín.
+  Cada pelotón se puede pulsar: estado de la tropa y CADENA DE MANDO con nombres.
+- NOMBRES DE MANDOS: se generan al abrir el pelotón, NO se guardan, y respetan la cultura del país y la época (un general en Rusia no
+  se llama Rodríguez; en el año 200 el jefe de un pelotón es un «Quiliarca», hoy un «Coronel»). Son 43 culturas
+  (datos/nombres_cultura.json, se puede editar). El jefe de Estado sale de Wikidata cuando se conoce (en dorado): Petro, Putin...
+  Solo hay nombres masculinos por ahora y los países con varias culturas usan la dominante.
+- DEVASTACIÓN POR PROVINCIA (0 a 100 %): reduce lo que produce la provincia (hasta -85 %), sube el riesgo de motín y, cuando
+  exista la guerra, afectará al éxito de la conquista. Se recupera sola cada mes. Todavía NADA la provoca salvo Debug.
+- EDAD, EXPERIENCIA, FAMILIARIDAD Y FORMA FÍSICA cambian cada mes: los soldados envejecen y se retiran (≈ 8 años de servicio),
+  entran reclutas de 19 años; sin bajas la experiencia y la familiaridad suben; las bajas y los reclutas las bajan.
+- DEBUG > pestaña «Ejército» (la 8.ª): reclutar en la provincia seleccionada, aplicar bajas (% en la provincia o en todo el país),
+  mover N pelotones del país seleccionado a la provincia (si no es suya salen como EXTRANJERO), fijar la devastación,
+  pasar un mes de servicio y disolver las tropas de la provincia. Todo queda en el historial con el motivo «Debug».
+- CORREGIDO: nombres ucranianos en generales rusos (ahora hay cultura rusa y cultura ucraniana separadas).
+- Las FÓRMULAS (reclutas, retiro, ganancia de experiencia, riesgo de motín, reparto por provincias) son PROVISIONALES: se ajustan
+  jugando. Ver NOTAS_TECNICAS_0.1.7.9.9D.md.
+
+NO SE PROBÓ (decirlo claro): jugar a mano (lo pruebas tú), tu PC real (rendimiento), Windows, partidas largas con tropas
+moviéndose, y las tasas militares por país no están verificadas con fuentes. La guerra no existe todavía: los pelotones solo se
+mueven y sufren bajas por Debug.
+
+QUÉ VIENE: mapeo de contenido (provincias ↔ nombres históricos de Wikidata), máquina del tiempo (próxima versión; dueño por fecha,
+mapa político de cada época), guerra y conquista, IA de naciones (0.1.8).
+
+QUÉ CAMBIÓ EN 0.1.7.9.9C  (la BASE de la historia)
+Esta versión no cambia cómo se juega: prepara el terreno para todo lo que viene (guerras, conquistas, tropas con nombre, fronteras
+de cada época). Qué trae:
+- ENTIDADES HISTÓRICAS: Imperio romano, URSS, Gran Colombia, Prusia... entran a la base de datos con su propio ID (1.000.000 a
+  1.999.999), con fecha de nacimiento y de fin, capital, y de quién vienen / quién les sucedió. No tienen "padre" geográfico.
+- "DUEÑO POR FECHA": la variable propietario de una provincia ahora puede ser un país O una entidad histórica, y con su
+  historial se sabe quién la tenía en cualquier fecha. Esa tabla será la de las guerras y las fronteras por época.
+- NOMBRES CON FECHAS: varios por ID, con idioma y clase (oficial / común / nativo). Ejemplo: Irán fue Persia hasta 1935,
+  Tailandia fue Siam, RD Congo fue Zaire (1971-1997) y Congo Belga. El juego elige el nombre vigente en la fecha pedida.
+- BANDERAS HISTÓRICAS con fechas y con la LICENCIA de cada imagen anotada (para poder publicar el juego sin sorpresas).
+- PERSONAS Y CARGOS: quién gobernó cada entidad y cuándo (Lenin y Stalin a la vez en 1923, Brézhnev en 1975...). Las personas
+  tienen su propio rango de ID (2.000.000 a 9.999.999) y no son territorios.
+- DEBUG > pestaña "Historia" (la 7ª): escribes una fecha y ves qué entidades existían, cómo se llamaba cada cosa y quién
+  gobernaba; hay buscador (también por nombres alternos) y, si hay bandera, se muestra con su licencia. Al seleccionar una
+  provincia, la pestaña dice cómo se llamaba y quién era su dueño en esa fecha.
+- DATOS DE EJEMPLO ("semilla"): 16 entidades, 36 nombres, 37 personas y 37 cargos escritos a mano (datos/historico/*.json). Son
+  muestras para probar; NO son la base de datos histórica completa y no traen imágenes de banderas.
+- PROGRAMA DE DESCARGA (herramientas/descargar_historia/): llena esas tablas con datos reales de Wikidata y Wikimedia Commons.
+  Instrucciones sencillas en herramientas/descargar_historia/LEEME_DESCARGA.txt. Úsalo primero con PRUEBA.
+
+NO SE PROBÓ (decirlo claro): el descargador contra los servidores REALES (solo contra un servidor falso que los imita). No sé si
+las consultas aguantan en Wikidata real ni cuánto tardan. Las imágenes se cargan desde disco (sirve en el editor; para
+exportar el juego hay que incluir la carpeta banderas_hist).
+
+QUÉ VIENE: tropas por pelotones con cadena de mando con nombres, devastación de provincias, guerra y conquista usando el
+"dueño por fecha", IA de naciones (0.1.8) y fronteras históricas por época.
+
+QUÉ CAMBIÓ EN 0.1.7.9.9B
+CAMBIOS INMEDIATOS (barra superior)
+- PAÍS QUE CONTROLAS: pulsa su bandera o su nombre y se abre la información del país (igual que si lo pulsaras en el mapa:
+  el país se enfoca, sale su panel). Si no controlas ninguno, avisa abajo cómo elegirlo.
+- DINERO: pulsa la tesorería y se abre la pestaña ECONOMÍA de tu país, con todas las pautas: tesorería, ingresos por día /
+  mes / año, impuestos, producción total, provincias que más aportan, PIB de referencia, velocidad de desarrollo,
+  favorabilidad media, divisa y tipo de cambio. Cada fila se puede pulsar para ver su detalle (por ejemplo la tesorería
+  muestra barras con los cierres de cada mes; Impuestos muestra qué recaudarías con otra tasa). Mientras pasan los días
+  las cifras del panel se actualizan solas. Es la MISMA ventana de economía del país (el contenido todavía está en
+  desarrollo y se irá puliendo).
+- FECHA: pulsa la fecha y sale una ventanita con 3 velocidades MÁS: 4 (rápido), 5 (muy rápido) y 6 (máximo, unos 250 días
+  por segundo). También con las teclas 4, 5 y 6. Con una velocidad extra la fecha se pone naranja. Pulsar fuera cierra la
+  ventanita. (Velocidad 1 = 1 día/s · 2 = 2,5 días/s · 3 = 8 días/s · 4 = 25 · 5 = 83 · 6 = 250.)
+- DEBUG COMO OVERLAY: botón del bicho (arriba a la izquierda) o tecla F1. Es una ventana flotante que NO pausa el juego,
+  NO oscurece ni bloquea el mapa (sigues haciendo clic en el mapa con ella abierta), se arrastra desde su barra de título,
+  se puede encoger con "–" y se cierra con ✕ o F1. Desde el menú de pausa, DEBUG reanuda el juego y abre el overlay.
+  Pestañas: Jugador · Anexar · Provincia · Tiempo · Mundo · Datos · Historia (desde 0.1.7.9.9C) · Ejército (desde 0.1.7.9.9D). Con "Seguir lo que selecciono en el mapa" marcado, lo que
+  pulses en el mapa se carga solo en el Debug (la provincia en la pestaña Provincia, el país en Jugador, y el inspector
+  de Datos). Todo cambio hecho desde Debug queda en el historial con el motivo "Debug".
+  - Tiempo: botones de velocidad 0-6, fijar fecha, +1 día / +30 días / +1 año / +10 años, dinero, impuestos de TU país.
+  - Mundo: crecimiento base anual y velocidad de desarrollo de tu país (con vista previa) y simulaciones +1/+10/+50 años.
+  - Datos: el inspector de la base de datos (ver abajo).
+
+BASE DE DATOS (el grueso de esta versión)
+- ID ÚNICO para cada territorio: mundo (0), 7 continentes (1-99), 249 países (100-999), 53 estados (1000-9999),
+  7.653 provincias (10000-99999) y 7.341 ciudades (100000-999999). Los IDs son permanentes (datos/ids.json): si un
+  territorio desaparece su ID queda dado de baja y nunca se reutiliza. Cada ID apunta a su padre (ciudad > provincia >
+  estado > país > continente > mundo), así un país "abarca" los IDs de sus provincias y un continente los de sus países.
+- UNA TABLA POR VARIABLE (datos/variables.json, 21 variables): población, favorabilidad, multiplicador de ingreso,
+  producción por habitante, velocidad de desarrollo, propietario, superficie, altitudes, bioma, reino, producción principal
+  (3 variables), divisa, PIB de referencia, tesorería, impuestos, nombre visible, anexado a y crecimiento base anual.
+  Cada variable guarda UN solo valor por ID: nada se sobrescribe ni se mezcla con otra variable. Para añadir una variable
+  nueva basta una línea en variables.json.
+- HISTORIAL POR VARIABLE: el valor actual es un solo dato; cuando cambia, el valor anterior pasa a la tabla de historial de
+  esa variable con sus fechas (desde-hasta) y el motivo (Conquista, Debug, Personalización, cierre mensual...). Políticas:
+  "cambio" (guarda el viejo en cada cambio), "mensual" (foto de la tesorería cada mes), "anual" (foto de población y
+  producción por habitante cada año) y "ninguno" (datos fijos). El registro de soberanía de cada provincia es el historial
+  de su variable "propietario".
+- MECÁNICAS EN LA MISMA BASE: la variable "velocidad_desarrollo" (por país y por provincia) y "crecimiento_base_anual"
+  (mundo) mueven cada mes la producción por habitante de las provincias: crecimiento base × velocidad de la provincia ×
+  velocidad de su país dueño. Así un país con más desarrollo hace crecer más rápido su producción y sus ingresos.
+  (El 2 % anual es un valor PROVISIONAL de prueba.)
+- DIAGRAMA: carpeta docs/ -> diagrama_bd_general.png (entidad-relación), diagrama_bd_variables.png (el ID conectado a las
+  21 variables y a sus historiales, con 1:0..1 y 1:N) y diagrama_bd_jerarquia.png (cadena de IDs con rangos). Explicación
+  en docs/DIAGRAMA_BASE_DE_DATOS.md. Se regeneran con herramientas/hacer_diagrama_bd.py.
+
+PERSONALIZAR TU PAÍS EN CUALQUIER MOMENTO ("Mi país")
+- Lápiz junto al nombre de tu país (barra superior), o Debug > Jugador > "Personalizar mi país". Ventana flotante, sin pausa.
+  Nombre (el original no se pierde), moneda (151 monedas; la tesorería se convierte con el tipo de cambio, sin ganar ni
+  perder valor real), impuestos (con vista previa de lo que recaudarías) y prioridad de desarrollo. Cada cambio se aplica
+  con su botón y queda en el "Registro de cambios" de la ventana (y en la base de datos, con fecha y motivo).
+
+SIGUE IGUAL QUE EN 0.1.7.9.1: colores sólidos por continente, reloj, divisas, economía por provincias, Debug de anexión /
+transferencia, botón atrás.
+
+NO ESTÁ (solo hay las bases): guerras y asedios (por ahora se conquista con el Debug), vasallaje y "pedir ingresos",
+efecto de la guerra en la población, variables étnicas cambiantes, árbol de investigación, evolución del idioma, gastos del
+estado (por ahora solo cobra impuestos). Subir impuestos todavía no tiene costo político.
+
+LIMITACIONES CONOCIDAS: las líneas de frontera del mapa siguen siendo las originales tras una anexión; "info.json" se sigue
+usando en el HUD para altitud/bioma (la base los duplica: fase 1); algunos departamentos colombianos muestran bandera "x".
+
+PROBADO: Godot 4.3 en Linux con render por software (sin tarjeta gráfica): carga sin errores y un guion de 48 comprobaciones
+con CLICS SIMULADOS sobre la barra (país, bandera, dinero, fecha, velocidades 5 y 6, teclas), F1, botón del bicho, Debug
+abierto mientras el mapa recibe clics, arrastrar y encoger la ventana, "Mi país" (nombre, moneda, impuestos, desarrollo),
+capturas revisadas, base de datos (IDs, historial, cierres mensual/anual, desarrollo). NO PROBADO: tu PC real (los FPS
+serán otros; con velocidad 6 el PC debe calcular ~250 días/s), Windows, partidas muy largas (cada año simulado guarda ~23 mil
+filas de historial en memoria) y jugar a mano: pruébalo tú.
+
+Regenerar datos: ver herramientas/ y NOTAS_TECNICAS_0.1.7.9.9E.md (y la D, la C y la B para el resto).

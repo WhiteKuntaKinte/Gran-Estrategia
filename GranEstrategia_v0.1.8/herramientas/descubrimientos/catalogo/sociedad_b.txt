@@ -1,0 +1,175 @@
+## SOC|TER|Gestión del territorio y urbanismo|Cómo se divide, se mide, se puebla y se gobierna un territorio. Aquí viven los descubrimientos que permitirían cambiar la forma y los límites de las provincias en el juego.
+### Asentamientos y ciudades
+campamento_estacional|Campamento estacional|0|B|banda_nomada,cabana_madera
+aldea_permanente|Aldea permanente|1|B|campamento_estacional,domesticacion_plantas,cabana_madera,tribu
+ciudad_primitiva|Ciudad primitiva|2|B|aldea_permanente,excedente_agricola,adobe_barro
+murallas_urbanas|Murallas urbanas|2|B|ciudad_primitiva,construccion_piedra
+templos_monumentales|Templos monumentales|2|B|ciudad_primitiva,religion_organizada,construccion_piedra
+plano_ortogonal_urbano|Plano urbano ortogonal|3|T|ciudad_primitiva,geometria_practica
+foro_agora|Foro y ágora (espacio público)|3|B|plano_ortogonal_urbano
+ciudades_romanas_servicios|Ciudad con servicios (agua, cloacas, foro)|3|B|plano_ortogonal_urbano,acueducto,alcantarillado,foro_agora
+burgos_fortificados|Burgos fortificados|4|B|feudalismo,murallas_urbanas
+plazas_mercado_urbano|Plazas de mercado|4|B|ciudades_libres_gremios
+urbanismo_renacentista|Urbanismo renacentista|5|T|plano_ortogonal_urbano,arco_boveda,imprenta
+urbanismo_industrial|Urbanismo industrial|7|T|industrializacion,alcantarillado
+barrios_obreros|Barrios obreros|7|B|urbanismo_industrial
+transporte_urbano_masivo|Transporte urbano masivo|7|B|tranvia,urbanismo_industrial
+parques_publicos|Parques públicos|7|B|urbanismo_industrial
+planificacion_urbana_moderna|Planificación urbana moderna|8|T|urbanismo_industrial,estadistica_oficial
+zonificacion_uso_suelo|Zonificación del uso del suelo|8|T|planificacion_urbana_moderna
+suburbios_automovil|Suburbios y ciudad del automóvil|8|T|automovil,zonificacion_uso_suelo,autopista
+grandes_metropolis|Grandes metrópolis|8|T|rascacielos,metro_subterraneo,planificacion_urbana_moderna
+vivienda_social|Vivienda social|8|T|planificacion_urbana_moderna,estado_bienestar
+megaciudades|Megaciudades|9|T|grandes_metropolis,transporte_urbano_masivo
+ciudades_inteligentes|Ciudades inteligentes|10|T|internet_de_las_cosas,planificacion_urbana_moderna
+### Provincias, fronteras y administración del territorio
+colonias_fundacion|Fundación de colonias|3|T|ciudad_primitiva,rutas_maritimas_comerciales
+provincias_administrativas|Provincias y gobernadores|3|G|burocracia,censo_poblacion
+limes_fronteras_fortificadas|Fronteras fortificadas (limes)|3|B|provincias_administrativas,murallas_urbanas
+red_viaria_imperial|Red viaria imperial|3|B|provincias_administrativas,calzada_pavimentada
+mapas_administrativos|Mapas administrativos y deslindes|4|T|catastro,cartografia_ptolemaica
+colonizacion_ultramar|Colonización ultramarina|5|T|navegacion_oceanica,monarquia_absoluta
+tratados_de_limites|Tratados de límites|6|A|colonizacion_ultramar,tratado_escrito,proyeccion_mercator
+reorganizacion_territorial|Reorganización territorial (departamentos y distritos)|6|G|provincias_administrativas,estado_nacion,catastro
+delimitacion_geodesica|Delimitación geodésica de fronteras|7|T|geodesia,tratados_de_limites,estado_nacion
+redistritacion_electoral|Delimitación de circunscripciones electorales|7|G|sufragio_universal_masculino,estadistica_oficial
+reforma_agraria|Reforma agraria|8|G|propiedad_privada,planificacion_estatal
+parques_nacionales_reservas|Parques nacionales y reservas|7|G|ecologia,parques_publicos
+ordenamiento_territorial|Ordenamiento territorial|9|G|zonificacion_uso_suelo,sig_geografico
+zonas_economicas_especiales|Zonas económicas especiales|9|G|globalizacion_comercial,ordenamiento_territorial
+descentralizacion_autonomias|Descentralización y autonomías|9|G|federalismo,ordenamiento_territorial
+### Propiedad y explotación de recursos @rec
+derechos_mineros|Derechos mineros y concesiones|3|G|provincias_administrativas,rec_hierro
+estancos_monopolios|Estancos y monopolios de recursos|4|G|rec_sal,provincias_administrativas
+catastro_minero|Catastro y registro minero|6|T|derechos_mineros,mapas_administrativos
+concesion_petrolera|Concesiones petroleras|7|G|rec_petroleo,derechos_mineros
+reservas_estrategicas|Reservas estratégicas|8|G|rec_petroleo,planificacion_estatal
+nacionalizacion_recursos|Nacionalización de recursos|8|G|concesion_petrolera,planificacion_estatal
+cartel_productores|Cártel de países productores|9|A|nacionalizacion_recursos,onu
+regulacion_ambiental_extractiva|Regulación ambiental de la extracción|9|G|derechos_mineros,parques_nacionales_reservas
+reciclaje_metales_estrategicos|Reciclaje de metales estratégicos|10|G|reciclaje_social,rec_tierras_raras
+tratado_fondos_marinos|Régimen de los fondos marinos|10|A|rec_nodulos_polimetalicos,onu
+derecho_recursos_espaciales|Derecho de recursos espaciales|11|A|rec_asteroides,onu
+## SOC|REL|Religión, filosofía y cultura|Creencias, pensamiento, ciencias humanas, arte y cultura de masas.
+### Religión
+animismo|Animismo|0|K|lenguaje,observacion_naturaleza
+ritual_funerario|Ritual funerario|0|T|animismo
+chamanismo|Chamanismo|1|G|animismo
+mitologia|Mitología|1|T|lenguaje,chamanismo
+calendario_ritual|Calendario ritual|2|T|calendario_lunar,mitologia
+religion_organizada|Religión organizada|2|G|mitologia,ciudad_primitiva
+sacerdocio_templos|Sacerdocio y templos|2|G|religion_organizada,templos_monumentales
+monoteismo_primitivo|Monoteísmo primitivo|3|G|religion_organizada,escritura_alfabetica
+religion_monoteista|Religión monoteísta|3|G|monoteismo_primitivo,etica_filosofia_moral
+religion_universal|Religión universal y misionera|3|G|etica_filosofia_moral,religion_organizada
+monasterios_copistas|Monasterios y copistas|4|B|religion_monoteista,biblioteca
+reforma_religiosa|Reforma religiosa|5|G|imprenta,religion_monoteista,libro_masivo
+tolerancia_religiosa|Tolerancia religiosa|6|G|reforma_religiosa,filosofia_ilustracion
+secularismo|Secularismo|7|G|tolerancia_religiosa,estado_nacion
+laicismo_estado|Estado laico|8|G|secularismo,constitucion_escrita
+### Filosofía y pensamiento
+filosofia_natural|Filosofía natural|3|K|escritura_alfabetica,mitologia
+logica_formal|Lógica formal|3|K|filosofia_natural
+etica_filosofia_moral|Ética y filosofía moral|3|K|filosofia_natural
+filosofia_politica|Filosofía política|3|K|etica_filosofia_moral,ciudad_estado
+retorica_oratoria|Retórica y oratoria|3|T|filosofia_politica
+escolastica|Escolástica|4|K|monasterios_copistas,logica_formal
+humanismo|Humanismo|5|K|escolastica,imprenta
+metodo_cientifico|Método científico|5|K|humanismo,optica_geometrica
+filosofia_ilustracion|Filosofía de la Ilustración|6|K|metodo_cientifico,libro_masivo
+positivismo|Positivismo|7|K|metodo_cientifico,filosofia_ilustracion
+### Arte, literatura y cultura
+pintura_mural|Pintura mural|1|T|arte_rupestre,pigmentos_tintes
+musica_instrumentos|Música e instrumentos|1|T|arte_rupestre,herramientas_hueso
+epica_literatura|Épica y literatura oral|2|T|mitologia,escritura_logografica
+escultura_monumental|Escultura monumental|2|T|construccion_piedra,religion_organizada
+teatro_drama|Teatro|3|T|mitologia,escritura_alfabetica
+competiciones_atleticas|Competiciones atléticas|3|T|ciudad_estado
+musica_escrita|Notación musical|4|T|musica_instrumentos,escritura_alfabetica
+perspectiva_pictorica|Perspectiva en la pintura|5|T|humanismo,geometria_demostrativa
+novela|Novela|6|T|libro_masivo,imprenta
+orquesta_sinfonica|Orquesta sinfónica|6|T|musica_escrita,imprenta
+romanticismo|Romanticismo|7|T|filosofia_ilustracion,novela
+museos_publicos|Museos públicos|7|B|humanismo,estado_nacion
+deporte_organizado|Deporte organizado|7|T|prensa_masiva,urbanismo_industrial
+olimpiadas_modernas|Olimpiadas modernas|7|A|deporte_organizado,congreso_diplomatico
+cultura_de_masas|Cultura de masas|8|T|radiodifusion,cine_industria
+musica_grabada_industria|Industria de la música grabada|8|T|fonografo_grabacion,radiodifusion
+industria_videojuegos|Industria de los videojuegos|9|T|computadora_personal,cultura_de_masas
+arte_digital|Arte digital|10|T|interfaz_grafica,internet_publico
+## SOC|EDU|Educación y conocimiento institucional|Escuelas, universidades, academias y financiación de la ciencia.
+transmision_oral|Transmisión oral del saber|0|T|lenguaje
+aprendizaje_oficios|Aprendizaje de oficios|1|T|transmision_oral,herramientas_piedra
+escuelas_escribas|Escuelas de escribas|2|B|escritura_logografica,ciudad_primitiva
+academias_filosoficas|Academias filosóficas|3|B|filosofia_natural,escuelas_escribas
+escuelas_monasticas|Escuelas monásticas|4|B|monasterios_copistas,escuelas_escribas
+madrasas_escuelas|Madrasas|4|B|religion_monoteista,biblioteca,escuelas_escribas
+casa_de_traduccion|Centros de traducción|4|B|biblioteca,algoritmo_formal
+universidades_medievales|Universidades medievales|4|B|escolastica,escuelas_monasticas
+academias_ciencias|Academias científicas|6|B|metodo_cientifico,imprenta
+revistas_cientificas|Revistas científicas|6|T|academias_ciencias,periodico
+educacion_publica|Educación pública obligatoria|7|G|estado_nacion,universidades_medievales
+formacion_profesional|Formación profesional|7|G|gremios_artesanos,educacion_publica
+escuelas_tecnicas_ingenieria|Escuelas técnicas e ingenierías|7|B|educacion_publica,maquinas_herramienta
+universidades_investigacion|Universidades de investigación|7|B|universidades_medievales,metodo_cientifico,academias_ciencias
+laboratorios_industriales|Laboratorios industriales|8|B|universidades_investigacion,industrializacion
+financiacion_publica_ciencia|Financiación pública de la ciencia|8|G|universidades_investigacion,planificacion_estatal
+educacion_universal_gratuita|Educación universal y gratuita|8|G|educacion_publica,estado_bienestar
+educacion_superior_masiva|Educación superior masiva|9|G|universidades_investigacion,educacion_universal_gratuita
+educacion_a_distancia|Educación a distancia|9|T|television_difusion,educacion_superior_masiva
+cooperacion_cientifica_internacional|Cooperación científica internacional|9|A|revistas_cientificas,onu
+becas_intercambio|Becas e intercambio académico|9|A|educacion_superior_masiva,onu
+educacion_digital|Educación digital|10|T|internet_publico,educacion_a_distancia
+acceso_abierto_ciencia|Ciencia de acceso abierto|10|G|revistas_cientificas,internet_publico
+## SOC|CIV|Sociedad civil, trabajo y derechos|Movimientos sociales, derechos laborales, sufragio y organizaciones civiles.
+### Trabajo y derechos laborales
+servidumbre_y_trabajo_forzoso|Trabajo forzoso institucional|3|G|esclavitud_institucional,burocracia
+huelga_derecho|Derecho de huelga|7|G|sindicatos,derecho_laboral
+jornada_laboral_limitada|Jornada laboral limitada|7|G|sindicatos,derecho_laboral
+trabajo_infantil_prohibicion|Prohibición del trabajo infantil|7|G|derecho_laboral,educacion_publica
+negociacion_colectiva|Negociación colectiva|8|G|sindicatos,derecho_laboral
+salario_minimo|Salario mínimo|8|G|derecho_laboral,economia_keynesiana
+seguridad_social|Seguridad social|7|G|derecho_laboral,seguros_vida_actuariales
+pensiones|Pensiones|8|G|seguridad_social
+### Libertades y movimientos
+abolicionismo|Abolicionismo|7|G|filosofia_ilustracion,prensa_masiva,esclavitud_institucional
+abolicion_esclavitud|Abolición de la esclavitud|7|G|abolicionismo,derecho_penal_moderno
+movimiento_sufragista|Movimiento sufragista|7|G|prensa_masiva,sufragio_censitario
+derechos_civiles_movimiento|Movimiento por los derechos civiles|8|G|abolicion_esclavitud,declaracion_derechos,radiodifusion
+asociaciones_civicas|Asociaciones cívicas|6|G|libertad_de_prensa,partidos_politicos
+filantropia_fundaciones|Filantropía y fundaciones|7|G|capitalismo_industrial,asociaciones_civicas
+ong|Organizaciones no gubernamentales|9|G|derechos_humanos_universales,prensa_masiva
+movimiento_ecologista|Movimiento ecologista|8|G|ecologia,prensa_masiva
+movimiento_pacifista|Movimiento pacifista|8|G|convenciones_guerra,prensa_masiva
+proteccion_consumidor|Protección al consumidor|8|G|derecho_mercantil,publicidad_masiva
+igualdad_genero_legal|Igualdad de género ante la ley|9|G|sufragio_femenino,derechos_humanos_universales
+derechos_minorias|Derechos de las minorías|9|G|derechos_civiles_movimiento,derechos_humanos_universales
+migraciones_regulacion|Regulación de migraciones y pasaportes|8|G|registro_civil,transatlantico
+voluntariado_humanitario|Voluntariado humanitario|7|G|cruz_roja_humanitaria
+activismo_digital|Activismo digital|10|G|redes_sociales,asociaciones_civicas
+## SOC|SAL|Servicios públicos y bienestar|Salud pública, hospitales, saneamiento, emergencias y protección social. Es la cara social de la medicina: de los curanderos al seguro universal.|@med
+curanderos_comunitarios|Curanderos comunitarios|1|T|herbolaria,tribu
+hospitales_religiosos|Hospitales religiosos|4|B|monasterios_copistas,cirugia_clasica
+cuarentenas|Cuarentenas|5|T|hospitales_religiosos,puerto_piedra
+lazaretos|Lazaretos|5|B|cuarentenas
+bomberos|Cuerpos de bomberos|3|G|ciudades_romanas_servicios
+salud_publica|Salud pública|7|G|epidemiologia,estado_nacion
+hospital_moderno|Hospital moderno|7|B|antisepsia,anestesia,salud_publica
+sanidad_urbana|Sanidad urbana|7|G|alcantarillado,cloracion,salud_publica
+vacunacion_masiva|Vacunación masiva|7|G|vacunas_modernas,salud_publica
+enfermeria_profesional|Enfermería profesional|7|G|hospital_moderno
+agua_potable_servicio|Servicio de agua potable|7|G|cloracion,acueducto
+recogida_residuos|Recogida de residuos|7|G|sanidad_urbana
+farmacia_industria|Industria farmacéutica|8|T|farmacopea,petroquimica
+regulacion_medicamentos|Regulación de medicamentos|8|G|farmacia_industria,derecho_penal_moderno
+salud_mental_sistemas|Sistemas de salud mental|8|G|psicologia_experimental,hospital_moderno
+sistema_nacional_salud|Sistema nacional de salud|9|G|hospital_moderno,estado_bienestar
+oms_cooperacion_sanitaria|Cooperación sanitaria internacional|8|A|onu,salud_publica
+proteccion_civil|Protección civil|8|G|bomberos,salud_publica
+seguridad_alimentaria|Seguridad alimentaria|8|G|pasteurizacion,regulacion_medicamentos
+erradicacion_enfermedades|Erradicación de enfermedades|9|G|vacunacion_masiva,onu
+historia_clinica_electronica|Historia clínica electrónica|9|T|base_datos,hospital_moderno
+seguro_salud_universal|Seguro de salud universal|9|G|sistema_nacional_salud,seguros_vida_actuariales
+vigilancia_epidemiologica|Vigilancia epidemiológica digital|9|T|epidemiologia,computadora_digital
+reciclaje_social|Reciclaje y gestión de residuos|9|G|recogida_residuos,ecologia
+telemedicina|Telemedicina|10|T|internet_publico,historia_clinica_electronica

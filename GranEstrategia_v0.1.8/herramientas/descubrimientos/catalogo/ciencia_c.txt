@@ -1,0 +1,279 @@
+## CIE|ING|Ingeniería civil y construcción|Casas, murallas, acueductos, puentes, canales, presas y rascacielos.
+### Edificación
+cabana_madera|Cabañas y refugios de madera|0|B|herramientas_piedra
+adobe_barro|Adobe y barro|1|B|ceramica_alfareria
+construccion_piedra|Construcción en piedra|1|B|herramientas_piedra,palanca_practica
+rueda|Rueda|2|T|palanca_practica,carpinteria
+polea|Polea|2|T|rueda,cuerda_fibras
+plano_inclinado_rampa|Rampas y planos inclinados|2|T|palanca_practica
+arco_boveda|Arco y bóveda|3|B|construccion_piedra,ladrillo_cocido,geometria_practica
+cupula|Cúpula|4|B|arco_boveda,hormigon_romano
+grua_medieval|Grúa de torno y rueda|4|T|polea,rueda
+catedral_gotica|Arquitectura gótica (arbotantes)|4|B|arco_boveda,cupula,grua_medieval
+ascensor_seguridad|Ascensor de seguridad|7|T|polea,acero_bessemer
+rascacielos|Rascacielos|7|B|hormigon_armado,ascensor_seguridad,acero_bessemer
+construccion_prefabricada|Construcción prefabricada|8|T|hormigon_armado,cadena_montaje
+edificio_antisismico|Edificios antisísmicos|9|T|sismografo,hormigon_armado,computadora_digital
+arquitectura_sostenible|Arquitectura sostenible|10|T|climatologia,fibra_vidrio
+impresion_3d_construccion|Impresión 3D de edificios|10|T|impresion_3d,cemento_portland
+### Agua y saneamiento
+drenaje_urbano|Drenaje urbano|2|B|ladrillo_cocido,riego_canales
+alcantarillado|Alcantarillado|3|B|drenaje_urbano,arco_boveda
+acueducto|Acueducto|3|B|arco_boveda,riego_canales,hormigon_romano
+presas_gravedad|Presas de gravedad|3|B|construccion_piedra,riego_canales
+presas_arco_hormigon|Presas de hormigón|8|B|presas_gravedad,hormigon_armado
+cloracion|Potabilización con cloro|7|T|quimica_analitica,teoria_germenes
+planta_depuradora|Planta depuradora|8|B|cloracion,alcantarillado
+desalinizacion|Desalinización|9|T|destilacion,termodinamica_clasica
+### Caminos, puentes y canales
+puente_madera|Puente de madera|2|B|carpinteria,cuerda_fibras
+puente_piedra_arco|Puente de piedra en arco|3|B|puente_madera,arco_boveda
+calzada_pavimentada|Calzadas pavimentadas|3|B|construccion_piedra,medicion_longitud,hormigon_romano
+puerto_piedra|Puerto de piedra|2|B|construccion_piedra,barco_vela
+faro|Faro|3|B|puerto_piedra,hormigon_romano
+esclusas_canales|Esclusas y canales de navegación|5|B|acueducto,grua_medieval
+reclamacion_tierras_mar|Tierras ganadas al mar (pólderes)|5|B|esclusas_canales,molino_viento
+puentes_hierro|Puentes de hierro|6|B|alto_horno,puente_piedra_arco
+puentes_colgantes|Puentes colgantes|6|B|puentes_hierro,elasticidad_resistencia
+mineria_subterranea|Minería subterránea|2|T|metalurgia_cobre,herramientas_piedra
+tunel_excavacion|Excavación de túneles|5|B|mineria_subterranea,polvora
+tunel_ferroviario|Túneles ferroviarios|7|B|tunel_excavacion,dinamita,locomotora_vapor
+canal_interoceanico|Canales interoceánicos|7|B|esclusas_canales,maquina_vapor,dinamita
+metro_subterraneo|Metro subterráneo|7|B|tunel_ferroviario,motor_electrico
+autopista|Autopistas|8|B|calzada_pavimentada,automovil,hormigon_armado
+aeropuerto|Aeropuertos|8|B|aviacion_motor,hormigon_armado
+acero_pretensado|Hormigón pretensado|9|T|hormigon_armado,aceros_aleados
+puente_atirantado|Puentes atirantados|9|B|puentes_colgantes,acero_pretensado,computadora_digital
+tuneladora|Tuneladora|9|T|tunel_excavacion,motor_electrico
+tunel_submarino|Túneles submarinos|9|B|tuneladora,hormigon_armado
+## CIE|ENE|Energía|De la fuerza animal y el fuego a la fusión nuclear.
+### Energía mecánica y calor
+fuerza_animal|Tracción animal|1|T|domesticacion_animales
+rueda_hidraulica|Rueda hidráulica|3|T|rueda,riego_canales
+molino_agua|Molino de agua|3|T|rueda_hidraulica,engranajes
+molino_viento|Molino de viento|4|T|molino_agua,barco_vela
+carbon_mineral_uso|Uso del carbón mineral|4|T|mineria_subterranea,horno_tiro
+coque|Coque|5|T|carbon_mineral_uso,alto_horno
+alumbrado_gas|Alumbrado de gas|6|T|coque
+bomba_vapor_atmosferica|Máquina de vapor atmosférica (Newcomen)|6|T|presion_atmosferica,mineria_subterranea,coque
+maquina_vapor|Máquina de vapor (Watt)|6|T|bomba_vapor_atmosferica,leyes_gases,rec_carbon
+turbina_vapor|Turbina de vapor|7|T|maquina_vapor,termodinamica_clasica
+turbina_hidraulica|Turbina hidráulica|7|T|rueda_hidraulica,dinamica_fluidos
+### Electricidad
+dinamo|Dínamo|7|T|electromagnetismo,maquina_vapor
+motor_electrico|Motor eléctrico|7|T|electromagnetismo,pila_electrica
+generador_electrico|Generador eléctrico|7|T|dinamo
+transformador_alterna|Transformador y corriente alterna|7|T|electromagnetismo,generador_electrico
+bateria_plomo_acido|Batería de plomo-ácido|7|T|pila_electrica,electrolisis
+lampara_electrica|Bombilla eléctrica|7|T|generador_electrico,vidrio_soplado
+central_termoelectrica|Central termoeléctrica|7|B|turbina_vapor,generador_electrico
+red_electrica|Red eléctrica urbana|7|B|generador_electrico,transformador_alterna,lampara_electrica
+central_hidroelectrica|Central hidroeléctrica|8|B|turbina_hidraulica,generador_electrico,presas_arco_hormigon
+red_alta_tension|Red de alta tensión|8|B|red_electrica,aceros_aleados
+### Petróleo, gas y combustión
+petroleo_perforacion|Perforación de petróleo|7|T|mineria_subterranea,maquina_vapor
+refinacion_petroleo|Refinación de petróleo|7|T|destilacion,petroleo_perforacion,rec_petroleo
+petroquimica|Petroquímica|8|T|refinacion_petroleo,quimica_organica
+gasolina_derivados|Gasolina y derivados|8|T|refinacion_petroleo
+motor_combustion|Motor de combustión interna|7|T|termodinamica_clasica,refinacion_petroleo
+motor_diesel|Motor diésel|7|T|motor_combustion
+turbina_gas|Turbina de gas|8|T|turbina_vapor,aleaciones_ligeras
+gas_natural|Gas natural y gasoductos|8|B|refinacion_petroleo,aceros_aleados,rec_gas_natural
+biocombustibles|Biocombustibles|9|T|fermentacion,petroquimica
+### Nuclear
+reactor_nuclear|Reactor nuclear|8|T|fision_nuclear,uranio_enriquecido
+central_nuclear|Central nuclear|9|B|reactor_nuclear,turbina_vapor,generador_electrico
+reactor_reproductor|Reactor reproductor|9|T|reactor_nuclear
+reciclaje_combustible_nuclear|Reciclaje de combustible nuclear|9|T|reactor_nuclear,quimica_analitica
+fusion_experimental|Fusión nuclear experimental|9|T|fusion_nuclear_teoria,fisica_plasma,superconductividad
+### Renovables y almacenamiento
+celda_solar|Célula fotovoltaica|9|T|semiconductores_silicio,fisica_estado_solido
+aerogenerador|Aerogenerador|9|T|molino_viento,generador_electrico,fibra_vidrio
+geotermia|Energía geotérmica|9|T|geofisica_prospeccion,turbina_vapor
+energia_mareomotriz|Energía de las mareas|9|T|turbina_hidraulica,oceanografia
+hidrogeno_pila|Hidrógeno y pila de combustible|9|T|electrolisis,catalisis
+bateria_litio|Batería de litio|9|T|bateria_plomo_acido,enlace_quimico,rec_litio
+energia_solar_comercial|Parques solares|10|B|celda_solar,red_alta_tension
+parque_eolico|Parques eólicos|10|B|aerogenerador,red_alta_tension
+almacenamiento_red|Almacenamiento en la red|10|T|bateria_litio,red_alta_tension
+red_inteligente|Red eléctrica inteligente|10|T|red_alta_tension,internet_tecnologia
+captura_carbono|Captura de carbono|10|T|climatologia,quimica_verde
+## CIE|ELE|Electrónica y telecomunicaciones (tecnología)|Cómo funcionan el telégrafo, la radio, el transistor, el chip y las redes móviles. La sociedad que los adopta va en la rama Sociedad.
+### Telecomunicación temprana
+telegrafo_optico|Telégrafo óptico|6|T|telescopio,senales_humo_tambores
+telegrafo_electrico|Telégrafo eléctrico|7|T|electromagnetismo,pila_electrica
+cable_submarino|Cable submarino|7|T|telegrafo_electrico,caucho_vulcanizado
+telefono|Teléfono|7|T|telegrafo_electrico,acustica
+microfono_altavoz|Micrófono y altavoz|7|T|telefono
+radio_telegrafia|Radiotelegrafía|7|T|ondas_electromagneticas,telegrafo_electrico
+### Imagen y sonido registrados
+fotografia|Fotografía|7|T|optica_ondulatoria,quimica_experimental
+cine|Cine|7|T|fotografia,motor_electrico
+fonografo_grabacion|Grabación de sonido|7|T|acustica,microfono_altavoz
+### Electrónica de válvulas
+tubo_vacio_valvula|Tubo de vacío (válvula)|7|T|lampara_electrica,electron_descubrimiento
+amplificador_oscilador|Amplificador y oscilador|7|T|tubo_vacio_valvula
+radio_voz|Radio de voz|8|T|radio_telegrafia,tubo_vacio_valvula,microfono_altavoz
+television_electronica|Televisión electrónica|8|T|tubo_vacio_valvula,cine
+radar|Radar|8|T|amplificador_oscilador,ondas_electromagneticas
+sonar|Sonar|8|T|acustica,amplificador_oscilador
+reloj_atomico|Reloj atómico|9|T|electrodinamica_cuantica,amplificador_oscilador
+### Semiconductores y chips
+transistor|Transistor|9|T|fisica_estado_solido,semiconductores_silicio
+circuito_impreso|Circuito impreso|8|T|amplificador_oscilador,plasticos_baquelita
+fotolitografia|Fotolitografía|9|T|fotografia,semiconductores_silicio
+circuito_integrado|Circuito integrado|9|T|transistor,circuito_impreso,fotolitografia
+memoria_semiconductores|Memoria de semiconductores|9|T|circuito_integrado
+microprocesador|Microprocesador|9|T|circuito_integrado,computadora_digital,fotolitografia
+chip_gran_escala|Chips de gran escala (VLSI)|9|T|microprocesador,fotolitografia
+litografia_ultravioleta_extrema|Litografía ultravioleta extrema|10|T|chip_gran_escala,laser,nanotecnologia
+sensores_mems|Sensores microelectromecánicos|9|T|chip_gran_escala,semiconductores_silicio
+### Fotónica, pantallas y redes móviles
+fibra_optica|Fibra óptica|9|T|laser,fibra_vidrio
+led_pantallas|LED y pantallas planas|9|T|semiconductores_silicio,cristal_liquido
+camara_digital|Cámara digital|9|T|chip_gran_escala,fotografia
+grabacion_digital|Grabación digital|9|T|memoria_semiconductores,teoria_informacion
+satelite_comunicaciones|Satélite de comunicaciones|9|T|satelite_artificial,radio_voz,transistor
+telefonia_movil_1g|Telefonía móvil analógica|9|T|radio_voz,microprocesador
+telefonia_celular_digital|Telefonía celular digital|9|T|telefonia_movil_1g,teoria_informacion
+wifi_bluetooth|Wi-Fi y Bluetooth|9|T|telefonia_celular_digital,teoria_informacion
+pantalla_tactil|Pantalla táctil|10|T|cristal_liquido,microprocesador
+smartphone_tecnologia|Teléfono inteligente|10|T|telefonia_celular_digital,pantalla_tactil,bateria_litio
+redes_5g|Redes móviles 5G|10|T|telefonia_celular_digital,wifi_bluetooth,fibra_optica
+lidar_sensor|Sensor lidar|10|T|laser,microprocesador
+impresion_3d|Impresión 3D|10|T|microprocesador,polimeros_sinteticos
+realidad_virtual_hardware|Equipos de realidad virtual|10|T|led_pantallas,sensores_mems,gpu_procesamiento_grafico
+drones_civiles|Drones civiles|10|V|bateria_litio,sensores_mems,microprocesador
+### Automatización
+robotica_industrial|Robótica industrial|9|T|microprocesador,motor_electrico,cadena_montaje
+automatizacion_plc|Automatización programable|9|T|microprocesador,robotica_industrial
+electrodomesticos|Electrodomésticos|8|T|motor_electrico,red_electrica
+## CIE|COM|Computación e informática|De contar con tallas a la inteligencia artificial, pasando por el sistema operativo, el procesador y las redes que hacen posible Internet.
+### Cálculo mecánico y primeras máquinas
+algoritmo_formal|Algoritmos (al-Juarismi)|4|K|algebra_sistematica,numeracion_indoarabiga
+maquina_calcular_mecanica|Calculadora mecánica|5|T|engranajes,reloj_mecanico,aritmetica_basica
+telares_tarjetas|Telar de tarjetas perforadas|6|T|textiles_tejido,engranajes
+maquina_analitica_diseno|Diseño de la máquina analítica|7|K|maquina_calcular_mecanica,telares_tarjetas,analisis_riguroso
+tabuladora_hollerith|Tabuladora de tarjetas|7|T|telares_tarjetas,estadistica,motor_electrico
+algebra_booleana|Álgebra de Boole|7|K|logica_matematica
+circuitos_logicos|Circuitos lógicos|8|K|algebra_booleana,telegrafo_electrico
+### La computadora
+computadora_electromecanica|Computadora electromecánica|8|T|computabilidad,circuitos_logicos,tabuladora_hollerith
+computadora_digital|Computadora electrónica digital|8|T|computadora_electromecanica,tubo_vacio_valvula
+programa_almacenado|Programa almacenado|9|K|computadora_digital,computabilidad
+almacenamiento_magnetico|Almacenamiento magnético|8|T|fonografo_grabacion,computadora_digital
+lenguaje_ensamblador|Lenguaje ensamblador|9|T|programa_almacenado
+compiladores|Compiladores|9|T|lenguaje_ensamblador
+lenguajes_alto_nivel|Lenguajes de alto nivel|9|T|compiladores
+sistema_operativo|Sistema operativo|9|T|compiladores,transistor
+multitarea_tiempo_compartido|Multitarea y tiempo compartido|9|T|sistema_operativo
+computadora_personal|Computadora personal|9|T|microprocesador,sistema_operativo,memoria_semiconductores
+interfaz_grafica|Interfaz gráfica|9|T|computadora_personal
+gpu_procesamiento_grafico|Procesador gráfico (GPU)|9|T|chip_gran_escala,interfaz_grafica
+supercomputacion|Supercomputación|9|T|microprocesador,memoria_semiconductores
+simulacion_cientifica|Simulación científica|9|T|supercomputacion,analisis_numerico
+virtualizacion|Virtualización|9|T|sistema_operativo
+### Datos y redes
+base_datos|Bases de datos|9|T|sistema_operativo,almacenamiento_magnetico
+procesamiento_senales_digital|Procesamiento digital de señales|9|K|teoria_informacion,computadora_digital
+compresion_datos|Compresión de datos|9|K|teoria_informacion,computadora_digital
+redes_conmutacion_paquetes|Redes de conmutación de paquetes|9|T|teoria_informacion,sistema_operativo
+protocolo_tcpip|Protocolo TCP/IP|9|T|redes_conmutacion_paquetes
+internet_tecnologia|Internet (red de redes)|9|T|protocolo_tcpip,sistema_operativo,microprocesador,circuito_integrado
+www_web|World Wide Web|9|T|internet_tecnologia,lenguajes_alto_nivel
+navegador_buscador|Navegador y buscadores|9|T|www_web,base_datos
+criptografia_clave_publica|Criptografía de clave pública|9|K|teoria_numeros,computadora_digital,teoria_complejidad
+cifrado_web_ssl|Cifrado web (SSL)|9|T|criptografia_clave_publica,internet_tecnologia
+ciberseguridad|Ciberseguridad|9|T|cifrado_web_ssl,sistema_operativo
+computacion_nube|Computación en la nube|10|T|virtualizacion,internet_tecnologia,fibra_optica
+big_data|Big data|10|T|computacion_nube,base_datos
+internet_de_las_cosas|Internet de las cosas|10|T|sensores_mems,wifi_bluetooth,computacion_nube
+blockchain|Cadena de bloques|10|T|criptografia_clave_publica,internet_tecnologia
+### Inteligencia artificial
+inteligencia_artificial_simbolica|Inteligencia artificial simbólica|9|K|computabilidad,lenguajes_alto_nivel
+redes_neuronales_clasicas|Redes neuronales clásicas|9|K|computadora_digital,neurociencia,algebra_lineal
+aprendizaje_automatico|Aprendizaje automático|9|K|redes_neuronales_clasicas,estadistica
+aprendizaje_profundo|Aprendizaje profundo|10|K|aprendizaje_automatico,gpu_procesamiento_grafico,big_data
+ia_generativa|Inteligencia artificial generativa|10|K|aprendizaje_profundo,big_data
+lenguaje_natural_nlp|Procesamiento del lenguaje natural|10|K|aprendizaje_automatico,big_data
+robotica_autonoma|Robótica autónoma|10|T|aprendizaje_profundo,sensores_mems,robotica_industrial
+vehiculos_autonomos|Vehículos autónomos|10|V|robotica_autonoma,lidar_sensor,gps_navegacion
+computacion_cuantica|Computación cuántica|10|K|computabilidad,mecanica_cuantica,superconductividad
+realidad_virtual_aumentada|Realidad virtual y aumentada|10|T|gpu_procesamiento_grafico,realidad_virtual_hardware
+## CIE|TRA|Transporte|Cómo se mueven personas y mercancías: carros, barcos, trenes, automóviles, aviones. Las versiones de guerra están en Militar.
+### Tierra
+canoa_monoxila|Canoa monóxila|1|V|herramientas_piedra,fuego
+domesticacion_caballo|Domesticación del caballo|2|T|domesticacion_animales
+montura_equitacion|Equitación|2|T|domesticacion_caballo
+carro_dos_ruedas|Carro de dos ruedas|2|V|rueda,domesticacion_animales
+carro_cuatro_ruedas|Carro de cuatro ruedas|2|V|carro_dos_ruedas
+silla_estribo|Silla de montar y estribos|4|T|montura_equitacion,hierro_forja
+carruaje_suspension|Carruaje con suspensión|5|V|carro_cuatro_ruedas,silla_estribo
+rieles_hierro|Rieles de hierro|6|T|alto_horno,carbon_mineral_uso
+locomotora_vapor|Locomotora de vapor|7|V|maquina_vapor,rieles_hierro
+bicicleta|Bicicleta|7|V|engranajes,caucho_vulcanizado
+tranvia|Tranvía eléctrico|7|V|motor_electrico,rieles_hierro
+motocicleta|Motocicleta|7|V|motor_combustion,bicicleta
+automovil|Automóvil|7|V|motor_combustion,bicicleta,caucho_vulcanizado
+cadena_montaje|Cadena de montaje|7|T|automovil,produccion_en_serie
+camion|Camión|8|V|automovil
+autobus|Autobús|8|V|camion
+locomotora_diesel_electrica|Locomotora diésel-eléctrica|8|V|motor_diesel,motor_electrico,locomotora_vapor
+tren_alta_velocidad|Tren de alta velocidad|9|V|locomotora_diesel_electrica,red_alta_tension,aerodinamica
+automovil_electrico|Automóvil eléctrico|10|V|automovil,bateria_litio,motor_electrico
+maglev|Tren de levitación magnética|10|V|tren_alta_velocidad,superconductividad
+### Agua
+balsa_troncos|Balsa de troncos|0|V|herramientas_piedra,cuerda_fibras
+barco_remos|Barco de remos|2|V|canoa_monoxila,carpinteria
+barco_vela|Barco de vela|2|V|barco_remos,textiles_tejido
+barco_mercante|Barco mercante|3|V|barco_vela,puerto_piedra
+timon_popa|Timón de popa|4|T|barco_mercante
+vela_latina|Vela latina|4|T|barco_vela
+junco_chino|Junco de mar|4|V|timon_popa,brujula
+carabela_nao|Carabela y nao|5|V|vela_latina,timon_popa,brujula
+navegacion_oceanica|Navegación oceánica|5|T|cartas_nauticas_portulanos,carabela_nao
+galeon_mercante|Galeón mercante|5|V|carabela_nao
+clipper|Clíper|6|V|galeon_mercante,dinamica_fluidos
+barco_vapor|Barco de vapor|6|V|maquina_vapor,clipper
+helice_barco|Hélice|7|T|barco_vapor,dinamica_fluidos
+casco_hierro_acero|Casco de hierro y acero|7|T|barco_vapor,acero_bessemer
+transatlantico|Transatlántico|7|V|casco_hierro_acero,helice_barco
+buque_motor_diesel|Buque de motor diésel|8|V|transatlantico,motor_diesel
+contenedor_maritimo|Contenedor marítimo|9|T|buque_motor_diesel,produccion_en_serie
+hovercraft_hidrofoil|Aerodeslizador e hidroala|9|V|turbina_gas,dinamica_fluidos
+### Aire
+globo_aerostatico|Globo aerostático|6|V|leyes_gases,textiles_tejido
+dirigible|Dirigible|7|V|globo_aerostatico,motor_combustion
+planeador|Planeador|7|V|aerodinamica
+aviacion_motor|Avión con motor|7|V|planeador,motor_combustion
+helicoptero|Helicóptero|8|V|aviacion_motor,aleaciones_ligeras
+aviacion_comercial|Aviación comercial|8|V|aviacion_motor,aleaciones_ligeras
+motor_jet_civil|Motor a reacción civil|9|V|turbina_gas,aviacion_comercial
+sistema_trafico_aereo|Control del tráfico aéreo|9|T|radar,aviacion_comercial
+## CIE|MAN|Manufactura e industria|Del hilado a mano a la fábrica automatizada.
+### Mecanismos y herramientas
+engranajes|Engranajes|3|T|rueda,polea
+tornillo_arquimedes|Tornillo y prensa de tornillo|3|T|ley_palanca,polea
+ciguenal_biela|Cigüeñal y biela|4|T|engranajes,rueda_hidraulica
+torno_madera_metal|Torno|4|T|engranajes,hierro_forja
+forja_medieval_martinete|Martinete hidráulico|4|T|hierro_forja,molino_agua
+reloj_mecanico|Reloj mecánico|4|T|engranajes,hierro_forja
+reloj_pendulo|Reloj de péndulo|5|T|reloj_mecanico,cinematica
+calibre_precision|Medición de precisión (calibre)|6|T|torno_madera_metal,tablas_calculo
+intercambiabilidad_piezas|Piezas intercambiables|6|T|torno_madera_metal,calibre_precision
+maquinas_herramienta|Máquinas herramienta|7|T|torno_madera_metal,maquina_vapor,calibre_precision
+produccion_en_serie|Producción en serie|7|T|intercambiabilidad_piezas,maquinas_herramienta
+rodamientos|Rodamientos|7|T|calibre_precision,aceros_aleados
+neumatica_hidraulica_industrial|Neumática e hidráulica industrial|7|T|dinamica_fluidos,maquina_vapor
+soldadura_arco|Soldadura por arco|8|T|generador_electrico,aceros_aleados
+control_calidad_estadistico|Control de calidad estadístico|8|T|estadistica,produccion_en_serie
+mecanizacion_cnc|Mecanizado por control numérico|9|T|maquinas_herramienta,microprocesador
+### Textil y fábrica
+hilanderia_mecanica|Hilandería mecánica|6|T|textiles_tejido,engranajes
+telar_mecanico|Telar mecánico|6|T|hilanderia_mecanica,maquina_vapor
+fabrica_textil|Fábrica textil|6|B|telar_mecanico,maquina_vapor
+maquina_coser|Máquina de coser|7|T|engranajes,hilanderia_mecanica
+produccion_papel_industrial|Papel industrial|7|T|papel,maquina_vapor
+industria_quimica_masiva|Industria química masiva|8|T|catalisis,petroquimica
+lubricantes_sinteticos|Lubricantes sintéticos|8|T|petroquimica
+manufactura_flexible_robots|Manufactura flexible con robots|10|T|robotica_industrial,automatizacion_plc,aprendizaje_automatico

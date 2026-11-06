@@ -1,0 +1,445 @@
+## MIL|TRO|Tipos de tropa|Todas las unidades que se pueden reclutar, de la partida de caza al soldado conectado. Subrama con énfasis propio: cada época y cada cultura con sus propias tropas.|@tro
+### Tropas antiguas
+milicia_cazadores|Partida de caza (milicia tribal)|0|U|palo_afilado_lanza
+guerreros_tribales|Guerreros tribales|1|U|milicia_cazadores,tribu
+honderos|Honderos|1|U|honda
+arqueros_tribales|Arqueros tribales|1|U|arco_simple
+lanceros|Lanceros|2|U|lanza_bronce
+espadachines_bronce|Espadachines de bronce|2|U|espada_bronce
+jabalineros|Jabalineros|2|U|jabalina,escudo_madera_cuero
+carros_guerra|Carros de guerra|2|U|carro_dos_ruedas,arco_compuesto
+guardia_real|Guardia real|2|U|monarquia_divina,espada_bronce
+exploradores|Exploradores|2|U|guerreros_tribales,orientacion_estrellas
+hoplitas|Hoplitas|3|U|lanza_hierro,escudo_hoplita,casco_hierro
+falangitas|Falangistas con sarisa|3|U|pica_larga_sarisa,hoplitas,falange
+legionarios|Legionarios|3|U|espada_corta_hierro,pilum,escudo_romano_scutum,armadura_laminar_lorica
+guardia_pretoriana|Guardia pretoriana|3|U|legionarios,guardia_real
+arqueros_montados|Arqueros a caballo|3|U|arco_compuesto,montura_equitacion
+caballeria_ligera|Caballería ligera|3|U|montura_equitacion,lanza_hierro
+caballeria_pesada_catafracta|Caballería pesada acorazada|3|U|armadura_catafracta_caballo,lanza_hierro
+ballesteros|Ballesteros|3|U|ballesta_tension
+elefantes_guerra|Elefantes de guerra|3|U|domesticacion_animales,comercio_larga_distancia
+camelleros|Camelleros|3|U|domesticacion_animales,caravanas_ruta_seda
+ingenieros_militares|Ingenieros militares|3|U|catapulta_torsion,geometria_practica,construccion_piedra
+mercenarios|Mercenarios|3|U|guerreros_tribales,moneda_acunada
+marines_infanteria_marina|Infantería de marina|3|U|hoplitas,trirreme
+### Edad Media
+caballeros_feudales|Caballeros feudales|4|U|lanza_caballeria_pesada,cota_de_malla,feudalismo
+infanteria_pesada_medieval|Infantería pesada medieval|4|U|alabarda,cota_de_malla
+arqueros_largos|Arqueros largos|4|U|arco_largo,tactica_arqueros_masa
+ballesteros_profesionales|Ballesteros profesionales|4|U|ballesta_acero
+jinetes_arqueros_nomadas|Jinetes arqueros nómadas|4|U|arco_reflejo_mongol,montura_equitacion
+samurai|Samurái|4|U|katana_espada_curva,feudalismo
+ordenes_militares|Órdenes militares|4|U|caballeros_feudales,monasterios_copistas
+### Renacimiento y Antiguo Régimen
+piqueros|Piqueros|5|U|pica_piquero,tactica_cuadro_piqueros
+arcabuceros|Arcabuceros|5|U|arcabuz_mecha
+reiters_pistoleros|Caballería de pistoleros|5|U|pistola_rueda,caballeria_pesada_catafracta
+mosqueteros|Mosqueteros|6|U|mosquete
+granaderos|Granaderos|6|U|granada_mano,mosquete
+dragones|Dragones|6|U|mosquete,montura_equitacion
+infanteria_linea|Infantería de línea|6|U|mosqueteros,bayoneta,tactica_linea
+fusileros_rayados|Fusileros de fusil rayado|6|U|fusil_rayado,jabalineros
+artilleros|Artilleros|6|U|canon_bronce
+ingenieros_zapadores|Zapadores|6|U|ingenieros_militares,polvora
+caballeria_coraceros_husares|Coraceros y húsares|6|U|sable_caballeria,pistola_chispa
+levee_en_masse|Leva en masa|6|U|estado_nacion,mosquete
+guerrilleros|Guerrilleros|6|U|tactica_guerrilla,mosquete
+### Era industrial
+infanteria_fusil_percusion|Infantería de fusil de percusión|7|U|fusil_minie,infanteria_linea
+caballeria_carabina|Caballería con carabina|7|U|fusil_retrocarga,caballeria_coraceros_husares
+ametralladoristas|Ametralladoristas|7|U|ametralladora_maxim
+ejercito_conscripcion_masiva|Ejército de conscripción masiva|7|U|levee_en_masse,locomotora_vapor
+reserva_movilizacion|Reservas y movilización general|7|U|ejercito_conscripcion_masiva,estado_mayor_general
+policia_militar|Policía militar|7|U|policia_moderna,ejercito_profesional
+### Siglo XX
+tropas_asalto_trinchera|Tropas de asalto de trinchera|8|U|granada_fragmentacion,tactica_infiltracion
+infanteria_motorizada|Infantería motorizada|8|U|camion,fusil_semiautomatico
+infanteria_mecanizada|Infantería mecanizada|8|U|vehiculo_transporte_oruga,fusil_semiautomatico
+tanquistas|Tripulaciones de tanque|8|U|tanque_ligero
+paracaidistas|Paracaidistas|8|U|paracaidas,avion_transporte_militar
+infanteria_planeador|Infantería de planeador|8|U|planeador,paracaidistas
+fuerzas_especiales|Fuerzas especiales|8|U|tropas_asalto_trinchera,inteligencia_militar_estado_mayor
+francotiradores|Francotiradores|8|U|fusil_francotirador
+cazacarros|Cazacarros de infantería|8|U|bazuca_antitanque
+infanteria_anfibia|Infantería anfibia|8|U|marines_infanteria_marina,lancha_desembarco
+### Época moderna
+infanteria_aerotransportada_helicoptero|Caballería aérea (helicópteros)|9|U|helicoptero_transporte_militar,fusil_asalto_moderno
+infanteria_moderna_conectada|Infantería moderna conectada|9|U|fusil_asalto_moderno,radio_individual,vision_nocturna
+unidades_nbq|Unidades de defensa NBQ|9|U|traje_proteccion_nbq,armas_quimicas
+operadores_drones|Operadores de drones|10|U|dron_armado
+fuerzas_ciberneticas|Fuerzas cibernéticas|10|U|ciberguerra
+soldado_digital|Soldado digital integrado|10|U|infanteria_moderna_conectada,gps_militar,microprocesador
+infanteria_robotica|Infantería robótica autónoma|10|U|robotica_autonoma,exoesqueleto_militar
+fuerzas_espaciales|Fuerzas espaciales|10|U|armas_antisatelite,estacion_espacial
+### Tropas de otras tradiciones
+inmortales_persas|Inmortales (guardia persa)|3|U|arco_compuesto,lanza_hierro,guardia_real
+peltastas|Peltastas|3|U|jabalina,escudo_hoplita
+guerreros_aguila_jaguar|Guerreros águila y jaguar|4|U|mazo_piedra_pulida,rec_silex,jerarquia_rangos
+huestes_incas|Huestes incas|4|U|honda,red_viaria_imperial,jerarquia_rangos
+huscarls_nordicos|Huscarls y guerreros nórdicos|4|U|hacha_hierro_guerra,drakkar_langskip,cota_de_malla
+mamelucos|Mamelucos|4|U|sable_caballeria,arco_compuesto,montura_equitacion
+keshig_mongol|Guardia imperial mongola|4|U|jinetes_arqueros_nomadas,guardia_real
+condotieros|Condotieros|5|U|mercenarios,ballesta_acero
+tercios|Tercios|5|U|tercios_formacion_mixta
+jenizaros|Jenízaros|5|U|arcabuz_mecha,ejercito_permanente
+conquistadores|Conquistadores|5|U|arcabuz_mecha,armadura_gotica_completa,carraca_nao_armada
+cosacos|Cosacos|5|U|sable_caballeria,montura_equitacion,tactica_guerrilla
+corsarios|Corsarios|5|U|guerra_de_corso,galeon_guerra
+marineria_de_linea|Marinería de línea|6|U|navio_de_linea
+legion_extranjera|Legión extranjera|7|U|mercenarios,ejercito_permanente
+tropas_coloniales|Tropas coloniales (sepoys, askaris)|7|U|infanteria_fusil_percusion,colonizacion_ultramar
+cazadores_montana|Tropas de montaña|7|U|fusil_minie,cartografia_militar
+partisanos|Partisanos|8|U|guerrilleros,radio_campana
+buzos_combate|Buzos de combate|8|U|submarino_motor,fuerzas_especiales
+cascos_azules|Cascos azules|9|U|onu
+contratistas_privados|Contratistas militares privados|9|U|mercenarios
+### Más allá de lo humano (futuro)
+infanteria_exoesqueleto|Infantería con exoesqueleto|10|U|exoesqueleto_militar,infanteria_moderna_conectada
+soldado_biomejorado|Soldado biomejorado|11|U|soldado_digital,terapia_genica
+combatiente_cibernetico|Combatiente cibernético|11|U|soldado_digital,interfaz_cerebro_computadora,protesis_bionicas
+enjambre_autonomo|Enjambres autónomos|11|U|guerra_enjambre_drones,robotica_autonoma
+ia_mando_tactico|Mando táctico por IA|11|T|guerra_red_centrica,aprendizaje_profundo
+mando_neuronal_enlazado|Mando neuronal enlazado|11|T|interfaz_cerebro_computadora,guerra_red_centrica
+legion_androides|Legiones de androides|11|U|infanteria_robotica,ia_mando_tactico
+tropas_clonadas|Tropas clonadas|11|U|clonacion,soldado_biomejorado
+criaturas_bioingenieria|Criaturas de combate bioingenierizadas|11|U|biologia_sintetica,soldado_biomejorado
+nanoenjambre_combate|Nanoenjambres de combate|11|U|nanotecnologia,enjambre_autonomo
+tropas_orbitales|Tropas de despliegue orbital|11|U|fuerzas_espaciales,cohete_reutilizable
+infanteria_espacial|Infantería espacial|11|U|tropas_orbitales,exoesqueleto_militar
+## MIL|TAC|Táctica, estrategia y doctrina|Cómo se pelea y se organiza un ejército: de la emboscada a la guerra en red.
+### Primeras tácticas y ejército profesional
+emboscada_acecho|Emboscada y acecho|0|T|palo_afilado_lanza,observacion_naturaleza
+formacion_tribal|Formación de combate tribal|1|T|emboscada_acecho,guerreros_tribales
+batalla_campal_organizada|Batalla campal organizada|2|T|formacion_tribal,liderazgo_guerrero
+ejercito_profesional|Ejército profesional|3|G|batalla_campal_organizada,sistema_tributario
+disciplina_formacion|Disciplina y formación cerrada|3|T|ejercito_profesional
+falange|Falange|3|T|disciplina_formacion,escudo_hoplita
+legion_manipular|Legión manipular|3|T|disciplina_formacion,espada_corta_hierro,pilum
+cohortes_legionarias|Cohortes legionarias|3|T|legion_manipular,ingenieros_militares
+arte_de_la_guerra_tratado|Tratado de arte militar|3|K|batalla_campal_organizada,escritura_alfabetica
+estrategia_clasica|Estrategia clásica|3|K|arte_de_la_guerra_tratado,mapas_primitivos
+tactica_guerrilla|Táctica de guerrilla|3|T|emboscada_acecho,exploradores
+jerarquia_rangos|Jerarquía de rangos y oficiales|3|G|ejercito_profesional,disciplina_formacion
+justicia_militar|Justicia militar|3|G|ejercito_profesional,derecho_codificado
+paga_militar_soldada|Soldada militar|3|T|ejercito_profesional,moneda_acunada
+tactica_arqueros_masa|Táctica de arqueros en masa|4|T|arco_largo,disciplina_formacion
+carga_caballeria_pesada|Carga de caballería pesada|4|T|lanza_caballeria_pesada,silla_estribo
+### Pólvora y Antiguo Régimen
+tactica_cuadro_piqueros|Cuadro de piqueros|5|T|pica_piquero,disciplina_formacion
+tercios_formacion_mixta|Formación mixta de piqueros y arcabuceros|5|T|tactica_cuadro_piqueros,arcabuz_mecha
+ejercito_permanente|Ejército permanente|5|G|ejercito_profesional,fisco_moderno
+tactica_linea|Táctica de línea de fuego|6|T|mosquete,disciplina_formacion
+fuego_de_pelotones|Fuego de pelotones|6|T|tactica_linea
+tactica_columna_ataque|Columna de ataque|6|T|tactica_linea,levee_en_masse
+organizacion_divisional|Organización en divisiones y cuerpos|6|T|ejercito_permanente,mapas_administrativos
+escuelas_militares|Escuelas militares|6|B|ejercito_permanente,academias_ciencias
+suboficiales_cuerpo|Cuerpo de suboficiales|6|G|ejercito_permanente,jerarquia_rangos
+### Era industrial
+estado_mayor_general|Estado mayor general|7|T|organizacion_divisional,escuelas_militares
+doctrina_movilizacion_ferroviaria|Movilización por ferrocarril|7|T|estado_mayor_general,locomotora_vapor
+tactica_dispersion|Táctica de dispersión y cobertura|7|T|fusil_cerrojo_cargador,tactica_linea
+academia_militar_moderna|Academia militar moderna|7|B|escuelas_militares,educacion_publica
+juegos_de_guerra|Juegos de guerra de estado mayor|7|T|estado_mayor_general,cartografia_militar
+inteligencia_militar_estado_mayor|Inteligencia militar de estado mayor|7|A|estado_mayor_general,servicio_secreto_estatal
+### Guerras mundiales
+guerra_de_trincheras|Guerra de trincheras|8|T|ametralladora_maxim,alambre_puas
+barrera_artilleria_rodante|Barrera de artillería rodante|8|T|canon_campana_rapido,guerra_de_trincheras
+tactica_infiltracion|Táctica de infiltración|8|T|guerra_de_trincheras,granada_fragmentacion
+defensa_en_profundidad|Defensa en profundidad|8|T|guerra_de_trincheras,barrera_artilleria_rodante
+armas_combinadas|Armas combinadas|8|T|tanque_ligero,infanteria_motorizada,caza_monoplano
+guerra_relampago|Guerra relámpago|8|T|armas_combinadas,radio_campana
+operaciones_aerotransportadas|Operaciones aerotransportadas|8|T|paracaidistas,estado_mayor_general
+bombardeo_estrategico_doctrina|Doctrina del bombardeo estratégico|8|T|bombardero_pesado,estado_mayor_general
+guerra_total|Guerra total|8|T|reserva_movilizacion,industrializacion,propaganda_masiva
+guerra_popular_prolongada|Guerra popular prolongada|8|T|tactica_guerrilla,marxismo
+contrainsurgencia|Contrainsurgencia|8|T|tactica_guerrilla,inteligencia_militar_estado_mayor
+### Guerra fría y presente
+doctrina_destruccion_mutua|Destrucción mutua asegurada|9|T|bomba_termonuclear,misil_balistico_intercontinental
+disuasion_segundo_ataque|Capacidad de segundo ataque|9|T|submarino_lanzamisiles_balisticos,doctrina_destruccion_mutua
+doctrina_batalla_aeroterrestre|Batalla aeroterrestre|9|T|armas_combinadas,helicoptero_ataque,comando_control_digital
+guerra_red_centrica|Guerra centrada en red|10|T|comando_control_digital,internet_tecnologia
+guerra_hibrida|Guerra híbrida|10|T|guerra_informativa,ciberguerra,tactica_guerrilla
+guerra_enjambre_drones|Guerra con enjambres de drones|10|T|dron_armado,aprendizaje_profundo
+## MIL|FOR|Fortificaciones y asedio|Empalizadas, murallas, castillos, fortalezas abaluartadas, trincheras, búnkeres y defensa antiaérea.
+### Antigüedad
+empalizada|Empalizada|1|B|cabana_madera,hacha_piedra
+zanja_foso|Foso y zanja|1|B|empalizada,herramientas_piedra
+fortaleza_colina|Fortaleza de colina|2|B|empalizada,zanja_foso
+fortin_torre_vigia|Fortín y torre de vigía|2|B|empalizada,construccion_piedra
+muralla_piedra|Muralla de piedra|2|B|murallas_urbanas,rec_piedra_cantera
+ariete_asedio|Ariete|2|W|carpinteria,hacha_cobre
+escalas_asedio|Escalas de asedio|2|W|carpinteria
+torre_asedio|Torre de asedio|3|W|ariete_asedio,escalas_asedio,polea
+zapa_mina_asedio|Zapa y minado|3|T|mineria_subterranea,ariete_asedio
+asedio_circunvalacion|Asedio por circunvalación|3|T|ingenieros_militares,zanja_foso
+torres_y_almenas|Torres y almenas|3|B|muralla_piedra,fortin_torre_vigia
+### Edad Media
+puertas_fortificadas|Puertas fortificadas y puente levadizo|4|B|torres_y_almenas,polea
+castillo_motte|Castillo de motte|4|B|empalizada,feudalismo
+castillo_piedra|Castillo de piedra|4|B|torres_y_almenas,feudalismo,arco_boveda
+castillo_concentrico|Castillo concéntrico|4|B|castillo_piedra,puertas_fortificadas
+machicolis_aspilleras|Matacanes y aspilleras|4|T|castillo_piedra
+### Pólvora
+fortificacion_abaluartada|Fortificación abaluartada|5|B|castillo_concentrico,canon_hierro_colado,geometria_demostrativa
+fortaleza_estrella|Fortaleza en estrella|5|B|fortificacion_abaluartada
+asedio_trincheras_paralelas|Asedio con trincheras paralelas|6|T|fortificacion_abaluartada,ingenieros_zapadores
+fortificaciones_permanentes|Sistema de fortificaciones permanentes|6|B|fortaleza_estrella
+fuertes_costeros|Fuertes costeros|6|B|fortaleza_estrella,canon_hierro_colado
+### Siglos XIX y XX
+mina_terrestre|Mina terrestre|7|W|polvora,llave_percusion
+mina_naval|Mina naval|7|W|polvora,llave_percusion,barco_vapor
+alambre_puas|Alambre de púas|7|T|produccion_en_serie,aleaciones_ferrosas
+fortificacion_hormigon|Fortificación de hormigón|7|B|hormigon_armado,fortificaciones_permanentes
+fuertes_acorazados|Fuertes acorazados|7|B|fortificacion_hormigon,canon_acero
+sistema_trincheras|Sistema de trincheras|8|B|alambre_puas,ametralladora_maxim
+casamatas_hormigon|Casamatas de hormigón|8|B|fortificacion_hormigon,ametralladora_maxim
+linea_defensiva_permanente|Línea defensiva permanente|8|B|fortificacion_hormigon,sistema_trincheras
+bunker_antiaereo|Búnker antiaéreo|8|B|fortificacion_hormigon,aviacion_motor
+mina_antipersona|Mina antipersona|8|W|mina_terrestre,granada_fragmentacion
+### Era atómica y moderna
+bunker_nuclear|Búnker antinuclear|9|B|bunker_antiaereo,bomba_termonuclear
+silo_misil|Silo de misiles|9|B|bunker_nuclear,misil_balistico_intercontinental
+base_subterranea_montana|Base subterránea en montaña|9|B|bunker_nuclear,tuneladora
+defensa_aerea_integrada|Sistema de defensa aérea integrado|9|B|radar,misil_tierra_aire
+defensa_costera_misiles|Defensa costera con misiles|9|B|fuertes_acorazados,misil_antibuque
+## MIL|VEH|Vehículos terrestres militares|Carros, blindados, tanques, transportes y sistemas robóticos terrestres.
+### Antiguos
+carreta_suministros|Carreta de suministros militar|2|V|carro_cuatro_ruedas
+carro_falcado|Carro de guerra con guadañas|3|V|carros_guerra,hierro_forja
+carro_asedio_cubierto|Carro de asedio cubierto|3|V|torre_asedio,rueda
+carro_fortificado_wagenburg|Carros fortificados (wagenburg)|5|V|carreta_suministros,arcabuz_mecha
+### Blindados
+orugas|Orugas|7|T|motor_combustion,rodamientos
+automovil_blindado|Automóvil blindado|8|V|automovil,aceros_aleados,ametralladora_maxim
+tanque_pesado_primera_guerra|Tanque de la Gran Guerra|8|V|orugas,automovil_blindado,guerra_de_trincheras
+tanque_ligero|Tanque ligero|8|V|tanque_pesado_primera_guerra,motor_combustion
+tanque_medio|Tanque medio|8|V|tanque_ligero,aceros_aleados,canon_campana_rapido
+tanque_pesado|Tanque pesado|8|V|tanque_medio
+cazacarros_autopropulsado|Cazacarros autopropulsado|8|V|tanque_medio,canon_antitanque
+tanque_lanzallamas|Tanque lanzallamas|8|V|tanque_medio,lanzallamas
+carga_hueca|Carga hueca|8|T|explosivo_tnt,aceros_aleados
+bazuca_antitanque|Lanzacohetes antitanque|8|W|cohete_polvora,carga_hueca
+blindaje_compuesto|Blindaje compuesto|9|T|aceros_aleados,ceramicas_tecnicas
+blindaje_reactivo|Blindaje reactivo|9|T|blindaje_compuesto,explosivo_plastico
+tanque_batalla_principal|Tanque de batalla principal|9|V|tanque_pesado,blindaje_compuesto,direccion_tiro
+tanque_vision_termica|Visión térmica en tanques|9|T|tanque_batalla_principal,vision_nocturna
+sistema_proteccion_activa|Sistema de protección activa|10|T|tanque_batalla_principal,radar,sensores_mems
+tanque_digital|Tanque digital de última generación|10|V|tanque_batalla_principal,sistema_proteccion_activa,comando_control_digital
+### Transporte y apoyo
+vehiculo_transporte_oruga|Transporte blindado de orugas|8|V|orugas,camion
+semioruga|Vehículo semioruga|8|V|orugas,camion
+vehiculo_ligero_todoterreno|Vehículo ligero todoterreno|8|V|camion,automovil
+camion_logistico_militar|Camión logístico militar|8|V|camion
+vehiculo_combate_infanteria|Vehículo de combate de infantería|9|V|vehiculo_transporte_oruga,fusil_asalto_moderno
+transporte_blindado_ruedas|Transporte blindado de ruedas|9|V|vehiculo_transporte_oruga,blindaje_compuesto
+lanzador_misiles_movil|Lanzador móvil de misiles|9|V|misil_tierra_aire,camion
+radar_movil_antiaereo|Radar móvil antiaéreo|9|V|radar,vehiculo_transporte_oruga
+vehiculo_resistente_minas|Vehículo resistente a minas|10|V|transporte_blindado_ruedas,blindaje_reactivo
+vehiculo_terrestre_no_tripulado|Vehículo terrestre no tripulado|10|V|robotica_autonoma,vehiculo_transporte_oruga
+## MIL|NAV|Guerra naval|Galeras, galeones, acorazados, submarinos y portaaviones.
+### Remos y velas
+balsa_canoa_guerra|Canoa de guerra|1|V|canoa_monoxila,palo_afilado_lanza
+galera_guerra|Galera de guerra|2|V|barco_remos,bronce
+espolon_naval|Espolón naval|3|W|galera_guerra,bronce
+abordaje_garfios|Abordaje con garfios|3|T|galera_guerra,cuerda_fibras
+birreme|Birreme|3|V|galera_guerra
+trirreme|Trirreme|3|V|birreme,espolon_naval
+quinquerreme|Quinquerreme|3|V|trirreme
+dromon_bizantino|Dromón|4|V|trirreme,fuego_griego
+drakkar_langskip|Drakkar|4|V|barco_vela,timon_popa
+junco_guerra|Junco de guerra|4|V|junco_chino,cohete_polvora
+galera_mediterranea|Galera con artillería|5|V|dromon_bizantino,canon_bombarda
+carraca_nao_armada|Nao armada|5|V|carabela_nao,canon_bombarda
+galeon_guerra|Galeón de guerra|5|V|galeon_mercante,canon_bronce
+artilleria_naval_costado|Artillería naval de costado|5|T|galeon_guerra,afuste_ruedas
+guerra_de_corso|Guerra de corso|5|T|galeon_guerra,companias_comerciales
+fragata_vela|Fragata de vela|6|V|galeon_guerra
+navio_de_linea|Navío de línea|6|V|fragata_vela,artilleria_naval_costado
+tactica_linea_batalla_naval|Línea de batalla naval|6|T|navio_de_linea,tactica_linea
+bergantin_corbeta|Bergantín y corbeta|6|V|fragata_vela
+bloqueo_naval|Bloqueo naval|6|T|navio_de_linea
+submarino_experimental|Submarino experimental|6|V|navio_de_linea,hidrostatica
+### Vapor, hierro y acorazados
+buque_vapor_guerra|Buque de guerra de vapor|7|V|barco_vapor,navio_de_linea,canon_hierro_colado
+fragata_acorazada|Fragata acorazada|7|V|buque_vapor_guerra,casco_hierro_acero,aleaciones_ferrosas
+monitor_torre_giratoria|Monitor de torre giratoria|7|V|fragata_acorazada,canon_acero
+crucero_acorazado|Crucero acorazado|7|V|fragata_acorazada,helice_barco
+torpedo|Torpedo automóvil|7|W|mina_naval,neumatica_hidraulica_industrial
+torpedero|Torpedero|7|V|torpedo,helice_barco
+destructor|Destructor|7|V|torpedero,turbina_vapor
+acorazado_pre_dreadnought|Acorazado pre-dreadnought|7|V|monitor_torre_giratoria,crucero_acorazado
+acorazado_dreadnought|Acorazado dreadnought|7|V|acorazado_pre_dreadnought,turbina_vapor
+submarino_motor|Submarino diésel-eléctrico|7|V|submarino_experimental,motor_diesel,bateria_plomo_acido,torpedo
+radio_naval|Radio naval|7|T|radio_telegrafia,buque_vapor_guerra
+### Siglo XX
+crucero_ligero|Crucero ligero|8|V|crucero_acorazado,destructor
+hidroavion_naval|Hidroavión naval|8|V|aviacion_motor,crucero_acorazado
+portaaviones|Portaaviones|8|V|hidroavion_naval,acorazado_dreadnought
+portaaviones_escolta|Portaaviones de escolta|8|V|portaaviones,destructor
+tactica_grupo_portaaviones|Grupo de combate de portaaviones|8|T|portaaviones,radio_naval,radar
+lancha_desembarco|Lancha de desembarco|8|V|buque_vapor_guerra,motor_combustion
+guerra_anfibia|Guerra anfibia|8|T|infanteria_anfibia,armas_combinadas
+sonar_antisubmarino|Sonar antisubmarino|8|T|sonar,destructor
+carga_profundidad|Carga de profundidad|8|W|submarino_motor,explosivo_tnt
+guerra_antisubmarina|Guerra antisubmarina|8|T|sonar_antisubmarino,carga_profundidad,radar
+convoyes_escoltados|Convoyes escoltados|8|T|guerra_antisubmarina
+acorazado_rapido|Acorazado rápido|8|V|acorazado_dreadnought,direccion_tiro
+### Era nuclear y moderna
+submarino_nuclear|Submarino nuclear|9|V|submarino_motor,reactor_nuclear
+portaaviones_nuclear|Portaaviones nuclear|9|V|portaaviones,reactor_nuclear
+destructor_misilistico|Destructor lanzamisiles|9|V|destructor,misil_antibuque
+submarino_lanzamisiles_balisticos|Submarino lanzamisiles balísticos|9|V|submarino_nuclear,misil_balistico_intercontinental
+crucero_aegis|Crucero de defensa integrada (tipo Aegis)|9|V|destructor_misilistico,defensa_aerea_integrada
+sonar_remolcado|Sonar pasivo remolcado|9|T|sonar_antisubmarino,computadora_digital
+hovercraft_militar|Aerodeslizador de desembarco|9|V|hovercraft_hidrofoil,lancha_desembarco
+buque_asalto_anfibio|Buque de asalto anfibio|9|V|lancha_desembarco,helicoptero_transporte_militar,portaaviones
+fragata_sigilosa|Fragata sigilosa|10|V|destructor_misilistico,sigilo_radar
+dron_naval|Dron naval autónomo|10|V|robotica_autonoma,sonar_remolcado
+submarino_propulsion_independiente_aire|Submarino de propulsión independiente del aire|10|V|submarino_motor,bateria_litio,hidrogeno_pila
+arma_laser_naval|Arma láser naval|10|W|arma_laser_defensa,destructor_misilistico
+## MIL|AIR|Guerra aérea|Globos, aviones, helicópteros, misiles y drones.
+### Primeros vuelos
+cometa_militar|Cometa de observación|3|V|textiles_tejido,cuerda_fibras
+globo_observacion_militar|Globo de observación|6|V|globo_aerostatico,telegrafo_optico
+globo_cautivo_artilleria|Globo cautivo para artillería|7|V|globo_observacion_militar,fotografia
+dirigible_militar|Dirigible militar|7|V|dirigible,aluminio
+### Primera mitad del siglo XX
+avion_reconocimiento|Avión de reconocimiento|8|V|aviacion_motor,fotogrametria_aerea
+ametralladora_sincronizada|Ametralladora sincronizada|8|T|avion_reconocimiento,ametralladora_ligera
+caza_biplano|Caza biplano|8|V|ametralladora_sincronizada,avion_reconocimiento
+bomba_aerea|Bomba de aviación|8|W|explosivo_tnt,aviacion_motor
+bombardero_ligero|Bombardero ligero|8|V|avion_reconocimiento,bomba_aerea
+paracaidas|Paracaídas|8|T|aviacion_motor,textiles_tejido
+avion_monoplano_metalico|Avión monoplano metálico|8|T|aleaciones_ligeras,caza_biplano
+caza_monoplano|Caza monoplano|8|V|avion_monoplano_metalico,motor_combustion
+bombardero_pesado|Bombardero pesado|8|V|avion_monoplano_metalico,bombardero_ligero
+avion_transporte_militar|Avión de transporte militar|8|V|aviacion_comercial,avion_monoplano_metalico
+bombardero_en_picado|Bombardero en picado|8|V|bombardero_ligero,caza_monoplano
+caza_embarcado|Caza embarcado|8|V|caza_monoplano,portaaviones
+radar_aereo_defensa|Radar de defensa aérea|8|T|radar,caza_monoplano
+defensa_aerea_ww2|Red de defensa aérea con radar|8|T|radar_aereo_defensa,radio_voz
+giroscopio_guiado|Giroscopio de guiado|8|T|motor_electrico,aceros_aleados
+pulsorreactor|Pulsorreactor|8|T|motor_combustion,aerodinamica
+cohete_balistico_aleman|Cohete balístico de combustible líquido|8|W|cohete_liquido,explosivo_tnt,giroscopio_guiado
+bomba_volante|Bomba volante|8|W|pulsorreactor,giroscopio_guiado
+helicoptero_transporte_militar|Helicóptero de transporte militar|8|V|helicoptero,ametralladora_media
+### Era del reactor y los misiles
+caza_reaccion|Caza a reacción|9|V|caza_monoplano,turbina_gas
+bombardero_estrategico_reaccion|Bombardero estratégico a reacción|9|V|bombardero_pesado,turbina_gas
+caza_supersonico|Caza supersónico|9|V|caza_reaccion,aerodinamica
+misil_aire_aire|Misil aire-aire|9|W|radar_aereo_defensa,cohete_balistico_aleman
+misil_tierra_aire|Misil tierra-aire|9|W|cohete_balistico_aleman,radar
+cohete_aire_tierra|Cohete aire-tierra|9|W|cohete_polvora,caza_reaccion
+helicoptero_ataque|Helicóptero de ataque|9|V|helicoptero_transporte_militar,cohete_aire_tierra
+avion_reconocimiento_estrategico|Avión de reconocimiento estratégico|9|V|caza_reaccion,fotogrametria_aerea
+bombardero_estrategico_nuclear|Bombardero estratégico nuclear|9|V|bombardero_estrategico_reaccion,bomba_fision
+reabastecimiento_aereo|Reabastecimiento en vuelo|9|T|bombardero_estrategico_reaccion
+sigilo_radar|Tecnología de sigilo|9|T|radar,fibra_carbono
+bombardero_sigiloso|Bombardero sigiloso|9|V|bombardero_estrategico_reaccion,sigilo_radar
+caza_sigiloso|Caza sigiloso|9|V|caza_supersonico,sigilo_radar
+avion_alerta_temprana|Avión de alerta temprana|9|V|avion_transporte_militar,radar_aereo_defensa,computadora_digital
+guerra_electronica|Guerra electrónica|9|T|radar,transistor
+contramedidas_electronicas|Contramedidas electrónicas|9|T|guerra_electronica
+bomba_guiada_laser|Bomba guiada por láser|9|W|bomba_aerea,laser,microprocesador
+transporte_estrategico_pesado|Transporte aéreo estratégico|9|V|avion_transporte_militar,motor_jet_civil
+dron_reconocimiento|Dron de reconocimiento|9|V|avion_reconocimiento_estrategico,microprocesador
+misil_antitanque_guiado|Misil antitanque guiado|9|W|bazuca_antitanque,giroscopio_guiado,transistor
+### Presente
+dron_armado|Dron armado|10|V|dron_reconocimiento,misil_antitanque_guiado,gps_navegacion
+caza_quinta_generacion|Caza de quinta generación|10|V|caza_sigiloso,comando_control_digital
+dron_combate_avanzado|Dron de combate avanzado|10|V|dron_armado,caza_sigiloso
+misil_hipersonico|Misil hipersónico|10|W|misil_crucero_moderno,aerodinamica,turbina_gas
+## MIL|NBQ|Armas estratégicas, nucleares, químicas y biológicas|Las armas de destrucción masiva, los misiles de largo alcance y los sistemas para defenderse de ellos.
+### Químicas y biológicas
+armas_quimicas|Armas químicas|8|W|quimica_organica,industria_quimica_masiva
+agentes_vesicantes|Agentes vesicantes|8|W|armas_quimicas
+agentes_nerviosos|Agentes nerviosos|8|W|armas_quimicas,bioquimica
+armas_biologicas|Armas biológicas|8|W|bacteriologia,industria_quimica_masiva
+armas_biologicas_avanzadas|Armas biológicas de ingeniería|9|W|armas_biologicas,ingenieria_genetica
+bomba_vacio_termobarica|Bomba termobárica|9|W|bomba_aerea,petroquimica
+bomba_racimo|Bomba de racimo|9|W|bomba_aerea,granada_fragmentacion
+armas_incendiarias_estrategicas|Armas incendiarias estratégicas|8|W|napalm,bombardero_pesado
+### Nucleares
+bomba_fision|Bomba atómica de fisión|8|W|reactor_nuclear,uranio_enriquecido,explosivo_tnt
+armas_nucleares|Arsenal nuclear|8|W|bomba_fision
+bomba_termonuclear|Bomba termonuclear|9|W|bomba_fision,fusion_nuclear_teoria
+ojiva_miniaturizada|Ojiva miniaturizada|9|W|bomba_termonuclear,circuito_integrado
+bomba_neutronica|Bomba de neutrones|9|W|bomba_termonuclear
+### Misiles de largo alcance y defensa
+misil_balistico_regional|Misil balístico regional|8|W|cohete_balistico_aleman,giroscopio_guiado
+misil_balistico_intercontinental|Misil balístico intercontinental|9|W|misil_balistico_regional,cohete_liquido,computadora_digital
+ojivas_multiples|Ojivas múltiples (MIRV)|9|W|ojiva_miniaturizada,misil_balistico_intercontinental
+misil_crucero_moderno|Misil de crucero moderno|9|W|bomba_volante,turbina_gas,computadora_digital
+misil_antibuque|Misil antibuque|9|W|misil_tierra_aire,radar
+misil_antibalistico|Misil antibalístico|9|W|misil_tierra_aire,radar_aereo_defensa,computadora_digital
+satelite_alerta_temprana|Satélite de alerta temprana|9|T|satelite_artificial,vision_nocturna
+escudo_antimisiles|Escudo antimisiles estratégico|10|B|misil_antibalistico,satelite_alerta_temprana
+armas_antisatelite|Armas antisatélite|10|W|misil_antibalistico,satelite_artificial
+## MIL|LOG|Logística, mando, inteligencia y comunicaciones|Intendencia, cifrado, radio, satélites espía, guerra electrónica y ciberguerra.
+### Intendencia y organización
+almacenes_suministro|Almacenes de suministro|2|B|almacenamiento_granos,batalla_campal_organizada
+marcha_forzada|Marcha forzada|2|T|batalla_campal_organizada,almacenamiento_granos
+campamento_fortificado|Campamento fortificado|3|T|ejercito_profesional,zanja_foso,empalizada
+calzadas_militares|Calzadas militares|3|B|calzada_pavimentada,ejercito_profesional
+intendencia_cuerpo|Cuerpo de intendencia|3|T|almacenes_suministro,ejercito_profesional
+logistica_ferroviaria_militar|Logística ferroviaria|7|T|locomotora_vapor,intendencia_cuerpo
+logistica_naval|Logística naval oceánica|7|T|buque_vapor_guerra,intendencia_cuerpo
+raciones_conservadas|Raciones conservadas|7|T|conservas,intendencia_cuerpo
+logistica_motorizada|Logística motorizada|8|T|camion_logistico_militar,intendencia_cuerpo
+puente_aereo_logistico|Puente aéreo logístico|8|T|avion_transporte_militar,logistica_motorizada
+logistica_digital|Logística digital|9|T|logistica_motorizada,base_datos
+veteranos_pensiones|Pensiones de veteranos|8|G|reserva_movilizacion,pensiones
+### Sanidad militar @med
+medicina_militar|Medicina militar|7|T|anestesia,intendencia_cuerpo
+hospital_de_campana|Hospital de campaña|7|T|medicina_militar,antisepsia
+cirugia_trauma_moderna|Cirugía de trauma moderna|8|T|hospital_de_campana,cirugia_moderna
+evacuacion_sanitaria_helicoptero|Evacuación sanitaria en helicóptero|9|T|medicina_militar,helicoptero_transporte_militar
+vendajes_campana|Vendajes y cauterización de campaña|3|T|herbolaria,ejercito_profesional
+cirugia_de_batalla|Cirugía de batalla|5|T|ligadura_arterias,arcabuz_mecha
+ambulancia_campana|Ambulancia de campaña|7|T|hospital_de_campana
+triaje_campo_batalla|Triaje en el campo de batalla|7|T|medicina_militar
+transfusion_campana|Transfusión en campaña|8|T|cirugia_trauma_moderna,grupos_sanguineos
+hospital_quirurgico_movil|Hospital quirúrgico móvil|9|T|cirugia_trauma_moderna,camion_logistico_militar
+medicina_combate_tactica|Medicina táctica de combate|10|T|evacuacion_sanitaria_helicoptero,monitoreo_clinico
+cirugia_robotica_remota|Cirugía robótica a distancia en campaña|10|T|cirugia_robotica,telemedicina
+curacion_acelerada_campo|Curación acelerada de heridas|11|T|nanomedicina,medicina_combate_tactica
+### Señales, cifrado e inteligencia
+senales_fuego_atalayas|Señales de fuego y atalayas|2|T|senales_humo_tambores,fortin_torre_vigia
+espionaje_militar_exploracion|Reconocimiento y exploración|3|T|exploradores,espias_informantes
+criptografia_clasica|Cifrado clásico|3|K|escritura_alfabetica,espias_informantes
+criptoanalisis|Criptoanálisis|4|K|criptografia_clasica,algoritmo_formal
+cartografia_militar|Cartografía militar|4|T|cartografia_ptolemaica,estrategia_clasica
+criptografia_polialfabetica|Cifrado polialfabético|5|K|criptografia_clasica,algebra_sistematica
+telegrafo_campana|Telégrafo de campaña|7|T|telegrafo_electrico,ejercito_conscripcion_masiva
+cifrado_mecanico|Cifrado mecánico|8|T|criptografia_polialfabetica,motor_electrico
+maquina_cifrado_rotores|Máquina de cifrado de rotores|8|T|cifrado_mecanico,tubo_vacio_valvula
+criptoanalisis_mecanico|Criptoanálisis mecánico|8|T|criptoanalisis,computadora_electromecanica,maquina_cifrado_rotores
+radio_campana|Radio de campaña|8|T|radio_voz,estado_mayor_general
+inteligencia_fotografica_aerea|Inteligencia fotográfica aérea|8|T|fotogrametria_aerea,avion_reconocimiento
+radar_vigilancia_terrestre|Radar de vigilancia terrestre|8|T|radar
+satelites_espia|Satélites espía|9|T|satelite_artificial,fotogrametria_aerea
+inteligencia_electronica|Inteligencia electrónica (ELINT)|9|T|satelites_espia,guerra_electronica
+navegacion_inercial|Navegación inercial|9|T|giroscopio_guiado,computadora_digital
+radio_individual|Radio individual portátil|9|T|radio_campana,transistor
+comando_control_digital|Mando y control digital|9|T|radio_individual,computadora_digital,redes_conmutacion_paquetes
+criptografia_digital_estandar|Cifrado digital estándar|9|T|maquina_cifrado_rotores,computadora_digital
+simuladores_entrenamiento|Simuladores de entrenamiento|9|T|simulacion_cientifica,computadora_digital
+gps_militar|GPS militar|9|T|gps_navegacion,comando_control_digital
+### Ciber y datos
+ciberguerra|Ciberguerra|10|T|ciberseguridad,intercepcion_comunicaciones
+guerra_informativa|Guerra de información|10|T|propaganda_masiva,ciberguerra,redes_sociales
+centro_operaciones_ciberneticas|Centro de operaciones cibernéticas|10|B|ciberguerra,comando_control_digital
+conciencia_situacional_digital|Conciencia situacional digital|10|T|comando_control_digital,gps_militar
+vigilancia_global_ia|Vigilancia global con IA|10|T|satelites_espia,aprendizaje_profundo
+inteligencia_artificial_militar|Inteligencia artificial militar|10|T|aprendizaje_profundo,comando_control_digital
+armas_autonomas_letales|Sistemas de armas autónomos|10|T|inteligencia_artificial_militar,dron_armado
+
+### Recursos estratégicos de guerra @rec
+salitre_polvora_suministro|Suministro de salitre y azufre|5|T|polvora,rec_salitre_azufre
+arsenal_fundicion|Arsenales y fundiciones estatales|5|B|rec_hierro,canon_hierro_colado
+combustible_militar|Combustible militar|8|T|rec_petroleo,motor_combustion
+materiales_fisiles_militares|Materiales físiles para armas|8|T|rec_uranio,uranio_enriquecido
+guerra_economica_bloqueo|Bloqueo y guerra económica|8|T|bloqueo_naval,rec_petroleo
+metales_estrategicos_blindaje|Metales estratégicos para blindajes|9|T|rec_tierras_raras,blindaje_compuesto
+logistica_recursos_espaciales|Logística de recursos fuera de la Tierra|11|T|rec_asteroides,fuerzas_espaciales

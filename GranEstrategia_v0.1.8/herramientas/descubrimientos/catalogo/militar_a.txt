@@ -1,0 +1,195 @@
+## MIL|MEL|Armas cuerpo a cuerpo y de asta|Lanzas, hachas, mazas, espadas y todo lo que se usa de cerca.
+### Piedra y madera
+palo_afilado_lanza|Lanza de madera endurecida al fuego|0|W|herramientas_piedra,fuego
+maza_garrote|Garrote y maza|0|W|herramientas_piedra
+hacha_piedra|Hacha de piedra|0|W|herramientas_piedra
+punta_lanza_piedra|Punta de lanza de pedernal|1|W|palo_afilado_lanza,herramientas_piedra
+daga_pedernal|Daga de pedernal|1|W|herramientas_piedra,rec_silex
+mazo_piedra_pulida|Maza de piedra pulida|1|W|maza_garrote,hacha_piedra
+jabalina|Jabalina|1|W|punta_lanza_piedra
+lanza_atlatl|Lanzadardos (átlatl)|1|W|jabalina,cuerda_fibras
+### Cobre y bronce
+hacha_cobre|Hacha de cobre|2|W|metalurgia_cobre,hacha_piedra
+daga_cobre|Daga de cobre|2|W|metalurgia_cobre,daga_pedernal
+lanza_bronce|Lanza de bronce|2|W|bronce,punta_lanza_piedra
+espada_bronce|Espada de bronce|2|W|bronce,daga_cobre
+hacha_batalla_bronce|Hacha de batalla de bronce|2|W|bronce,hacha_cobre
+maza_metal|Maza de metal|2|W|bronce,mazo_piedra_pulida
+### Hierro y acero
+lanza_hierro|Lanza de hierro|3|W|hierro_forja,lanza_bronce
+pica_larga_sarisa|Pica larga (sarisa)|3|W|lanza_bronce,disciplina_formacion
+espada_hierro|Espada de hierro|3|W|hierro_forja,espada_bronce
+espada_corta_hierro|Espada corta de infantería|3|W|espada_hierro
+espada_larga_celta|Espada larga|3|W|espada_hierro
+pilum|Pilum (jabalina pesada)|3|W|lanza_hierro,jabalina
+hacha_hierro_guerra|Hacha de guerra de hierro|3|W|hierro_forja,hacha_batalla_bronce
+espada_acero|Espada de acero|4|W|acero_crisol,espada_hierro
+katana_espada_curva|Espada curva de forja japonesa|4|W|espada_acero
+sable_caballeria|Sable de caballería|4|W|espada_acero,silla_estribo
+lanza_caballeria_pesada|Lanza de caballería pesada|4|W|lanza_hierro,silla_estribo
+alabarda|Alabarda|4|W|lanza_hierro,hacha_hierro_guerra
+mangual_maza_hierro|Mangual y maza de hierro|4|W|maza_metal,hierro_forja
+espada_dos_manos|Espada de dos manos|5|W|espada_acero,aleaciones_ferrosas
+estoque_florete|Estoque y florete|5|W|espada_acero
+pica_piquero|Pica de infantería|5|W|alabarda,pica_larga_sarisa
+martillo_de_guerra|Martillo de guerra|5|W|maza_metal,armadura_de_placas
+machete|Machete|5|W|espada_hierro,cultivos_plantacion
+bayoneta|Bayoneta|6|W|mosquete,lanza_hierro
+bayoneta_cubo|Bayoneta de cubo|6|W|bayoneta
+sable_oficial_moderno|Sable de oficial moderno|7|W|sable_caballeria,acero_bessemer
+porra_policial|Porra policial|7|W|maza_metal,policia_moderna
+cuchillo_combate|Cuchillo de combate|8|W|bayoneta,aceros_aleados
+## MIL|PRO|Armas de proyectil y asedio mecánico|Hondas, arcos, ballestas, catapultas e incendiarios.
+### Armas de lanzamiento
+honda|Honda|0|W|cuerda_fibras,observacion_naturaleza
+piedras_arrojadizas|Piedras arrojadizas|0|W|observacion_naturaleza
+veneno_flechas|Veneno para flechas|1|T|herbolaria,arco_simple
+### Arcos
+arco_simple|Arco simple|1|W|cuerda_fibras,carpinteria
+flecha_piedra|Flecha de punta de piedra|1|W|arco_simple,punta_lanza_piedra
+flecha_bronce|Flecha de bronce|2|W|flecha_piedra,bronce
+flecha_fuego|Flecha incendiaria|3|W|flecha_bronce,fuego
+arco_compuesto|Arco compuesto|2|W|arco_simple,cuero_curtido
+flecha_hierro|Flecha de hierro|3|W|flecha_bronce,hierro_forja
+arco_largo|Arco largo|4|W|arco_simple,flecha_hierro
+arco_reflejo_mongol|Arco reflejo de jinete|4|W|arco_compuesto,montura_equitacion
+### Ballestas
+ballesta_tension|Ballesta|3|W|arco_compuesto,polea
+ballesta_repeticion|Ballesta de repetición|4|W|ballesta_tension,ciguenal_biela
+ballesta_acero|Ballesta de arco de acero|4|W|ballesta_tension,aleaciones_ferrosas
+ballesta_cranequin|Ballesta de cranequín|5|W|ballesta_acero,engranajes
+### Máquinas de torsión y contrapeso
+catapulta_torsion|Catapulta de torsión|3|W|polea,cuerda_fibras,ballesta_tension
+balista|Balista|3|W|catapulta_torsion
+onagro|Onagro|3|W|catapulta_torsion
+trabuquete|Trabuquete de contrapeso|4|W|onagro,ley_palanca
+### Incendiarios
+fuego_griego|Fuego griego|4|W|destilacion,barco_vela
+lanzallamas|Lanzallamas|8|W|gasolina_derivados
+napalm|Napalm|8|W|lanzallamas,petroquimica
+### Armas de energía dirigida
+canon_electromagnetico|Cañón electromagnético|10|W|superconductividad,bateria_litio,aceros_aleados
+arma_laser_defensa|Arma láser de defensa|10|W|laser,bateria_litio,sensores_mems
+## MIL|FUE|Armas de fuego portátiles|Del cañón de mano al fusil de asalto. Requieren metales, aleaciones y pólvora.
+### Primeras armas de pólvora
+lanza_de_fuego|Lanza de fuego|4|W|polvora,lanza_hierro
+canon_de_mano|Cañón de mano|4|W|polvora,aleaciones_metalicas,hierro_forja
+mecanismo_serpentin|Mecanismo de serpentín (mecha)|5|T|engranajes,canon_de_mano
+arcabuz_mecha|Arcabuz de mecha|5|W|canon_de_mano,mecanismo_serpentin
+mosquete_mecha|Mosquete de mecha|5|W|arcabuz_mecha
+llave_rueda|Llave de rueda|5|T|mecanismo_serpentin,reloj_mecanico
+pistola_rueda|Pistola de rueda|5|W|llave_rueda,canon_de_mano
+granada_mano|Granada de mano|5|W|polvora,ceramica_alfareria
+### Armas de chispa y fusil rayado
+llave_chispa_pedernal|Llave de chispa (pedernal)|6|T|llave_rueda
+mosquete|Mosquete de chispa|6|W|mosquete_mecha,llave_chispa_pedernal
+pistola_chispa|Pistola de chispa|6|W|pistola_rueda,llave_chispa_pedernal
+escopeta_caza|Escopeta|6|W|mosquete
+rayado_canon|Rayado del cañón|6|T|torno_madera_metal,mosquete
+fusil_rayado|Fusil rayado|6|W|mosquete,rayado_canon
+cartucho_papel|Cartucho de papel|6|T|mosquete,papel
+### Percusión y retrocarga
+llave_percusion|Sistema de percusión|7|T|llave_chispa_pedernal,teoria_atomica_dalton
+fusil_percusion|Fusil de percusión|7|W|llave_percusion,fusil_rayado
+bala_minie|Bala Minié|7|T|fusil_rayado,aleaciones_metalicas
+fusil_minie|Fusil Minié|7|W|fusil_percusion,bala_minie
+retrocarga_cierre|Cierre de retrocarga|7|T|fusil_percusion,maquinas_herramienta
+fusil_retrocarga|Fusil de retrocarga|7|W|retrocarga_cierre,cartucho_papel
+cartucho_metalico|Cartucho metálico|7|T|retrocarga_cierre,aleaciones_metalicas
+revolver|Revólver|7|W|pistola_chispa,llave_percusion,produccion_en_serie
+fusil_cerrojo|Fusil de cerrojo|7|W|fusil_retrocarga,cartucho_metalico
+fusil_palanca_repeticion|Fusil de repetición de palanca|7|W|fusil_retrocarga,cartucho_metalico
+fusil_cerrojo_cargador|Fusil de cerrojo con cargador|7|W|fusil_cerrojo,polvora_sin_humo
+pistola_semiautomatica|Pistola semiautomática|7|W|revolver,polvora_sin_humo,cartucho_metalico
+### Ametralladoras
+ametralladora_gatling|Ametralladora de manivela (Gatling)|7|W|cartucho_metalico,engranajes
+ametralladora_maxim|Ametralladora automática (Maxim)|7|W|fusil_cerrojo_cargador,polvora_sin_humo
+ametralladora_ligera|Ametralladora ligera|8|W|ametralladora_maxim,aceros_aleados
+ametralladora_media|Ametralladora de uso general|8|W|ametralladora_ligera
+ametralladora_pesada|Ametralladora pesada|8|W|ametralladora_maxim,aceros_aleados
+ametralladora_giratoria_electrica|Ametralladora rotativa eléctrica|9|W|ametralladora_pesada,motor_electrico
+### Fusiles y armas automáticas modernas
+escopeta_combate|Escopeta de combate|8|W|escopeta_caza,pistola_semiautomatica
+subfusil|Subfusil|8|W|pistola_semiautomatica,ametralladora_ligera
+fusil_semiautomatico|Fusil semiautomático|8|W|fusil_cerrojo_cargador,pistola_semiautomatica
+cartucho_intermedio|Cartucho intermedio|8|T|fusil_semiautomatico,subfusil
+fusil_asalto|Fusil de asalto|8|W|fusil_semiautomatico,subfusil,cartucho_intermedio
+mira_telescopica|Mira telescópica|8|T|telescopio,fusil_cerrojo_cargador
+fusil_francotirador|Fusil de francotirador|8|W|mira_telescopica,fusil_cerrojo_cargador
+granada_fragmentacion|Granada de fragmentación|8|W|granada_mano,aceros_aleados
+fusil_asalto_moderno|Fusil de asalto moderno|9|W|fusil_asalto,polimeros_sinteticos
+fusil_antimaterial|Fusil antimaterial|9|W|fusil_francotirador,ametralladora_pesada
+lanzagranadas|Lanzagranadas|9|W|granada_mano,fusil_asalto_moderno
+vision_nocturna|Visión nocturna|9|T|espectro_electromagnetico,transistor
+mira_laser|Mira láser|9|T|laser,fusil_asalto_moderno
+arma_electrica_aturdidora|Arma eléctrica aturdidora|9|W|transistor,policia_moderna
+fusil_modular_digital|Fusil modular con óptica digital|10|W|fusil_asalto_moderno,microprocesador,mira_laser
+armas_pequenas_guiadas|Munición pequeña guiada|10|W|fusil_modular_digital,sensores_mems
+## MIL|ART|Artillería, morteros y cohetes|Cañones de bronce, obuses, artillería de campaña y cohetería.
+### Bombardas y cañones
+canon_bombarda|Bombarda|5|W|canon_de_mano,alto_horno
+canon_bronce|Cañón de bronce|5|W|canon_bombarda,bronce
+canon_hierro_colado|Cañón de hierro colado|5|W|canon_bombarda,alto_horno
+afuste_ruedas|Afuste con ruedas|5|T|canon_bronce,carro_cuatro_ruedas
+mortero|Mortero|5|W|canon_bombarda
+artilleria_campana_ligera|Artillería de campaña ligera|6|W|canon_bronce,afuste_ruedas
+bote_de_metralla|Bote de metralla|6|T|artilleria_campana_ligera
+obus|Obús|6|W|mortero,artilleria_campana_ligera
+granada_artilleria|Granada de artillería|6|T|canon_hierro_colado,granada_mano
+balistica_matematica|Balística matemática|6|K|leyes_newton,tablas_calculo
+### Artillería industrial
+canon_acero|Cañón de acero|7|W|canon_hierro_colado,acero_bessemer
+canon_rayado_retrocarga|Cañón rayado de retrocarga|7|W|obus,retrocarga_cierre,fusil_rayado
+retroceso_hidraulico|Freno de retroceso hidráulico|7|T|canon_acero,neumatica_hidraulica_industrial
+canon_campana_rapido|Cañón de campaña de tiro rápido|7|W|canon_acero,retroceso_hidraulico,polvora_sin_humo
+obus_pesado|Obús pesado|7|W|obus,canon_acero
+artilleria_costera|Artillería costera|7|W|canon_acero
+artilleria_ferroviaria|Artillería ferroviaria|8|W|obus_pesado,locomotora_vapor
+mortero_trinchera|Mortero de trinchera|8|W|mortero,granada_fragmentacion
+direccion_tiro|Dirección de tiro con cálculo|8|T|balistica_matematica,amplificador_oscilador
+artilleria_antiaerea|Artillería antiaérea|8|W|canon_campana_rapido,aviacion_motor
+canon_antitanque|Cañón antitanque|8|W|canon_campana_rapido,tanque_ligero
+artilleria_autopropulsada|Artillería autopropulsada|8|W|obus_pesado,motor_combustion,orugas
+obus_nuclear|Obús nuclear|9|W|obus_pesado,bomba_fision
+### Cohetes y artillería moderna
+cohete_polvora|Cohete de pólvora|4|W|polvora,papel
+cohete_congreve|Cohete de guerra (tipo Congreve)|6|W|cohete_polvora,aleaciones_metalicas
+lanzacohetes_multiple|Lanzacohetes múltiple|8|W|cohete_polvora,camion,explosivo_tnt
+radar_contrabateria|Radar de contrabatería|9|T|radar,computadora_digital
+obus_autopropulsado_moderno|Obús autopropulsado moderno|9|W|artilleria_autopropulsada,computadora_digital
+municion_guiada|Munición de artillería guiada|9|W|obus_autopropulsado_moderno,gps_navegacion,sensores_mems
+artilleria_cohete_guiada|Artillería de cohetes guiada|9|W|lanzacohetes_multiple,gps_navegacion
+## MIL|ARM|Armadura y protección personal|Escudos, cascos, corazas, chalecos y equipo de protección.
+### Escudos y cascos antiguos
+escudo_madera_cuero|Escudo de madera y cuero|1|W|cuero_curtido,carpinteria
+casco_cuero|Casco de cuero|2|W|cuero_curtido
+camuflaje_basico|Camuflaje básico|1|T|pigmentos_tintes,cuero_curtido
+escudo_paves_bronce|Escudo reforzado de bronce|2|W|escudo_madera_cuero,bronce
+casco_bronce|Casco de bronce|2|W|bronce,casco_cuero
+armadura_cuero_endurecido|Armadura de cuero endurecido|2|W|cuero_curtido
+coraza_bronce|Coraza de bronce|2|W|bronce,armadura_cuero_endurecido
+escudo_hoplita|Escudo hoplita|3|W|escudo_paves_bronce
+escudo_romano_scutum|Escudo rectangular (scutum)|3|W|escudo_hoplita,carpinteria
+casco_hierro|Casco de hierro|3|W|casco_bronce,hierro_forja
+armadura_laminar_lorica|Armadura laminar|3|W|coraza_bronce,hierro_forja
+armadura_escamas|Armadura de escamas|3|W|armadura_cuero_endurecido,hierro_forja
+cota_de_malla|Cota de malla|3|W|hierro_forja,armadura_cuero_endurecido
+armadura_catafracta_caballo|Armadura para caballo y jinete|3|W|armadura_laminar_lorica,montura_equitacion
+### Armaduras medievales
+escudo_torre_pavesina|Escudo de torre|4|W|escudo_hoplita
+armadura_de_placas|Armadura de placas|4|W|cota_de_malla,acero_crisol
+armadura_gotica_completa|Armadura gótica completa|5|W|armadura_de_placas,forja_medieval_martinete
+peto_antibala_primitivo|Peto a prueba de bala|6|W|armadura_de_placas,mosquete
+uniforme_estandarizado|Uniforme estandarizado|6|T|ejercito_permanente
+### Protección moderna
+camuflaje_caqui|Uniformes de camuflaje (caqui)|7|T|camuflaje_basico,quimica_organica
+casco_acero_moderno|Casco de acero moderno|8|W|casco_hierro,aceros_aleados
+chaleco_antifragmentos|Chaleco antifragmentos|8|W|fibras_sinteticas,casco_acero_moderno
+mascara_gas|Máscara antigás|8|W|caucho_vulcanizado,armas_quimicas
+chaleco_balistico|Chaleco balístico (aramida)|9|W|chaleco_antifragmentos,polimeros_sinteticos
+blindaje_ceramico_personal|Placas cerámicas de protección|9|T|chaleco_balistico,ceramicas_tecnicas
+traje_proteccion_nbq|Traje de protección NBQ|9|W|mascara_gas,polimeros_sinteticos
+escudo_antidisturbios|Escudo antidisturbios|9|W|polimeros_sinteticos,policia_moderna
+uniforme_camuflaje_digital|Camuflaje digital|9|T|camuflaje_caqui,computadora_digital
+exoesqueleto_militar|Exoesqueleto militar|10|W|robotica_industrial,bateria_litio,sensores_mems
+visor_casco_integrado|Visor de casco integrado|10|T|casco_acero_moderno,led_pantallas,sensores_mems

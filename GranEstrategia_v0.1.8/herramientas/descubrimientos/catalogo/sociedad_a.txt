@@ -1,0 +1,264 @@
+## SOC|COM|Comunicación y medios|Lenguaje, escritura, imprenta, correo, telégrafo, radio, televisión, celular e Internet. La tecnología física de cada invento está en Científica; aquí está cómo la sociedad lo adopta y lo organiza.
+### Papel e imprenta
+papel|Papel|4|T|textiles_tejido,escritura_alfabetica,tinta
+xilografia|Xilografía (impresión con tacos)|4|T|papel,tinta
+tipos_moviles|Tipos móviles|4|T|xilografia,aleaciones_metalicas
+imprenta|Imprenta (Gutenberg)|5|T|tipos_moviles,papel,tornillo_arquimedes
+libro_masivo|Libro impreso masivo|5|G|imprenta
+periodico|Periódico|5|T|imprenta,servicio_postal
+enciclopedia|Enciclopedia|6|T|libro_masivo,biblioteca
+imprenta_rotativa|Imprenta rotativa|7|T|imprenta,maquina_vapor
+prensa_masiva|Prensa de masas|7|G|imprenta_rotativa,agencia_noticias
+libertad_de_prensa|Libertad de prensa|6|G|constitucion_escrita,periodico
+### Correo y telecomunicación
+servicio_postal|Mensajeros y correo|3|G|escritura_alfabetica,montura_equitacion
+correo_regular_publico|Correo público regular|6|G|servicio_postal,imprenta
+red_telegrafica|Red telegráfica|7|G|telegrafo_electrico,correo_regular_publico
+agencia_noticias|Agencia de noticias|7|G|red_telegrafica,periodico
+telefonia_publica|Red telefónica pública|7|G|telefono,red_telegrafica,red_electrica
+telefonia_movil|Telefonía móvil (adopción masiva)|9|G|telefonia_celular_digital,telefonia_publica
+sms_mensajeria|Mensajería de texto|9|G|telefonia_movil
+smartphone_adopcion|Teléfono inteligente (adopción masiva)|10|G|smartphone_tecnologia,internet_publico,telefonia_movil
+### Medios audiovisuales
+radiodifusion|Radiodifusión|8|G|radio_voz,prensa_masiva
+cine_industria|Industria del cine|8|G|cine,prensa_masiva
+television_difusion|Televisión abierta|8|G|television_electronica,radiodifusion
+television_satelite_cable|Televisión por satélite y cable|9|G|television_difusion,satelite_comunicaciones
+propaganda_masiva|Propaganda de masas|8|A|radiodifusion,prensa_masiva
+### Internet y sociedad en red
+correo_electronico|Correo electrónico|9|G|redes_conmutacion_paquetes,computadora_personal
+internet_publico|Internet público|9|G|internet_tecnologia,telefonia_publica,computadora_personal
+comercio_electronico|Comercio electrónico|9|G|internet_publico,cifrado_web_ssl
+redes_sociales|Redes sociales|10|G|internet_publico,www_web
+streaming_video|Video en streaming|10|G|internet_publico,fibra_optica
+periodismo_digital|Periodismo digital|10|G|prensa_masiva,internet_publico
+videollamada|Videollamada|10|G|internet_publico,camara_digital
+alfabetizacion_masiva|Alfabetización masiva|7|G|prensa_masiva,educacion_publica
+## SOC|GOB|Gobierno y sistemas políticos|Cómo se organiza el poder: desde la banda nómada hasta la democracia liberal, el fascismo o el Estado comunista.
+### Poder tribal y primeros estados
+banda_nomada|Banda nómada igualitaria|0|G|lenguaje
+tribu|Tribu y clan|1|G|banda_nomada
+jefatura|Jefatura (cacicazgo)|2|G|tribu,almacenamiento_granos
+liderazgo_guerrero|Liderazgo guerrero|2|G|jefatura
+ciudad_estado|Ciudad-estado|2|G|jefatura,escritura_pictografica,riego_canales
+monarquia_hereditaria|Monarquía hereditaria|2|G|ciudad_estado
+teocracia|Teocracia|2|G|ciudad_estado,religion_organizada
+monarquia_divina|Monarquía divina|2|G|monarquia_hereditaria,teocracia
+aristocracia|Aristocracia|3|G|monarquia_hereditaria
+oligarquia|Oligarquía|3|G|aristocracia,comercio_larga_distancia
+tirania|Tiranía|3|G|oligarquia
+democracia_directa|Democracia directa|3|G|ciudad_estado,escritura_alfabetica,filosofia_politica
+republica_aristocratica|República aristocrática|3|G|oligarquia,derecho_codificado,filosofia_politica
+burocracia|Burocracia|3|G|censo_poblacion,escritura_alfabetica
+imperio_multietnico|Imperio multiétnico|3|G|monarquia_divina,burocracia,ejercito_profesional
+### Edad Media y Edad Moderna
+meritocracia_examenes|Examen imperial (meritocracia)|4|G|burocracia,papel,escuelas_escribas
+feudalismo|Feudalismo|4|G|aristocracia,caballeria_pesada_catafracta,costumbre_tribal
+servidumbre_gleba|Servidumbre de la gleba|4|G|feudalismo
+ciudades_libres_gremios|Ciudades libres y gremios|4|G|feudalismo,gremios_artesanos
+califato|Califato|4|G|teocracia,imperio_multietnico,religion_monoteista
+imperio_universal|Imperio universal|4|G|imperio_multietnico,religion_universal
+asamblea_estamental|Asamblea de estamentos|4|G|feudalismo,derecho_codificado
+parlamento|Parlamento|5|G|asamblea_estamental,derecho_comun
+monarquia_estamental|Monarquía estamental|5|G|feudalismo,asamblea_estamental
+monarquia_absoluta|Monarquía absoluta|5|G|monarquia_estamental,ejercito_permanente,fisco_moderno
+imperio_colonial|Imperio colonial|5|G|monarquia_absoluta,colonizacion_ultramar
+estado_nacion|Estado-nación|6|G|monarquia_absoluta,imprenta,diplomacia_permanente
+despotismo_ilustrado|Despotismo ilustrado|6|G|monarquia_absoluta,filosofia_ilustracion
+monarquia_constitucional|Monarquía constitucional|6|G|parlamento,estado_nacion,constitucion_escrita
+republica_parlamentaria|República parlamentaria|6|G|parlamento,constitucion_escrita
+republica_presidencial|República presidencial|6|G|republica_aristocratica,constitucion_escrita,separacion_poderes
+partidos_politicos|Partidos políticos|6|G|parlamento,periodico
+democracia_representativa|Democracia representativa|6|G|republica_parlamentaria,separacion_poderes,sufragio_censitario
+### Era industrial y contemporánea
+democracia_liberal|Democracia liberal|7|G|democracia_representativa,sufragio_universal_masculino,partidos_politicos
+republica_federal|República federal|7|G|republica_presidencial,federalismo
+federalismo|Federalismo|7|G|constitucion_escrita,separacion_poderes
+socialismo_utopico|Socialismo utópico|7|G|filosofia_ilustracion,fabrica_textil
+marxismo|Marxismo|7|G|socialismo_utopico,economia_clasica
+anarquismo_politico|Anarquismo|7|G|filosofia_ilustracion,socialismo_utopico
+nacionalismo_moderno|Nacionalismo moderno|7|G|estado_nacion,prensa_masiva,alfabetizacion_masiva
+imperialismo_industrial|Imperialismo industrial|7|G|imperio_colonial,casco_hierro_acero
+estado_comunista_leninista|Estado comunista de partido único|8|G|marxismo,partidos_politicos,propaganda_masiva
+junta_militar|Junta militar|8|G|ejercito_profesional,estado_nacion
+fascismo|Fascismo|8|G|nacionalismo_moderno,propaganda_masiva,partidos_politicos
+totalitarismo|Estado totalitario|8|G|(fascismo|estado_comunista_leninista),policia_politica
+socialdemocracia|Socialdemocracia|8|G|democracia_liberal,sindicatos
+estado_bienestar|Estado de bienestar|8|G|socialdemocracia,seguridad_social
+teocracia_constitucional|Teocracia constitucional|9|G|teocracia,constitucion_escrita
+union_supranacional|Unión supranacional|9|G|democracia_liberal,integracion_regional
+gobierno_electronico|Gobierno electrónico|10|G|internet_publico,burocracia_moderna
+estado_vigilancia_digital|Estado de vigilancia digital|10|G|big_data,policia_politica
+## SOC|LEY|Derecho y administración del Estado|Leyes, tribunales, impuestos, censos, burocracia moderna y derechos.
+### Derecho
+costumbre_tribal|Derecho consuetudinario|1|G|tribu,lenguaje
+ley_talion|Ley del talión y compensación|2|G|costumbre_tribal
+derecho_codificado|Código de leyes escrito|2|G|costumbre_tribal,escritura_logografica
+contratos_escritos|Contratos escritos|2|G|derecho_codificado,escritura_logografica
+propiedad_privada|Propiedad privada|2|G|derecho_codificado,almacenamiento_granos
+tribunales|Tribunales|3|G|derecho_codificado,ciudad_estado
+derecho_romano|Derecho romano|3|G|tribunales,filosofia_politica,escritura_alfabetica
+ciudadania|Ciudadanía|3|G|derecho_romano,ciudad_estado
+jurisprudencia|Jurisprudencia|3|G|derecho_romano,biblioteca
+derecho_canonico|Derecho canónico|4|G|derecho_romano,religion_organizada
+derecho_islamico|Derecho islámico|4|G|jurisprudencia,religion_monoteista
+derecho_comun|Derecho común|4|G|jurisprudencia,feudalismo
+derecho_mercantil|Derecho mercantil|4|G|derecho_romano,comercio_larga_distancia
+habeas_corpus|Habeas corpus|5|G|derecho_comun,asamblea_estamental
+derecho_internacional_clasico|Derecho de gentes|5|G|derecho_romano,derecho_canonico,diplomacia_permanente
+constitucion_escrita|Constitución escrita|6|G|derecho_comun,imprenta
+separacion_poderes|Separación de poderes|6|G|constitucion_escrita,filosofia_ilustracion
+declaracion_derechos|Declaración de derechos|6|G|constitucion_escrita,filosofia_ilustracion
+codigo_civil|Código civil|6|G|derecho_romano,constitucion_escrita
+derecho_penal_moderno|Derecho penal moderno|6|G|codigo_civil,filosofia_ilustracion
+abolicion_tortura|Abolición de la tortura|6|G|derecho_penal_moderno
+patentes_propiedad_intelectual|Patentes y propiedad intelectual|6|G|derecho_mercantil,imprenta
+derechos_de_autor|Derechos de autor|6|G|patentes_propiedad_intelectual,imprenta
+sufragio_censitario|Sufragio censitario|6|G|constitucion_escrita,derecho_comun
+policia_moderna|Policía moderna|7|G|derecho_penal_moderno,urbanismo_industrial
+derecho_laboral|Derecho laboral|7|G|codigo_civil,sindicatos
+derechos_humanos_universales|Derechos humanos universales|9|G|declaracion_derechos,onu
+tribunal_penal_internacional|Justicia penal internacional|9|G|derechos_humanos_universales,derecho_internacional_clasico
+derecho_ambiental|Derecho ambiental|9|G|ecologia,constitucion_escrita
+derecho_digital|Derecho digital|10|G|internet_publico,derechos_de_autor
+proteccion_datos_privacidad|Protección de datos y privacidad|10|G|internet_publico,derechos_humanos_universales
+### Administración, censo e impuestos
+censo_poblacion|Censo de población|2|G|escritura_pictografica,aritmetica_basica
+sistema_tributario|Sistema de tributos|2|G|censo_poblacion,almacenamiento_granos,jefatura
+catastro|Catastro|3|G|censo_poblacion,geometria_practica,propiedad_privada
+fisco_moderno|Hacienda pública moderna|5|G|sistema_tributario,banca_comercial
+registro_civil|Registro civil|6|G|censo_poblacion,derecho_canonico
+impuesto_renta|Impuesto sobre la renta|7|G|fisco_moderno,estadistica
+burocracia_moderna|Burocracia moderna|7|G|meritocracia_examenes,constitucion_escrita
+servicio_civil|Servicio civil de carrera|7|G|burocracia_moderna,educacion_publica
+estadistica_oficial|Estadística oficial|7|G|estadistica,censo_poblacion,burocracia_moderna
+planificacion_estatal|Planificación estatal|8|G|estadistica_oficial,investigacion_operativa
+identificacion_biometrica|Identificación biométrica|9|T|base_datos,registro_civil
+### Elecciones y sufragio
+sufragio_universal_masculino|Sufragio universal masculino|7|G|sufragio_censitario,prensa_masiva
+sufragio_femenino|Sufragio femenino|8|G|sufragio_universal_masculino,movimiento_sufragista
+## SOC|DIP|Diplomacia, relaciones internacionales y espionaje|Tratados, embajadas, alianzas, organismos internacionales, servicios secretos y agencias de inteligencia.
+### Diplomacia antigua y moderna
+intercambio_regalos|Intercambio de regalos y rehenes|1|A|tribu,lenguaje
+tratado_oral|Juramento y pacto|2|A|intercambio_regalos
+matrimonios_dinasticos|Matrimonios dinásticos|2|A|jefatura,intercambio_regalos
+tributo_vasallaje|Tributo y vasallaje|2|A|jefatura,sistema_tributario
+tratado_escrito|Tratado escrito|3|A|tratado_oral,escritura_logografica
+mensajeros_diplomaticos|Heraldos y mensajeros diplomáticos|3|A|tratado_escrito,servicio_postal
+alianza_militar_clasica|Alianza militar|3|A|tratado_escrito
+liga_ciudades|Liga de ciudades|3|A|alianza_militar_clasica,ciudad_estado
+inmunidad_diplomatica|Inmunidad diplomática|3|A|mensajeros_diplomaticos
+diplomacia_permanente|Embajadas permanentes|5|A|inmunidad_diplomatica,banca_comercial
+equilibrio_de_poder|Equilibrio de poder|6|A|diplomacia_permanente,estado_nacion
+soberania_westfaliana|Soberanía westfaliana|6|A|diplomacia_permanente,estado_nacion
+neutralidad_armada|Neutralidad armada|6|A|equilibrio_de_poder
+congreso_diplomatico|Congresos diplomáticos|7|A|equilibrio_de_poder,soberania_westfaliana
+arbitraje_internacional|Arbitraje internacional|7|A|congreso_diplomatico,derecho_internacional_clasico
+convenciones_guerra|Convenios sobre las leyes de la guerra|7|A|derecho_internacional_clasico,congreso_diplomatico
+diplomacia_de_canoneras|Diplomacia de cañoneras|7|A|imperialismo_industrial,buque_vapor_guerra
+sociedad_de_naciones|Sociedad de Naciones|8|A|arbitraje_internacional,convenciones_guerra
+### Organismos y alianzas contemporáneas
+onu|Organización de las Naciones Unidas|8|A|sociedad_de_naciones
+consejo_seguridad_veto|Consejo de Seguridad y veto|8|A|onu
+alianza_defensiva_permanente|Alianza defensiva permanente (tipo OTAN)|9|A|alianza_militar_clasica,onu,armas_nucleares
+alianzas_de_bloques|Sistema de bloques|9|A|alianza_defensiva_permanente,estado_comunista_leninista
+guerra_fria_disuasion|Disuasión nuclear entre bloques|9|A|armas_nucleares,alianzas_de_bloques
+descolonizacion|Descolonización|9|G|imperio_colonial,onu,nacionalismo_moderno
+no_alineados|Movimiento de no alineados|9|A|onu,descolonizacion
+organismos_economicos|FMI y Banco Mundial|8|A|onu,banca_central
+sanciones_economicas|Sanciones económicas|8|A|organismos_economicos,derecho_internacional_clasico
+cruz_roja_humanitaria|Cruz Roja y ayuda humanitaria|7|A|convenciones_guerra,hospital_moderno
+diplomacia_cultural_blanda|Diplomacia cultural|8|A|radiodifusion,onu
+tratados_desarme|Tratados de desarme|9|A|guerra_fria_disuasion,satelites_espia
+tratado_no_proliferacion|Tratado de no proliferación nuclear|9|A|armas_nucleares,tratados_desarme
+comercio_multilateral_omc|Comercio multilateral (OMC)|9|A|organismos_economicos,comercio_internacional
+integracion_regional|Integración regional|9|A|comercio_multilateral_omc,alianza_defensiva_permanente
+cooperacion_espacial|Cooperación espacial|9|A|tratados_desarme,vuelo_espacial_tripulado
+acuerdos_climaticos|Acuerdos climáticos|10|A|climatologia,onu,derecho_ambiental
+ciberdiplomacia|Ciberdiplomacia|10|A|internet_publico,diplomacia_permanente
+### Espionaje e inteligencia
+espias_informantes|Informantes y espías|2|A|tratado_oral
+contraespionaje_clasico|Contraespionaje clásico|3|A|espias_informantes,burocracia
+red_agentes_secretos|Red de agentes secretos|4|A|espias_informantes,servicio_postal,criptografia_clasica
+servicio_secreto_estatal|Servicio secreto de Estado|5|A|red_agentes_secretos,diplomacia_permanente
+espionaje_industrial|Espionaje industrial|6|A|servicio_secreto_estatal,patentes_propiedad_intelectual
+policia_politica|Policía política|7|A|servicio_secreto_estatal,policia_moderna
+intercepcion_comunicaciones|Interceptación de comunicaciones|8|A|servicio_secreto_estatal,radio_telegrafia,criptoanalisis
+agencia_inteligencia_exterior|Agencia de inteligencia exterior (tipo CIA)|9|A|servicio_secreto_estatal,intercepcion_comunicaciones
+agentes_dobles_contrainteligencia|Contrainteligencia y agentes dobles|9|A|contraespionaje_clasico,agencia_inteligencia_exterior
+operaciones_encubiertas|Operaciones encubiertas|9|A|agencia_inteligencia_exterior,fuerzas_especiales
+propaganda_encubierta|Propaganda encubierta|9|A|propaganda_masiva,operaciones_encubiertas
+agencia_senales|Agencia de inteligencia de señales|9|A|intercepcion_comunicaciones,computadora_digital
+vigilancia_satelital|Vigilancia satelital|9|A|satelites_espia,agencia_inteligencia_exterior
+desestabilizacion_encubierta|Desestabilización encubierta de gobiernos|9|A|operaciones_encubiertas,guerra_fria_disuasion
+ciberespionaje|Ciberespionaje|10|A|agencia_senales,internet_publico
+espionaje_masivo_datos|Vigilancia masiva de datos|10|A|ciberespionaje,big_data
+## SOC|ECO|Economía y comercio|Del trueque a la bolsa, el capitalismo industrial, la planificación central y las criptomonedas.
+### Comercio y dinero antiguos
+trueque|Trueque|1|T|tribu
+division_trabajo_basica|División básica del trabajo|1|T|tribu,domesticacion_plantas
+excedente_agricola|Excedente agrícola|2|T|almacenamiento_granos,riego_canales
+mercados_locales|Mercados locales|2|B|trueque,excedente_agricola
+artesanos_especializados|Artesanos especializados|2|T|division_trabajo_basica,metalurgia_cobre
+moneda_mercancia|Moneda mercancía|2|T|mercados_locales,medicion_longitud
+comercio_larga_distancia|Comercio a larga distancia|2|T|mercados_locales,barco_vela
+credito_prestamo|Crédito y préstamo|2|T|moneda_mercancia,contratos_escritos
+esclavitud_institucional|Esclavitud institucional|2|G|excedente_agricola,liderazgo_guerrero
+moneda_acunada|Moneda acuñada|3|T|moneda_mercancia,aleaciones_metalicas,rec_oro_plata
+pesos_medidas_estandar|Pesos y medidas estándar|3|T|moneda_mercancia,medicion_longitud
+caravanas_ruta_seda|Caravanas y rutas terrestres|3|T|comercio_larga_distancia,montura_equitacion
+rutas_maritimas_comerciales|Rutas marítimas comerciales|3|T|comercio_larga_distancia,barco_mercante
+### Banca y capital
+gremios_artesanos|Gremios artesanos|4|G|artesanos_especializados,derecho_mercantil
+feria_comercial|Ferias comerciales|4|B|mercados_locales,derecho_mercantil
+banca_comercial|Banca comercial|4|T|credito_prestamo,moneda_acunada,derecho_mercantil
+letra_de_cambio|Letra de cambio|4|T|banca_comercial,papel
+papel_moneda|Papel moneda|4|T|papel,banca_comercial
+contabilidad_partida_doble|Contabilidad por partida doble|5|T|banca_comercial,numeracion_indoarabiga
+liga_comercial|Ligas comerciales|5|G|gremios_artesanos,rutas_maritimas_comerciales
+mercantilismo|Mercantilismo|5|G|banca_comercial,monarquia_absoluta
+companias_comerciales|Compañías comerciales por acciones|5|G|mercantilismo,contabilidad_partida_doble,navegacion_oceanica
+bolsa_valores|Bolsa de valores|5|G|companias_comerciales,letra_de_cambio
+seguros_maritimos|Seguros marítimos|5|T|companias_comerciales,probabilidad
+economia_plantacion|Economía de plantación|5|G|cultivos_plantacion,esclavitud_institucional,imperio_colonial
+banca_central|Banca central|6|G|bolsa_valores,fisco_moderno,papel_moneda
+economia_clasica|Economía clásica|6|K|mercantilismo,filosofia_ilustracion
+industrializacion|Sistema fabril (Revolución industrial)|6|G|fabrica_textil,maquina_vapor,companias_comerciales
+### Capitalismo industrial
+libre_comercio|Libre comercio|7|G|economia_clasica,companias_comerciales
+comercio_internacional|Comercio internacional|7|G|libre_comercio,transatlantico
+sociedad_anonima|Sociedad anónima|7|G|companias_comerciales,derecho_mercantil,industrializacion
+capitalismo_industrial|Capitalismo industrial|7|G|industrializacion,sociedad_anonima,libre_comercio
+patron_oro|Patrón oro|7|G|banca_central,moneda_acunada
+monopolios_carteles|Monopolios y cárteles|7|G|capitalismo_industrial
+leyes_antimonopolio|Leyes antimonopolio|7|G|monopolios_carteles,derecho_mercantil
+grandes_almacenes|Grandes almacenes|7|B|capitalismo_industrial,locomotora_vapor
+cooperativas|Cooperativas|7|G|socialismo_utopico,derecho_mercantil
+sindicatos|Sindicatos|7|G|industrializacion,prensa_masiva
+seguros_vida_actuariales|Seguros de vida actuariales|7|T|seguros_maritimos,estadistica
+### Siglo XX y XXI
+taylorismo|Gestión científica del trabajo (taylorismo)|8|T|produccion_en_serie,estadistica
+fordismo|Fordismo|8|T|cadena_montaje,taylorismo
+publicidad_masiva|Publicidad masiva|8|T|prensa_masiva,radiodifusion
+marketing_moderno|Marketing moderno|8|T|publicidad_masiva,estadistica
+credito_consumo|Crédito al consumo|8|T|banca_central,electrodomesticos
+economia_keynesiana|Economía keynesiana|8|K|economia_clasica,estadistica_oficial
+planificacion_central|Planificación central|8|G|marxismo,planificacion_estatal
+fondos_inversion|Fondos de inversión|8|T|bolsa_valores,sociedad_anonima
+bretton_woods|Sistema monetario de Bretton Woods|8|G|patron_oro,organismos_economicos,economia_keynesiana
+globalizacion_comercial|Globalización comercial|9|G|comercio_internacional,contenedor_maritimo,comercio_multilateral_omc
+cadenas_suministro_globales|Cadenas de suministro globales|9|G|globalizacion_comercial,internet_tecnologia
+logistica_just_in_time|Logística justo a tiempo|9|T|fordismo,computadora_personal
+codigo_barras_inventario|Código de barras e inventario digital|9|T|laser,base_datos
+tarjeta_credito|Tarjeta de crédito|9|T|credito_consumo,computadora_digital
+banca_electronica|Banca electrónica|9|G|tarjeta_credito,redes_conmutacion_paquetes
+mercados_financieros_globales|Mercados financieros globales|9|G|bolsa_valores,banca_electronica,globalizacion_comercial
+derivados_financieros|Derivados financieros|9|T|mercados_financieros_globales,probabilidad_axiomatica
+microcredito|Microcrédito|9|T|organismos_economicos,banca_comercial
+economia_conductual|Economía conductual|9|K|psicologia_experimental,estadistica
+criptomonedas|Criptomonedas|10|G|blockchain,banca_electronica
+pagos_moviles_fintech|Pagos móviles y tecnología financiera|10|G|smartphone_adopcion,banca_electronica
+economia_plataformas|Economía de plataformas|10|G|comercio_electronico,redes_sociales
+trabajo_remoto|Trabajo remoto|10|G|internet_publico,videollamada
+automatizacion_laboral|Automatización del trabajo|10|G|robotica_industrial,aprendizaje_automatico
+economia_circular|Economía circular|10|G|quimica_verde,derecho_ambiental

@@ -1,0 +1,267 @@
+## CIE|AST|Astronomía y exploración espacial|Mirar al cielo, medir el tiempo, entender el universo y salir de la Tierra.
+### Observación y teoría
+astronomia_ojo_desnudo|Observación astronómica a simple vista|1|K|observacion_naturaleza
+calendario_lunar|Calendario lunar|1|K|astronomia_ojo_desnudo,conteo
+calendario_solar|Calendario solar|2|K|calendario_lunar,aritmetica_basica
+eclipses_prediccion|Predicción de eclipses|3|K|calendario_solar,tablas_calculo
+modelo_geocentrico|Modelo geocéntrico (Ptolomeo)|3|K|trigonometria,astronomia_ojo_desnudo
+astrolabio|Astrolabio|4|T|trigonometria,aleaciones_metalicas
+observatorios_astronomicos|Observatorios astronómicos|4|B|modelo_geocentrico,astrolabio
+modelo_heliocentrico|Modelo heliocéntrico|5|K|modelo_geocentrico
+telescopio|Telescopio|5|T|vidrio_soplado,optica_geometrica
+leyes_kepler|Leyes de Kepler|5|K|modelo_heliocentrico,telescopio
+telescopio_reflector|Telescopio reflector|6|T|telescopio,leyes_newton
+mecanica_celeste|Mecánica celeste|6|K|leyes_newton,leyes_kepler
+descubrimiento_planetas|Descubrimiento de nuevos planetas|6|K|mecanica_celeste,telescopio_reflector
+espectroscopia_estelar|Espectroscopía estelar|7|K|espectro_electromagnetico,telescopio_reflector
+astrofisica_estelar|Astrofísica estelar|8|K|espectroscopia_estelar,fusion_nuclear_teoria
+estructura_galaxias|Naturaleza de las galaxias|8|K|espectroscopia_estelar,telescopio_reflector
+expansion_universo|Expansión del universo|8|K|estructura_galaxias,relatividad_general
+cosmologia_relativista|Cosmología relativista (Big Bang)|8|K|expansion_universo,relatividad_general
+radioastronomia|Radioastronomía|8|T|ondas_electromagneticas,radio_voz,telescopio_reflector
+materia_oscura|Materia y energía oscuras|9|K|expansion_universo,astrofisica_estelar
+exoplanetas|Detección de exoplanetas|10|K|telescopio_espacial,computadora_digital
+imagen_agujero_negro|Imagen de un agujero negro|10|K|radioastronomia,supercomputacion,relatividad_general
+### Cohetería y espacio
+cohete_liquido|Cohete de combustible líquido|8|T|cohete_polvora,refinacion_petroleo,aleaciones_ligeras
+satelite_artificial|Satélite artificial|9|T|cohete_liquido,radio_voz
+vuelo_espacial_tripulado|Vuelo espacial tripulado|9|T|cohete_liquido,satelite_artificial,aviacion_comercial
+alunizaje|Llegada a la Luna|9|T|vuelo_espacial_tripulado,computadora_digital
+estacion_espacial|Estación espacial|9|B|vuelo_espacial_tripulado,transistor
+sondas_planetarias|Sondas planetarias|9|T|satelite_artificial,radioastronomia
+telescopio_espacial|Telescopio espacial|9|T|telescopio_reflector,satelite_artificial
+transbordador_espacial|Transbordador espacial|9|V|vuelo_espacial_tripulado,ceramicas_tecnicas
+cohete_reutilizable|Cohete reutilizable|10|V|cohete_liquido,aprendizaje_profundo
+turismo_espacial|Turismo espacial|10|T|cohete_reutilizable,estacion_espacial
+## CIE|TIE|Ciencias de la Tierra y geografía|Mapas, navegación, geología, clima, océanos y sismos.
+### Cartografía y navegación
+orientacion_estrellas|Orientación por las estrellas|1|T|astronomia_ojo_desnudo
+mapas_primitivos|Mapas primitivos|1|T|observacion_naturaleza,medicion_longitud
+esfericidad_tierra|Esfericidad de la Tierra y su medida|3|K|geometria_demostrativa,astronomia_ojo_desnudo
+cartografia_ptolemaica|Cartografía con coordenadas|3|K|mapas_primitivos,geometria_demostrativa,modelo_geocentrico
+brujula|Brújula|4|T|magnetismo_natural,hierro_forja
+cartas_nauticas_portulanos|Cartas náuticas (portulanos)|5|T|brujula,cartografia_ptolemaica
+proyeccion_mercator|Proyección de Mercator|5|K|cartografia_ptolemaica,trigonometria
+sextante|Sextante|6|T|telescopio,trigonometria
+cronometro_marino|Cronómetro marino (la longitud)|6|T|reloj_pendulo,sextante
+geodesia|Geodesia|6|K|esfericidad_tierra,leyes_newton
+topografia_triangulacion|Topografía y triangulación|6|T|geodesia,telescopio
+fotogrametria_aerea|Fotogrametría aérea|8|T|fotografia,aviacion_motor
+teledeteccion_satelital|Teledetección satelital|9|T|satelite_artificial,fotogrametria_aerea
+gps_navegacion|Navegación por satélite (GPS)|9|T|satelite_artificial,relatividad_general,reloj_atomico
+sig_geografico|Sistemas de información geográfica|9|T|teledeteccion_satelital,computadora_digital
+mapas_digitales|Mapas digitales y navegación en línea|10|T|sig_geografico,gps_navegacion,internet_tecnologia
+### Geología y sismos
+sismoscopio|Sismoscopio|3|T|observacion_naturaleza,aleaciones_metalicas
+geologia_estratigrafia|Geología y estratigrafía|6|K|metodo_cientifico,mineria_subterranea
+uniformitarismo|Tiempo geológico|7|K|geologia_estratigrafia
+glaciologia|Glaciología y eras glaciales|7|K|uniformitarismo
+paleontologia|Paleontología|7|K|geologia_estratigrafia,anatomia_moderna
+sismografo|Sismógrafo|7|T|sismoscopio,electromagnetismo
+escala_sismica|Medición de la magnitud de los sismos|8|K|sismografo,logaritmos
+deriva_continental|Deriva continental|8|K|uniformitarismo,cartografia_ptolemaica
+geofisica_prospeccion|Prospección geofísica|8|T|sismografo,magnetismo_natural
+tectonica_placas|Tectónica de placas|9|K|deriva_continental,batimetria_sonar
+prediccion_sismica|Evaluación del riesgo sísmico|9|K|tectonica_placas,computadora_digital
+alerta_sismica|Sistemas de alerta sísmica|10|T|prediccion_sismica,internet_tecnologia
+edafologia|Ciencia del suelo|7|K|geologia_estratigrafia,quimica_organica
+### Clima, aguas y océanos
+meteorologia_observacion|Observación meteorológica|3|K|observacion_naturaleza,calendario_solar
+barometro|Barómetro|5|T|presion_atmosferica
+hidrologia|Hidrología|6|K|meteorologia_observacion,geologia_estratigrafia
+meteorologia_cientifica|Meteorología científica|7|K|barometro,termometria,telegrafo_electrico
+oceanografia|Oceanografía|7|K|geologia_estratigrafia,sextante,meteorologia_cientifica
+batimetria_sonar|Batimetría y sonar|8|T|acustica,oceanografia
+radar_meteorologico|Radar meteorológico|8|T|radar,meteorologia_cientifica
+pronostico_numerico|Pronóstico numérico del tiempo|9|K|meteorologia_cientifica,computadora_digital,dinamica_fluidos
+satelites_meteorologicos|Satélites meteorológicos|9|T|satelite_artificial,meteorologia_cientifica
+climatologia|Climatología y cambio climático|9|K|meteorologia_cientifica,glaciologia
+modelos_climaticos|Modelos climáticos globales|10|K|climatologia,supercomputacion
+## CIE|MED|Medicina y salud|Del curandero a la nanomedicina: cuerpo humano, enfermedades, remedios, cirugía, diagnóstico y regeneración. Subrama con énfasis propio.|@med
+### Medicina antigua y anatomía
+herbolaria|Plantas medicinales|1|T|observacion_naturaleza
+cirugia_primitiva|Cirugía primitiva (trepanación, suturas)|1|T|herramientas_piedra,herbolaria
+parteria|Partería y asistencia al parto|1|T|herbolaria,tribu
+fracturas_ferulas|Reducción de fracturas y férulas|2|T|cirugia_primitiva,cuerda_fibras
+embalsamamiento|Embalsamamiento|2|T|cirugia_primitiva
+protesis_primitivas|Prótesis primitivas|3|T|cirugia_primitiva,carpinteria
+odontologia_antigua|Odontología antigua|2|T|cirugia_primitiva,metalurgia_cobre
+medicina_humoral|Medicina hipocrática y humores|3|K|herbolaria,filosofia_natural
+anatomia_clasica|Anatomía clásica (Galeno)|3|K|embalsamamiento,medicina_humoral
+farmacopea|Farmacopea|3|K|herbolaria,medicina_humoral
+medicina_china|Medicina tradicional china|3|K|herbolaria,filosofia_natural
+ayurveda|Medicina ayurvédica|3|K|herbolaria,filosofia_natural
+cirugia_clasica|Cirugía clásica|4|T|anatomia_clasica,bronce
+canon_medico|Síntesis médica medieval|4|K|farmacopea,anatomia_clasica,destilacion
+variolizacion|Variolización|4|T|medicina_humoral
+escuelas_medicina|Escuelas de medicina|4|B|canon_medico,monasterios_copistas
+oftalmologia_gafas|Lentes y oftalmología|4|T|vidrio_soplado,anatomia_clasica
+anatomia_moderna|Anatomía moderna (Vesalio)|5|K|anatomia_clasica,imprenta
+circulacion_sangre|Circulación de la sangre|5|K|anatomia_moderna,metodo_cientifico
+ligadura_arterias|Ligadura de arterias en heridas de guerra|5|T|cirugia_clasica,anatomia_moderna
+anatomia_patologica|Anatomía patológica|6|K|anatomia_moderna,microscopio
+termometro_clinico|Termómetro clínico|6|T|termometria,medicina_humoral
+estetoscopio|Estetoscopio|7|T|acustica,anatomia_moderna
+### Microbios y enfermedades
+microscopio|Microscopio|5|T|vidrio_soplado,optica_geometrica
+microorganismos|Descubrimiento de los microorganismos|5|K|microscopio
+teoria_celular|Teoría celular|7|K|microorganismos,quimica_organica
+teoria_germenes|Teoría de los gérmenes|7|K|microorganismos,teoria_celular
+bacteriologia|Bacteriología|7|K|teoria_germenes,microscopio
+epidemiologia|Epidemiología|7|K|estadistica,teoria_germenes
+medios_cultivo|Cultivo de bacterias (placas de Petri)|7|T|bacteriologia,vidrio_plano
+microscopio_electronico|Microscopio electrónico|8|T|microscopio,electron_descubrimiento
+virologia|Virología|8|K|bacteriologia,microscopio_electronico
+inmunologia|Inmunología|8|K|vacunas_modernas,bioquimica
+resistencia_antimicrobiana|Resistencia antimicrobiana|10|K|antibioticos,secuenciacion_adn
+vigilancia_genomica_patogenos|Vigilancia genómica de patógenos|10|T|secuenciacion_adn,epidemiologia
+### Farmacología y vacunas
+quimiatria_paracelso|Iatroquímica (Paracelso)|5|K|alquimia,farmacopea
+vacuna_viruela|Vacuna contra la viruela|6|T|variolizacion,microorganismos
+vacunas_modernas|Vacunas modernas (rabia, difteria…)|7|T|vacuna_viruela,bacteriologia
+aspirina_sinteticos|Aspirina y fármacos sintéticos|7|T|quimica_organica,farmacopea
+suero_antitoxina|Sueros y antitoxinas|7|T|vacunas_modernas
+antibioticos|Antibióticos|8|T|bacteriologia,bioquimica
+endocrinologia_insulina|Hormonas e insulina|8|T|bioquimica,farmacopea
+vitaminas|Vitaminas y nutrición científica|8|K|bioquimica
+sulfamidas|Sulfamidas|8|T|bacteriologia,quimica_organica
+anestesicos_locales|Anestésicos locales y analgésicos|8|T|anestesia,quimica_organica
+quimioterapia|Quimioterapia|9|T|antibioticos,bioquimica
+anticoncepcion_hormonal|Anticoncepción hormonal|9|T|endocrinologia_insulina
+antivirales|Antivirales|9|T|virologia,antibioticos
+vacunas_recombinantes|Vacunas recombinantes|9|T|ingenieria_genetica,vacunas_modernas
+anticuerpos_monoclonales|Anticuerpos monoclonales|9|T|inmunologia,ingenieria_genetica
+vacunas_arnm|Vacunas de ARN mensajero|10|T|biologia_molecular,vacunas_modernas,codigo_genetico
+inmunoterapia_cancer|Inmunoterapia contra el cáncer|10|T|anticuerpos_monoclonales,genoma_humano
+terapia_genica|Terapia génica|10|T|crispr,vacunas_arnm
+diseno_farmacos_ia|Diseño de fármacos con IA|10|T|quimica_computacional,aprendizaje_profundo
+### Cirugía y cuidados
+anestesia|Anestesia|7|T|quimica_organica,cirugia_clasica
+antisepsia|Antisepsia|7|T|teoria_germenes,anestesia
+esterilizacion_autoclave|Esterilización por vapor (autoclave)|7|T|antisepsia,maquina_vapor
+grupos_sanguineos|Grupos sanguíneos y transfusión|8|T|circulacion_sangre,bacteriologia
+cirugia_moderna|Cirugía moderna|8|T|anestesia,antisepsia,grupos_sanguineos
+radioterapia|Radioterapia|8|T|radiactividad,rayos_x_medicina
+cirugia_ortopedica|Cirugía ortopédica e implantes|8|T|cirugia_moderna,aceros_aleados
+trasplantes|Trasplante de órganos|9|T|cirugia_moderna,antibioticos
+marcapasos_protesis|Marcapasos y prótesis electrónicas|9|T|transistor,biomateriales
+fecundacion_in_vitro|Fecundación in vitro|9|T|endocrinologia_insulina,celulas_madre
+cirugia_cardiaca|Cirugía cardíaca y bypass|9|T|cirugia_moderna,circulacion_sangre
+endoscopia_minima_invasion|Endoscopia y cirugía mínimamente invasiva|9|T|cirugia_moderna,fibra_optica
+cirugia_laser|Cirugía láser|9|T|cirugia_moderna,laser
+ventilacion_mecanica|Ventilación mecánica|9|T|motor_electrico,anestesia
+dialisis|Diálisis (riñón artificial)|9|T|cirugia_moderna,polimeros_sinteticos
+monitoreo_clinico|Monitorización electrónica del paciente|9|T|transistor,hospital_moderno
+cuidados_intensivos|Cuidados intensivos|9|T|ventilacion_mecanica,monitoreo_clinico
+medicina_espacial|Medicina espacial|9|T|vuelo_espacial_tripulado,cuidados_intensivos
+cirugia_robotica|Cirugía robótica|10|T|endoscopia_minima_invasion,robotica_industrial
+protesis_bionicas|Prótesis biónicas|10|T|marcapasos_protesis,robotica_autonoma
+### Diagnóstico y medicina de precisión
+rayos_x_medicina|Radiografía|7|T|espectro_electromagnetico
+analisis_laboratorio|Análisis clínicos de laboratorio|8|T|bacteriologia,quimica_analitica
+electrocardiograma|Electrocardiograma|8|T|electromagnetismo,circulacion_sangre
+electroencefalograma|Electroencefalograma|8|T|neurociencia,electromagnetismo
+ecografia|Ecografía|9|T|acustica,transistor
+tomografia_axial|Tomografía computarizada|9|T|rayos_x_medicina,computadora_digital
+resonancia_magnetica|Resonancia magnética|9|T|electromagnetismo,superconductividad,tomografia_axial
+medicina_nuclear|Medicina nuclear (PET)|9|T|radiactividad,tomografia_axial
+diagnostico_genetico|Diagnóstico genético|9|T|secuenciacion_adn,pcr
+diagnostico_ia|Diagnóstico asistido por IA|10|T|aprendizaje_profundo,tomografia_axial
+biosensores_portatiles|Sensores médicos portátiles|10|T|sensores_mems,telefonia_celular_digital
+medicina_personalizada|Medicina personalizada|10|T|genoma_humano,historia_clinica_electronica,diagnostico_genetico
+### Mente y cerebro
+psicologia_experimental|Psicología experimental|7|K|metodo_cientifico,anatomia_moderna
+neurociencia|Neurociencia|8|K|anatomia_moderna,electromagnetismo,bioquimica
+psicofarmacologia|Psicofarmacología|9|T|neurociencia,farmacopea,quimica_organica
+psicoterapia_cognitiva|Psicoterapia cognitivo-conductual|9|K|psicologia_experimental,psicoanalisis
+neuroimagen|Neuroimagen funcional|10|K|resonancia_magnetica,neurociencia
+estimulacion_cerebral|Estimulación cerebral profunda|10|T|neurociencia,marcapasos_protesis
+interfaz_cerebro_computadora|Interfaz cerebro-computadora|10|T|neuroimagen,microprocesador
+### Medicina regenerativa y futuro
+ingenieria_tejidos|Ingeniería de tejidos|10|T|celulas_madre,biomateriales
+organos_bioimpresos|Órganos bioimpresos|10|T|ingenieria_tejidos,impresion_3d
+xenotrasplantes|Xenotrasplantes|10|T|trasplantes,crispr
+nanomedicina|Nanomedicina|10|T|nanotecnologia,quimioterapia
+regeneracion_miembros|Regeneración de miembros|11|T|ingenieria_tejidos,terapia_genica
+control_envejecimiento|Control del envejecimiento|11|T|terapia_genica,medicina_personalizada
+organos_sinteticos|Órganos artificiales completos|11|T|organos_bioimpresos,protesis_bionicas
+nanorrobots_medicos|Nanorrobots médicos|11|T|nanomedicina,robotica_autonoma
+mejora_cognitiva|Mejora cognitiva|11|T|interfaz_cerebro_computadora,psicofarmacologia
+## CIE|BIO|Biología y genética|La vida en general: clasificarla, entender cómo evoluciona y se hereda, y aprender a editarla.
+### Ecología y diversidad de la vida
+clasificacion_aristotelica|Clasificación de seres vivos (Aristóteles)|3|K|observacion_naturaleza,filosofia_natural
+taxonomia_linneana|Taxonomía de Linneo|6|K|clasificacion_aristotelica,imprenta
+fotosintesis|Fotosíntesis y ciclos de la materia|6|K|ley_conservacion_masa,microscopio
+ecologia|Ecología|7|K|taxonomia_linneana,geologia_estratigrafia
+biologia_marina|Biología marina|7|K|oceanografia,taxonomia_linneana
+evolucion_seleccion_natural|Evolución por selección natural|7|K|taxonomia_linneana,uniformitarismo,paleontologia
+etologia|Etología (comportamiento animal)|8|K|evolucion_seleccion_natural,observacion_naturaleza
+evodevo|Biología evolutiva del desarrollo|10|K|evolucion_seleccion_natural,biologia_molecular
+microbioma|Microbioma|10|K|bacteriologia,secuenciacion_adn
+paleogenetica|Paleogenética (ADN antiguo)|10|K|secuenciacion_adn,paleontologia
+desextincion|De-extinción de especies|11|T|paleogenetica,clonacion
+### Genética y biotecnología
+genetica_mendeliana|Genética mendeliana|7|K|estadistica,taxonomia_linneana
+cromosomas|Cromosomas|8|K|genetica_mendeliana,teoria_celular
+adn_estructura|Estructura del ADN|9|K|cromosomas,cristalografia,bioquimica
+biologia_molecular|Biología molecular|9|K|adn_estructura
+codigo_genetico|Código genético|9|K|biologia_molecular
+ingenieria_genetica|Ingeniería genética|9|T|codigo_genetico
+celulas_madre|Células madre|9|T|biologia_molecular
+clonacion|Clonación|9|T|ingenieria_genetica,celulas_madre
+pcr|Reacción en cadena de la polimerasa (PCR)|9|T|ingenieria_genetica
+secuenciacion_adn|Secuenciación del ADN|9|T|ingenieria_genetica,computadora_digital
+bioinformatica|Bioinformática|9|K|secuenciacion_adn,computadora_digital
+biotecnologia_industrial|Biotecnología industrial|9|T|ingenieria_genetica,fermentacion
+genoma_humano|Genoma humano|10|K|secuenciacion_adn,redes_conmutacion_paquetes
+crispr|Edición genética (CRISPR)|10|T|ingenieria_genetica,genoma_humano
+biologia_sintetica|Biología sintética|10|T|crispr,quimica_computacional
+epigenetica|Epigenética|10|K|adn_estructura,biologia_molecular
+vida_sintetica_completa|Vida sintética desde cero|11|T|biologia_sintetica,quimica_computacional
+## CIE|AGR|Agricultura y alimentos|Domesticar plantas y animales, regar, abonar, mecanizar y conservar.
+### Domesticación y técnicas antiguas
+recoleccion_selectiva|Recolección organizada|0|T|observacion_naturaleza
+pesca_primitiva|Pesca primitiva (redes y anzuelos)|0|T|herramientas_hueso,cuerda_fibras
+domesticacion_perro|Domesticación del perro|0|T|observacion_naturaleza
+domesticacion_plantas|Domesticación de plantas (cereales)|1|T|recoleccion_selectiva,calendario_lunar
+domesticacion_animales|Domesticación de animales de granja|1|T|domesticacion_perro,domesticacion_plantas
+almacenamiento_granos|Almacenamiento de granos|1|T|domesticacion_plantas,ceramica_alfareria
+azada_arado_simple|Azada y arado simple|1|T|domesticacion_plantas,herramientas_piedra
+riego_canales|Riego por canales|2|T|domesticacion_plantas,medicion_longitud
+arado_tirado|Arado tirado por animales|2|T|azada_arado_simple,domesticacion_animales,rueda
+abonos_organicos|Abonos orgánicos|2|T|domesticacion_plantas,domesticacion_animales
+terrazas_cultivo|Terrazas de cultivo|2|T|riego_canales
+pastoreo_nomada|Pastoreo nómada|2|T|domesticacion_animales
+seleccion_cria|Cría selectiva|2|T|domesticacion_animales
+viticultura_vinificacion|Viticultura y vinificación|2|T|domesticacion_plantas,fermentacion
+apicultura|Apicultura|2|T|domesticacion_animales
+acuicultura|Acuicultura|3|T|domesticacion_animales,riego_canales
+### Revolución agrícola medieval y moderna
+rotacion_trienal|Rotación trienal de cultivos|4|T|arado_tirado,abonos_organicos
+arado_pesado_collera|Arado pesado y collera|4|T|arado_tirado,hierro_forja
+cultivos_nuevo_mundo|Intercambio de cultivos entre continentes|5|T|navegacion_oceanica,rotacion_trienal
+cultivos_plantacion|Cultivos comerciales de plantación|5|T|cultivos_nuevo_mundo,rutas_maritimas_comerciales
+agricultura_cientifica|Agricultura científica|6|T|rotacion_trienal,cultivos_nuevo_mundo,quimica_experimental
+sembradora_mecanica|Sembradora mecánica|6|T|arado_pesado_collera,engranajes
+silvicultura|Silvicultura|6|T|agricultura_cientifica,taxonomia_linneana
+conservas|Conservas en vidrio|6|T|vidrio_soplado,agricultura_cientifica,rec_sal
+### Industrialización del campo
+fertilizantes_quimicos|Fertilizantes químicos|7|T|agricultura_cientifica,quimica_organica,rec_fosfatos_nitratos
+trilladora_vapor|Trilladora de vapor|7|T|sembradora_mecanica,maquina_vapor
+refrigeracion_mecanica|Refrigeración mecánica|7|T|termodinamica_clasica,maquina_vapor
+pasteurizacion|Pasteurización|7|T|bacteriologia,conservas
+tractor|Tractor|8|V|motor_combustion,agricultura_cientifica
+cosecha_mecanizada|Cosecha mecanizada|8|T|tractor,trilladora_vapor
+fijacion_nitrogeno|Fijación industrial del nitrógeno|8|T|catalisis,quimica_analitica
+pesticidas_sinteticos|Pesticidas sintéticos|8|T|quimica_organica,petroquimica
+mejora_genetica_animal|Mejora genética animal|8|T|genetica_mendeliana,seleccion_cria
+ganaderia_industrial|Ganadería industrial|8|T|seleccion_cria,refrigeracion_mecanica
+riego_mecanizado|Riego mecanizado|8|T|riego_canales,motor_electrico
+pesca_industrial|Pesca industrial|8|T|motor_combustion,refrigeracion_mecanica
+### Agricultura contemporánea
+revolucion_verde|Revolución verde|9|T|fertilizantes_quimicos,fijacion_nitrogeno,genetica_mendeliana
+transgenicos|Cultivos transgénicos|9|T|ingenieria_genetica,revolucion_verde
+hidroponia|Hidroponía|9|T|quimica_analitica,revolucion_verde
+agricultura_precision|Agricultura de precisión|10|T|revolucion_verde,gps_navegacion,sensores_mems
+agroecologia|Agroecología|10|T|ecologia,agricultura_precision
+proteina_alternativa|Proteínas alternativas y carne cultivada|10|T|biologia_sintetica,hidroponia

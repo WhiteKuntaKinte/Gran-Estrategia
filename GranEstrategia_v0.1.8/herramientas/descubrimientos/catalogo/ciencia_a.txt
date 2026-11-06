@@ -1,0 +1,183 @@
+## CIE|BAS|Cimientos y oficios primitivos|Lo primero que descubre cualquier pueblo: observar, hacer fuego, trabajar piedra, hueso y fibras. Son las raíces de casi todo el árbol.
+observacion_naturaleza|Observación de la naturaleza|0|K|
+fuego|Dominio del fuego|0|T|observacion_naturaleza
+herramientas_piedra|Herramientas de piedra|0|T|observacion_naturaleza
+herramientas_hueso|Herramientas de hueso y asta|0|T|herramientas_piedra
+cuerda_fibras|Cordaje y fibras vegetales|0|T|observacion_naturaleza,herramientas_piedra
+carpinteria|Carpintería básica|1|T|herramientas_piedra,fuego
+cesteria|Cestería|1|T|cuerda_fibras
+cuero_curtido|Curtido de cuero|1|T|herramientas_hueso,fuego
+textiles_tejido|Hilado y tejido|1|T|cuerda_fibras
+telar_vertical|Telar vertical|2|T|textiles_tejido,carpinteria
+lena_carbon_vegetal|Leña y carbón vegetal|1|T|fuego
+cocina_fuego|Cocción de alimentos|0|T|fuego
+pigmentos_tintes|Pigmentos y tintes naturales|1|T|observacion_naturaleza
+## CIE|MAT|Matemáticas|Números, formas, cambio, lógica y probabilidad: la base teórica de casi todo lo demás.
+### Aritmética y numeración
+conteo|Conteo con tallas|0|K|observacion_naturaleza
+aritmetica_basica|Aritmética básica|1|K|conteo
+medicion_longitud|Medidas de longitud y peso|1|K|conteo
+fracciones|Fracciones|2|K|aritmetica_basica
+numeracion_posicional|Numeración posicional (base 60)|2|K|aritmetica_basica,escritura_pictografica
+abaco|Ábaco|2|T|aritmetica_basica
+tablas_calculo|Tablas de cálculo|2|K|numeracion_posicional
+cero_negativos|El cero y los números negativos|4|K|numeracion_posicional
+numeracion_indoarabiga|Numeración indoarábiga|4|K|cero_negativos
+logaritmos|Logaritmos|5|K|algebra_sistematica,numeracion_indoarabiga
+### Álgebra
+algebra_retorica|Álgebra retórica (problemas con incógnita)|2|K|numeracion_posicional,fracciones
+algebra_sistematica|Álgebra sistemática (al-Jabr)|4|K|cero_negativos,algebra_retorica
+numeros_complejos|Números complejos|6|K|algebra_sistematica
+algebra_lineal|Álgebra lineal y matrices|7|K|algebra_sistematica,numeros_complejos
+teoria_grupos|Teoría de grupos|7|K|algebra_sistematica,teoria_numeros
+### Geometría
+geometria_practica|Geometría práctica (agrimensura)|2|K|medicion_longitud,aritmetica_basica
+geometria_demostrativa|Geometría demostrativa (Euclides)|3|K|geometria_practica,logica_formal
+teorema_pitagoras|Teorema de Pitágoras|3|K|geometria_practica,algebra_retorica
+trigonometria|Trigonometría|3|K|geometria_demostrativa,astronomia_ojo_desnudo
+geometria_analitica|Geometría analítica|5|K|algebra_sistematica,geometria_demostrativa
+geometria_no_euclidiana|Geometrías no euclidianas|7|K|geometria_analitica,calculo_infinitesimal
+topologia|Topología|7|K|geometria_no_euclidiana
+geometria_fractal|Geometría fractal|9|K|topologia,computadora_digital
+### Cálculo y análisis
+calculo_infinitesimal|Cálculo infinitesimal|6|K|geometria_analitica,logaritmos
+series_infinitas|Series infinitas|6|K|calculo_infinitesimal
+ecuaciones_diferenciales|Ecuaciones diferenciales|6|K|calculo_infinitesimal
+analisis_riguroso|Análisis matemático riguroso|7|K|calculo_infinitesimal,series_infinitas
+analisis_numerico|Análisis numérico|8|K|analisis_riguroso,computadora_digital
+teoria_caos|Teoría del caos|9|K|ecuaciones_diferenciales,computadora_digital
+### Números, lógica y fundamentos
+numeros_primos|Números primos e irracionales|3|K|geometria_demostrativa,teorema_pitagoras
+teoria_numeros|Teoría de números|6|K|numeros_primos,algebra_sistematica
+logica_matematica|Lógica matemática|7|K|logica_formal,algebra_sistematica
+teoria_conjuntos|Teoría de conjuntos|7|K|analisis_riguroso,logica_matematica
+computabilidad|Teoría de la computabilidad|8|K|logica_matematica,teoria_conjuntos
+teoria_complejidad|Teoría de la complejidad computacional|9|K|computabilidad,analisis_numerico
+### Probabilidad, estadística y decisión
+probabilidad|Probabilidad|5|K|algebra_sistematica
+estadistica|Estadística|6|K|probabilidad,censo_poblacion
+probabilidad_axiomatica|Probabilidad axiomática|8|K|teoria_conjuntos,estadistica
+teoria_informacion|Teoría de la información|9|K|probabilidad_axiomatica,logica_matematica
+teoria_juegos|Teoría de juegos|8|K|probabilidad_axiomatica,economia_clasica
+investigacion_operativa|Investigación operativa|8|T|estadistica,algebra_lineal
+## CIE|FIS|Física|Mecánica, calor, electricidad, luz y la física moderna.
+### Mecánica y fluidos
+palanca_practica|Palanca y rodillos|1|T|herramientas_piedra
+ley_palanca|Ley de la palanca y la flotación (Arquímedes)|3|K|geometria_demostrativa,palanca_practica
+hidrostatica|Hidrostática|3|K|ley_palanca
+acustica|Acústica y ondas de sonido|5|K|geometria_demostrativa,metodo_cientifico
+cinematica|Cinemática (Galileo)|5|K|algebra_sistematica,metodo_cientifico
+leyes_newton|Leyes de Newton y gravitación universal|6|K|cinematica,calculo_infinitesimal
+mecanica_analitica|Mecánica analítica|6|K|leyes_newton,ecuaciones_diferenciales
+dinamica_fluidos|Dinámica de fluidos|6|K|hidrostatica,leyes_newton
+elasticidad_resistencia|Resistencia de materiales|6|K|leyes_newton
+aerodinamica|Aerodinámica|7|K|dinamica_fluidos
+### Óptica
+optica_geometrica|Óptica geométrica|4|K|geometria_demostrativa,vidrio
+optica_ondulatoria|Óptica ondulatoria|6|K|optica_geometrica,acustica
+### Calor y gases
+termometria|Termómetro y escalas de temperatura|5|K|vidrio_soplado,metodo_cientifico
+presion_atmosferica|Presión atmosférica y vacío|5|K|hidrostatica,metodo_cientifico
+leyes_gases|Leyes de los gases|6|K|presion_atmosferica,termometria
+termodinamica_clasica|Termodinámica clásica|7|K|leyes_gases,maquina_vapor
+teoria_cinetica|Teoría cinética y mecánica estadística|7|K|termodinamica_clasica,estadistica
+criogenia|Criogenia y licuefacción de gases|7|K|termodinamica_clasica
+superconductividad|Superconductividad|8|K|criogenia,mecanica_cuantica
+### Electricidad y magnetismo
+magnetismo_natural|Magnetismo natural (piedra imán)|3|K|observacion_naturaleza
+electricidad_estatica|Electricidad estática|3|K|observacion_naturaleza
+electrostatica|Electrostática (Coulomb)|6|K|electricidad_estatica,leyes_newton
+pila_electrica|Pila eléctrica (Volta)|6|T|electrostatica,quimica_experimental
+electromagnetismo|Electromagnetismo (Ørsted y Faraday)|7|K|pila_electrica,magnetismo_natural
+ecuaciones_maxwell|Ecuaciones de Maxwell|7|K|electromagnetismo,ecuaciones_diferenciales
+ondas_electromagneticas|Ondas electromagnéticas (Hertz)|7|K|ecuaciones_maxwell
+espectro_electromagnetico|Espectro electromagnético y rayos X|7|K|ondas_electromagneticas
+### Física moderna
+electron_descubrimiento|Descubrimiento del electrón|7|K|electromagnetismo,leyes_gases
+radiactividad|Radiactividad|7|K|espectro_electromagnetico,quimica_analitica
+relatividad_especial|Relatividad especial|8|K|ecuaciones_maxwell,leyes_newton
+mecanica_cuantica|Mecánica cuántica|8|K|radiactividad,electron_descubrimiento,teoria_cinetica
+relatividad_general|Relatividad general|8|K|relatividad_especial,geometria_no_euclidiana
+estructura_atomica|Estructura del átomo y el núcleo|8|K|radiactividad,electron_descubrimiento
+fision_nuclear|Fisión nuclear|8|K|estructura_atomica
+fusion_nuclear_teoria|Fusión nuclear (teoría)|8|K|estructura_atomica,relatividad_especial
+electrodinamica_cuantica|Electrodinámica cuántica|8|K|mecanica_cuantica,relatividad_especial
+fisica_estado_solido|Física del estado sólido|8|K|mecanica_cuantica,cristalografia
+fisica_plasma|Física de plasmas|8|K|espectro_electromagnetico,leyes_gases
+aceleradores_particulas|Aceleradores de partículas|8|T|estructura_atomica,generador_electrico
+fisica_particulas|Física de partículas (modelo estándar)|9|K|electrodinamica_cuantica,aceleradores_particulas
+laser|Láser|9|T|mecanica_cuantica,electrodinamica_cuantica
+ondas_gravitacionales|Detección de ondas gravitacionales|10|K|relatividad_general,laser,computadora_digital
+## CIE|QUI|Química y materiales|De la alquimia a la química moderna; metales y aleaciones, explosivos, cerámicas, polímeros y materiales avanzados.
+### Química teórica y analítica
+fermentacion|Fermentación|1|T|fuego,ceramica_alfareria
+alquimia|Alquimia|3|K|metalurgia_cobre,fermentacion
+destilacion|Destilación|4|T|alquimia
+acidos_minerales|Ácidos minerales|4|K|destilacion
+quimica_experimental|Química experimental|5|K|alquimia,metodo_cientifico,presion_atmosferica
+ley_conservacion_masa|Conservación de la masa (Lavoisier)|6|K|quimica_experimental,leyes_gases
+teoria_atomica_dalton|Teoría atómica de Dalton|6|K|ley_conservacion_masa
+electrolisis|Electrólisis|6|K|pila_electrica,quimica_experimental
+tabla_periodica|Tabla periódica|7|K|teoria_atomica_dalton,electrolisis
+quimica_organica|Química orgánica|7|K|teoria_atomica_dalton
+termoquimica|Termoquímica|7|K|termodinamica_clasica,teoria_atomica_dalton
+catalisis|Catálisis|7|K|termoquimica
+quimica_analitica|Química analítica y espectroscopía|7|K|espectro_electromagnetico,tabla_periodica
+enlace_quimico|Enlace químico|8|K|tabla_periodica,mecanica_cuantica
+cristalografia|Cristalografía de rayos X|8|K|espectro_electromagnetico,tabla_periodica
+bioquimica|Bioquímica|8|K|quimica_organica,teoria_celular
+quimica_polimeros_teoria|Química de polímeros|8|K|quimica_organica,enlace_quimico
+quimica_computacional|Química computacional|9|K|enlace_quimico,computadora_digital
+nanotecnologia|Nanotecnología|9|T|fisica_estado_solido,quimica_analitica
+quimica_verde|Química verde|10|T|catalisis,quimica_computacional
+### Explosivos y combustibles
+polvora|Pólvora negra|4|K|alquimia,fuego,rec_salitre_azufre
+nitroglicerina|Nitroglicerina|7|K|acidos_minerales,quimica_organica
+nitrocelulosa|Nitrocelulosa (algodón pólvora)|7|K|acidos_minerales,quimica_organica
+dinamita|Dinamita|7|T|nitroglicerina
+explosivo_tnt|Trinitrotolueno (TNT)|7|T|quimica_organica,acidos_minerales
+explosivo_plastico|Explosivos plásticos|8|T|explosivo_tnt,petroquimica
+polvora_sin_humo|Pólvora sin humo|7|T|nitrocelulosa,polvora
+### Metales y aleaciones
+metalurgia_cobre|Cobre nativo y fundición|1|T|fuego,herramientas_piedra
+horno_tiro|Horno de tiro forzado (fuelles)|2|T|metalurgia_cobre
+bronce|Bronce (cobre y estaño)|2|T|metalurgia_cobre,comercio_larga_distancia,rec_estano
+aleaciones_metalicas|Aleaciones metálicas (latón, peltre)|3|T|bronce
+hierro_forja|Metalurgia del hierro (forja)|3|T|bronce,horno_tiro,rec_hierro
+acero_crisol|Acero de crisol|4|T|hierro_forja
+alto_horno|Alto horno (hierro colado)|4|T|hierro_forja,rueda_hidraulica
+aleaciones_ferrosas|Aleaciones de hierro de calidad|4|K|acero_crisol,alto_horno
+acero_bessemer|Acero Bessemer|7|T|aleaciones_ferrosas,maquina_vapor
+acero_siemens|Horno Siemens-Martin|7|T|acero_bessemer
+aceros_aleados|Aceros aleados (cromo, níquel, manganeso)|7|T|acero_siemens,quimica_analitica,rec_aleantes
+acero_inoxidable|Acero inoxidable|8|T|aceros_aleados
+aluminio|Aluminio|7|T|electrolisis,dinamo,rec_bauxita
+aleaciones_ligeras|Aleaciones ligeras (duraluminio)|8|T|aluminio,aceros_aleados
+titanio|Titanio|9|T|aleaciones_ligeras,quimica_analitica
+superaleaciones|Superaleaciones para turbinas|9|T|aceros_aleados,turbina_gas
+uranio_enriquecido|Enriquecimiento de uranio|8|T|fision_nuclear,quimica_analitica,rec_uranio
+metales_tierras_raras|Tierras raras|9|T|tabla_periodica,quimica_analitica,rec_tierras_raras
+### Cerámicas, vidrio y construcción
+ceramica_alfareria|Alfarería y cerámica|1|T|fuego
+rueda_alfarero|Torno de alfarero|2|T|ceramica_alfareria,rueda
+ladrillo_cocido|Ladrillo cocido|2|T|ceramica_alfareria,rec_arcilla
+vidrio|Vidrio|2|T|ceramica_alfareria,horno_tiro,rec_arena_cuarzo
+vidrio_soplado|Vidrio soplado|3|T|vidrio
+cal_yeso|Cal y yeso|2|T|ladrillo_cocido
+hormigon_romano|Hormigón romano|3|T|cal_yeso,ladrillo_cocido,rec_caliza_yeso
+porcelana|Porcelana|4|T|ceramica_alfareria,horno_tiro
+cemento_portland|Cemento Portland|7|T|hormigon_romano,ley_conservacion_masa
+hormigon_armado|Hormigón armado|7|T|cemento_portland,acero_bessemer
+vidrio_plano|Vidrio plano y templado|7|T|vidrio_soplado,termoquimica
+ceramicas_tecnicas|Cerámicas técnicas|9|T|porcelana,quimica_analitica
+### Plásticos, fibras y materiales avanzados
+caucho_vulcanizado|Caucho vulcanizado|7|T|quimica_organica,navegacion_oceanica,rec_caucho
+plasticos_baquelita|Plásticos (baquelita)|8|T|quimica_organica
+polimeros_sinteticos|Polímeros sintéticos|8|T|quimica_polimeros_teoria,petroquimica
+fibras_sinteticas|Fibras sintéticas (nailon)|8|T|polimeros_sinteticos
+fibra_vidrio|Fibra de vidrio y compuestos|8|T|vidrio_plano,polimeros_sinteticos
+fibra_carbono|Fibra de carbono|9|T|polimeros_sinteticos,aleaciones_ligeras
+semiconductores_silicio|Silicio ultrapuro|8|T|fisica_estado_solido,quimica_analitica
+cristal_liquido|Cristales líquidos|9|T|semiconductores_silicio,quimica_organica
+biomateriales|Biomateriales e implantes|9|T|aleaciones_ligeras,cirugia_moderna
+grafeno|Grafeno y materiales 2D|10|T|nanotecnologia,fibra_carbono

@@ -1,0 +1,46 @@
+---
+title: Cadena de IDs 0.1.8.2 — cada nivel apunta a su padre (padre_id)
+---
+flowchart TB
+    M["<b>MUNDO</b><br/>ID 0<br/>1 registro"]:::mundo
+    C["<b>CONTINENTE</b><br/>IDs 1 a 99<br/>7 registros"]:::cont
+    P["<b>PAÍS / TERRITORIO</b><br/>IDs 100 a 999<br/>249 registros"]:::pais
+    E["<b>ESTADO</b><br/>IDs 1000 a 9999<br/>53 registros<br/><i>solo países con estados (EE. UU.)</i>"]:::estado
+    PR["<b>PROVINCIA</b><br/>IDs 10000 a 99999<br/>7653 registros<br/><i>departamentos, regiones, condados...</i>"]:::prov
+    CI["<b>CIUDAD</b><br/>IDs 100000 a 999999<br/>7341 registros"]:::ciudad
+    M -->|"1 : N"| C
+    C -->|"1 : N"| P
+    P -->|"1 : N"| E
+    E -->|"1 : N"| PR
+    P -->|"1 : N<br/>(países sin estados)"| PR
+    PR -->|"1 : N"| CI
+    PR -. "propietario (N : 1)<br/>quien la controla en una fecha" .-> P
+    P -. "anexado_a (N : 1)" .-> P
+    EN["<b>ENTIDAD HISTÓRICA</b><br/>IDs 1000000 a 1999999<br/>16 registros<br/><i>imperios, repúblicas, virreinatos...<br/>sin padre geográfico</i>"]:::entidad
+    PE["<b>PERSONA</b><br/>IDs 2000000 a 9999999<br/>37 registros<br/><i>no es un territorio: tabla aparte</i>"]:::persona
+    PR -. "propietario (N : 1)<br/>también puede ser una entidad" .-> EN
+    EN -. "cargos: persona + cargo + fechas" .-> PE
+    EJ["<b>EJÉRCITO</b><br/>IDs 10000000 a 10999999<br/>249 (uno por país)<br/><i>se crea al empezar la partida</i>"]:::ejercito
+    PL["<b>PELOTÓN</b><br/>IDs 11.000.000 a 11.999.999<br/>≈ 21.600 al empezar 2026<br/><i>hasta 1.000 soldados cada uno</i>"]:::ejercito
+    RG["<b>REGIMIENTO</b><br/>IDs 12.000.000 en adelante<br/><i>grupo de pelotones: se mueve, pelea y se dibuja como UN cuadro;<br/>las tropas no se funden solas (unir = orden deliberada)</i>"]:::ejercito
+    GU["<b>GUERRA</b><br/>IDs 13.000.000 en adelante<br/><i>agresor, defensor, fechas, causa<br/>(atacar una provincia ajena la declara)</i>"]:::guerra
+    BA["<b>BATALLA</b><br/>IDs 14.000.000 en adelante<br/><i>bajas día por día = historial de estadísticas de batalla</i>"]:::guerra
+    P -->|"1 : 1"| EJ
+    EJ -->|"1 : N"| RG
+    RG -->|"1 : N"| PL
+    PL -. "ubicacion (N : 1)<br/>provincia donde está" .-> PR
+    P -. "agresor / defensor (N : 1)" .-> GU
+    GU -->|"1 : N"| BA
+    BA -. "bat_provincia (N : 1)" .-> PR
+    NOTA["Ejemplo real:  Medellín (ID 100102)  →  Antioquia (ID 15085)  →  Colombia (ID 150)  →  América del Sur (ID 2)  →  Mundo (ID 0)"]:::nota
+    classDef ejercito fill:#d1fae5,stroke:#059669,color:#111
+    classDef guerra fill:#fee2e2,stroke:#b91c1c,color:#111
+    classDef mundo fill:#e5e7eb,stroke:#6b7280,color:#111
+    classDef cont fill:#dbeafe,stroke:#3b82f6,color:#111
+    classDef pais fill:#ccfbf1,stroke:#14b8a6,color:#111
+    classDef estado fill:#fef9c3,stroke:#ca8a04,color:#111
+    classDef prov fill:#ffedd5,stroke:#f97316,color:#111
+    classDef ciudad fill:#fce7f3,stroke:#ec4899,color:#111
+    classDef entidad fill:#ede9fe,stroke:#7c3aed,color:#111
+    classDef persona fill:#fae8ff,stroke:#c026d3,color:#111
+    classDef nota fill:#ffffff,stroke:#9ca3af,color:#111,stroke-dasharray: 4 3

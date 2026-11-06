@@ -1,0 +1,18 @@
+{
+ "anio": 1,
+ "nombre": "Año 1 d. C.",
+ "esquema_colores": "propio",
+ "reloj": [
+  1,
+  1,
+  1
+ ],
+ "descripcion": "El mundo en el año 1 d. C.: Roma y la China Han, el Imperio parto, cientos de pueblos y culturas, y tierras sin reclamar.",
+ "creditos": [
+  "Fronteras de los estados: Cliopatria v0.2.1, Seshat Global History Databank (CC BY 4.0), https://github.com/Seshat-Global-History-Databank/cliopatria — adaptadas a las provincias del juego.",
+  "Pueblos y culturas sin estado, poblaciones, ciudades y economía: estimaciones propias de este proyecto."
+ ],
+ "naciones": 186,
+ "provincias": 4110,
+ "pob_mundo": 237533280
+}

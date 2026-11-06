@@ -1,0 +1,1734 @@
+# Año de cada descubrimiento: slug|año|origen|nombre (solo informativo)
+# año: entero con signo; los años antes de Cristo van en negativo (-44 = 44 a. C.), sin año cero. La prehistoria (era 0) usa años muy aproximados.
+# origen: h = fecha histórica asignada a mano (a veces aproximada) · a = ajustada para respetar los prerrequisitos y el rango de su era · x = hipotético (futuro, era 11)
+# Regla del juego: un país conoce un descubrimiento cuando el año del reloj es >= su año. Regla de coherencia (la comprueba construir_descubrimientos.py): año >= año de sus prerrequisitos, y el año cae dentro del rango de su era.
+observacion_naturaleza|-2600000|h|Observación de la naturaleza
+fuego|-400000|h|Dominio del fuego
+herramientas_piedra|-2600000|h|Herramientas de piedra
+herramientas_hueso|-90000|h|Herramientas de hueso y asta
+cuerda_fibras|-50000|h|Cordaje y fibras vegetales
+carpinteria|-9000|h|Carpintería básica
+cesteria|-10000|h|Cestería
+cuero_curtido|-9000|h|Curtido de cuero
+textiles_tejido|-7000|h|Hilado y tejido
+telar_vertical|-3000|h|Telar vertical
+lena_carbon_vegetal|-6000|h|Leña y carbón vegetal
+cocina_fuego|-250000|h|Cocción de alimentos
+pigmentos_tintes|-10000|h|Pigmentos y tintes naturales
+conteo|-40000|h|Conteo con tallas
+aritmetica_basica|-8000|h|Aritmética básica
+medicion_longitud|-5000|h|Medidas de longitud y peso
+fracciones|-1800|h|Fracciones
+numeracion_posicional|-2000|h|Numeración posicional (base 60)
+abaco|-2500|h|Ábaco
+tablas_calculo|-1900|h|Tablas de cálculo
+cero_negativos|628|h|El cero y los números negativos
+numeracion_indoarabiga|825|h|Numeración indoarábiga
+logaritmos|1614|h|Logaritmos
+algebra_retorica|-1800|h|Álgebra retórica (problemas con incógnita)
+algebra_sistematica|820|h|Álgebra sistemática (al-Jabr)
+numeros_complejos|1700|h|Números complejos
+algebra_lineal|1858|h|Álgebra lineal y matrices
+teoria_grupos|1832|h|Teoría de grupos
+geometria_practica|-3000|h|Geometría práctica (agrimensura)
+geometria_demostrativa|-300|h|Geometría demostrativa (Euclides)
+teorema_pitagoras|-540|h|Teorema de Pitágoras
+trigonometria|-150|h|Trigonometría
+geometria_analitica|1637|h|Geometría analítica
+geometria_no_euclidiana|1829|h|Geometrías no euclidianas
+topologia|1895|h|Topología
+geometria_fractal|1975|h|Geometría fractal
+calculo_infinitesimal|1666|h|Cálculo infinitesimal
+series_infinitas|1670|h|Series infinitas
+ecuaciones_diferenciales|1690|h|Ecuaciones diferenciales
+analisis_riguroso|1821|h|Análisis matemático riguroso
+analisis_numerico|1945|a|Análisis numérico
+teoria_caos|1963|h|Teoría del caos
+numeros_primos|-300|h|Números primos e irracionales
+teoria_numeros|1750|h|Teoría de números
+logica_matematica|1879|h|Lógica matemática
+teoria_conjuntos|1879|a|Teoría de conjuntos
+computabilidad|1936|h|Teoría de la computabilidad
+teoria_complejidad|1971|h|Teoría de la complejidad computacional
+probabilidad|1564|h|Probabilidad
+estadistica|1662|h|Estadística
+probabilidad_axiomatica|1933|h|Probabilidad axiomática
+teoria_informacion|1948|h|Teoría de la información
+teoria_juegos|1944|h|Teoría de juegos
+investigacion_operativa|1940|h|Investigación operativa
+palanca_practica|-5000|h|Palanca y rodillos
+ley_palanca|-250|h|Ley de la palanca y la flotación (Arquímedes)
+hidrostatica|-250|h|Hidrostática
+acustica|1636|h|Acústica y ondas de sonido
+cinematica|1620|a|Cinemática (Galileo)
+leyes_newton|1687|h|Leyes de Newton y gravitación universal
+mecanica_analitica|1788|h|Mecánica analítica
+dinamica_fluidos|1738|h|Dinámica de fluidos
+elasticidad_resistencia|1687|a|Resistencia de materiales
+aerodinamica|1809|h|Aerodinámica
+optica_geometrica|1021|h|Óptica geométrica
+optica_ondulatoria|1690|h|Óptica ondulatoria
+termometria|1620|a|Termómetro y escalas de temperatura
+presion_atmosferica|1643|h|Presión atmosférica y vacío
+leyes_gases|1662|h|Leyes de los gases
+termodinamica_clasica|1850|h|Termodinámica clásica
+teoria_cinetica|1860|h|Teoría cinética y mecánica estadística
+criogenia|1877|h|Criogenia y licuefacción de gases
+superconductividad|1925|a|Superconductividad
+magnetismo_natural|-1000|h|Magnetismo natural (piedra imán)
+electricidad_estatica|-600|h|Electricidad estática
+electrostatica|1785|h|Electrostática (Coulomb)
+pila_electrica|1800|h|Pila eléctrica (Volta)
+electromagnetismo|1820|h|Electromagnetismo (Ørsted y Faraday)
+ecuaciones_maxwell|1865|h|Ecuaciones de Maxwell
+ondas_electromagneticas|1887|h|Ondas electromagnéticas (Hertz)
+espectro_electromagnetico|1895|h|Espectro electromagnético y rayos X
+electron_descubrimiento|1897|h|Descubrimiento del electrón
+radiactividad|1896|h|Radiactividad
+relatividad_especial|1905|h|Relatividad especial
+mecanica_cuantica|1925|h|Mecánica cuántica
+relatividad_general|1915|h|Relatividad general
+estructura_atomica|1911|h|Estructura del átomo y el núcleo
+fision_nuclear|1938|h|Fisión nuclear
+fusion_nuclear_teoria|1938|h|Fusión nuclear (teoría)
+electrodinamica_cuantica|1930|h|Electrodinámica cuántica
+fisica_estado_solido|1930|h|Física del estado sólido
+fisica_plasma|1928|h|Física de plasmas
+aceleradores_particulas|1932|h|Aceleradores de partículas
+fisica_particulas|1973|h|Física de partículas (modelo estándar)
+laser|1960|h|Láser
+ondas_gravitacionales|2015|h|Detección de ondas gravitacionales
+fermentacion|-7000|h|Fermentación
+alquimia|-300|h|Alquimia
+destilacion|600|h|Destilación
+acidos_minerales|900|h|Ácidos minerales
+quimica_experimental|1643|a|Química experimental
+ley_conservacion_masa|1789|h|Conservación de la masa (Lavoisier)
+teoria_atomica_dalton|1800|h|Teoría atómica de Dalton
+electrolisis|1800|h|Electrólisis
+tabla_periodica|1869|h|Tabla periódica
+quimica_organica|1828|h|Química orgánica
+termoquimica|1850|a|Termoquímica
+catalisis|1850|a|Catálisis
+quimica_analitica|1895|a|Química analítica y espectroscopía
+enlace_quimico|1925|a|Enlace químico
+cristalografia|1912|h|Cristalografía de rayos X
+bioquimica|1920|h|Bioquímica
+quimica_polimeros_teoria|1925|a|Química de polímeros
+quimica_computacional|1970|h|Química computacional
+nanotecnologia|1981|h|Nanotecnología
+quimica_verde|2000|h|Química verde
+polvora|850|h|Pólvora negra
+nitroglicerina|1847|h|Nitroglicerina
+nitrocelulosa|1846|h|Nitrocelulosa (algodón pólvora)
+dinamita|1867|h|Dinamita
+explosivo_tnt|1863|h|Trinitrotolueno (TNT)
+explosivo_plastico|1940|h|Explosivos plásticos
+polvora_sin_humo|1884|h|Pólvora sin humo
+metalurgia_cobre|-5000|h|Cobre nativo y fundición
+horno_tiro|-2500|h|Horno de tiro forzado (fuelles)
+bronce|-3200|a|Bronce (cobre y estaño)
+aleaciones_metalicas|-700|h|Aleaciones metálicas (latón, peltre)
+hierro_forja|-1100|h|Metalurgia del hierro (forja)
+acero_crisol|500|h|Acero de crisol
+alto_horno|1150|h|Alto horno (hierro colado)
+aleaciones_ferrosas|1150|a|Aleaciones de hierro de calidad
+acero_bessemer|1856|h|Acero Bessemer
+acero_siemens|1865|h|Horno Siemens-Martin
+aceros_aleados|1895|a|Aceros aleados (cromo, níquel, manganeso)
+acero_inoxidable|1913|h|Acero inoxidable
+aluminio|1886|h|Aluminio
+aleaciones_ligeras|1909|h|Aleaciones ligeras (duraluminio)
+titanio|1946|h|Titanio
+superaleaciones|1950|h|Superaleaciones para turbinas
+uranio_enriquecido|1943|h|Enriquecimiento de uranio
+metales_tierras_raras|1972|a|Tierras raras
+ceramica_alfareria|-8000|h|Alfarería y cerámica
+rueda_alfarero|-3500|h|Torno de alfarero
+ladrillo_cocido|-3000|h|Ladrillo cocido
+vidrio|-2000|h|Vidrio
+vidrio_soplado|-50|h|Vidrio soplado
+cal_yeso|-3000|a|Cal y yeso
+hormigon_romano|-300|h|Hormigón romano
+porcelana|700|h|Porcelana
+cemento_portland|1824|h|Cemento Portland
+hormigon_armado|1867|h|Hormigón armado
+vidrio_plano|1874|h|Vidrio plano y templado
+ceramicas_tecnicas|1960|h|Cerámicas técnicas
+caucho_vulcanizado|1839|h|Caucho vulcanizado
+plasticos_baquelita|1907|h|Plásticos (baquelita)
+polimeros_sinteticos|1930|h|Polímeros sintéticos
+fibras_sinteticas|1935|h|Fibras sintéticas (nailon)
+fibra_vidrio|1938|h|Fibra de vidrio y compuestos
+fibra_carbono|1963|h|Fibra de carbono
+semiconductores_silicio|1945|h|Silicio ultrapuro
+cristal_liquido|1968|h|Cristales líquidos
+biomateriales|1960|h|Biomateriales e implantes
+grafeno|2004|h|Grafeno y materiales 2D
+astronomia_ojo_desnudo|-10000|a|Observación astronómica a simple vista
+calendario_lunar|-8000|h|Calendario lunar
+calendario_solar|-3200|h|Calendario solar
+eclipses_prediccion|-700|h|Predicción de eclipses
+modelo_geocentrico|-150|a|Modelo geocéntrico (Ptolomeo)
+astrolabio|800|h|Astrolabio
+observatorios_astronomicos|830|h|Observatorios astronómicos
+modelo_heliocentrico|1543|h|Modelo heliocéntrico
+telescopio|1608|h|Telescopio
+leyes_kepler|1609|h|Leyes de Kepler
+telescopio_reflector|1687|a|Telescopio reflector
+mecanica_celeste|1799|h|Mecánica celeste
+descubrimiento_planetas|1799|a|Descubrimiento de nuevos planetas
+espectroscopia_estelar|1895|a|Espectroscopía estelar
+astrofisica_estelar|1938|a|Astrofísica estelar
+estructura_galaxias|1924|h|Naturaleza de las galaxias
+expansion_universo|1929|h|Expansión del universo
+cosmologia_relativista|1931|h|Cosmología relativista (Big Bang)
+radioastronomia|1932|h|Radioastronomía
+materia_oscura|1998|h|Materia y energía oscuras
+exoplanetas|2000|h|Detección de exoplanetas
+imagen_agujero_negro|2019|h|Imagen de un agujero negro
+cohete_liquido|1926|h|Cohete de combustible líquido
+satelite_artificial|1957|h|Satélite artificial
+vuelo_espacial_tripulado|1961|h|Vuelo espacial tripulado
+alunizaje|1969|h|Llegada a la Luna
+estacion_espacial|1971|h|Estación espacial
+sondas_planetarias|1962|h|Sondas planetarias
+telescopio_espacial|1990|h|Telescopio espacial
+transbordador_espacial|1981|h|Transbordador espacial
+cohete_reutilizable|2015|h|Cohete reutilizable
+turismo_espacial|2015|a|Turismo espacial
+orientacion_estrellas|-10000|a|Orientación por las estrellas
+mapas_primitivos|-5000|a|Mapas primitivos
+esfericidad_tierra|-240|h|Esfericidad de la Tierra y su medida
+cartografia_ptolemaica|-150|h|Cartografía con coordenadas
+brujula|1090|h|Brújula
+cartas_nauticas_portulanos|1450|h|Cartas náuticas (portulanos)
+proyeccion_mercator|1569|h|Proyección de Mercator
+sextante|1731|h|Sextante
+cronometro_marino|1761|h|Cronómetro marino (la longitud)
+geodesia|1735|h|Geodesia
+topografia_triangulacion|1735|a|Topografía y triangulación
+fotogrametria_aerea|1915|h|Fotogrametría aérea
+teledeteccion_satelital|1972|h|Teledetección satelital
+gps_navegacion|1978|h|Navegación por satélite (GPS)
+sig_geografico|1972|a|Sistemas de información geográfica
+mapas_digitales|2005|h|Mapas digitales y navegación en línea
+sismoscopio|132|h|Sismoscopio
+geologia_estratigrafia|1669|h|Geología y estratigrafía
+uniformitarismo|1830|h|Tiempo geológico
+glaciologia|1837|h|Glaciología y eras glaciales
+paleontologia|1812|h|Paleontología
+sismografo|1880|h|Sismógrafo
+escala_sismica|1935|h|Medición de la magnitud de los sismos
+deriva_continental|1912|h|Deriva continental
+geofisica_prospeccion|1923|h|Prospección geofísica
+tectonica_placas|1968|h|Tectónica de placas
+prediccion_sismica|1970|h|Evaluación del riesgo sísmico
+alerta_sismica|2007|h|Sistemas de alerta sísmica
+edafologia|1883|h|Ciencia del suelo
+meteorologia_observacion|-340|h|Observación meteorológica
+barometro|1643|h|Barómetro
+hidrologia|1674|h|Hidrología
+meteorologia_cientifica|1860|h|Meteorología científica
+oceanografia|1872|h|Oceanografía
+batimetria_sonar|1920|h|Batimetría y sonar
+radar_meteorologico|1943|h|Radar meteorológico
+pronostico_numerico|1950|h|Pronóstico numérico del tiempo
+satelites_meteorologicos|1960|h|Satélites meteorológicos
+climatologia|1988|h|Climatología y cambio climático
+modelos_climaticos|2000|h|Modelos climáticos globales
+herbolaria|-10000|a|Plantas medicinales
+cirugia_primitiva|-7000|h|Cirugía primitiva (trepanación, suturas)
+parteria|-3500|h|Partería y asistencia al parto
+fracturas_ferulas|-3000|h|Reducción de fracturas y férulas
+embalsamamiento|-3000|h|Embalsamamiento
+protesis_primitivas|-1000|h|Prótesis primitivas
+odontologia_antigua|-3500|a|Odontología antigua
+medicina_humoral|-400|h|Medicina hipocrática y humores
+anatomia_clasica|170|h|Anatomía clásica (Galeno)
+farmacopea|60|h|Farmacopea
+medicina_china|-200|h|Medicina tradicional china
+ayurveda|-585|a|Medicina ayurvédica
+cirugia_clasica|1000|h|Cirugía clásica
+canon_medico|1025|h|Síntesis médica medieval
+variolizacion|1000|h|Variolización
+escuelas_medicina|1025|a|Escuelas de medicina
+oftalmologia_gafas|1286|h|Lentes y oftalmología
+anatomia_moderna|1543|h|Anatomía moderna (Vesalio)
+circulacion_sangre|1628|h|Circulación de la sangre
+ligadura_arterias|1552|h|Ligadura de arterias en heridas de guerra
+anatomia_patologica|1761|h|Anatomía patológica
+termometro_clinico|1714|h|Termómetro clínico
+estetoscopio|1816|h|Estetoscopio
+microscopio|1590|h|Microscopio
+microorganismos|1650|h|Descubrimiento de los microorganismos
+teoria_celular|1839|h|Teoría celular
+teoria_germenes|1861|h|Teoría de los gérmenes
+bacteriologia|1876|h|Bacteriología
+epidemiologia|1861|a|Epidemiología
+medios_cultivo|1887|h|Cultivo de bacterias (placas de Petri)
+microscopio_electronico|1931|h|Microscopio electrónico
+virologia|1935|h|Virología
+inmunologia|1920|a|Inmunología
+resistencia_antimicrobiana|2000|h|Resistencia antimicrobiana
+vigilancia_genomica_patogenos|2014|h|Vigilancia genómica de patógenos
+quimiatria_paracelso|1527|h|Iatroquímica (Paracelso)
+vacuna_viruela|1796|h|Vacuna contra la viruela
+vacunas_modernas|1885|h|Vacunas modernas (rabia, difteria…)
+aspirina_sinteticos|1897|h|Aspirina y fármacos sintéticos
+suero_antitoxina|1890|h|Sueros y antitoxinas
+antibioticos|1928|h|Antibióticos
+endocrinologia_insulina|1921|h|Hormonas e insulina
+vitaminas|1920|a|Vitaminas y nutrición científica
+sulfamidas|1935|h|Sulfamidas
+anestesicos_locales|1905|h|Anestésicos locales y analgésicos
+quimioterapia|1948|h|Quimioterapia
+anticoncepcion_hormonal|1960|h|Anticoncepción hormonal
+antivirales|1963|h|Antivirales
+vacunas_recombinantes|1986|h|Vacunas recombinantes
+anticuerpos_monoclonales|1975|h|Anticuerpos monoclonales
+vacunas_arnm|2020|h|Vacunas de ARN mensajero
+inmunoterapia_cancer|2011|h|Inmunoterapia contra el cáncer
+terapia_genica|2020|a|Terapia génica
+diseno_farmacos_ia|2020|h|Diseño de fármacos con IA
+anestesia|1846|h|Anestesia
+antisepsia|1867|h|Antisepsia
+esterilizacion_autoclave|1879|h|Esterilización por vapor (autoclave)
+grupos_sanguineos|1901|h|Grupos sanguíneos y transfusión
+cirugia_moderna|1910|h|Cirugía moderna
+radioterapia|1910|h|Radioterapia
+cirugia_ortopedica|1940|h|Cirugía ortopédica e implantes
+trasplantes|1954|h|Trasplante de órganos
+marcapasos_protesis|1960|a|Marcapasos y prótesis electrónicas
+fecundacion_in_vitro|1981|a|Fecundación in vitro
+cirugia_cardiaca|1967|h|Cirugía cardíaca y bypass
+endoscopia_minima_invasion|1980|h|Endoscopia y cirugía mínimamente invasiva
+cirugia_laser|1970|h|Cirugía láser
+ventilacion_mecanica|1952|h|Ventilación mecánica
+dialisis|1945|h|Diálisis (riñón artificial)
+monitoreo_clinico|1960|h|Monitorización electrónica del paciente
+cuidados_intensivos|1960|a|Cuidados intensivos
+medicina_espacial|1961|h|Medicina espacial
+cirugia_robotica|2000|h|Cirugía robótica
+protesis_bionicas|2012|a|Prótesis biónicas
+rayos_x_medicina|1895|h|Radiografía
+analisis_laboratorio|1910|h|Análisis clínicos de laboratorio
+electrocardiograma|1903|h|Electrocardiograma
+electroencefalograma|1924|h|Electroencefalograma
+ecografia|1958|h|Ecografía
+tomografia_axial|1971|h|Tomografía computarizada
+resonancia_magnetica|1977|h|Resonancia magnética
+medicina_nuclear|1975|h|Medicina nuclear (PET)
+diagnostico_genetico|1983|a|Diagnóstico genético
+diagnostico_ia|2018|h|Diagnóstico asistido por IA
+biosensores_portatiles|2015|h|Sensores médicos portátiles
+medicina_personalizada|2010|h|Medicina personalizada
+psicologia_experimental|1879|h|Psicología experimental
+neurociencia|1920|a|Neurociencia
+psicofarmacologia|1952|h|Psicofarmacología
+psicoterapia_cognitiva|1960|h|Psicoterapia cognitivo-conductual
+neuroimagen|2000|h|Neuroimagen funcional
+estimulacion_cerebral|2002|h|Estimulación cerebral profunda
+interfaz_cerebro_computadora|2004|h|Interfaz cerebro-computadora
+ingenieria_tejidos|2006|h|Ingeniería de tejidos
+organos_bioimpresos|2013|h|Órganos bioimpresos
+xenotrasplantes|2022|h|Xenotrasplantes
+nanomedicina|2005|h|Nanomedicina
+regeneracion_miembros|2040|x|Regeneración de miembros
+control_envejecimiento|2045|x|Control del envejecimiento
+organos_sinteticos|2050|x|Órganos artificiales completos
+nanorrobots_medicos|2055|x|Nanorrobots médicos
+mejora_cognitiva|2050|x|Mejora cognitiva
+clasificacion_aristotelica|-340|h|Clasificación de seres vivos (Aristóteles)
+taxonomia_linneana|1735|h|Taxonomía de Linneo
+fotosintesis|1789|a|Fotosíntesis y ciclos de la materia
+ecologia|1866|h|Ecología
+biologia_marina|1872|h|Biología marina
+evolucion_seleccion_natural|1859|h|Evolución por selección natural
+etologia|1935|h|Etología (comportamiento animal)
+evodevo|2000|h|Biología evolutiva del desarrollo
+microbioma|2007|h|Microbioma
+paleogenetica|2010|h|Paleogenética (ADN antiguo)
+desextincion|2040|x|De-extinción de especies
+genetica_mendeliana|1866|h|Genética mendeliana
+cromosomas|1902|h|Cromosomas
+adn_estructura|1953|h|Estructura del ADN
+biologia_molecular|1958|h|Biología molecular
+codigo_genetico|1966|h|Código genético
+ingenieria_genetica|1973|h|Ingeniería genética
+celulas_madre|1981|h|Células madre
+clonacion|1996|h|Clonación
+pcr|1983|h|Reacción en cadena de la polimerasa (PCR)
+secuenciacion_adn|1977|h|Secuenciación del ADN
+bioinformatica|1980|h|Bioinformática
+biotecnologia_industrial|1976|h|Biotecnología industrial
+genoma_humano|2003|h|Genoma humano
+crispr|2012|h|Edición genética (CRISPR)
+biologia_sintetica|2012|a|Biología sintética
+epigenetica|2002|h|Epigenética
+vida_sintetica_completa|2060|x|Vida sintética desde cero
+recoleccion_selectiva|-100000|h|Recolección organizada
+pesca_primitiva|-23000|h|Pesca primitiva (redes y anzuelos)
+domesticacion_perro|-15000|h|Domesticación del perro
+domesticacion_plantas|-8000|a|Domesticación de plantas (cereales)
+domesticacion_animales|-8000|a|Domesticación de animales de granja
+almacenamiento_granos|-8000|h|Almacenamiento de granos
+azada_arado_simple|-6000|h|Azada y arado simple
+riego_canales|-3500|a|Riego por canales
+arado_tirado|-3500|a|Arado tirado por animales
+abonos_organicos|-3500|a|Abonos orgánicos
+terrazas_cultivo|-2500|h|Terrazas de cultivo
+pastoreo_nomada|-3500|a|Pastoreo nómada
+seleccion_cria|-3500|a|Cría selectiva
+viticultura_vinificacion|-3500|a|Viticultura y vinificación
+apicultura|-3500|a|Apicultura
+acuicultura|-475|h|Acuicultura
+rotacion_trienal|800|h|Rotación trienal de cultivos
+arado_pesado_collera|800|h|Arado pesado y collera
+cultivos_nuevo_mundo|1493|h|Intercambio de cultivos entre continentes
+cultivos_plantacion|1500|h|Cultivos comerciales de plantación
+agricultura_cientifica|1730|h|Agricultura científica
+sembradora_mecanica|1701|h|Sembradora mecánica
+silvicultura|1735|a|Silvicultura
+conservas|1795|h|Conservas en vidrio
+fertilizantes_quimicos|1842|h|Fertilizantes químicos
+trilladora_vapor|1840|h|Trilladora de vapor
+refrigeracion_mecanica|1850|a|Refrigeración mecánica
+pasteurizacion|1876|a|Pasteurización
+tractor|1910|h|Tractor
+cosecha_mecanizada|1910|h|Cosecha mecanizada
+fijacion_nitrogeno|1909|h|Fijación industrial del nitrógeno
+pesticidas_sinteticos|1939|h|Pesticidas sintéticos
+mejora_genetica_animal|1930|h|Mejora genética animal
+ganaderia_industrial|1940|h|Ganadería industrial
+riego_mecanizado|1940|h|Riego mecanizado
+pesca_industrial|1910|h|Pesca industrial
+revolucion_verde|1960|h|Revolución verde
+transgenicos|1994|h|Cultivos transgénicos
+hidroponia|1960|h|Hidroponía
+agricultura_precision|2000|h|Agricultura de precisión
+agroecologia|2000|h|Agroecología
+proteina_alternativa|2013|h|Proteínas alternativas y carne cultivada
+cabana_madera|-50000|h|Cabañas y refugios de madera
+adobe_barro|-8000|h|Adobe y barro
+construccion_piedra|-5000|a|Construcción en piedra
+rueda|-3500|h|Rueda
+polea|-1500|h|Polea
+plano_inclinado_rampa|-3000|h|Rampas y planos inclinados
+arco_boveda|-600|h|Arco y bóveda
+cupula|537|h|Cúpula
+grua_medieval|1100|h|Grúa de torno y rueda
+catedral_gotica|1140|h|Arquitectura gótica (arbotantes)
+ascensor_seguridad|1856|a|Ascensor de seguridad
+rascacielos|1885|h|Rascacielos
+construccion_prefabricada|1915|h|Construcción prefabricada
+edificio_antisismico|1965|h|Edificios antisísmicos
+arquitectura_sostenible|2000|h|Arquitectura sostenible
+impresion_3d_construccion|2018|h|Impresión 3D de edificios
+drenaje_urbano|-2600|h|Drenaje urbano
+alcantarillado|-600|h|Alcantarillado
+acueducto|-300|a|Acueducto
+presas_gravedad|-700|h|Presas de gravedad
+presas_arco_hormigon|1910|h|Presas de hormigón
+cloracion|1897|h|Potabilización con cloro
+planta_depuradora|1914|h|Planta depuradora
+desalinizacion|1955|h|Desalinización
+puente_madera|-3500|a|Puente de madera
+puente_piedra_arco|-500|h|Puente de piedra en arco
+calzada_pavimentada|-300|a|Calzadas pavimentadas
+puerto_piedra|-2400|h|Puerto de piedra
+faro|-280|h|Faro
+esclusas_canales|1500|h|Esclusas y canales de navegación
+reclamacion_tierras_mar|1500|h|Tierras ganadas al mar (pólderes)
+puentes_hierro|1779|h|Puentes de hierro
+puentes_colgantes|1796|h|Puentes colgantes
+mineria_subterranea|-3500|a|Minería subterránea
+tunel_excavacion|1550|h|Excavación de túneles
+tunel_ferroviario|1867|a|Túneles ferroviarios
+canal_interoceanico|1869|h|Canales interoceánicos
+metro_subterraneo|1867|a|Metro subterráneo
+autopista|1932|h|Autopistas
+aeropuerto|1920|h|Aeropuertos
+acero_pretensado|1950|h|Hormigón pretensado
+puente_atirantado|1955|h|Puentes atirantados
+tuneladora|1955|h|Tuneladora
+tunel_submarino|1970|h|Túneles submarinos
+fuerza_animal|-4000|h|Tracción animal
+rueda_hidraulica|-250|h|Rueda hidráulica
+molino_agua|-70|h|Molino de agua
+molino_viento|1185|h|Molino de viento
+carbon_mineral_uso|1200|h|Uso del carbón mineral
+coque|1619|h|Coque
+alumbrado_gas|1792|h|Alumbrado de gas
+bomba_vapor_atmosferica|1712|h|Máquina de vapor atmosférica (Newcomen)
+maquina_vapor|1769|h|Máquina de vapor (Watt)
+turbina_vapor|1884|h|Turbina de vapor
+turbina_hidraulica|1827|h|Turbina hidráulica
+dinamo|1866|h|Dínamo
+motor_electrico|1834|h|Motor eléctrico
+generador_electrico|1870|h|Generador eléctrico
+transformador_alterna|1885|h|Transformador y corriente alterna
+bateria_plomo_acido|1859|h|Batería de plomo-ácido
+lampara_electrica|1879|h|Bombilla eléctrica
+central_termoelectrica|1884|a|Central termoeléctrica
+red_electrica|1886|h|Red eléctrica urbana
+central_hidroelectrica|1910|a|Central hidroeléctrica
+red_alta_tension|1910|h|Red de alta tensión
+petroleo_perforacion|1859|h|Perforación de petróleo
+refinacion_petroleo|1859|a|Refinación de petróleo
+petroquimica|1920|h|Petroquímica
+gasolina_derivados|1913|h|Gasolina y derivados
+motor_combustion|1876|h|Motor de combustión interna
+motor_diesel|1893|h|Motor diésel
+turbina_gas|1939|h|Turbina de gas
+gas_natural|1925|h|Gas natural y gasoductos
+biocombustibles|1975|h|Biocombustibles
+reactor_nuclear|1943|a|Reactor nuclear
+central_nuclear|1954|h|Central nuclear
+reactor_reproductor|1951|h|Reactor reproductor
+reciclaje_combustible_nuclear|1960|h|Reciclaje de combustible nuclear
+fusion_experimental|1968|h|Fusión nuclear experimental
+celda_solar|1954|h|Célula fotovoltaica
+aerogenerador|1957|h|Aerogenerador
+geotermia|1958|h|Energía geotérmica
+energia_mareomotriz|1966|h|Energía de las mareas
+hidrogeno_pila|1960|h|Hidrógeno y pila de combustible
+bateria_litio|1991|h|Batería de litio
+energia_solar_comercial|2005|h|Parques solares
+parque_eolico|2000|h|Parques eólicos
+almacenamiento_red|2010|h|Almacenamiento en la red
+red_inteligente|2008|h|Red eléctrica inteligente
+captura_carbono|2014|h|Captura de carbono
+telegrafo_optico|1792|h|Telégrafo óptico
+telegrafo_electrico|1837|h|Telégrafo eléctrico
+cable_submarino|1858|h|Cable submarino
+telefono|1876|h|Teléfono
+microfono_altavoz|1877|h|Micrófono y altavoz
+radio_telegrafia|1895|h|Radiotelegrafía
+fotografia|1839|h|Fotografía
+cine|1895|h|Cine
+fonografo_grabacion|1877|h|Grabación de sonido
+tubo_vacio_valvula|1900|h|Tubo de vacío (válvula)
+amplificador_oscilador|1900|h|Amplificador y oscilador
+radio_voz|1906|h|Radio de voz
+television_electronica|1927|h|Televisión electrónica
+radar|1935|h|Radar
+sonar|1915|h|Sonar
+reloj_atomico|1949|h|Reloj atómico
+transistor|1947|h|Transistor
+circuito_impreso|1940|h|Circuito impreso
+fotolitografia|1958|h|Fotolitografía
+circuito_integrado|1958|h|Circuito integrado
+memoria_semiconductores|1966|h|Memoria de semiconductores
+microprocesador|1971|h|Microprocesador
+chip_gran_escala|1978|h|Chips de gran escala (VLSI)
+litografia_ultravioleta_extrema|2019|h|Litografía ultravioleta extrema
+sensores_mems|1982|h|Sensores microelectromecánicos
+fibra_optica|1970|h|Fibra óptica
+led_pantallas|1968|a|LED y pantallas planas
+camara_digital|1978|a|Cámara digital
+grabacion_digital|1982|h|Grabación digital
+satelite_comunicaciones|1962|h|Satélite de comunicaciones
+telefonia_movil_1g|1979|h|Telefonía móvil analógica
+telefonia_celular_digital|1991|h|Telefonía celular digital
+wifi_bluetooth|1997|h|Wi-Fi y Bluetooth
+pantalla_tactil|2007|h|Pantalla táctil
+smartphone_tecnologia|2007|h|Teléfono inteligente
+redes_5g|2019|h|Redes móviles 5G
+lidar_sensor|2007|h|Sensor lidar
+impresion_3d|2010|h|Impresión 3D
+realidad_virtual_hardware|2012|h|Equipos de realidad virtual
+drones_civiles|2010|h|Drones civiles
+robotica_industrial|1971|a|Robótica industrial
+automatizacion_plc|1971|a|Automatización programable
+electrodomesticos|1920|h|Electrodomésticos
+algoritmo_formal|825|h|Algoritmos (al-Juarismi)
+maquina_calcular_mecanica|1642|h|Calculadora mecánica
+telares_tarjetas|1800|h|Telar de tarjetas perforadas
+maquina_analitica_diseno|1837|h|Diseño de la máquina analítica
+tabuladora_hollerith|1890|h|Tabuladora de tarjetas
+algebra_booleana|1879|a|Álgebra de Boole
+circuitos_logicos|1937|h|Circuitos lógicos
+computadora_electromecanica|1941|h|Computadora electromecánica
+computadora_digital|1945|h|Computadora electrónica digital
+programa_almacenado|1948|h|Programa almacenado
+almacenamiento_magnetico|1945|a|Almacenamiento magnético
+lenguaje_ensamblador|1948|a|Lenguaje ensamblador
+compiladores|1952|h|Compiladores
+lenguajes_alto_nivel|1957|h|Lenguajes de alto nivel
+sistema_operativo|1956|h|Sistema operativo
+multitarea_tiempo_compartido|1961|h|Multitarea y tiempo compartido
+computadora_personal|1975|h|Computadora personal
+interfaz_grafica|1975|a|Interfaz gráfica
+gpu_procesamiento_grafico|1999|h|Procesador gráfico (GPU)
+supercomputacion|1971|a|Supercomputación
+simulacion_cientifica|1971|a|Simulación científica
+virtualizacion|1967|h|Virtualización
+base_datos|1970|h|Bases de datos
+procesamiento_senales_digital|1965|h|Procesamiento digital de señales
+compresion_datos|1952|h|Compresión de datos
+redes_conmutacion_paquetes|1965|h|Redes de conmutación de paquetes
+protocolo_tcpip|1974|h|Protocolo TCP/IP
+internet_tecnologia|1983|h|Internet (red de redes)
+www_web|1991|h|World Wide Web
+navegador_buscador|1993|h|Navegador y buscadores
+criptografia_clave_publica|1976|h|Criptografía de clave pública
+cifrado_web_ssl|1995|h|Cifrado web (SSL)
+ciberseguridad|1995|a|Ciberseguridad
+computacion_nube|2006|h|Computación en la nube
+big_data|2010|h|Big data
+internet_de_las_cosas|2010|h|Internet de las cosas
+blockchain|2009|h|Cadena de bloques
+inteligencia_artificial_simbolica|1957|a|Inteligencia artificial simbólica
+redes_neuronales_clasicas|1958|h|Redes neuronales clásicas
+aprendizaje_automatico|1959|h|Aprendizaje automático
+aprendizaje_profundo|2012|h|Aprendizaje profundo
+ia_generativa|2022|h|Inteligencia artificial generativa
+lenguaje_natural_nlp|2016|h|Procesamiento del lenguaje natural
+robotica_autonoma|2012|a|Robótica autónoma
+vehiculos_autonomos|2015|h|Vehículos autónomos
+computacion_cuantica|2019|h|Computación cuántica
+realidad_virtual_aumentada|2016|h|Realidad virtual y aumentada
+canoa_monoxila|-8000|h|Canoa monóxila
+domesticacion_caballo|-3500|h|Domesticación del caballo
+montura_equitacion|-3000|h|Equitación
+carro_dos_ruedas|-3000|h|Carro de dos ruedas
+carro_cuatro_ruedas|-3000|a|Carro de cuatro ruedas
+silla_estribo|550|h|Silla de montar y estribos
+carruaje_suspension|1450|h|Carruaje con suspensión
+rieles_hierro|1767|h|Rieles de hierro
+locomotora_vapor|1804|h|Locomotora de vapor
+bicicleta|1839|a|Bicicleta
+tranvia|1881|h|Tranvía eléctrico
+motocicleta|1885|h|Motocicleta
+automovil|1886|h|Automóvil
+cadena_montaje|1900|h|Cadena de montaje
+camion|1900|h|Camión
+autobus|1905|h|Autobús
+locomotora_diesel_electrica|1924|h|Locomotora diésel-eléctrica
+tren_alta_velocidad|1964|h|Tren de alta velocidad
+automovil_electrico|2008|h|Automóvil eléctrico
+maglev|2004|h|Tren de levitación magnética
+balsa_troncos|-45000|h|Balsa de troncos
+barco_remos|-3500|h|Barco de remos
+barco_vela|-3200|h|Barco de vela
+barco_mercante|-1000|h|Barco mercante
+timon_popa|1000|h|Timón de popa
+vela_latina|600|h|Vela latina
+junco_chino|1090|a|Junco de mar
+carabela_nao|1450|h|Carabela y nao
+navegacion_oceanica|1488|h|Navegación oceánica
+galeon_mercante|1550|h|Galeón mercante
+clipper|1790|h|Clíper
+barco_vapor|1790|a|Barco de vapor
+helice_barco|1836|h|Hélice
+casco_hierro_acero|1856|a|Casco de hierro y acero
+transatlantico|1856|a|Transatlántico
+buque_motor_diesel|1912|h|Buque de motor diésel
+contenedor_maritimo|1956|h|Contenedor marítimo
+hovercraft_hidrofoil|1959|h|Aerodeslizador e hidroala
+globo_aerostatico|1783|h|Globo aerostático
+dirigible|1876|a|Dirigible
+planeador|1853|h|Planeador
+aviacion_motor|1900|h|Avión con motor
+helicoptero|1936|h|Helicóptero
+aviacion_comercial|1919|h|Aviación comercial
+motor_jet_civil|1952|h|Motor a reacción civil
+sistema_trafico_aereo|1950|h|Control del tráfico aéreo
+engranajes|-250|h|Engranajes
+tornillo_arquimedes|-250|h|Tornillo y prensa de tornillo
+ciguenal_biela|1206|h|Cigüeñal y biela
+torno_madera_metal|1100|h|Torno
+forja_medieval_martinete|1150|h|Martinete hidráulico
+reloj_mecanico|1300|h|Reloj mecánico
+reloj_pendulo|1650|h|Reloj de péndulo
+calibre_precision|1775|h|Medición de precisión (calibre)
+intercambiabilidad_piezas|1785|h|Piezas intercambiables
+maquinas_herramienta|1800|h|Máquinas herramienta
+produccion_en_serie|1850|h|Producción en serie
+rodamientos|1895|a|Rodamientos
+neumatica_hidraulica_industrial|1800|h|Neumática e hidráulica industrial
+soldadura_arco|1908|h|Soldadura por arco
+control_calidad_estadistico|1924|h|Control de calidad estadístico
+mecanizacion_cnc|1971|a|Mecanizado por control numérico
+hilanderia_mecanica|1764|h|Hilandería mecánica
+telar_mecanico|1785|h|Telar mecánico
+fabrica_textil|1785|a|Fábrica textil
+maquina_coser|1846|h|Máquina de coser
+produccion_papel_industrial|1844|h|Papel industrial
+industria_quimica_masiva|1920|a|Industria química masiva
+lubricantes_sinteticos|1937|h|Lubricantes sintéticos
+manufactura_flexible_robots|2000|h|Manufactura flexible con robots
+prospeccion_empirica|-3500|a|Prospección por indicios del terreno
+mapas_geologicos|1815|h|Mapas geológicos
+prospeccion_sismica|1923|a|Prospección sísmica de yacimientos
+teledeteccion_recursos|1972|h|Teledetección de recursos
+sig_recursos|2010|h|Inventario digital de recursos
+exploracion_automatizada|2018|h|Exploración autónoma con drones e IA
+prospeccion_espacial|2035|x|Prospección espacial
+rec_silex|-2000000|h|Sílex y obsidiana
+rec_arcilla|-8000|a|Arcilla de alfarería
+rec_sal|-6000|h|Sal (salinas y minas)
+rec_madera_bosque|-9000|a|Madera de bosque maduro
+rec_acuiferos|-3500|a|Acuíferos y pozos
+rec_arena_cuarzo|-2500|a|Arena de sílice y cuarzo
+rec_caliza_yeso|-3000|a|Caliza y yeso
+rec_piedra_cantera|-3000|h|Piedra de cantera y mármol
+rec_cobre|-5000|h|Cobre
+rec_estano|-3200|a|Estaño
+rec_oro_plata|-3500|a|Oro y plata
+rec_hierro|-1200|h|Mineral de hierro
+rec_plomo|-800|h|Plomo
+rec_bauxita|1821|h|Bauxita (aluminio)
+rec_aleantes|1895|a|Níquel, cromo y manganeso
+rec_salitre_azufre|800|h|Salitre y azufre
+rec_carbon|1200|a|Carbón mineral
+rec_caucho|1770|h|Caucho (árbol de hevea)
+rec_fosfatos_nitratos|1840|h|Fosfatos y nitratos
+rec_petroleo|1859|a|Petróleo
+rec_gas_natural|1923|a|Gas natural
+rec_uranio|1938|a|Uranio
+rec_torio|1950|h|Torio
+rec_petroleo_marino|1947|h|Petróleo y gas marinos
+rec_esquisto|2008|h|Gas y petróleo de esquisto
+rec_litio|1972|a|Litio
+rec_tierras_raras|1972|a|Tierras raras
+rec_helio|1950|h|Helio y gases nobles
+rec_cobalto_coltan|2010|a|Cobalto y coltán
+rec_nodulos_polimetalicos|2018|a|Nódulos del fondo marino
+rec_hidratos_metano|2030|x|Hidratos de metano
+rec_hielo_lunar_marte|2035|x|Hielo de agua en la Luna y Marte
+rec_helio3_lunar|2045|x|Helio-3 lunar
+rec_asteroides|2040|x|Minería de asteroides
+palo_afilado_lanza|-300000|h|Lanza de madera endurecida al fuego
+maza_garrote|-500000|h|Garrote y maza
+hacha_piedra|-250000|h|Hacha de piedra
+punta_lanza_piedra|-10000|a|Punta de lanza de pedernal
+daga_pedernal|-10000|a|Daga de pedernal
+mazo_piedra_pulida|-9000|h|Maza de piedra pulida
+jabalina|-10000|a|Jabalina
+lanza_atlatl|-10000|a|Lanzadardos (átlatl)
+hacha_cobre|-3500|a|Hacha de cobre
+daga_cobre|-3500|a|Daga de cobre
+lanza_bronce|-2800|h|Lanza de bronce
+espada_bronce|-2000|h|Espada de bronce
+hacha_batalla_bronce|-2500|h|Hacha de batalla de bronce
+maza_metal|-2000|h|Maza de metal
+lanza_hierro|-1100|h|Lanza de hierro
+pica_larga_sarisa|-350|h|Pica larga (sarisa)
+espada_hierro|-1100|h|Espada de hierro
+espada_corta_hierro|-320|h|Espada corta de infantería
+espada_larga_celta|-700|h|Espada larga
+pilum|-320|h|Pilum (jabalina pesada)
+hacha_hierro_guerra|-1000|h|Hacha de guerra de hierro
+espada_acero|600|h|Espada de acero
+katana_espada_curva|900|h|Espada curva de forja japonesa
+sable_caballeria|700|h|Sable de caballería
+lanza_caballeria_pesada|1000|h|Lanza de caballería pesada
+alabarda|1300|h|Alabarda
+mangual_maza_hierro|1000|h|Mangual y maza de hierro
+espada_dos_manos|1450|h|Espada de dos manos
+estoque_florete|1500|h|Estoque y florete
+pica_piquero|1450|h|Pica de infantería
+martillo_de_guerra|1450|h|Martillo de guerra
+machete|1500|h|Machete
+bayoneta|1660|a|Bayoneta
+bayoneta_cubo|1688|h|Bayoneta de cubo
+sable_oficial_moderno|1856|a|Sable de oficial moderno
+porra_policial|1829|h|Porra policial
+cuchillo_combate|1915|h|Cuchillo de combate
+honda|-20000|h|Honda
+piedras_arrojadizas|-500000|h|Piedras arrojadizas
+veneno_flechas|-9000|a|Veneno para flechas
+arco_simple|-9000|a|Arco simple
+flecha_piedra|-9000|a|Flecha de punta de piedra
+flecha_bronce|-1800|h|Flecha de bronce
+flecha_fuego|-700|h|Flecha incendiaria
+arco_compuesto|-2000|h|Arco compuesto
+flecha_hierro|-1000|h|Flecha de hierro
+arco_largo|1250|h|Arco largo
+arco_reflejo_mongol|500|h|Arco reflejo de jinete
+ballesta_tension|-400|h|Ballesta
+ballesta_repeticion|1206|a|Ballesta de repetición
+ballesta_acero|1370|h|Ballesta de arco de acero
+ballesta_cranequin|1450|h|Ballesta de cranequín
+catapulta_torsion|-350|h|Catapulta de torsión
+balista|-330|h|Balista
+onagro|350|h|Onagro
+trabuquete|1150|h|Trabuquete de contrapeso
+fuego_griego|672|h|Fuego griego
+lanzallamas|1915|h|Lanzallamas
+napalm|1942|h|Napalm
+canon_electromagnetico|2010|h|Cañón electromagnético
+arma_laser_defensa|2014|h|Arma láser de defensa
+lanza_de_fuego|950|h|Lanza de fuego
+canon_de_mano|1300|h|Cañón de mano
+mecanismo_serpentin|1450|h|Mecanismo de serpentín (mecha)
+arcabuz_mecha|1470|h|Arcabuz de mecha
+mosquete_mecha|1521|h|Mosquete de mecha
+llave_rueda|1500|h|Llave de rueda
+pistola_rueda|1520|h|Pistola de rueda
+granada_mano|1500|h|Granada de mano
+llave_chispa_pedernal|1650|h|Llave de chispa (pedernal)
+mosquete|1660|h|Mosquete de chispa
+pistola_chispa|1650|h|Pistola de chispa
+escopeta_caza|1660|a|Escopeta
+rayado_canon|1660|a|Rayado del cañón
+fusil_rayado|1750|h|Fusil rayado
+cartucho_papel|1660|a|Cartucho de papel
+llave_percusion|1807|h|Sistema de percusión
+fusil_percusion|1820|h|Fusil de percusión
+bala_minie|1849|h|Bala Minié
+fusil_minie|1851|h|Fusil Minié
+retrocarga_cierre|1820|a|Cierre de retrocarga
+fusil_retrocarga|1841|h|Fusil de retrocarga
+cartucho_metalico|1836|h|Cartucho metálico
+revolver|1850|a|Revólver
+fusil_cerrojo|1841|h|Fusil de cerrojo
+fusil_palanca_repeticion|1860|h|Fusil de repetición de palanca
+fusil_cerrojo_cargador|1886|h|Fusil de cerrojo con cargador
+pistola_semiautomatica|1893|h|Pistola semiautomática
+ametralladora_gatling|1861|h|Ametralladora de manivela (Gatling)
+ametralladora_maxim|1886|a|Ametralladora automática (Maxim)
+ametralladora_ligera|1902|h|Ametralladora ligera
+ametralladora_media|1934|h|Ametralladora de uso general
+ametralladora_pesada|1910|h|Ametralladora pesada
+ametralladora_giratoria_electrica|1962|h|Ametralladora rotativa eléctrica
+escopeta_combate|1917|h|Escopeta de combate
+subfusil|1918|h|Subfusil
+fusil_semiautomatico|1936|h|Fusil semiautomático
+cartucho_intermedio|1943|h|Cartucho intermedio
+fusil_asalto|1944|h|Fusil de asalto
+mira_telescopica|1900|h|Mira telescópica
+fusil_francotirador|1915|h|Fusil de francotirador
+granada_fragmentacion|1915|h|Granada de fragmentación
+fusil_asalto_moderno|1963|h|Fusil de asalto moderno
+fusil_antimaterial|1982|h|Fusil antimaterial
+lanzagranadas|1963|a|Lanzagranadas
+vision_nocturna|1965|h|Visión nocturna
+mira_laser|1975|h|Mira láser
+arma_electrica_aturdidora|1974|h|Arma eléctrica aturdidora
+fusil_modular_digital|2018|h|Fusil modular con óptica digital
+armas_pequenas_guiadas|2018|a|Munición pequeña guiada
+canon_bombarda|1450|h|Bombarda
+canon_bronce|1480|h|Cañón de bronce
+canon_hierro_colado|1543|h|Cañón de hierro colado
+afuste_ruedas|1480|a|Afuste con ruedas
+mortero|1480|h|Mortero
+artilleria_campana_ligera|1700|h|Artillería de campaña ligera
+bote_de_metralla|1700|h|Bote de metralla
+obus|1700|h|Obús
+granada_artilleria|1700|h|Granada de artillería
+balistica_matematica|1742|h|Balística matemática
+canon_acero|1856|a|Cañón de acero
+canon_rayado_retrocarga|1855|h|Cañón rayado de retrocarga
+retroceso_hidraulico|1897|h|Freno de retroceso hidráulico
+canon_campana_rapido|1897|h|Cañón de campaña de tiro rápido
+obus_pesado|1890|h|Obús pesado
+artilleria_costera|1870|h|Artillería costera
+artilleria_ferroviaria|1914|h|Artillería ferroviaria
+mortero_trinchera|1915|h|Mortero de trinchera
+direccion_tiro|1915|h|Dirección de tiro con cálculo
+artilleria_antiaerea|1914|h|Artillería antiaérea
+canon_antitanque|1936|h|Cañón antitanque
+artilleria_autopropulsada|1916|h|Artillería autopropulsada
+obus_nuclear|1953|h|Obús nuclear
+cohete_polvora|1232|h|Cohete de pólvora
+cohete_congreve|1800|h|Cohete de guerra (tipo Congreve)
+lanzacohetes_multiple|1941|h|Lanzacohetes múltiple
+radar_contrabateria|1970|h|Radar de contrabatería
+obus_autopropulsado_moderno|1963|h|Obús autopropulsado moderno
+municion_guiada|1982|h|Munición de artillería guiada
+artilleria_cohete_guiada|1982|h|Artillería de cohetes guiada
+escudo_madera_cuero|-3500|h|Escudo de madera y cuero
+casco_cuero|-3000|h|Casco de cuero
+camuflaje_basico|-9000|a|Camuflaje básico
+escudo_paves_bronce|-1300|h|Escudo reforzado de bronce
+casco_bronce|-2500|h|Casco de bronce
+armadura_cuero_endurecido|-2500|h|Armadura de cuero endurecido
+coraza_bronce|-1400|h|Coraza de bronce
+escudo_hoplita|-700|h|Escudo hoplita
+escudo_romano_scutum|-300|h|Escudo rectangular (scutum)
+casco_hierro|-800|h|Casco de hierro
+armadura_laminar_lorica|-900|h|Armadura laminar
+armadura_escamas|-800|h|Armadura de escamas
+cota_de_malla|-300|h|Cota de malla
+armadura_catafracta_caballo|-200|h|Armadura para caballo y jinete
+escudo_torre_pavesina|700|h|Escudo de torre
+armadura_de_placas|1350|h|Armadura de placas
+armadura_gotica_completa|1450|h|Armadura gótica completa
+peto_antibala_primitivo|1660|a|Peto a prueba de bala
+uniforme_estandarizado|1650|h|Uniforme estandarizado
+camuflaje_caqui|1880|h|Uniformes de camuflaje (caqui)
+casco_acero_moderno|1915|h|Casco de acero moderno
+chaleco_antifragmentos|1943|h|Chaleco antifragmentos
+mascara_gas|1920|a|Máscara antigás
+chaleco_balistico|1971|h|Chaleco balístico (aramida)
+blindaje_ceramico_personal|1971|a|Placas cerámicas de protección
+traje_proteccion_nbq|1950|h|Traje de protección NBQ
+escudo_antidisturbios|1960|h|Escudo antidisturbios
+uniforme_camuflaje_digital|1997|h|Camuflaje digital
+exoesqueleto_militar|2010|h|Exoesqueleto militar
+visor_casco_integrado|2015|h|Visor de casco integrado
+milicia_cazadores|-30000|h|Partida de caza (milicia tribal)
+guerreros_tribales|-10000|a|Guerreros tribales
+honderos|-7000|h|Honderos
+arqueros_tribales|-9000|h|Arqueros tribales
+lanceros|-2800|a|Lanceros
+espadachines_bronce|-1800|h|Espadachines de bronce
+jabalineros|-3500|a|Jabalineros
+carros_guerra|-2000|h|Carros de guerra
+guardia_real|-2000|a|Guardia real
+exploradores|-3500|a|Exploradores
+hoplitas|-700|h|Hoplitas
+falangitas|-350|h|Falangistas con sarisa
+legionarios|-300|h|Legionarios
+guardia_pretoriana|-27|h|Guardia pretoriana
+arqueros_montados|-700|h|Arqueros a caballo
+caballeria_ligera|-800|h|Caballería ligera
+caballeria_pesada_catafracta|-200|h|Caballería pesada acorazada
+ballesteros|-400|h|Ballesteros
+elefantes_guerra|-331|h|Elefantes de guerra
+camelleros|-550|h|Camelleros
+ingenieros_militares|-350|h|Ingenieros militares
+mercenarios|-600|a|Mercenarios
+marines_infanteria_marina|-480|h|Infantería de marina
+caballeros_feudales|1000|a|Caballeros feudales
+infanteria_pesada_medieval|1300|a|Infantería pesada medieval
+arqueros_largos|1346|a|Arqueros largos
+ballesteros_profesionales|1370|a|Ballesteros profesionales
+jinetes_arqueros_nomadas|500|h|Jinetes arqueros nómadas
+samurai|950|h|Samurái
+ordenes_militares|1119|h|Órdenes militares
+piqueros|1450|h|Piqueros
+arcabuceros|1500|h|Arcabuceros
+reiters_pistoleros|1550|h|Caballería de pistoleros
+mosqueteros|1660|a|Mosqueteros
+granaderos|1667|h|Granaderos
+dragones|1660|a|Dragones
+infanteria_linea|1700|h|Infantería de línea
+fusileros_rayados|1750|h|Fusileros de fusil rayado
+artilleros|1700|h|Artilleros
+ingenieros_zapadores|1670|h|Zapadores
+caballeria_coraceros_husares|1650|h|Coraceros y húsares
+levee_en_masse|1793|h|Leva en masa
+guerrilleros|1780|h|Guerrilleros
+infanteria_fusil_percusion|1851|a|Infantería de fusil de percusión
+caballeria_carabina|1850|h|Caballería con carabina
+ametralladoristas|1886|a|Ametralladoristas
+ejercito_conscripcion_masiva|1813|h|Ejército de conscripción masiva
+reserva_movilizacion|1860|h|Reservas y movilización general
+policia_militar|1829|a|Policía militar
+tropas_asalto_trinchera|1917|a|Tropas de asalto de trinchera
+infanteria_motorizada|1936|a|Infantería motorizada
+infanteria_mecanizada|1939|h|Infantería mecanizada
+tanquistas|1917|a|Tripulaciones de tanque
+paracaidistas|1935|a|Paracaidistas
+infanteria_planeador|1940|h|Infantería de planeador
+fuerzas_especiales|1940|h|Fuerzas especiales
+francotiradores|1915|h|Francotiradores
+cazacarros|1942|h|Cazacarros de infantería
+infanteria_anfibia|1941|a|Infantería anfibia
+infanteria_aerotransportada_helicoptero|1965|h|Caballería aérea (helicópteros)
+infanteria_moderna_conectada|1996|h|Infantería moderna conectada
+unidades_nbq|1950|h|Unidades de defensa NBQ
+operadores_drones|2001|h|Operadores de drones
+fuerzas_ciberneticas|2009|h|Fuerzas cibernéticas
+soldado_digital|2010|h|Soldado digital integrado
+infanteria_robotica|2023|h|Infantería robótica autónoma
+fuerzas_espaciales|2019|h|Fuerzas espaciales
+inmortales_persas|-550|h|Inmortales (guardia persa)
+peltastas|-400|h|Peltastas
+guerreros_aguila_jaguar|1325|h|Guerreros águila y jaguar
+huestes_incas|1438|h|Huestes incas
+huscarls_nordicos|1016|h|Huscarls y guerreros nórdicos
+mamelucos|1250|h|Mamelucos
+keshig_mongol|1206|h|Guardia imperial mongola
+condotieros|1450|h|Condotieros
+tercios|1534|h|Tercios
+jenizaros|1500|a|Jenízaros
+conquistadores|1500|h|Conquistadores
+cosacos|1500|h|Cosacos
+corsarios|1602|a|Corsarios
+marineria_de_linea|1650|h|Marinería de línea
+legion_extranjera|1831|h|Legión extranjera
+tropas_coloniales|1851|a|Tropas coloniales (sepoys, askaris)
+cazadores_montana|1872|h|Tropas de montaña
+partisanos|1941|h|Partisanos
+buzos_combate|1941|h|Buzos de combate
+cascos_azules|1956|h|Cascos azules
+contratistas_privados|1989|h|Contratistas militares privados
+infanteria_exoesqueleto|2020|h|Infantería con exoesqueleto
+soldado_biomejorado|2040|x|Soldado biomejorado
+combatiente_cibernetico|2045|x|Combatiente cibernético
+enjambre_autonomo|2035|x|Enjambres autónomos
+ia_mando_tactico|2032|x|Mando táctico por IA
+mando_neuronal_enlazado|2050|x|Mando neuronal enlazado
+legion_androides|2060|x|Legiones de androides
+tropas_clonadas|2070|x|Tropas clonadas
+criaturas_bioingenieria|2080|x|Criaturas de combate bioingenierizadas
+nanoenjambre_combate|2065|x|Nanoenjambres de combate
+tropas_orbitales|2045|x|Tropas de despliegue orbital
+infanteria_espacial|2055|x|Infantería espacial
+emboscada_acecho|-50000|h|Emboscada y acecho
+formacion_tribal|-10000|h|Formación de combate tribal
+batalla_campal_organizada|-2500|h|Batalla campal organizada
+ejercito_profesional|-745|h|Ejército profesional
+disciplina_formacion|-700|h|Disciplina y formación cerrada
+falange|-650|h|Falange
+legion_manipular|-315|h|Legión manipular
+cohortes_legionarias|-107|h|Cohortes legionarias
+arte_de_la_guerra_tratado|-500|h|Tratado de arte militar
+estrategia_clasica|-400|h|Estrategia clásica
+tactica_guerrilla|-217|h|Táctica de guerrilla
+jerarquia_rangos|-300|h|Jerarquía de rangos y oficiales
+justicia_militar|-200|h|Justicia militar
+paga_militar_soldada|-400|h|Soldada militar
+tactica_arqueros_masa|1346|h|Táctica de arqueros en masa
+carga_caballeria_pesada|1000|h|Carga de caballería pesada
+tactica_cuadro_piqueros|1450|h|Cuadro de piqueros
+tercios_formacion_mixta|1500|h|Formación mixta de piqueros y arcabuceros
+ejercito_permanente|1500|a|Ejército permanente
+tactica_linea|1660|a|Táctica de línea de fuego
+fuego_de_pelotones|1660|a|Fuego de pelotones
+tactica_columna_ataque|1793|a|Columna de ataque
+organizacion_divisional|1790|h|Organización en divisiones y cuerpos
+escuelas_militares|1751|h|Escuelas militares
+suboficiales_cuerpo|1700|h|Cuerpo de suboficiales
+estado_mayor_general|1806|h|Estado mayor general
+doctrina_movilizacion_ferroviaria|1859|h|Movilización por ferrocarril
+tactica_dispersion|1886|a|Táctica de dispersión y cobertura
+academia_militar_moderna|1852|a|Academia militar moderna
+juegos_de_guerra|1824|h|Juegos de guerra de estado mayor
+inteligencia_militar_estado_mayor|1870|h|Inteligencia militar de estado mayor
+guerra_de_trincheras|1914|h|Guerra de trincheras
+barrera_artilleria_rodante|1916|h|Barrera de artillería rodante
+tactica_infiltracion|1917|h|Táctica de infiltración
+defensa_en_profundidad|1917|h|Defensa en profundidad
+armas_combinadas|1936|a|Armas combinadas
+guerra_relampago|1939|h|Guerra relámpago
+operaciones_aerotransportadas|1940|h|Operaciones aerotransportadas
+bombardeo_estrategico_doctrina|1921|h|Doctrina del bombardeo estratégico
+guerra_total|1920|a|Guerra total
+guerra_popular_prolongada|1936|h|Guerra popular prolongada
+contrainsurgencia|1940|h|Contrainsurgencia
+doctrina_destruccion_mutua|1962|h|Destrucción mutua asegurada
+disuasion_segundo_ataque|1962|a|Capacidad de segundo ataque
+doctrina_batalla_aeroterrestre|1982|h|Batalla aeroterrestre
+guerra_red_centrica|2001|h|Guerra centrada en red
+guerra_hibrida|2014|a|Guerra híbrida
+guerra_enjambre_drones|2018|h|Guerra con enjambres de drones
+empalizada|-8000|h|Empalizada
+zanja_foso|-5000|h|Foso y zanja
+fortaleza_colina|-3000|h|Fortaleza de colina
+fortin_torre_vigia|-2500|h|Fortín y torre de vigía
+muralla_piedra|-3000|a|Muralla de piedra
+ariete_asedio|-1900|h|Ariete
+escalas_asedio|-2500|h|Escalas de asedio
+torre_asedio|-350|h|Torre de asedio
+zapa_mina_asedio|-900|h|Zapa y minado
+asedio_circunvalacion|-350|a|Asedio por circunvalación
+torres_y_almenas|-800|h|Torres y almenas
+puertas_fortificadas|1000|h|Puertas fortificadas y puente levadizo
+castillo_motte|950|h|Castillo de motte
+castillo_piedra|1050|h|Castillo de piedra
+castillo_concentrico|1275|h|Castillo concéntrico
+machicolis_aspilleras|1200|h|Matacanes y aspilleras
+fortificacion_abaluartada|1543|a|Fortificación abaluartada
+fortaleza_estrella|1550|h|Fortaleza en estrella
+asedio_trincheras_paralelas|1673|h|Asedio con trincheras paralelas
+fortificaciones_permanentes|1680|h|Sistema de fortificaciones permanentes
+fuertes_costeros|1700|h|Fuertes costeros
+mina_terrestre|1862|h|Mina terrestre
+mina_naval|1853|h|Mina naval
+alambre_puas|1874|h|Alambre de púas
+fortificacion_hormigon|1888|h|Fortificación de hormigón
+fuertes_acorazados|1888|a|Fuertes acorazados
+sistema_trincheras|1914|h|Sistema de trincheras
+casamatas_hormigon|1914|h|Casamatas de hormigón
+linea_defensiva_permanente|1930|h|Línea defensiva permanente
+bunker_antiaereo|1940|h|Búnker antiaéreo
+mina_antipersona|1939|h|Mina antipersona
+bunker_nuclear|1952|a|Búnker antinuclear
+silo_misil|1959|h|Silo de misiles
+base_subterranea_montana|1961|h|Base subterránea en montaña
+defensa_aerea_integrada|1958|h|Sistema de defensa aérea integrado
+defensa_costera_misiles|1967|a|Defensa costera con misiles
+carreta_suministros|-2000|h|Carreta de suministros militar
+carro_falcado|-401|h|Carro de guerra con guadañas
+carro_asedio_cubierto|-350|h|Carro de asedio cubierto
+carro_fortificado_wagenburg|1470|a|Carros fortificados (wagenburg)
+orugas|1900|h|Orugas
+automovil_blindado|1902|h|Automóvil blindado
+tanque_pesado_primera_guerra|1916|h|Tanque de la Gran Guerra
+tanque_ligero|1917|h|Tanque ligero
+tanque_medio|1918|h|Tanque medio
+tanque_pesado|1930|h|Tanque pesado
+cazacarros_autopropulsado|1942|h|Cazacarros autopropulsado
+tanque_lanzallamas|1940|h|Tanque lanzallamas
+carga_hueca|1938|h|Carga hueca
+bazuca_antitanque|1942|h|Lanzacohetes antitanque
+blindaje_compuesto|1970|h|Blindaje compuesto
+blindaje_reactivo|1982|h|Blindaje reactivo
+tanque_batalla_principal|1970|a|Tanque de batalla principal
+tanque_vision_termica|1980|h|Visión térmica en tanques
+sistema_proteccion_activa|2011|h|Sistema de protección activa
+tanque_digital|2011|a|Tanque digital de última generación
+vehiculo_transporte_oruga|1936|h|Transporte blindado de orugas
+semioruga|1930|h|Vehículo semioruga
+vehiculo_ligero_todoterreno|1940|h|Vehículo ligero todoterreno
+camion_logistico_militar|1914|h|Camión logístico militar
+vehiculo_combate_infanteria|1966|h|Vehículo de combate de infantería
+transporte_blindado_ruedas|1970|a|Transporte blindado de ruedas
+lanzador_misiles_movil|1960|h|Lanzador móvil de misiles
+radar_movil_antiaereo|1960|h|Radar móvil antiaéreo
+vehiculo_resistente_minas|2007|h|Vehículo resistente a minas
+vehiculo_terrestre_no_tripulado|2012|a|Vehículo terrestre no tripulado
+balsa_canoa_guerra|-5000|h|Canoa de guerra
+galera_guerra|-1200|h|Galera de guerra
+espolon_naval|-850|h|Espolón naval
+abordaje_garfios|-1100|h|Abordaje con garfios
+birreme|-800|h|Birreme
+trirreme|-700|h|Trirreme
+quinquerreme|-330|h|Quinquerreme
+dromon_bizantino|672|a|Dromón
+drakkar_langskip|1000|a|Drakkar
+junco_guerra|1232|a|Junco de guerra
+galera_mediterranea|1500|h|Galera con artillería
+carraca_nao_armada|1500|h|Nao armada
+galeon_guerra|1550|h|Galeón de guerra
+artilleria_naval_costado|1550|a|Artillería naval de costado
+guerra_de_corso|1602|a|Guerra de corso
+fragata_vela|1650|h|Fragata de vela
+navio_de_linea|1650|h|Navío de línea
+tactica_linea_batalla_naval|1660|a|Línea de batalla naval
+bergantin_corbeta|1700|h|Bergantín y corbeta
+bloqueo_naval|1650|h|Bloqueo naval
+submarino_experimental|1776|h|Submarino experimental
+buque_vapor_guerra|1840|h|Buque de guerra de vapor
+fragata_acorazada|1859|h|Fragata acorazada
+monitor_torre_giratoria|1862|h|Monitor de torre giratoria
+crucero_acorazado|1875|h|Crucero acorazado
+torpedo|1866|h|Torpedo automóvil
+torpedero|1876|h|Torpedero
+destructor|1893|h|Destructor
+acorazado_pre_dreadnought|1892|h|Acorazado pre-dreadnought
+acorazado_dreadnought|1900|h|Acorazado dreadnought
+submarino_motor|1900|h|Submarino diésel-eléctrico
+radio_naval|1899|h|Radio naval
+crucero_ligero|1912|h|Crucero ligero
+hidroavion_naval|1912|h|Hidroavión naval
+portaaviones|1918|h|Portaaviones
+portaaviones_escolta|1941|h|Portaaviones de escolta
+tactica_grupo_portaaviones|1942|h|Grupo de combate de portaaviones
+lancha_desembarco|1941|h|Lancha de desembarco
+guerra_anfibia|1941|a|Guerra anfibia
+sonar_antisubmarino|1918|h|Sonar antisubmarino
+carga_profundidad|1916|h|Carga de profundidad
+guerra_antisubmarina|1935|a|Guerra antisubmarina
+convoyes_escoltados|1935|a|Convoyes escoltados
+acorazado_rapido|1920|h|Acorazado rápido
+submarino_nuclear|1954|h|Submarino nuclear
+portaaviones_nuclear|1961|h|Portaaviones nuclear
+destructor_misilistico|1967|a|Destructor lanzamisiles
+submarino_lanzamisiles_balisticos|1960|h|Submarino lanzamisiles balísticos
+crucero_aegis|1983|h|Crucero de defensa integrada (tipo Aegis)
+sonar_remolcado|1970|h|Sonar pasivo remolcado
+hovercraft_militar|1984|h|Aerodeslizador de desembarco
+buque_asalto_anfibio|1961|h|Buque de asalto anfibio
+fragata_sigilosa|2000|h|Fragata sigilosa
+dron_naval|2016|h|Dron naval autónomo
+submarino_propulsion_independiente_aire|2005|h|Submarino de propulsión independiente del aire
+arma_laser_naval|2014|h|Arma láser naval
+cometa_militar|-400|h|Cometa de observación
+globo_observacion_militar|1794|h|Globo de observación
+globo_cautivo_artilleria|1861|h|Globo cautivo para artillería
+dirigible_militar|1900|h|Dirigible militar
+avion_reconocimiento|1915|a|Avión de reconocimiento
+ametralladora_sincronizada|1915|h|Ametralladora sincronizada
+caza_biplano|1915|h|Caza biplano
+bomba_aerea|1911|h|Bomba de aviación
+bombardero_ligero|1915|h|Bombardero ligero
+paracaidas|1912|h|Paracaídas
+avion_monoplano_metalico|1915|h|Avión monoplano metálico
+caza_monoplano|1935|h|Caza monoplano
+bombardero_pesado|1915|h|Bombardero pesado
+avion_transporte_militar|1935|h|Avión de transporte militar
+bombardero_en_picado|1936|h|Bombardero en picado
+caza_embarcado|1935|a|Caza embarcado
+radar_aereo_defensa|1936|h|Radar de defensa aérea
+defensa_aerea_ww2|1940|h|Red de defensa aérea con radar
+giroscopio_guiado|1930|h|Giroscopio de guiado
+pulsorreactor|1941|h|Pulsorreactor
+cohete_balistico_aleman|1942|h|Cohete balístico de combustible líquido
+bomba_volante|1944|h|Bomba volante
+helicoptero_transporte_militar|1944|h|Helicóptero de transporte militar
+caza_reaccion|1945|h|Caza a reacción
+bombardero_estrategico_reaccion|1951|h|Bombardero estratégico a reacción
+caza_supersonico|1954|h|Caza supersónico
+misil_aire_aire|1956|h|Misil aire-aire
+misil_tierra_aire|1953|h|Misil tierra-aire
+cohete_aire_tierra|1951|h|Cohete aire-tierra
+helicoptero_ataque|1967|h|Helicóptero de ataque
+avion_reconocimiento_estrategico|1955|h|Avión de reconocimiento estratégico
+bombardero_estrategico_nuclear|1951|a|Bombardero estratégico nuclear
+reabastecimiento_aereo|1951|a|Reabastecimiento en vuelo
+sigilo_radar|1977|h|Tecnología de sigilo
+bombardero_sigiloso|1989|h|Bombardero sigiloso
+caza_sigiloso|1997|h|Caza sigiloso
+avion_alerta_temprana|1960|h|Avión de alerta temprana
+guerra_electronica|1960|h|Guerra electrónica
+contramedidas_electronicas|1965|h|Contramedidas electrónicas
+bomba_guiada_laser|1971|a|Bomba guiada por láser
+transporte_estrategico_pesado|1965|h|Transporte aéreo estratégico
+dron_reconocimiento|1971|a|Dron de reconocimiento
+misil_antitanque_guiado|1955|h|Misil antitanque guiado
+dron_armado|2001|h|Dron armado
+caza_quinta_generacion|2005|h|Caza de quinta generación
+dron_combate_avanzado|2013|h|Dron de combate avanzado
+misil_hipersonico|2019|h|Misil hipersónico
+armas_quimicas|1920|a|Armas químicas
+agentes_vesicantes|1920|a|Agentes vesicantes
+agentes_nerviosos|1936|h|Agentes nerviosos
+armas_biologicas|1932|h|Armas biológicas
+armas_biologicas_avanzadas|1975|h|Armas biológicas de ingeniería
+bomba_vacio_termobarica|1969|h|Bomba termobárica
+bomba_racimo|1965|h|Bomba de racimo
+armas_incendiarias_estrategicas|1942|a|Armas incendiarias estratégicas
+bomba_fision|1945|h|Bomba atómica de fisión
+armas_nucleares|1945|h|Arsenal nuclear
+bomba_termonuclear|1952|h|Bomba termonuclear
+ojiva_miniaturizada|1960|h|Ojiva miniaturizada
+bomba_neutronica|1977|h|Bomba de neutrones
+misil_balistico_regional|1944|h|Misil balístico regional
+misil_balistico_intercontinental|1959|h|Misil balístico intercontinental
+ojivas_multiples|1970|h|Ojivas múltiples (MIRV)
+misil_crucero_moderno|1983|h|Misil de crucero moderno
+misil_antibuque|1967|h|Misil antibuque
+misil_antibalistico|1962|h|Misil antibalístico
+satelite_alerta_temprana|1965|a|Satélite de alerta temprana
+escudo_antimisiles|2004|h|Escudo antimisiles estratégico
+armas_antisatelite|2007|h|Armas antisatélite
+almacenes_suministro|-2500|h|Almacenes de suministro
+marcha_forzada|-2000|h|Marcha forzada
+campamento_fortificado|-280|h|Campamento fortificado
+calzadas_militares|-300|a|Calzadas militares
+intendencia_cuerpo|-250|h|Cuerpo de intendencia
+logistica_ferroviaria_militar|1855|h|Logística ferroviaria
+logistica_naval|1850|h|Logística naval oceánica
+raciones_conservadas|1812|h|Raciones conservadas
+logistica_motorizada|1914|h|Logística motorizada
+puente_aereo_logistico|1942|h|Puente aéreo logístico
+logistica_digital|1970|h|Logística digital
+veteranos_pensiones|1918|h|Pensiones de veteranos
+medicina_militar|1846|a|Medicina militar
+hospital_de_campana|1867|a|Hospital de campaña
+cirugia_trauma_moderna|1915|h|Cirugía de trauma moderna
+evacuacion_sanitaria_helicoptero|1950|h|Evacuación sanitaria en helicóptero
+vendajes_campana|-200|h|Vendajes y cauterización de campaña
+cirugia_de_batalla|1552|a|Cirugía de batalla
+ambulancia_campana|1867|a|Ambulancia de campaña
+triaje_campo_batalla|1846|a|Triaje en el campo de batalla
+transfusion_campana|1917|h|Transfusión en campaña
+hospital_quirurgico_movil|1950|h|Hospital quirúrgico móvil
+medicina_combate_tactica|2005|h|Medicina táctica de combate
+cirugia_robotica_remota|2020|h|Cirugía robótica a distancia en campaña
+curacion_acelerada_campo|2040|x|Curación acelerada de heridas
+senales_fuego_atalayas|-2000|h|Señales de fuego y atalayas
+espionaje_militar_exploracion|-500|h|Reconocimiento y exploración
+criptografia_clasica|-475|h|Cifrado clásico
+criptoanalisis|850|h|Criptoanálisis
+cartografia_militar|1100|h|Cartografía militar
+criptografia_polialfabetica|1467|h|Cifrado polialfabético
+telegrafo_campana|1855|h|Telégrafo de campaña
+cifrado_mecanico|1918|h|Cifrado mecánico
+maquina_cifrado_rotores|1918|h|Máquina de cifrado de rotores
+criptoanalisis_mecanico|1941|a|Criptoanálisis mecánico
+radio_campana|1914|h|Radio de campaña
+inteligencia_fotografica_aerea|1915|a|Inteligencia fotográfica aérea
+radar_vigilancia_terrestre|1941|h|Radar de vigilancia terrestre
+satelites_espia|1960|h|Satélites espía
+inteligencia_electronica|1960|a|Inteligencia electrónica (ELINT)
+navegacion_inercial|1953|h|Navegación inercial
+radio_individual|1960|h|Radio individual portátil
+comando_control_digital|1970|h|Mando y control digital
+criptografia_digital_estandar|1977|h|Cifrado digital estándar
+simuladores_entrenamiento|1971|a|Simuladores de entrenamiento
+gps_militar|1990|h|GPS militar
+ciberguerra|2007|h|Ciberguerra
+guerra_informativa|2014|h|Guerra de información
+centro_operaciones_ciberneticas|2010|h|Centro de operaciones cibernéticas
+conciencia_situacional_digital|2005|h|Conciencia situacional digital
+vigilancia_global_ia|2018|h|Vigilancia global con IA
+inteligencia_artificial_militar|2017|h|Inteligencia artificial militar
+armas_autonomas_letales|2020|h|Sistemas de armas autónomos
+salitre_polvora_suministro|1500|h|Suministro de salitre y azufre
+arsenal_fundicion|1543|a|Arsenales y fundiciones estatales
+combustible_militar|1914|h|Combustible militar
+materiales_fisiles_militares|1943|h|Materiales físiles para armas
+guerra_economica_bloqueo|1914|h|Bloqueo y guerra económica
+metales_estrategicos_blindaje|1972|a|Metales estratégicos para blindajes
+logistica_recursos_espaciales|2050|x|Logística de recursos fuera de la Tierra
+papel|600|h|Papel
+xilografia|700|h|Xilografía (impresión con tacos)
+tipos_moviles|1040|h|Tipos móviles
+imprenta|1450|h|Imprenta (Gutenberg)
+libro_masivo|1500|h|Libro impreso masivo
+periodico|1605|h|Periódico
+enciclopedia|1751|h|Enciclopedia
+imprenta_rotativa|1843|h|Imprenta rotativa
+prensa_masiva|1850|a|Prensa de masas
+libertad_de_prensa|1766|h|Libertad de prensa
+servicio_postal|-500|h|Mensajeros y correo
+correo_regular_publico|1680|h|Correo público regular
+red_telegrafica|1850|h|Red telegráfica
+agencia_noticias|1850|a|Agencia de noticias
+telefonia_publica|1886|a|Red telefónica pública
+telefonia_movil|1995|h|Telefonía móvil (adopción masiva)
+sms_mensajeria|1995|a|Mensajería de texto
+smartphone_adopcion|2012|h|Teléfono inteligente (adopción masiva)
+radiodifusion|1920|h|Radiodifusión
+cine_industria|1910|h|Industria del cine
+television_difusion|1936|h|Televisión abierta
+television_satelite_cable|1975|h|Televisión por satélite y cable
+propaganda_masiva|1920|a|Propaganda de masas
+correo_electronico|1975|a|Correo electrónico
+internet_publico|1993|h|Internet público
+comercio_electronico|1995|h|Comercio electrónico
+redes_sociales|2004|h|Redes sociales
+streaming_video|2007|h|Video en streaming
+periodismo_digital|2005|h|Periodismo digital
+videollamada|2003|h|Videollamada
+alfabetizacion_masiva|1880|h|Alfabetización masiva
+banda_nomada|-100000|a|Banda nómada igualitaria
+tribu|-10000|a|Tribu y clan
+jefatura|-3500|a|Jefatura (cacicazgo)
+liderazgo_guerrero|-3500|a|Liderazgo guerrero
+ciudad_estado|-3500|h|Ciudad-estado
+monarquia_hereditaria|-3100|h|Monarquía hereditaria
+teocracia|-3300|h|Teocracia
+monarquia_divina|-3000|h|Monarquía divina
+aristocracia|-800|h|Aristocracia
+oligarquia|-650|h|Oligarquía
+tirania|-650|h|Tiranía
+democracia_directa|-380|a|Democracia directa
+republica_aristocratica|-380|a|República aristocrática
+burocracia|-300|h|Burocracia
+imperio_multietnico|-300|a|Imperio multiétnico
+meritocracia_examenes|605|h|Examen imperial (meritocracia)
+feudalismo|800|h|Feudalismo
+servidumbre_gleba|800|h|Servidumbre de la gleba
+ciudades_libres_gremios|1200|a|Ciudades libres y gremios
+califato|632|h|Califato
+imperio_universal|800|h|Imperio universal
+asamblea_estamental|1188|h|Asamblea de estamentos
+parlamento|1450|h|Parlamento
+monarquia_estamental|1450|h|Monarquía estamental
+monarquia_absoluta|1500|h|Monarquía absoluta
+imperio_colonial|1500|h|Imperio colonial
+estado_nacion|1650|h|Estado-nación
+despotismo_ilustrado|1740|h|Despotismo ilustrado
+monarquia_constitucional|1689|h|Monarquía constitucional
+republica_parlamentaria|1653|a|República parlamentaria
+republica_presidencial|1787|h|República presidencial
+partidos_politicos|1690|h|Partidos políticos
+democracia_representativa|1791|a|Democracia representativa
+democracia_liberal|1850|a|Democracia liberal
+republica_federal|1824|h|República federal
+federalismo|1800|h|Federalismo
+socialismo_utopico|1820|h|Socialismo utópico
+marxismo|1848|h|Marxismo
+anarquismo_politico|1840|h|Anarquismo
+nacionalismo_moderno|1880|a|Nacionalismo moderno
+imperialismo_industrial|1884|h|Imperialismo industrial
+estado_comunista_leninista|1922|h|Estado comunista de partido único
+junta_militar|1923|h|Junta militar
+fascismo|1922|h|Fascismo
+totalitarismo|1933|h|Estado totalitario
+socialdemocracia|1919|h|Socialdemocracia
+estado_bienestar|1942|h|Estado de bienestar
+teocracia_constitucional|1979|h|Teocracia constitucional
+union_supranacional|1993|h|Unión supranacional
+gobierno_electronico|2000|h|Gobierno electrónico
+estado_vigilancia_digital|2013|h|Estado de vigilancia digital
+costumbre_tribal|-10000|a|Derecho consuetudinario
+ley_talion|-2100|h|Ley del talión y compensación
+derecho_codificado|-2100|h|Código de leyes escrito
+contratos_escritos|-2100|a|Contratos escritos
+propiedad_privada|-2100|a|Propiedad privada
+tribunales|-600|h|Tribunales
+derecho_romano|-380|a|Derecho romano
+ciudadania|-380|a|Ciudadanía
+jurisprudencia|-100|h|Jurisprudencia
+derecho_canonico|1140|h|Derecho canónico
+derecho_islamico|820|h|Derecho islámico
+derecho_comun|1100|h|Derecho común
+derecho_mercantil|1200|h|Derecho mercantil
+habeas_corpus|1628|h|Habeas corpus
+derecho_internacional_clasico|1625|h|Derecho de gentes
+constitucion_escrita|1653|h|Constitución escrita
+separacion_poderes|1748|h|Separación de poderes
+declaracion_derechos|1690|a|Declaración de derechos
+codigo_civil|1756|h|Código civil
+derecho_penal_moderno|1764|h|Derecho penal moderno
+abolicion_tortura|1764|a|Abolición de la tortura
+patentes_propiedad_intelectual|1650|h|Patentes y propiedad intelectual
+derechos_de_autor|1710|h|Derechos de autor
+sufragio_censitario|1791|h|Sufragio censitario
+policia_moderna|1829|h|Policía moderna
+derecho_laboral|1850|a|Derecho laboral
+derechos_humanos_universales|1948|h|Derechos humanos universales
+tribunal_penal_internacional|1948|a|Justicia penal internacional
+derecho_ambiental|1970|h|Derecho ambiental
+derecho_digital|2000|h|Derecho digital
+proteccion_datos_privacidad|2016|h|Protección de datos y privacidad
+censo_poblacion|-3000|h|Censo de población
+sistema_tributario|-3000|h|Sistema de tributos
+catastro|-100|h|Catastro
+fisco_moderno|1500|h|Hacienda pública moderna
+registro_civil|1700|h|Registro civil
+impuesto_renta|1842|h|Impuesto sobre la renta
+burocracia_moderna|1810|h|Burocracia moderna
+servicio_civil|1854|h|Servicio civil de carrera
+estadistica_oficial|1810|a|Estadística oficial
+planificacion_estatal|1940|a|Planificación estatal
+identificacion_biometrica|1985|h|Identificación biométrica
+sufragio_universal_masculino|1850|a|Sufragio universal masculino
+sufragio_femenino|1906|h|Sufragio femenino
+intercambio_regalos|-4000|h|Intercambio de regalos y rehenes
+tratado_oral|-3000|h|Juramento y pacto
+matrimonios_dinasticos|-2000|h|Matrimonios dinásticos
+tributo_vasallaje|-2300|h|Tributo y vasallaje
+tratado_escrito|-1200|h|Tratado escrito
+mensajeros_diplomaticos|-500|a|Heraldos y mensajeros diplomáticos
+alianza_militar_clasica|-1000|h|Alianza militar
+liga_ciudades|-478|h|Liga de ciudades
+inmunidad_diplomatica|-450|h|Inmunidad diplomática
+diplomacia_permanente|1455|h|Embajadas permanentes
+equilibrio_de_poder|1713|h|Equilibrio de poder
+soberania_westfaliana|1650|h|Soberanía westfaliana
+neutralidad_armada|1780|h|Neutralidad armada
+congreso_diplomatico|1815|h|Congresos diplomáticos
+arbitraje_internacional|1872|h|Arbitraje internacional
+convenciones_guerra|1864|h|Convenios sobre las leyes de la guerra
+diplomacia_de_canoneras|1884|a|Diplomacia de cañoneras
+sociedad_de_naciones|1920|h|Sociedad de Naciones
+onu|1945|h|Organización de las Naciones Unidas
+consejo_seguridad_veto|1945|h|Consejo de Seguridad y veto
+alianza_defensiva_permanente|1949|h|Alianza defensiva permanente (tipo OTAN)
+alianzas_de_bloques|1949|a|Sistema de bloques
+guerra_fria_disuasion|1950|h|Disuasión nuclear entre bloques
+descolonizacion|1947|h|Descolonización
+no_alineados|1955|h|Movimiento de no alineados
+organismos_economicos|1945|a|FMI y Banco Mundial
+sanciones_economicas|1945|a|Sanciones económicas
+cruz_roja_humanitaria|1867|a|Cruz Roja y ayuda humanitaria
+diplomacia_cultural_blanda|1945|a|Diplomacia cultural
+tratados_desarme|1963|h|Tratados de desarme
+tratado_no_proliferacion|1968|h|Tratado de no proliferación nuclear
+comercio_multilateral_omc|1947|h|Comercio multilateral (OMC)
+integracion_regional|1957|h|Integración regional
+cooperacion_espacial|1975|h|Cooperación espacial
+acuerdos_climaticos|2015|h|Acuerdos climáticos
+ciberdiplomacia|2013|h|Ciberdiplomacia
+espias_informantes|-1800|h|Informantes y espías
+contraespionaje_clasico|-300|h|Contraespionaje clásico
+red_agentes_secretos|800|h|Red de agentes secretos
+servicio_secreto_estatal|1573|h|Servicio secreto de Estado
+espionaje_industrial|1717|h|Espionaje industrial
+policia_politica|1829|a|Policía política
+intercepcion_comunicaciones|1914|h|Interceptación de comunicaciones
+agencia_inteligencia_exterior|1947|h|Agencia de inteligencia exterior (tipo CIA)
+agentes_dobles_contrainteligencia|1947|a|Contrainteligencia y agentes dobles
+operaciones_encubiertas|1947|a|Operaciones encubiertas
+propaganda_encubierta|1947|a|Propaganda encubierta
+agencia_senales|1952|h|Agencia de inteligencia de señales
+vigilancia_satelital|1960|h|Vigilancia satelital
+desestabilizacion_encubierta|1953|h|Desestabilización encubierta de gobiernos
+ciberespionaje|2010|h|Ciberespionaje
+espionaje_masivo_datos|2010|a|Vigilancia masiva de datos
+trueque|-10000|a|Trueque
+division_trabajo_basica|-8000|a|División básica del trabajo
+excedente_agricola|-3500|a|Excedente agrícola
+mercados_locales|-3500|a|Mercados locales
+artesanos_especializados|-3500|a|Artesanos especializados
+moneda_mercancia|-3000|h|Moneda mercancía
+comercio_larga_distancia|-3200|a|Comercio a larga distancia
+credito_prestamo|-2100|a|Crédito y préstamo
+esclavitud_institucional|-3000|h|Esclavitud institucional
+moneda_acunada|-600|h|Moneda acuñada
+pesos_medidas_estandar|-600|h|Pesos y medidas estándar
+caravanas_ruta_seda|-1100|h|Caravanas y rutas terrestres
+rutas_maritimas_comerciales|-1000|a|Rutas marítimas comerciales
+gremios_artesanos|1200|a|Gremios artesanos
+feria_comercial|1200|a|Ferias comerciales
+banca_comercial|1200|h|Banca comercial
+letra_de_cambio|1200|h|Letra de cambio
+papel_moneda|1200|a|Papel moneda
+contabilidad_partida_doble|1494|h|Contabilidad por partida doble
+liga_comercial|1450|h|Ligas comerciales
+mercantilismo|1550|h|Mercantilismo
+companias_comerciales|1602|h|Compañías comerciales por acciones
+bolsa_valores|1602|a|Bolsa de valores
+seguros_maritimos|1602|a|Seguros marítimos
+economia_plantacion|1500|h|Economía de plantación
+banca_central|1694|h|Banca central
+economia_clasica|1776|h|Economía clásica
+industrializacion|1785|a|Sistema fabril (Revolución industrial)
+libre_comercio|1846|h|Libre comercio
+comercio_internacional|1860|h|Comercio internacional
+sociedad_anonima|1844|h|Sociedad anónima
+capitalismo_industrial|1846|a|Capitalismo industrial
+patron_oro|1871|h|Patrón oro
+monopolios_carteles|1870|h|Monopolios y cárteles
+leyes_antimonopolio|1890|h|Leyes antimonopolio
+grandes_almacenes|1852|h|Grandes almacenes
+cooperativas|1844|h|Cooperativas
+sindicatos|1850|a|Sindicatos
+seguros_vida_actuariales|1800|h|Seguros de vida actuariales
+taylorismo|1911|h|Gestión científica del trabajo (taylorismo)
+fordismo|1913|h|Fordismo
+publicidad_masiva|1920|h|Publicidad masiva
+marketing_moderno|1930|h|Marketing moderno
+credito_consumo|1920|h|Crédito al consumo
+economia_keynesiana|1936|h|Economía keynesiana
+planificacion_central|1940|a|Planificación central
+fondos_inversion|1924|h|Fondos de inversión
+bretton_woods|1945|a|Sistema monetario de Bretton Woods
+globalizacion_comercial|1990|h|Globalización comercial
+cadenas_suministro_globales|1990|a|Cadenas de suministro globales
+logistica_just_in_time|1975|a|Logística justo a tiempo
+codigo_barras_inventario|1974|h|Código de barras e inventario digital
+tarjeta_credito|1950|h|Tarjeta de crédito
+banca_electronica|1967|h|Banca electrónica
+mercados_financieros_globales|1990|a|Mercados financieros globales
+derivados_financieros|1990|a|Derivados financieros
+microcredito|1976|h|Microcrédito
+economia_conductual|1979|h|Economía conductual
+criptomonedas|2009|h|Criptomonedas
+pagos_moviles_fintech|2012|a|Pagos móviles y tecnología financiera
+economia_plataformas|2008|h|Economía de plataformas
+trabajo_remoto|2020|h|Trabajo remoto
+automatizacion_laboral|2015|h|Automatización del trabajo
+economia_circular|2015|h|Economía circular
+campamento_estacional|-50000|a|Campamento estacional
+aldea_permanente|-8000|a|Aldea permanente
+ciudad_primitiva|-3500|a|Ciudad primitiva
+murallas_urbanas|-3500|h|Murallas urbanas
+templos_monumentales|-3500|a|Templos monumentales
+plano_ortogonal_urbano|-470|h|Plano urbano ortogonal
+foro_agora|-470|a|Foro y ágora (espacio público)
+ciudades_romanas_servicios|-200|h|Ciudad con servicios (agua, cloacas, foro)
+burgos_fortificados|900|h|Burgos fortificados
+plazas_mercado_urbano|1200|a|Plazas de mercado
+urbanismo_renacentista|1450|h|Urbanismo renacentista
+urbanismo_industrial|1800|h|Urbanismo industrial
+barrios_obreros|1830|h|Barrios obreros
+transporte_urbano_masivo|1881|a|Transporte urbano masivo
+parques_publicos|1847|h|Parques públicos
+planificacion_urbana_moderna|1909|h|Planificación urbana moderna
+zonificacion_uso_suelo|1916|h|Zonificación del uso del suelo
+suburbios_automovil|1932|a|Suburbios y ciudad del automóvil
+grandes_metropolis|1925|h|Grandes metrópolis
+vivienda_social|1942|a|Vivienda social
+megaciudades|1975|h|Megaciudades
+ciudades_inteligentes|2010|h|Ciudades inteligentes
+colonias_fundacion|-750|h|Fundación de colonias
+provincias_administrativas|-300|a|Provincias y gobernadores
+limes_fronteras_fortificadas|-214|h|Fronteras fortificadas (limes)
+red_viaria_imperial|-300|a|Red viaria imperial
+mapas_administrativos|1086|h|Mapas administrativos y deslindes
+colonizacion_ultramar|1500|a|Colonización ultramarina
+tratados_de_limites|1700|h|Tratados de límites
+reorganizacion_territorial|1790|h|Reorganización territorial (departamentos y distritos)
+delimitacion_geodesica|1840|h|Delimitación geodésica de fronteras
+redistritacion_electoral|1850|a|Delimitación de circunscripciones electorales
+reforma_agraria|1940|a|Reforma agraria
+parques_nacionales_reservas|1872|h|Parques nacionales y reservas
+ordenamiento_territorial|1972|a|Ordenamiento territorial
+zonas_economicas_especiales|1990|a|Zonas económicas especiales
+descentralizacion_autonomias|1978|h|Descentralización y autonomías
+derechos_mineros|-300|a|Derechos mineros y concesiones
+estancos_monopolios|1100|h|Estancos y monopolios de recursos
+catastro_minero|1750|h|Catastro y registro minero
+concesion_petrolera|1880|h|Concesiones petroleras
+reservas_estrategicas|1940|a|Reservas estratégicas
+nacionalizacion_recursos|1940|a|Nacionalización de recursos
+cartel_productores|1960|h|Cártel de países productores
+regulacion_ambiental_extractiva|1970|h|Regulación ambiental de la extracción
+reciclaje_metales_estrategicos|2010|h|Reciclaje de metales estratégicos
+tratado_fondos_marinos|2018|a|Régimen de los fondos marinos
+derecho_recursos_espaciales|2040|x|Derecho de recursos espaciales
+animismo|-100000|h|Animismo
+ritual_funerario|-100000|h|Ritual funerario
+chamanismo|-10000|a|Chamanismo
+mitologia|-10000|a|Mitología
+calendario_ritual|-3500|a|Calendario ritual
+religion_organizada|-3500|a|Religión organizada
+sacerdocio_templos|-3500|a|Sacerdocio y templos
+monoteismo_primitivo|-1000|h|Monoteísmo primitivo
+religion_monoteista|-400|a|Religión monoteísta
+religion_universal|-250|h|Religión universal y misionera
+monasterios_copistas|529|h|Monasterios y copistas
+reforma_religiosa|1517|h|Reforma religiosa
+tolerancia_religiosa|1690|a|Tolerancia religiosa
+secularismo|1851|h|Secularismo
+laicismo_estado|1905|h|Estado laico
+filosofia_natural|-585|h|Filosofía natural
+logica_formal|-350|h|Lógica formal
+etica_filosofia_moral|-400|h|Ética y filosofía moral
+filosofia_politica|-380|h|Filosofía política
+retorica_oratoria|-380|a|Retórica y oratoria
+escolastica|1100|h|Escolástica
+humanismo|1450|h|Humanismo
+metodo_cientifico|1620|h|Método científico
+filosofia_ilustracion|1690|h|Filosofía de la Ilustración
+positivismo|1830|h|Positivismo
+pintura_mural|-10000|a|Pintura mural
+musica_instrumentos|-10000|a|Música e instrumentos
+epica_literatura|-3200|a|Épica y literatura oral
+escultura_monumental|-2600|h|Escultura monumental
+teatro_drama|-534|h|Teatro
+competiciones_atleticas|-776|h|Competiciones atléticas
+musica_escrita|1025|h|Notación musical
+perspectiva_pictorica|1450|h|Perspectiva en la pintura
+novela|1650|h|Novela
+orquesta_sinfonica|1750|h|Orquesta sinfónica
+romanticismo|1800|h|Romanticismo
+museos_publicos|1800|h|Museos públicos
+deporte_organizado|1863|h|Deporte organizado
+olimpiadas_modernas|1896|h|Olimpiadas modernas
+cultura_de_masas|1920|h|Cultura de masas
+musica_grabada_industria|1920|a|Industria de la música grabada
+industria_videojuegos|1975|a|Industria de los videojuegos
+arte_digital|2000|h|Arte digital
+transmision_oral|-100000|h|Transmisión oral del saber
+aprendizaje_oficios|-10000|a|Aprendizaje de oficios
+escuelas_escribas|-2500|h|Escuelas de escribas
+academias_filosoficas|-387|h|Academias filosóficas
+escuelas_monasticas|800|h|Escuelas monásticas
+madrasas_escuelas|1065|h|Madrasas
+casa_de_traduccion|832|h|Centros de traducción
+universidades_medievales|1100|a|Universidades medievales
+academias_ciencias|1660|h|Academias científicas
+revistas_cientificas|1665|h|Revistas científicas
+educacion_publica|1852|h|Educación pública obligatoria
+formacion_profesional|1852|a|Formación profesional
+escuelas_tecnicas_ingenieria|1852|a|Escuelas técnicas e ingenierías
+universidades_investigacion|1810|h|Universidades de investigación
+laboratorios_industriales|1900|h|Laboratorios industriales
+financiacion_publica_ciencia|1940|h|Financiación pública de la ciencia
+educacion_universal_gratuita|1942|a|Educación universal y gratuita
+educacion_superior_masiva|1965|h|Educación superior masiva
+educacion_a_distancia|1969|h|Educación a distancia
+cooperacion_cientifica_internacional|1954|h|Cooperación científica internacional
+becas_intercambio|1965|a|Becas e intercambio académico
+educacion_digital|2012|h|Educación digital
+acceso_abierto_ciencia|2002|h|Ciencia de acceso abierto
+servidumbre_y_trabajo_forzoso|-300|a|Trabajo forzoso institucional
+huelga_derecho|1871|h|Derecho de huelga
+jornada_laboral_limitada|1850|a|Jornada laboral limitada
+trabajo_infantil_prohibicion|1852|a|Prohibición del trabajo infantil
+negociacion_colectiva|1935|h|Negociación colectiva
+salario_minimo|1936|a|Salario mínimo
+seguridad_social|1883|h|Seguridad social
+pensiones|1908|h|Pensiones
+abolicionismo|1850|a|Abolicionismo
+abolicion_esclavitud|1850|a|Abolición de la esclavitud
+movimiento_sufragista|1850|a|Movimiento sufragista
+derechos_civiles_movimiento|1920|a|Movimiento por los derechos civiles
+asociaciones_civicas|1766|a|Asociaciones cívicas
+filantropia_fundaciones|1889|h|Filantropía y fundaciones
+ong|1948|a|Organizaciones no gubernamentales
+movimiento_ecologista|1935|h|Movimiento ecologista
+movimiento_pacifista|1915|h|Movimiento pacifista
+proteccion_consumidor|1920|a|Protección al consumidor
+igualdad_genero_legal|1964|h|Igualdad de género ante la ley
+derechos_minorias|1966|h|Derechos de las minorías
+migraciones_regulacion|1914|h|Regulación de migraciones y pasaportes
+voluntariado_humanitario|1867|a|Voluntariado humanitario
+activismo_digital|2011|h|Activismo digital
+curanderos_comunitarios|-10000|a|Curanderos comunitarios
+hospitales_religiosos|1000|a|Hospitales religiosos
+cuarentenas|1450|h|Cuarentenas
+lazaretos|1450|h|Lazaretos
+bomberos|6|h|Cuerpos de bomberos
+salud_publica|1861|a|Salud pública
+hospital_moderno|1867|a|Hospital moderno
+sanidad_urbana|1897|a|Sanidad urbana
+vacunacion_masiva|1885|a|Vacunación masiva
+enfermeria_profesional|1867|a|Enfermería profesional
+agua_potable_servicio|1897|a|Servicio de agua potable
+recogida_residuos|1897|a|Recogida de residuos
+farmacia_industria|1920|a|Industria farmacéutica
+regulacion_medicamentos|1920|a|Regulación de medicamentos
+salud_mental_sistemas|1930|h|Sistemas de salud mental
+sistema_nacional_salud|1948|h|Sistema nacional de salud
+oms_cooperacion_sanitaria|1945|a|Cooperación sanitaria internacional
+proteccion_civil|1935|h|Protección civil
+seguridad_alimentaria|1945|h|Seguridad alimentaria
+erradicacion_enfermedades|1980|h|Erradicación de enfermedades
+historia_clinica_electronica|1972|h|Historia clínica electrónica
+seguro_salud_universal|1965|h|Seguro de salud universal
+vigilancia_epidemiologica|1995|h|Vigilancia epidemiológica digital
+reciclaje_social|1970|h|Reciclaje y gestión de residuos
+telemedicina|2005|h|Telemedicina
+lenguaje|-100000|h|Lenguaje hablado
+senales_humo_tambores|-10000|a|Señales de humo y tambores
+arte_rupestre|-10000|a|Arte rupestre y símbolos
+escritura_pictografica|-3500|h|Escritura pictográfica
+escritura_logografica|-3200|h|Escritura logográfica (tablillas)
+tinta|-2500|h|Tinta
+papiro|-3000|h|Papiro
+escritura_alfabetica|-1050|h|Alfabeto
+pergamino|-190|h|Pergamino
+libro_codice|100|h|Códice (libro encuadernado)
+biblioteca|-285|h|Biblioteca
+lingua_franca|-500|h|Lengua franca
+diccionarios_gramaticas|600|h|Gramáticas y diccionarios
+lenguas_senas|-1300|h|Lenguas de señas
+escritura_silabica|-1800|h|Escrituras silábicas
+sinogramas|-1250|h|Sinogramas (escritura china)
+lenguas_clasicas|-285|a|Lenguas clásicas (latín y griego)
+retorica|-285|a|Retórica y oratoria
+escuelas_traduccion|1130|h|Escuelas de traducción
+lenguas_vernaculas_escritas|1450|h|Lenguas vernáculas escritas
+academias_lengua|1713|h|Academias de la lengua
+ortografia_normalizada|1741|h|Ortografía normalizada
+braille|1824|h|Sistema Braille
+lenguas_planificadas|1900|a|Lenguas planificadas (esperanto)
+revitalizacion_lenguas|1970|h|Revitalización de lenguas minoritarias
+lengua_franca_global|1983|a|Lengua franca global
+iconografia_universal|2010|h|Iconografía universal (emoji)
+linguistica|1860|a|Lingüística
+fonetica|1780|h|Fonética y fonología
+filologia_comparada|1786|h|Filología comparada
+desciframiento_escrituras|1860|a|Desciframiento de escrituras antiguas
+linguistica_historica|1822|h|Lingüística histórica (indoeuropeo)
+semiotica|1916|h|Semiótica
+sociolinguistica|1960|h|Sociolingüística
+gramatica_generativa|1957|h|Gramática generativa
+psicolinguistica|1960|h|Psicolingüística
+linguistica_computacional|1954|h|Lingüística computacional
+neurolinguistica|2000|h|Neurolingüística
+traduccion_automatica|2016|h|Traducción automática
+descifrado_lenguas_perdidas_ia|2022|a|Descifrado de lenguas perdidas con IA
+traduccion_universal_tiempo_real|2035|x|Traducción universal en tiempo real
+interlingua_ia|2045|x|Interlingua universal
+comunicacion_mente_a_mente|2060|x|Comunicación mente a mente
+comunicacion_interespecie|2055|x|Comunicación interespecie
+historiografia|-440|h|Historiografía
+sociologia|1838|h|Sociología
+antropologia|1860|h|Antropología
+arqueologia|1860|h|Arqueología
+ciencias_politicas|1903|h|Ciencias políticas
+psicoanalisis|1900|h|Psicología clínica y psicoanálisis
+demografia|1855|h|Demografía
+geografia_humana|1860|a|Geografía humana
+etnografia|1922|h|Etnografía de campo
+psicologia_social|1908|h|Psicología social
+datacion_radiocarbono|1949|h|Datación por radiocarbono
+ciencia_cognitiva|1956|h|Ciencias cognitivas
+humanidades_digitales|2010|a|Humanidades digitales
+ciencia_datos_social|2010|h|Ciencia de datos social
+simulacion_sociedades|2050|x|Simulación de sociedades completas

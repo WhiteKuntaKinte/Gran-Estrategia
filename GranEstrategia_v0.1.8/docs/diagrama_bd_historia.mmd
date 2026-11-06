@@ -1,0 +1,65 @@
+---
+title: Capa histórica 0.1.8.2 — entidades, nombres, banderas, personas y cargos (todo con fechas)
+---
+erDiagram
+    TERRITORIO {
+        int id PK "entidades: 1.000.000 a 1.999.999"
+        string tipo "entidad"
+        string nombre
+        string clave "wd:Q... (Wikidata) o semilla:..."
+        bool activo
+    }
+    ENTIDAD_INFO {
+        int id PK, FK
+        int inicio "fecha de nacimiento (0 = desconocida)"
+        int fin "fecha de fin (0 = sigue)"
+        string tipo_entidad "imperio, republica, virreinato..."
+        string capital
+        string fuente "semilla o wikidata"
+    }
+    SUCESION {
+        int id_anterior FK
+        int id_siguiente FK
+    }
+    NOMBRE {
+        int id_territorio FK "entidad O país actual"
+        string nombre
+        string idioma "es, en, ru..."
+        string clase "oficial, comun, nativo"
+        int desde
+        int hasta
+    }
+    BANDERA {
+        int id_territorio FK
+        string archivo "banderas_hist/xxxx.png"
+        string clase "bandera, escudo, estandarte"
+        int desde
+        int hasta
+        string licencia "licencia de cada imagen"
+    }
+    PERSONA {
+        int id PK "2.000.000 a 9.999.999"
+        string clave
+        string nombre
+        int nacimiento
+        int muerte
+    }
+    CARGO {
+        int id_persona FK
+        int id_entidad FK
+        string cargo "rey, presidente, emperador..."
+        int desde
+        int hasta
+    }
+    VAR_propietario {
+        int id_provincia FK
+        int valor "ID de un país O de una entidad"
+        int desde
+    }
+    TERRITORIO ||--o| ENTIDAD_INFO : "describe"
+    TERRITORIO ||--o{ SUCESION : "predecesores y sucesores"
+    TERRITORIO ||--o{ NOMBRE : "se llamó (varios, con fechas)"
+    TERRITORIO ||--o{ BANDERA : "usó (varias, con fechas)"
+    PERSONA ||--o{ CARGO : "ocupó"
+    TERRITORIO ||--o{ CARGO : "gobernada por"
+    TERRITORIO ||--o{ VAR_propietario : "dueño en una fecha"

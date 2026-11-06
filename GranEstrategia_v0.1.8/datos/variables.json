@@ -1,0 +1,807 @@
+{
+  "version": "0.1.8.2",
+  "ayuda": "Catálogo de VARIABLES de la base de datos. Cada variable guarda UN solo valor actual por ID de territorio; los valores anteriores van a las tablas de historial. Para añadir una variable nueva basta con agregar una entrada aquí (id_var nuevo, nunca reutilizar). tipo: numero | texto | id. aplica_a: mundo, continente, pais, estado, provincia, ciudad. historial: cambio (guarda el valor viejo cada vez que cambia) | mensual | anual (foto al cerrar el mes / año) | ninguno. agregacion: como se resume hacia arriba en la cadena (suma, media_ponderada:<variable>, ninguna). afecta_economia: si es true, cambiar esta variable invalida la caché de ingresos de los países.",
+  "variables": [
+    {
+      "id_var": 1,
+      "nombre": "poblacion",
+      "etiqueta": "Población",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "habitantes",
+      "aplica_a": [
+        "provincia",
+        "ciudad"
+      ],
+      "historial": "anual",
+      "agregacion": "suma",
+      "descripcion": "Habitantes (2026 al inicio). En las ciudades es un dato aparte: no se suma a la provincia.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 2,
+      "nombre": "favorabilidad",
+      "etiqueta": "Favorabilidad",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Opinión de la población hacia su dueño actual. 0 = rinde 0,5x; 100 = rinde 1,5x.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 3,
+      "nombre": "mult_ingreso",
+      "etiqueta": "Multiplicador de ingreso",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "x",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Multiplica la producción de la provincia (eventos, debug).",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 4,
+      "nombre": "pib_pc_usd",
+      "etiqueta": "Producción por habitante",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "US$/hab/año",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "anual",
+      "agregacion": "ninguna",
+      "descripcion": "Producción anual por habitante. Crece cada mes según la velocidad de desarrollo.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 5,
+      "nombre": "velocidad_desarrollo",
+      "etiqueta": "Velocidad de desarrollo",
+      "categoria": "desarrollo",
+      "tipo": "numero",
+      "unidad": "x",
+      "aplica_a": [
+        "pais",
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Multiplicador del ritmo de desarrollo. El de la provincia y el de su país dueño se multiplican."
+    },
+    {
+      "id_var": 6,
+      "nombre": "propietario",
+      "etiqueta": "Dueño actual",
+      "categoria": "politica",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "País que controla la provincia hoy. Su historial es el registro de soberanía.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 7,
+      "nombre": "area_km2",
+      "etiqueta": "Superficie",
+      "categoria": "geografia",
+      "tipo": "numero",
+      "unidad": "km²",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "suma",
+      "descripcion": "Superficie aproximada de la provincia."
+    },
+    {
+      "id_var": 8,
+      "nombre": "altitud_media_m",
+      "etiqueta": "Altitud media",
+      "categoria": "geografia",
+      "tipo": "numero",
+      "unidad": "m",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Altitud media sobre el nivel del mar."
+    },
+    {
+      "id_var": 9,
+      "nombre": "altitud_max_m",
+      "etiqueta": "Altitud máxima",
+      "categoria": "geografia",
+      "tipo": "numero",
+      "unidad": "m",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Punto más alto de la provincia."
+    },
+    {
+      "id_var": 10,
+      "nombre": "bioma_principal",
+      "etiqueta": "Bioma principal",
+      "categoria": "geografia",
+      "tipo": "texto",
+      "unidad": "código",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Código del bioma dominante (tabla `biomas` de info.json)."
+    },
+    {
+      "id_var": 11,
+      "nombre": "reino_biogeografico",
+      "etiqueta": "Reino biogeográfico",
+      "categoria": "geografia",
+      "tipo": "texto",
+      "unidad": "código",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Código del reino (tabla `reinos` de info.json)."
+    },
+    {
+      "id_var": 12,
+      "nombre": "produccion_principal",
+      "etiqueta": "Producción principal",
+      "categoria": "economia",
+      "tipo": "texto",
+      "unidad": "texto",
+      "aplica_a": [
+        "pais",
+        "estado",
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Lo que más ingresos genera. Se hereda hacia abajo en la cadena si el territorio no tiene dato propio."
+    },
+    {
+      "id_var": 13,
+      "nombre": "produccion_principal_pct",
+      "etiqueta": "% de ingresos de la producción principal",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "%",
+      "aplica_a": [
+        "pais",
+        "estado",
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Peso de la producción principal en los ingresos."
+    },
+    {
+      "id_var": 14,
+      "nombre": "produccion_principal_rubro",
+      "etiqueta": "Rubro de la producción principal",
+      "categoria": "economia",
+      "tipo": "texto",
+      "unidad": "texto",
+      "aplica_a": [
+        "pais",
+        "estado",
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Rubro económico al que pertenece."
+    },
+    {
+      "id_var": 15,
+      "nombre": "divisa",
+      "etiqueta": "Divisa",
+      "categoria": "economia",
+      "tipo": "texto",
+      "unidad": "código",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Código de la moneda del país (tabla de datos/divisas.json).",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 16,
+      "nombre": "pib_ref_2026_usd",
+      "etiqueta": "PIB de referencia 2026",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "US$",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "PIB estimado al inicio del juego (punto de partida; no cambia)."
+    },
+    {
+      "id_var": 17,
+      "nombre": "tesoreria",
+      "etiqueta": "Tesorería",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "moneda del país",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "mensual",
+      "agregacion": "ninguna",
+      "descripcion": "Dinero acumulado por el estado, en SU moneda. Todos los países con provincias la tienen: cobran ingresos y pagan el mantenimiento de su ejército cada día (0.1.8.1)."
+    },
+    {
+      "id_var": 18,
+      "nombre": "tasa_fiscal",
+      "etiqueta": "Impuestos",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "fracción",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Parte de la producción que recauda el estado (0,25 = 25 %).",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 19,
+      "nombre": "nombre_visible",
+      "etiqueta": "Nombre personalizado",
+      "categoria": "identidad",
+      "tipo": "texto",
+      "unidad": "texto",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Nombre que ve el jugador si personalizó su país (vacío = nombre original)."
+    },
+    {
+      "id_var": 20,
+      "nombre": "anexado_a",
+      "etiqueta": "Anexado a",
+      "categoria": "politica",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "País que absorbió a este país (vacío = independiente)."
+    },
+    {
+      "id_var": 21,
+      "nombre": "crecimiento_base_anual",
+      "etiqueta": "Crecimiento base anual",
+      "categoria": "desarrollo",
+      "tipo": "numero",
+      "unidad": "fracción/año",
+      "aplica_a": [
+        "mundo"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Crecimiento anual de la producción por habitante con velocidad de desarrollo 1,0. Valor provisional 0,02."
+    },
+    {
+      "id_var": 22,
+      "nombre": "devastacion",
+      "etiqueta": "Devastación",
+      "categoria": "guerra",
+      "tipo": "numero",
+      "unidad": "0-1",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "afecta_economia": true,
+      "descripcion": "Daño por guerra de la provincia (0 = intacta, 1 = arrasada). Reduce lo que produce (hasta -85 %) y se recupera sola poco a poco cada mes. Los cambios por guerra o Debug quedan en el historial; la recuperación mensual no. PROVISIONAL: también servirá para el éxito de la conquista y el riesgo de motín."
+    },
+    {
+      "id_var": 23,
+      "nombre": "soldados",
+      "etiqueta": "Soldados",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "soldados",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "cambio",
+      "agregacion": "suma",
+      "descripcion": "Soldados vivos del pelotón (máximo 1.000). Cada baja o refuerzo deja una fila de historial."
+    },
+    {
+      "id_var": 24,
+      "nombre": "edad_media",
+      "etiqueta": "Edad media",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "años",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:soldados",
+      "descripcion": "Edad media de los soldados. Sube con el tiempo y baja al entrar reclutas. Se actualiza cada mes sin historial."
+    },
+    {
+      "id_var": 25,
+      "nombre": "experiencia",
+      "etiqueta": "Experiencia",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:soldados",
+      "descripcion": "Experiencia de combate y de servicio. Sube sin bajas; los reclutas la bajan."
+    },
+    {
+      "id_var": 26,
+      "nombre": "familiaridad",
+      "etiqueta": "Familiaridad",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:soldados",
+      "descripcion": "Cohesión entre los soldados y con sus jefes. Sube con menos bajas; las bajas y los reclutas la bajan."
+    },
+    {
+      "id_var": 27,
+      "nombre": "forma_fisica",
+      "etiqueta": "Forma física",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:soldados",
+      "descripcion": "Derivada de la edad media: máxima entre ~20 y 28 años."
+    },
+    {
+      "id_var": 28,
+      "nombre": "bajas_mes",
+      "etiqueta": "Bajas del mes",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "fracción",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Fracción de la tropa perdida en el mes en curso (se pone a cero al cerrar el mes)."
+    },
+    {
+      "id_var": 29,
+      "nombre": "bajas_total",
+      "etiqueta": "Bajas acumuladas",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "soldados",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "ninguno",
+      "agregacion": "suma",
+      "descripcion": "Soldados perdidos desde que existe el pelotón."
+    },
+    {
+      "id_var": 30,
+      "nombre": "ubicacion",
+      "etiqueta": "Ubicación",
+      "categoria": "ejercito",
+      "tipo": "id",
+      "unidad": "ID de provincia",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Provincia donde está el pelotón. Cada movimiento deja historial."
+    },
+    {
+      "id_var": 31,
+      "nombre": "tasa_militar",
+      "etiqueta": "Tasa militar",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "fracción de la población",
+      "aplica_a": [
+        "ejercito"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Parte de la población del país que sirve en su ejército al empezar la partida (datos/ejercito.json). PROVISIONAL."
+    },
+    {
+      "id_var": 32,
+      "nombre": "regimiento",
+      "etiqueta": "Regimiento",
+      "categoria": "ejercito",
+      "tipo": "id",
+      "unidad": "ID de regimiento",
+      "aplica_a": [
+        "peloton"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Regimiento al que pertenece el pelotón. Un regimiento es un grupo de pelotones que se mueve, pelea y se ve en el mapa como UN solo cuadro. Dos regimientos pueden estar en la misma provincia sin juntarse: unirlos es una orden deliberada."
+    },
+    {
+      "id_var": 33,
+      "nombre": "factor_mantenimiento",
+      "etiqueta": "Factor de mantenimiento",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "× PIB por habitante al año por soldado",
+      "aplica_a": [
+        "ejercito"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Cuánto cuesta mantener UN soldado un año, medido en PIB por habitante del país. Multiplicado por 1.000 da el mantenimiento de una unidad. PROVISIONAL (4 = unos 4 sueldos medios de la economía)."
+    },
+    {
+      "id_var": 34,
+      "nombre": "factor_reclutamiento",
+      "etiqueta": "Factor de reclutamiento",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "× PIB por habitante por soldado",
+      "aplica_a": [
+        "ejercito"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Cuánto cuesta reclutar y equipar UN soldado, medido en PIB por habitante del país (se paga una sola vez). PROVISIONAL."
+    },
+    {
+      "id_var": 35,
+      "nombre": "mantenimiento_unidad",
+      "etiqueta": "Mantenimiento por unidad",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "US$ por año por unidad (1.000 soldados)",
+      "aplica_a": [
+        "ejercito"
+      ],
+      "historial": "mensual",
+      "agregacion": "ninguna",
+      "descripcion": "Precio anual de mantener una unidad de 1.000 soldados = factor_mantenimiento × PIB por habitante × 1.000. Se recalcula cada mes con la economía."
+    },
+    {
+      "id_var": 36,
+      "nombre": "costo_reclutamiento_unidad",
+      "etiqueta": "Costo de reclutar una unidad",
+      "categoria": "ejercito",
+      "tipo": "numero",
+      "unidad": "US$ por unidad (1.000 soldados)",
+      "aplica_a": [
+        "ejercito"
+      ],
+      "historial": "mensual",
+      "agregacion": "ninguna",
+      "descripcion": "Precio de reclutar una unidad de 1.000 soldados (pago único) = factor_reclutamiento × PIB por habitante × 1.000. Se recalcula cada mes con la economía."
+    },
+    {
+      "id_var": 37,
+      "nombre": "guerras_activas",
+      "etiqueta": "Guerras activas",
+      "categoria": "guerra",
+      "tipo": "numero",
+      "unidad": "guerras",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Cuántas guerras tiene abiertas el país ahora mismo."
+    },
+    {
+      "id_var": 38,
+      "nombre": "agresor",
+      "etiqueta": "Agresor",
+      "categoria": "guerra",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "guerra"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "País que declaró la guerra (el que atacó primero una provincia del otro)."
+    },
+    {
+      "id_var": 39,
+      "nombre": "defensor",
+      "etiqueta": "Defensor",
+      "categoria": "guerra",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "guerra"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "País al que le atacaron una provincia."
+    },
+    {
+      "id_var": 40,
+      "nombre": "guerra_inicio",
+      "etiqueta": "Inicio de la guerra",
+      "categoria": "guerra",
+      "tipo": "numero",
+      "unidad": "fecha AAAAMMDD+100000",
+      "aplica_a": [
+        "guerra"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Fecha en que empezó la guerra."
+    },
+    {
+      "id_var": 41,
+      "nombre": "guerra_fin",
+      "etiqueta": "Fin de la guerra",
+      "categoria": "guerra",
+      "tipo": "numero",
+      "unidad": "fecha AAAAMMDD+100000 (0 = sigue abierta)",
+      "aplica_a": [
+        "guerra"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Fecha en que terminó la guerra; 0 mientras sigue abierta."
+    },
+    {
+      "id_var": 42,
+      "nombre": "guerra_causa",
+      "etiqueta": "Causa de la guerra",
+      "categoria": "guerra",
+      "tipo": "texto",
+      "unidad": "",
+      "aplica_a": [
+        "guerra"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Por qué empezó (por ahora: ataque a una provincia)."
+    },
+    {
+      "id_var": 43,
+      "nombre": "bat_provincia",
+      "etiqueta": "Provincia de la batalla",
+      "categoria": "batalla",
+      "tipo": "id",
+      "unidad": "ID de provincia",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Provincia donde se peleó."
+    },
+    {
+      "id_var": 44,
+      "nombre": "bat_guerra",
+      "etiqueta": "Guerra de la batalla",
+      "categoria": "batalla",
+      "tipo": "id",
+      "unidad": "ID de guerra",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Guerra a la que pertenece la batalla."
+    },
+    {
+      "id_var": 45,
+      "nombre": "bat_atacante",
+      "etiqueta": "Atacante",
+      "categoria": "batalla",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "País cuyas tropas llegaron a la provincia (el que atacó)."
+    },
+    {
+      "id_var": 46,
+      "nombre": "bat_defensor",
+      "etiqueta": "Defensor",
+      "categoria": "batalla",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "País que ya tenía tropas en la provincia."
+    },
+    {
+      "id_var": 47,
+      "nombre": "bat_inicio",
+      "etiqueta": "Inicio de la batalla",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "fecha AAAAMMDD+100000",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Fecha del primer día de combate."
+    },
+    {
+      "id_var": 48,
+      "nombre": "bat_fin",
+      "etiqueta": "Fin de la batalla",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "fecha AAAAMMDD+100000 (0 = sigue)",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Fecha del último día de combate; 0 mientras continúa."
+    },
+    {
+      "id_var": 49,
+      "nombre": "bat_dias",
+      "etiqueta": "Días de combate",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "días",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Días que lleva la batalla (cada día deja una fila de historial)."
+    },
+    {
+      "id_var": 50,
+      "nombre": "bat_ini_atac",
+      "etiqueta": "Soldados atacantes al empezar",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "soldados",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Fuerza del atacante el primer día."
+    },
+    {
+      "id_var": 51,
+      "nombre": "bat_ini_def",
+      "etiqueta": "Soldados defensores al empezar",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "soldados",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Fuerza del defensor el primer día."
+    },
+    {
+      "id_var": 52,
+      "nombre": "bat_bajas_atac",
+      "etiqueta": "Bajas del atacante",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "soldados",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Soldados que ha perdido el atacante hasta ahora (historial día por día)."
+    },
+    {
+      "id_var": 53,
+      "nombre": "bat_bajas_def",
+      "etiqueta": "Bajas del defensor",
+      "categoria": "batalla",
+      "tipo": "numero",
+      "unidad": "soldados",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Soldados que ha perdido el defensor hasta ahora (historial día por día)."
+    },
+    {
+      "id_var": 54,
+      "nombre": "bat_ganador",
+      "etiqueta": "Ganador",
+      "categoria": "batalla",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "País que se quedó en la provincia (-1 mientras sigue o si no hubo ganador)."
+    },
+    {
+      "id_var": 55,
+      "nombre": "bat_resultado",
+      "etiqueta": "Resultado",
+      "categoria": "batalla",
+      "tipo": "texto",
+      "unidad": "",
+      "aplica_a": [
+        "batalla"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Cómo terminó: aniquilación, retirada o paz."
+    },
+    {
+      "id_var": 56,
+      "nombre": "ocupante",
+      "etiqueta": "Ocupada por",
+      "categoria": "guerra",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "afecta_economia": true,
+      "descripcion": "País que ocupa la provincia en una guerra (vacío = nadie). El dueño sigue siendo el de `propietario`, pero mientras esté ocupada no le rinde ingresos. La paz decide si se devuelve o cambia de dueño. Su historial es el registro de ocupaciones."
+    }
+  ]
+}

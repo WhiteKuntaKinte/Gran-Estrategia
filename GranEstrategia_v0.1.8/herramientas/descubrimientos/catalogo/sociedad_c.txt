@@ -1,0 +1,63 @@
+## SOC|HUM|Lenguas y ciencias humanas|Cómo se habla, se escribe y se estudia al ser humano: lenguas, escrituras, lingüística, historia, antropología y psicología social. Subrama con énfasis propio.|@len
+### Lenguaje y escritura
+lenguaje|Lenguaje hablado|0|T|observacion_naturaleza
+senales_humo_tambores|Señales de humo y tambores|1|T|lenguaje,fuego
+arte_rupestre|Arte rupestre y símbolos|1|T|lenguaje,pigmentos_tintes
+escritura_pictografica|Escritura pictográfica|2|T|arte_rupestre,conteo
+escritura_logografica|Escritura logográfica (tablillas)|2|T|escritura_pictografica,ceramica_alfareria
+tinta|Tinta|2|T|pigmentos_tintes,escritura_pictografica
+papiro|Papiro|2|T|escritura_pictografica,cuerda_fibras
+escritura_alfabetica|Alfabeto|3|T|escritura_logografica
+pergamino|Pergamino|3|T|papiro,cuero_curtido
+libro_codice|Códice (libro encuadernado)|3|T|pergamino
+biblioteca|Biblioteca|3|B|escritura_alfabetica,papiro
+lingua_franca|Lengua franca|3|T|escritura_alfabetica,comercio_larga_distancia
+diccionarios_gramaticas|Gramáticas y diccionarios|4|T|escritura_alfabetica,biblioteca
+lenguas_senas|Lenguas de señas|2|T|lenguaje
+escritura_silabica|Escrituras silábicas|2|T|escritura_logografica
+sinogramas|Sinogramas (escritura china)|2|T|escritura_logografica,tinta
+lenguas_clasicas|Lenguas clásicas (latín y griego)|3|T|escritura_alfabetica,biblioteca
+retorica|Retórica y oratoria|3|K|escritura_alfabetica,biblioteca
+escuelas_traduccion|Escuelas de traducción|4|B|lingua_franca,monasterios_copistas
+lenguas_vernaculas_escritas|Lenguas vernáculas escritas|5|T|imprenta,diccionarios_gramaticas
+academias_lengua|Academias de la lengua|6|B|diccionarios_gramaticas,academias_ciencias
+ortografia_normalizada|Ortografía normalizada|6|G|academias_lengua,imprenta
+braille|Sistema Braille|7|T|escritura_alfabetica,imprenta
+lenguas_planificadas|Lenguas planificadas (esperanto)|8|T|linguistica,sociologia
+revitalizacion_lenguas|Revitalización de lenguas minoritarias|9|G|linguistica,educacion_publica
+lengua_franca_global|Lengua franca global|9|T|lingua_franca,internet_tecnologia
+iconografia_universal|Iconografía universal (emoji)|10|T|internet_publico,escritura_pictografica
+### Lingüística
+linguistica|Lingüística|7|K|diccionarios_gramaticas,antropologia
+fonetica|Fonética y fonología|6|K|diccionarios_gramaticas,acustica
+filologia_comparada|Filología comparada|6|K|diccionarios_gramaticas,historiografia
+desciframiento_escrituras|Desciframiento de escrituras antiguas|7|K|filologia_comparada,arqueologia
+linguistica_historica|Lingüística histórica (indoeuropeo)|7|K|filologia_comparada
+semiotica|Semiótica|8|K|linguistica
+sociolinguistica|Sociolingüística|9|K|linguistica,sociologia
+gramatica_generativa|Gramática generativa|9|K|linguistica,computabilidad
+psicolinguistica|Psicolingüística|9|K|linguistica,psicologia_experimental
+linguistica_computacional|Lingüística computacional|9|K|linguistica,computadora_digital
+neurolinguistica|Neurolingüística|10|K|psicolinguistica,neuroimagen
+traduccion_automatica|Traducción automática|10|T|lenguaje_natural_nlp,linguistica_computacional
+descifrado_lenguas_perdidas_ia|Descifrado de lenguas perdidas con IA|10|T|ia_generativa,desciframiento_escrituras
+traduccion_universal_tiempo_real|Traducción universal en tiempo real|11|T|traduccion_automatica,interfaz_cerebro_computadora
+interlingua_ia|Interlingua universal|11|T|traduccion_automatica,ia_generativa
+comunicacion_mente_a_mente|Comunicación mente a mente|11|T|interfaz_cerebro_computadora,neurolinguistica
+comunicacion_interespecie|Comunicación interespecie|11|T|neurolinguistica,etologia
+### Ciencias humanas
+historiografia|Historiografía|3|K|epica_literatura,escritura_alfabetica
+sociologia|Sociología|7|K|positivismo,estadistica_oficial
+antropologia|Antropología|7|K|positivismo,paleontologia
+arqueologia|Arqueología|7|K|historiografia,geologia_estratigrafia
+ciencias_politicas|Ciencias políticas|8|K|sociologia,filosofia_politica
+psicoanalisis|Psicología clínica y psicoanálisis|8|K|psicologia_experimental,sociologia
+demografia|Demografía|7|K|estadistica_oficial,sociologia
+geografia_humana|Geografía humana|7|K|antropologia,mapas_administrativos
+etnografia|Etnografía de campo|8|K|antropologia
+psicologia_social|Psicología social|8|K|psicologia_experimental,sociologia
+datacion_radiocarbono|Datación por radiocarbono|9|T|arqueologia,radiactividad
+ciencia_cognitiva|Ciencias cognitivas|9|K|psicologia_experimental,computadora_digital,linguistica
+humanidades_digitales|Humanidades digitales|10|K|historiografia,big_data
+ciencia_datos_social|Ciencia de datos social|10|K|sociologia,big_data
+simulacion_sociedades|Simulación de sociedades completas|11|K|ciencia_datos_social,ia_generativa

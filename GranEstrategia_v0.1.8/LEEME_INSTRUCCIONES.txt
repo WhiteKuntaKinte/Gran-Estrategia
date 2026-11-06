@@ -1,0 +1,66 @@
+GRAN ESTRATEGIA — 0.1.8.33 (DESARROLLO)
+
+1. Descomprime el ZIP y abre la carpeta (donde está project.godot) con Godot 4.
+2. F5 para ejecutar. Rueda = zoom, arrastrar o W A S D = mover, UN clic en un país = lo elige y muestra sus provincias.
+   Al pulsar JUGAR eliges MODO DEV (mundo entero, sin IA salvo la que actives) o CAMPAÑA (solo Europa + Rusia y Turquía, IA en todos los países menos el tuyo, y Ranking: tecla R;
+   la primera opción de la lista, «— Ninguno: solo observar —», te deja mirar sin jugar). Ver LEEME.txt.
+3. Tiempo: Espacio pausa, 1-2-3 velocidad; pulsa la FECHA para las velocidades 4-5-6 (o las teclas 4, 5, 6). x6 = un año por segundo. Atrás: ↩ o Retroceso.
+4. DEBUG: botón del bicho (arriba a la izquierda) o F1. Es una ventana flotante; no pausa el juego. Elige tu país en la
+   pestaña Jugador. Desde ahí o con el lápiz de la barra superior abres "Mi país" para personalizarlo.
+5. Barra superior: pulsa tu país (pestaña General), tu dinero (pestaña Economía) o la fecha (más velocidades). El HUD de país tiene pestañas:
+   General · Diplomacia · Militar · Política · Economía.
+6. Debug (F1) > pestaña "Historia": escribe una fecha y ve qué estados existían, sus nombres y quién gobernaba. Este ZIP trae los
+   1.902 estados REALES que descargaste (datos/historico/). Sus imágenes de banderas están en la carpeta banderas_hist, que NO va en el
+   ZIP: si abres el proyecto en una carpeta nueva, copia banderas_hist de tu carpeta anterior (si descomprimes ENCIMA de la
+   anterior, no hace falta). Para volver a descargar: herramientas/descargar_historia/LEEME_DESCARGA.txt.
+7. NUEVO en 0.1.7.9.9D — EJÉRCITO: selecciona un país, una provincia o un continente y abre la pestaña «Ejército» del panel
+   (la 5.ª). Para probarlo: Debug (F1) > pestaña «Ejército» (reclutar, bajas, mover pelotones, devastación, pasar un mes).
+   Las cifras de tropas por país son estimaciones provisionales mías; todavía no hay guerra.
+8. TROPAS EN EL MAPA (rehecho en 0.1.8): elige tu país en Debug (F1) > Jugador; haz zoom a tu país y verás cuadros con bandera y número COMPLETO
+   de soldados (un cuadro = un REGIMIENTO; siempre se dibujan por encima de todo lo demás). Pulsa un cuadro (o una provincia tuya): se abre TU PAÍS en el HUD,
+   pestaña MILITAR (Resumen · Regimientos · Reclutar · Batallas). Ya no hay ventana flotante de ejército.
+   REGIMIENTOS: Mover… (clic en la provincia de destino; ves la ruta y los días; Esc cancela), Dividir, Unir (a propósito: las tropas que comparten
+   provincia NO se funden solas), Disolver (sin confirmación), Detener. CTRL + CLIC en cuadros del mapa o en filas de la lista: elige VARIOS regimientos a la vez
+   (como en el explorador de archivos); las órdenes valen para todos. RECLUTAR: pon cuántos; CUESTA dinero (se ve el precio y cuánto sube el mantenimiento).
+   El mantenimiento del ejército se resta cada día de tu caja: arriba ves el balance (en rojo si pierdes dinero). Para entrar con tropas en una provincia de
+   OTRO país hay que estar en guerra con él (desde 0.1.8.3 se declara en Diplomacia; antes la orden la declaraba sola); si coinciden regimientos enemigos hay BATALLA (cuadro con borde rojo y espadas) y queda en
+   Militar > Batallas. Las guerras abiertas y la paz están en la pestaña DIPLOMACIA. Deja correr el tiempo (Espacio / 1-6). Todo esto es provisional.
+   NUEVO en 0.1.8.1: TODOS los países tienen caja y gastan en su ejército (si la caja queda en rojo, los soldados desertan); si te quedas SOLO 3 días en una provincia
+   enemiga la OCUPAS (sigue siendo de su dueño pero no le rinde y se pinta mezclada); el bando que va perdiendo mucho se RETIRA en vez de morir; y en Diplomacia > guerra
+   puedes PROPONER LA PAZ de tres formas (blanca, quedarse con lo ocupado, o con indemnización): el rival acepta o rechaza según el puntaje de guerra.
+   Para probarlo rápido: Debug (F1) > Ejército para reclutar tropas junto a una frontera, mándalas a una provincia ajena con poca defensa y deja correr el tiempo.
+   NUEVO en 0.1.8.3: ya NO se declara la guerra mandando tropas. Elige el país vecino > pestaña DIPLOMACIA > «Declarar la guerra a …» (pulsa dos veces); después sí puedes mandar tropas a su territorio.
+   En esa pestaña también ves las treguas. Botón ▾ del panel = encogerlo a solo el nombre. Debug: « » y ◢ cambian el tamaño de la ventana.
+9. NUEVO en 0.1.7.9.9F — ANEXAR PAÍSES: Debug (F1) > pestaña «Anexar»: elige país A (el que se anexa) y país B (el que lo recibe) y pulsa el botón.
+   Las provincias de A toman el color exacto de B, las fronteras se recalculan, A queda «anexado a B» sin provincias y su ejército pasa a B.
+   Para devolver una provincia: elige la provincia y usa Debug > Provincia > «TRANSFERIR A …». Con doble clic en B ves todas sus líneas de provincia.
+   MOVER SIN MENÚ (9F): clic izquierdo en un cuadrito de tus tropas y clic DERECHO en la provincia de destino; o arrastra el cuadrito hasta ella.
+   El derecho mantenido y arrastrado sigue moviendo la cámara. Esc cancela. La ruta se ve en dorado con flechas que avanzan.
+10. RENDIMIENTO: Debug (F1) > pestaña «Rend.»: ves tu tarjeta gráfica y los FPS, puedes apagar capas del mapa para ver cuál pesa más, y el botón
+   «Prueba de zoom» te da un informe (queda copiado: pégalo en el chat con Ctrl+V).
+11. Diagramas de la base de datos: carpeta docs/ (actualizados: ahora incluyen ejército y pelotón).
+12. Versión, FPS y zoom aparecen en la esquina.
+13. OPCIONES (0.1.8.32): menú principal > OPCIONES tiene dos ventanas, PANTALLA e INFORMACIÓN (los datos del mapa y la versión).
+   PANTALLA tiene tres partes: PANTALLA (modo ventana / pantalla completa, resolución, ventana sin bordes, VSync, límite de FPS, contador de FPS),
+   GRÁFICOS DEL MAPA (Calidad Alta / Media / Baja, suavizado de bordes, mar liso o con profundidad, detalle de las costas, líneas de provincia, ciudades y lagos)
+   y SIMULACIÓN (Prioridad: Fluidez / Equilibrada / Velocidad del tiempo). Los cambios se aplican con el botón APLICAR; si cambian el tamaño o el modo de la
+   ventana te pregunta «¿Mantener estos cambios?» y, si no respondes en 10 segundos, vuelve solo a lo anterior. Lo que confirmas se guarda y se aplica la próxima
+   vez que abras el juego. Para un PC flojo: Calidad Baja + VSync desactivado + prioridad Fluidez.
+14. ESCENARIOS (0.1.8.34): JUGAR > MODO DEV > elige «2026» o «AÑO 1 d. C.». Son el MISMO juego con otros datos de partida: en el año 1 eliges una nación y ves el mismo HUD
+   (General · Diplomacia · Militar · Política · Economía), corre el reloj (empieza el 1/1/1), hay economía, ejércitos, guerra, diplomacia, IA y Debug. Lo gris oscuro son «Tierras sin
+   reclamar» (nadie las gobierna: no se atacan ni se controlan; las tropas pasan por ellas). Fronteras y pueblos aproximados. Elegir otro escenario recarga el mundo.
+15. OPCIONES EN LA PAUSA (0.1.8.33): Esc > OPCIONES abre PANTALLA e INFORMACIÓN; VOLVER regresa a la pausa. Tras APLICAR, una línea debajo de los botones dice si la ventana cambió de verdad.
+   Si dice AVISO y usas Godot 4.4 o posterior con F5: desactiva «Embed Game on Next Start» en la pestaña Juego del editor (el editor manda sobre el tamaño de su ventana incrustada).
+
+16. FORMA DEL TERRITORIO (0.1.8.35): F1 > pestaña PROVINCIA > «Forma del territorio». Elige una provincia (búscala o selecciónala en el mapa), elige una vecina en el selector y
+   pulsa «Cederle ¼» / «Cederle ½» (mueve la frontera), «Absorberla toda» (la vecina se queda sin territorio y pasa a ti) o «Fusionarme en ella». «Deshacer» devuelve el último cambio y
+   «Restablecer forma» deja el mapa como empezó la época. Las provincias son grupos de celdas fijas (docs/MAPA_CELDAS.md); la población y las tropas no se mueven con ellas todavía.
+17. PANTALLA COMPLETA (0.1.8.35): en OPCIONES > PANTALLA, con «Pantalla completa», la lista de resoluciones es la RESOLUCIÓN INTERNA (a la que se dibuja el juego): «Nativa» o menores.
+   Godot no puede cambiar la resolución real del monitor; bajar la interna da más FPS en PCs modestos.
+18. DESCUBRIMIENTOS (0.1.8.36): F1 > pestaña «Descub.». Arriba ves el año del reloj, cuántos descubrimientos conoce la historia y tu país, el reparto por era y cuáles acaban de llegar / llegan
+   a continuación. La lista muestra los 30 anteriores y 30 siguientes a la fecha (✓ = ya conocido; los que faltan salen en gris); escribe en el buscador para encontrar cualquiera de los 1.730.
+   Al elegir uno, la ficha dice su año (y si es histórico, ajustado o hipotético), era, ruta, tipo y qué prerrequisitos tiene tu país (✓ / ✗). CONCEDER A MI PAÍS / QUITAR A MI PAÍS cambian solo a tu país;
+   MI PAÍS = HISTORIA lo deja con lo que la historia sabría en esa fecha. Para probarlo: salta de fecha en el Debug (por ejemplo al año 1 y a 1800) y mira cómo cambia el total.
+
+Si algo no carga: mira el panel "Salida" de Godot; los mensajes indican qué archivo de datos/ falta.
+Ver LEEME.txt para el detalle de cambios y cómo regenerar los datos.
