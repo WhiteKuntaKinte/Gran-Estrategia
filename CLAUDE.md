@@ -14,13 +14,16 @@ Rama de trabajo: `v0.1.8-development` (`main` no se toca, ver README). Proyecto 
 - `datos/`: JSON y `.bin` **generados**; no editarlos a mano. `herramientas/`: generadores en Python (`construir_*.py`, `preparar_*.py`). Los descubrimientos se editan en `herramientas/descubrimientos/` (catálogo + `anios.tsv`) y se regeneran con `construir_descubrimientos.py`. Las imágenes de la vista de Relieve (`datos/texturas/relieve_vista_*.jpg`) salen de `preparar_relieve_vista.py` (ETOPO 2022 + Natural Earth; el .tif de 465 MB está en el Release `datos-etopo`, no en la rama; lo lee `leer_etopo.py` sin GDAL). `renovar_paleta.py` cambia los colores de continente ya horneados.
 - `docs/`: `DESCUBRIMIENTOS.md`, `MAPA_CELDAS.md`, `NATURAL_EARTH.md`, `DIAGRAMA_BASE_DE_DATOS.md`. Lo hecho en cada versión: `NOTAS_TECNICAS_*.md`.
 
+## Regla del zoom
+`_actualizar_zoom()` corre en cada paso de la rueda: ahí solo valores de shader (uniforms) y alfas. **Nunca** cambiar `Line2D.width`, reconstruir mallas o texto por paso (cada cambio rehace la geometría al dibujar y da tirones). Un grosor fijo en píxeles = cinta de malla + shader con `half_width` por uniform (ver `SHADER_BORDE`, `SHADER_SELECCION`).
+
 ## Probar
 - Godot 4.3 sin ventana: `Godot_v4.3-stable_linux.x86_64 --headless --path GranEstrategia_v0.1.8 res://test/runner79.tscn` (se baja de github.com/godotengine/godot/releases; el entorno solo alcanza github.com y los registros de paquetes). Cada prueba imprime `FALLOS: 0` si todo va bien.
 - `runner74` necesita ventana: `xvfb-run -a godot --path … --rendering-driver opengl3 res://test/runner74.tscn`. Primera vez en una carpeta limpia: `--import`.
-- Pruebas incluidas: `test/runner71`–`79` y `89` (rendimiento); ver `test/LEEME_PRUEBAS.txt`. Las ~80 antiguas y los datos históricos reales no están en el repo.
+- Pruebas incluidas: `test/runner71`–`79`, `89` (rendimiento) y `90` (banco de zoom: mide el coste de cada paso de la rueda; usarlo si se toca algo de `_actualizar_zoom`); ver `test/LEEME_PRUEBAS.txt`. Las ~80 antiguas y los datos históricos reales no están en el repo.
 - Auditoría estática: `python3 herramientas/auditar_codigo.py GranEstrategia_v0.1.8 salida.json`.
 
 ## Estado
-Versión actual **0.1.8.37** (3 temas de interfaz, barra y menú VISTA, selección nueva con Ctrl+clic, bordes HD Baja/Media/Alta, etiquetas verticales arregladas, paleta renovada y vista de Relieve con ETOPO 2022): ver `NOTAS_TECNICAS_0.1.8.37.md`. Antes: `NOTAS_TECNICAS_0.1.8.36.md` y `docs/DESCUBRIMIENTOS.md`.
+Versión actual **0.1.8.37a** (corrección de tirones al hacer zoom: el contorno de la selección pasó de `Line2D` a malla con shader, ver sección 11 de `NOTAS_TECNICAS_0.1.8.37.md`; la 0.1.8.37 trae 3 temas de interfaz, barra y menú VISTA, selección nueva con Ctrl+clic, bordes HD Baja/Media/Alta, etiquetas verticales arregladas, paleta renovada y vista de Relieve con ETOPO 2022): ver `NOTAS_TECNICAS_0.1.8.37.md`). Antes: `NOTAS_TECNICAS_0.1.8.36.md` y `docs/DESCUBRIMIENTOS.md`.
 Plan siguiente: **0.1.8.38** = HUD y ventanas (menú Debug en cuadrícula con migas, país con tarjetas, HUD de provincia con Edificios / dos Cores / Ingreso / Población y ventana Construir con los 109 edificios, ventanas movibles y redimensionables, totales y órdenes de grupo con Ctrl+clic, avisos y tooltips flotantes); **0.1.8.39** = imágenes (sistema de pinturas por carpeta y nombre, banderas, iconos de materias primas y de divisas en HD, iconos y migas rediseñados).
 Pendiente conocido: filtro sepia del tema A y tarjetas con pergamino del C; vistas Clima / Población / Economía / Cultura (en el menú como «próximamente»).

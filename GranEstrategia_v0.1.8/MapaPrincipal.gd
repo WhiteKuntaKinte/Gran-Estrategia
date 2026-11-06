@@ -22,7 +22,7 @@ const AjustesScript := preload("res://scripts/ajustes.gd")
 const MenuPantallaScript := preload("res://scripts/menu_pantalla.gd")
 const PerfilScript := preload("res://scripts/perfil.gd")
 
-const VERSION := "0.1.8.37"
+const VERSION := "0.1.8.37a"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -80,6 +80,32 @@ void fragment() {
 		float d = length(UV) * (nucleo + ext_px);
 		a = clamp(nucleo - d + 0.5, 0.0, 1.0);
 		a = max(a, halo * (1.0 - smoothstep(nucleo, nucleo + ext_px, d)));
+	}
+	COLOR = vec4(col.rgb, col.a * alfa * a);
+}
+"""
+
+## 0.1.8.38 · Línea de la selección (borde negro, resplandor, contorno del mar): una cinta de malla cuyo ancho se ajusta aquí, en el shader, a un grosor fijo
+## en píxeles de pantalla. Antes eran `Line2D` y cada paso de zoom les recalculaba toda la geometría (con un país grande elegido, ~6 ms por paso); ahora el zoom
+## solo cambia un par de números. UV = vector de desplazamiento (normal con esquina en inglete); COLOR.r = 0 / 1 según el lado de la cinta.
+const SHADER_SELECCION := """
+shader_type canvas_item;
+uniform float half_width = 0.5;                 // medio ancho de la malla en unidades del mapa (incluye el margen del suavizado)
+uniform vec4 col : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform float alfa = 1.0;
+uniform float nucleo = 1.0;                     // medio grosor de la línea en píxeles de pantalla
+uniform float ext_px = 1.0;                     // margen de malla (px) a cada lado para suavizar el canto
+uniform float suave = 0.0;                      // 0 = línea nítida; 1 = resplandor (cae suave hacia fuera)
+varying float lado;
+void vertex() {
+	VERTEX += UV * half_width;
+	lado = COLOR.r * 2.0 - 1.0;
+}
+void fragment() {
+	float t = abs(lado);
+	float a = clamp(nucleo - t * (nucleo + ext_px) + 0.5, 0.0, 1.0);
+	if (suave > 0.5) {
+		a = (1.0 - t) * (1.0 - t);
 	}
 	COLOR = vec4(col.rgb, col.a * alfa * a);
 }
@@ -522,6 +548,7 @@ var col_hex_continente: Dictionary = {}   # color de continente de cada país ta
 # Selección
 var resaltado: Array = []
 var lineas_resaltado: Array = []
+var cintas_resaltado: Array = []                # 0.1.8.38: cintas de malla del contorno de la selección (borde y resplandor)
 var sel_tipo := ""
 var sel_ref := {}
 
@@ -1563,9 +1590,10 @@ func _actualizar_zoom() -> void:
 			a3 *= 1.0 - smoothstep(zin3 * 2.6, zin3 * 4.5, zc)      # en vista tradicional los estados ceden ante los condados
 		_poner_alfa_nodo(c["padre"], a3)
 
+	_fijar_materiales_seleccion(z)                                           # el borde y el resplandor de la selección: solo unos números (nada de rehacer líneas)
 	for l in lineas_resaltado:
 		if is_instance_valid(l):
-			l.width = float((l as Node).get_meta("px", 2.4)) / z
+			l.width = float((l as Node).get_meta("px", 2.4)) / z             # (solo queda el aro de una ciudad elegida: 33 puntos)
 
 
 func _normalizar_camara() -> void:
@@ -2182,6 +2210,10 @@ func _borrar_resaltado() -> void:
 		if is_instance_valid(l):
 			l.queue_free()
 	lineas_resaltado.clear()
+	for c in cintas_resaltado:
+		if is_instance_valid(c):
+			c.queue_free()
+	cintas_resaltado.clear()
 
 
 func cerrar_seleccion() -> void:
@@ -2281,19 +2313,125 @@ func _contorno_de_anillos(lista: Array) -> Array:
 	return cadenas
 
 
-## Una línea de la selección: `px` es su grosor en pantalla (se reescala con el zoom).
-func _linea_seleccion(pts: PackedVector2Array, dx: float, col: Color, px: float, z: float) -> Line2D:
-	var l := Line2D.new()
-	l.points = pts
-	l.position = Vector2(dx, 0.0)
-	l.width = px / z
-	l.default_color = col
-	l.joint_mode = Line2D.LINE_JOINT_ROUND
-	l.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	l.end_cap_mode = Line2D.LINE_CAP_ROUND
-	l.antialiased = true
-	l.set_meta("px", px)
-	return l
+## Parámetros de cada material de línea de la selección: color, grosor en pantalla (px), margen de suavizado (px), resplandor (1) o línea nítida (0).
+const SEL_MATERIALES := {
+	"brillo": [COLOR_SEL, SEL_BRILLO_PX, 0.0, 1.0],
+	"borde": [Color(0.0, 0.0, 0.0, 1.0), SEL_BORDE_PX, 1.0, 0.0],
+	"mar": [Color(1.0, 0.85, 0.1, 0.9), 2.4, 1.0, 0.0],
+}
+var mats_sel: Dictionary = {}                          # clave de SEL_MATERIALES -> ShaderMaterial (compartido por todas las cintas de esa clase)
+var _shader_sel: Shader
+var _cache_cintas: Dictionary = {}                     # hash de la lista de celdas -> malla de cintas del contorno (como _cache_contorno)
+
+
+## Material de una clase de línea de la selección (se crea la primera vez). Su ancho en el mapa lo pone `_fijar_materiales_seleccion` con el zoom.
+func _material_seleccion(clave: String) -> ShaderMaterial:
+	if mats_sel.has(clave):
+		return mats_sel[clave]
+	if _shader_sel == null:
+		_shader_sel = Shader.new()
+		_shader_sel.code = SHADER_SELECCION
+	var d: Array = SEL_MATERIALES[clave]
+	var m := ShaderMaterial.new()
+	m.shader = _shader_sel
+	m.set_shader_parameter("col", d[0])
+	m.set_shader_parameter("nucleo", float(d[1]) * 0.5)
+	m.set_shader_parameter("ext_px", float(d[2]))
+	m.set_shader_parameter("suave", float(d[3]))
+	m.set_shader_parameter("alfa", 1.0 if clave != "brillo" else lerpf(SEL_BRILLO.x, SEL_BRILLO.y, 0.5))
+	mats_sel[clave] = m
+	_fijar_materiales_seleccion(_zoom_real())
+	return m
+
+
+## Ajusta el ancho en el mapa de las líneas de la selección al zoom actual (el grosor en pantalla no cambia): solo unos números por material.
+func _fijar_materiales_seleccion(z: float) -> void:
+	for clave in mats_sel:
+		var d: Array = SEL_MATERIALES[clave]
+		(mats_sel[clave] as ShaderMaterial).set_shader_parameter("half_width", (float(d[1]) * 0.5 + float(d[2])) / z)
+
+
+## Malla de cinta (un solo `ArrayMesh`) para varias líneas: por cada punto, dos vértices en el mismo sitio con UV = ±vector de desplazamiento (el shader los separa).
+## Las líneas cuyo primer y último punto coinciden se cierran. Las esquinas llevan inglete (limitado a 2× para que las puntas muy agudas no se disparen).
+func _malla_cintas(lineas: Array) -> ArrayMesh:
+	var v := PackedVector2Array()
+	var uv := PackedVector2Array()
+	var col := PackedColorArray()
+	var idx := PackedInt32Array()
+	for linea in lineas:
+		var pts: PackedVector2Array = linea
+		var p := PackedVector2Array()
+		for q in pts:
+			if p.is_empty() or not q.is_equal_approx(p[p.size() - 1]):
+				p.append(q)
+		var cerrada := p.size() > 2 and p[0].is_equal_approx(p[p.size() - 1])
+		if cerrada:
+			p.remove_at(p.size() - 1)
+		var n := p.size()
+		if n < 2:
+			continue
+		var base := v.size()
+		for i in n:
+			var ant: Vector2 = p[(i - 1 + n) % n] if (cerrada or i > 0) else p[i]
+			var sig: Vector2 = p[(i + 1) % n] if (cerrada or i < n - 1) else p[i]
+			var d1 := (p[i] - ant).normalized()
+			var d2 := (sig - p[i]).normalized()
+			var n1 := Vector2(-d1.y, d1.x)
+			var n2 := Vector2(-d2.y, d2.x)
+			var m: Vector2
+			if d1 == Vector2.ZERO:
+				m = n2
+			elif d2 == Vector2.ZERO:
+				m = n1
+			else:
+				m = n1 + n2
+				if m.length_squared() < 0.0001:
+					m = n1
+				else:
+					m = m.normalized()
+					m /= maxf(m.dot(n1), 0.5)
+			v.append(p[i])
+			uv.append(m)
+			col.append(Color(1.0, 0.0, 0.0, 1.0))
+			v.append(p[i])
+			uv.append(-m)
+			col.append(Color(0.0, 0.0, 0.0, 1.0))
+		var tramos := n if cerrada else n - 1
+		for i in tramos:
+			var j := (i + 1) % n
+			var a0 := base + i * 2
+			var b0 := base + j * 2
+			idx.append_array(PackedInt32Array([a0, a0 + 1, b0, b0, a0 + 1, b0 + 1]))
+	if v.is_empty():
+		return null
+	return _crear_malla(v, idx, col, uv)
+
+
+## Las cintas del contorno exterior de un conjunto de celdas (una malla por conjunto, en caché).
+func _cintas_de_anillos(lista: Array) -> ArrayMesh:
+	var h := hash(lista)
+	if _cache_cintas.has(h):
+		return _cache_cintas[h]
+	if _cache_cintas.size() > 24:
+		_cache_cintas.clear()
+	var malla := _malla_cintas(_contorno_de_anillos(lista))
+	_cache_cintas[h] = malla
+	return malla
+
+
+## Pone una cinta (con el material de su clase) en `padre`, en cada copia horizontal del mundo.
+func _poner_cintas(malla: ArrayMesh, clave: String, padre: Node, copias: Array, z_idx: int) -> void:
+	if malla == null:
+		return
+	var mat := _material_seleccion(clave)
+	for dx in copias:
+		var mi := MeshInstance2D.new()
+		mi.mesh = malla
+		mi.material = mat
+		mi.position = Vector2(dx, 0.0)
+		mi.z_index = z_idx
+		padre.add_child(mi)
+		cintas_resaltado.append(mi)
 
 
 ## Resalta un conjunto de celdas: relleno amarillo (`suave`: más tenue, para un país entero) y, con `contorno`, resplandor + borde negro por su contorno exterior.
@@ -2316,19 +2454,9 @@ func _resaltar_anillos(lista: Array, contorno: bool, suave := false) -> void:
 		padre.add_child(mi)
 		resaltado.append(mi)
 	if contorno:
-		var z := _zoom_real()
-		for cad in _contorno_de_anillos(lista):
-			for dx in copias:
-				var brillo := _linea_seleccion(cad, dx, COLOR_SEL, SEL_BRILLO_PX, z)
-				brillo.modulate.a = lerpf(SEL_BRILLO.x, SEL_BRILLO.y, 0.5)
-				brillo.set_meta("resp", SEL_BRILLO)
-				brillo.z_index = 9 if en_foco else 13
-				padre.add_child(brillo)
-				lineas_resaltado.append(brillo)
-				var borde := _linea_seleccion(cad, dx, Color(0.0, 0.0, 0.0, 1.0), SEL_BORDE_PX, z)
-				borde.z_index = 10 if en_foco else 14
-				padre.add_child(borde)
-				lineas_resaltado.append(borde)
+		var cintas := _cintas_de_anillos(lista)
+		_poner_cintas(cintas, "brillo", padre, copias, 9 if en_foco else 13)     # resplandor amarillo que respira
+		_poner_cintas(cintas, "borde", padre, copias, 10 if en_foco else 14)     # borde negro nítido encima
 	_iniciar_respiracion()
 
 
@@ -2346,20 +2474,19 @@ func _pulso_seleccion(f: float) -> void:
 		if is_instance_valid(n) and (n as Node).has_meta("resp"):
 			var r: Vector2 = (n as Node).get_meta("resp")
 			(n as CanvasItem).modulate.a = lerpf(r.x, r.y, k)
-	for l in lineas_resaltado:
-		if is_instance_valid(l) and (l as Node).has_meta("resp"):
-			var r2: Vector2 = (l as Node).get_meta("resp")
-			(l as CanvasItem).modulate.a = lerpf(r2.x, r2.y, k)
+	if mats_sel.has("brillo"):
+		(mats_sel["brillo"] as ShaderMaterial).set_shader_parameter("alfa", lerpf(SEL_BRILLO.x, SEL_BRILLO.y, k))
 
 
 func _resaltar_mar(m: Dictionary) -> void:
-	var z := _zoom_real()
+	var lineas: Array = []
 	for r in m["r"]:
 		var pts := PackedVector2Array()
 		for k in range(0, r.size(), 2):
 			pts.append(Vector2(r[k], r[k + 1]))
 		var cierre := pts.duplicate()
 		cierre.append(pts[0])
+		lineas.append(cierre)
 		for dx in [-ANCHO_MAPA, 0.0, ANCHO_MAPA]:
 			var pg := Polygon2D.new()
 			pg.polygon = pts
@@ -2368,14 +2495,7 @@ func _resaltar_mar(m: Dictionary) -> void:
 			pg.z_index = -1
 			add_child(pg)
 			resaltado.append(pg)
-			var l := Line2D.new()
-			l.points = cierre
-			l.position = Vector2(dx, 0.0)
-			l.width = 2.4 / z
-			l.default_color = Color(1.0, 0.85, 0.1, 0.9)
-			l.z_index = -1
-			add_child(l)
-			lineas_resaltado.append(l)
+	_poner_cintas(_malla_cintas(lineas), "mar", self, [-ANCHO_MAPA, 0.0, ANCHO_MAPA], -1)
 
 
 func _profundidad_en(p: Vector2) -> int:

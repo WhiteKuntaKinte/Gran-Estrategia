@@ -1,4 +1,4 @@
-PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.37
+PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.37a
 =============================================
 
 Qué son: nueve escenas de Godot que ejecutan el código del juego y comprueban sus resultados
@@ -12,7 +12,8 @@ Qué son: nueve escenas de Godot que ejecutan el código del juego y comprueban 
   runner76  TERRITORIO (0.1.8.35): el mapa en celdas; mover / fusionar / ceder / dividir celdas, clic, colores y fronteras tras cada cambio, deshacer y restablecer, baile aleatorio con comprobación de tablas, gancho de texturas, herramientas del Debug y el año 1 d. C. (~100 comprobaciones)
   runner77  DESCUBRIMIENTOS (0.1.8.36): coherencia del catálogo (1.730, todos con año, prerrequisitos y era), frontera histórica contra una cuenta por fuerza bruta en 31 años, cierre de prerrequisitos, avanzar mes a mes = empezar directo, saltos hacia adelante y hacia atrás, conceder / quitar / reiniciar por país, disponibles, textos de año, coste, y dentro del juego: 2026, 1 d. C. y la pestaña Descub. del Debug (88 comprobaciones)
   runner78  TEMAS DE INTERFAZ (0.1.8.37): las tres paletas (válidas, distintas, legibles), ajustes «tema» y «bordes», el selector «Interfaz» de Opciones con cambio en vivo y guardado, el HUD que se repinta sin reiniciar, menú principal y pausa (74 comprobaciones)
-  runner79  MAPA (0.1.8.37): menú VISTA, selección (borde negro, relleno, respiración, Ctrl+clic), bordes Baja / Media / Alta, sentido de lectura de las etiquetas, paleta renovada y vista de Relieve (imágenes, capas, silueta, calidad) (112 comprobaciones)
+  runner79  MAPA (0.1.8.37): menú VISTA, selección (borde negro, relleno, respiración, Ctrl+clic), bordes Baja / Media / Alta, sentido de lectura de las etiquetas, paleta renovada y vista de Relieve (imágenes, capas, silueta, calidad) (120 comprobaciones; en la 0.1.8.37a el contorno de la selección son cintas con shader)
+  runner90  (no es una prueba: es el BANCO DE ZOOM; simula la rueda paso a paso con el mundo vacío y con el país más grande enfocado y elegido (y con Relieve) e imprime líneas «[Z]» con el coste de cada paso. Con --headless solo cuentan los scripts; con xvfb incluye el dibujo por software.)
   runner89  (no es una prueba: es el BANCO DE RENDIMIENTO de los escenarios; imprime líneas «[B]» con ms por fotograma, llamadas de dibujo y memoria de 2026 y del año 1. Úsalo para comparar versiones.)
 
 Cómo correrlas:

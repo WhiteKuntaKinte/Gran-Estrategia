@@ -1,4 +1,4 @@
-GRAN ESTRATEGIA — 0.1.8.37 (DESARROLLO)
+GRAN ESTRATEGIA — 0.1.8.37a (DESARROLLO)
 
 1. Abre la carpeta del proyecto (donde está project.godot) con Godot 4. (La 0.1.8.37 se sube a GitHub, rama v0.1.8-development; no hay ZIP.)
    NUEVO 0.1.8.37: el botón de lentes de la barra (VISTA) cambia entre Tradicional, Internacional y Relieve; Ctrl+clic elige varias provincias o países; en Opciones > Pantalla

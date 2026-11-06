@@ -1,4 +1,4 @@
-# Notas técnicas 0.1.8.37 — Temas de interfaz, barra y menú VISTA, selección nueva, bordes HD, etiquetas, paleta y vista de Relieve
+# Notas técnicas 0.1.8.37 (y corrección 0.1.8.37a) — Temas de interfaz, barra y menú VISTA, selección nueva, bordes HD, etiquetas, paleta y vista de Relieve
 
 ## Qué es esta versión
 Primera de las tres tandas del rediseño (la 0.1.8.38 es el HUD y las ventanas; la 0.1.8.39, las imágenes). Pedido de Camilo tras las maquetas de estilo: poder elegir **entre 3 temas** desde Opciones,
@@ -22,7 +22,7 @@ arreglar el mapa (selección, bordes, etiquetas, paleta) y estrenar la **vista d
 
 ## 3. Selección (`MapaPrincipal.gd`)
 - Una selección ahora es: **relleno amarillo** + **resplandor** + **borde NEGRO nítido** que sigue el contorno **exterior exacto** de lo elegido (las aristas que las celdas no comparten con otra de la misma
-  selección, encadenadas en `Line2D` antialiasados con grosor fijo en píxeles). El resplandor y el relleno **«respiran»** (un solo `Tween` en bucle que mueve el alfa de lo marcado con `meta "resp"`).
+  selección, encadenadas en una malla de cinta con shader y grosor fijo en píxeles; en la 0.1.8.37 eran `Line2D`, ver la corrección 0.1.8.37a). El resplandor y el relleno **«respiran»** (un solo `Tween` en bucle que mueve el alfa de lo marcado con `meta "resp"`).
 - Se **quitó el efecto de país flotante**: enfocar un país ya no lo agranda ni le pone sombra; solo se atenúa el resto del mapa.
 - **Ctrl+clic**: suma o quita la provincia (con un país enfocado) o el país (sin foco) bajo el cursor; todo lo elegido queda resaltado, el panel muestra lo último y avisa de cuántos hay (`multi_sel`).
   Con un país ya elegido por clic normal, el primer Ctrl+clic en otro lo suma a ese. Con varios países no se enfoca ninguno. **Todavía no**: totales del grupo y órdenes a varias unidades a la vez (0.1.8.38).
@@ -66,7 +66,7 @@ arreglar el mapa (selección, bordes, etiquetas, paleta) y estrenar la **vista d
 - `runner72`: el panel ya no baja con «Ranking» (la barra lo contiene); `runner74`: versión 0.1.8.37.
 
 ## 9. Pruebas y revisiones
-- **`runner79` (nuevo)**: menú VISTA, selección (borde negro, relleno, contorno exacto, caché, grosor en píxeles, respiración), Ctrl+clic, bordes por calidad y desplegable, etiquetas, paleta y vista de Relieve
+- **`runner79` (nuevo; 120 comprobaciones con la corrección 0.1.8.37a)**: menú VISTA, selección (borde negro, relleno, contorno exacto, caché, grosor en píxeles, respiración), Ctrl+clic, bordes por calidad y desplegable, etiquetas, paleta y vista de Relieve
   (tamaños de imagen, colores del océano / fosa / llanura / Tíbet / Antártida / lago, capas, silueta, cambio de calidad, volver atrás).
 - `runner78`: 74 comprobaciones (temas). Resumen de la regresión y del rendimiento en `CHECKLIST_TESTING.md`.
 - **Rendimiento** (`runner89` por software, 0.1.8.37 con bordes Alta contra 0.1.8.36, dos pasadas): ms por fotograma +5 a +12 % (mundo 91–94 frente a 87–88; Europa 89–90 frente a 82–83; Roma 58–66 frente a 54–56), mismos triángulos,
@@ -78,3 +78,20 @@ arreglar el mapa (selección, bordes, etiquetas, paleta) y estrenar la **vista d
 - Pinturas, banderas, iconos de materias primas y de divisas en alta definición: **0.1.8.39**.
 - El filtro sepia del tema A y las tarjetas con pergamino del tema C no están en esta versión (los temas ya cambian colores, tipografía, bordes y botones).
 - Las vistas Clima, Población, Economía y Cultura y religión están en el menú pero como «próximamente».
+
+## 11. Corrección 0.1.8.37a — bajones de FPS al hacer zoom
+- **Lo que vio Camilo**: con la 0.1.8.37, al acercar y alejar con la rueda el juego daba tirones (solo mientras se hacía zoom).
+- **Causa (mía)**: el borde negro y el resplandor de la selección eran `Line2D` con el grosor «fijo en píxeles», y para mantenerlo `_actualizar_zoom()` les reescribía `width` en **cada paso de zoom**.
+  Cambiar el ancho de un `Line2D` le rehace toda la geometría (cierres redondos, antialias): con un país grande elegido eran cientos de líneas (EE. UU.: 350 cadenas, 10.029 puntos, ×2 líneas) y cada paso de la rueda costaba ~6 ms de más (el coste no sale en
+  `ms_zoom` porque el rehacer se hace al dibujar, no al cambiar la propiedad). La 0.1.8.36 no tenía esas líneas.
+- **Arreglo**: el contorno ahora es **una sola malla de cinta por conjunto** (`_malla_cintas`: 2 vértices por punto, UV = vector de desplazamiento con esquina en inglete limitado a 2×, `COLOR.r` = lado) con el shader `SHADER_SELECCION`, que ensancha la cinta en el
+  vértice con el zoom y suaviza el canto en el fragmento (igual que los bordes HD). El resplandor y el borde son dos materiales compartidos (`mats_sel`); **el zoom solo cambia dos números por material** (`_fijar_materiales_seleccion`), la respiración solo cambia el `alfa` del
+  material del resplandor (ya no recorre nodos) y la malla se guarda en caché con la lista de celdas (`_cache_cintas`). El contorno del mar elegido usa lo mismo; solo queda un `Line2D`: el aro de una ciudad elegida (33 puntos).
+  Además el resplandor ahora cae suave hacia fuera (antes era un trazo de 7 px de alfa fijo).
+- **Medido** (`runner90`, banco de zoom nuevo: la rueda paso a paso, un paso por fotograma, EE. UU. enfocado y elegido): scripts solos (headless) **12,9 ms por fotograma (máx. 24,2) en la 0.1.8.37 → 6,9 ms (máx. 7,1) en la 0.1.8.37a, igual que la 0.1.8.36 (6,9)**.
+  Con dibujo por software (dos pasadas): 160 ms entregada, 127–136 ms corregida, 107–113 ms la 0.1.8.36; lo que queda de diferencia (~20 ms) es el coste de rellenar el resplandor y el borde en una GPU simulada por CPU; en una tarjeta real es casi nulo.
+  Sin selección el zoom es igual en las tres (98 / 93–99 / 83–90 ms por software). Elegir un país por primera vez (EE. UU., sin caché) cuesta 138 ms frente a 57 ms en la 0.1.8.36 (el contorno exterior de 4.060 celdas ≈ 61 ms y las cintas ≈ 9 ms); con caché 50 frente a 39 ms.
+  Es un coste de una sola vez al hacer clic, no por fotograma.
+- **Pruebas**: `runner79` ahora comprueba cintas en vez de `Line2D` (3 copias del mundo, una malla por clase, sin `Line2D` en el contorno), que el zoom solo cambia el grosor de los materiales y no rehace la malla, la caché, la forma de la malla (2 vértices por punto,
+  2 triángulos por tramo, UV entre 1 y 2) y el alfa máximo / mínimo de la respiración. `runner90` es el banco de zoom (no comprueba nada: imprime líneas `[Z]`).
+- **Revisión de variables**: 0 funciones y 0 variables repetidas; `datos/variables.json` sin cambios; todo lo nuevo se usa (se quitó `_linea_seleccion`).

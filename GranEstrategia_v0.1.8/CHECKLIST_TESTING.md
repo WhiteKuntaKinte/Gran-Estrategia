@@ -1,4 +1,4 @@
-# Checklist de testing — Gran Estrategia 0.1.8.37
+# Checklist de testing — Gran Estrategia 0.1.8.37a
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
@@ -334,3 +334,12 @@ Marca cada casilla cuando lo hayas probado y dime qué pasó.
 - Godot 4.3 en Linux con `xvfb-run` y render por software: `godot --path <proyecto> --rendering-driver opengl3 res://test/runnerN.tscn`.
 - Cada runner imprime líneas `[T] OK …` / `[T] FALLO …` y termina con `FALLOS: 0` (o `fallos=0`). Cualquier «SCRIPT ERROR» o «Parse Error» cuenta como fallo.
 - Los runners viven en una carpeta `test/` que NO va dentro del ZIP del juego.
+
+### Corrección 0.1.8.37a — tirones al hacer zoom
+- ✅ Causa localizada con el banco `runner90` (zoom paso a paso): con un país elegido, el borde y el resplandor de la selección (`Line2D`) se rehacían en cada paso de zoom. Cambiados por una malla de cinta con shader (`SHADER_SELECCION`); el zoom solo cambia dos números por material.
+- ✅ **Revisión de rendimiento** (`runner90`, EE. UU. enfocado y elegido, 30 pasos de rueda hacia dentro y 30 hacia fuera): scripts solos 12,9 → **6,9 ms por fotograma** (máx. 24,2 → 7,1; la 0.1.8.36: 6,9). Con dibujo por software, dos pasadas: entregada 160 / 161 ms, corregida 127–136 ms, 0.1.8.36 107–113 ms. Sin selección: igual en las tres. Primer clic en EE. UU. (sin caché) 138 ms frente a 57 ms; con caché 50 frente a 39 ms. `runner89` no cambia (no usa selección).
+- ✅ **Revisión de variables**: 0 funciones y 0 variables repetidas; `datos/variables.json` sin cambios; sin nada nuevo sin uso.
+- ✅ Revisión visual (xvfb): país elegido a zoom 3 y 14 y una provincia a zoom 10: borde negro nítido con resplandor amarillo, sin picos en las esquinas.
+- ✅ `runner79` actualizado (120 comprobaciones: cintas, caché, grosor por zoom, respiración); `runner74` pide la versión 0.1.8.37a.
+- ✅ **Regresión final de la 0.1.8.37a**: runner71 181, runner72 121, runner73 84, runner75 145, runner76 97, runner77 88, runner78 74, runner79 120 (headless) y runner74 220 (con ventana, xvfb): **1.130 comprobaciones, 0 fallos y 0 errores de script**.
+- ☐ Pendiente de ti: que en tu PC el zoom con un país elegido vaya fluido.

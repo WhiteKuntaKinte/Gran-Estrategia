@@ -1,8 +1,14 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.37 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.37a (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = cambiar de vista (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña).
+
+CORRECCIÓN 0.1.8.37a — TIRONES AL HACER ZOOM
+- Con la 0.1.8.37 el juego daba tirones al acercar y alejar con la rueda (sobre todo con un país elegido). Era el borde negro y el resplandor de la selección: se rehacían enteros en cada paso de zoom.
+  Ahora son una malla con shader (como las fronteras) y el zoom solo cambia dos números. Medido con EE. UU. elegido: 12,9 ms por fotograma -> 6,9 ms (igual que la 0.1.8.36). Elegir un país muy grande por primera vez tarda algo más (~0,14 s, una sola vez).
+  El resplandor ahora se apaga suave hacia fuera. Todo lo demás de la 0.1.8.37 sigue igual. Detalle en NOTAS_TECNICAS_0.1.8.37.md (sección 11).
+- PRUEBAS: runner79 sube a 120 comprobaciones y hay un banco nuevo de zoom (runner90). Regresión: 71: 181, 72: 121, 73: 84, 75: 145, 76: 97, 77: 88, 78: 74, 79: 120, 74: 220; 1.130 en total, 0 fallos
 
 NUEVO EN 0.1.8.37 — TRES TEMAS DE INTERFAZ, MENÚ VISTA, SELECCIÓN NUEVA, BORDES HD, ETIQUETAS ARREGLADAS, PALETA RENOVADA Y VISTA DE RELIEVE
 (Detalle técnico y rendimiento en NOTAS_TECNICAS_0.1.8.37.md. El número de versión lo elegí yo. La 0.1.8.38 será el HUD y las ventanas; la 0.1.8.39, las imágenes.)

@@ -96,16 +96,22 @@ func t_seleccion() -> void:
 	ok(cadenas.size() >= 1, "el contorno tiene al menos una cadena")
 	var negros := 0
 	var brillos := 0
-	for l in main.lineas_resaltado:
-		if (l as Line2D).default_color == Color(0.0, 0.0, 0.0, 1.0):
+	for c in main.cintas_resaltado:
+		var col: Color = ((c as MeshInstance2D).material as ShaderMaterial).get_shader_parameter("col")
+		if col == Color(0.0, 0.0, 0.0, 1.0):
 			negros += 1
 		else:
 			brillos += 1
-	ok(negros == cadenas.size() * 3 and brillos == cadenas.size() * 3, "cada cadena lleva su borde NEGRO y su resplandor (×3 copias del mundo)")
+	ok(negros == 3 and brillos == 3, "el contorno lleva su borde NEGRO y su resplandor, cada uno en una sola malla (×3 copias del mundo)")
+	ok(main.lineas_resaltado.is_empty(), "el contorno ya no usa Line2D (se recalculaban enteras en cada paso de zoom)")
 	ok(main.resaltado.size() == 3, "el relleno amarillo va en 3 copias")
 	var relleno: MeshInstance2D = main.resaltado[0]
 	ok(relleno.modulate.r > 0.8 and relleno.modulate.g > 0.6 and relleno.modulate.b < 0.4, "el relleno es amarillo")
 	ok(main.tween_resp != null and main.tween_resp.is_valid(), "la respiración está en marcha")
+	main._pulso_seleccion(PI)
+	ok(is_equal_approx(float(main.mats_sel["brillo"].get_shader_parameter("alfa")), main.SEL_BRILLO.y), "en lo más alto de la respiración el resplandor tiene su alfa máximo")
+	main._pulso_seleccion(0.0)
+	ok(is_equal_approx(float(main.mats_sel["brillo"].get_shader_parameter("alfa")), main.SEL_BRILLO.x), "…y en lo más bajo, el mínimo")
 	# el contorno es EXACTAMENTE el borde exterior: cada arista que queda una sola vez entre las celdas
 	var cuenta := {}
 	for ri in celdas:
@@ -127,12 +133,36 @@ func t_seleccion() -> void:
 		segmentos += (c as PackedVector2Array).size() - 1
 	ok(segmentos == exteriores, "el contorno tiene exactamente las aristas exteriores (%d)" % exteriores)
 	ok(main._contorno_de_anillos(celdas) == cadenas, "el contorno se guarda en caché (mismo resultado)")
-	var antes: int = main.lineas_resaltado.size()
-	main._actualizar_zoom()
-	ok(is_equal_approx((main.lineas_resaltado[0] as Line2D).width, float((main.lineas_resaltado[0] as Line2D).get_meta("px")) / main._zoom_real()), "el grosor de las líneas se mantiene en píxeles al cambiar el zoom")
-	ok(main.lineas_resaltado.size() == antes, "cambiar el zoom no duplica líneas")
+	var antes: int = main.cintas_resaltado.size()
+	var malla0: Mesh = (main.cintas_resaltado[0] as MeshInstance2D).mesh
+	var rid0 := malla0.get_rid()
+	main.camara.zoom = Vector2(main.camara.zoom.x * 1.7, main.camara.zoom.x * 1.7)
+	await esperar(0.2)                                   # (el mapa reajusta el zoom solo en su _process)
+	var zr: float = main._zoom_real()
+	for clave in ["borde", "brillo"]:
+		var m: ShaderMaterial = main.mats_sel[clave]
+		var d: Array = main.SEL_MATERIALES[clave]
+		ok(is_equal_approx(float(m.get_shader_parameter("half_width")), (float(d[1]) * 0.5 + float(d[2])) / zr),
+			"el grosor «%s» se mantiene en píxeles al cambiar el zoom (solo cambia un número del material)" % clave)
+	ok(main.cintas_resaltado.size() == antes, "cambiar el zoom no duplica cintas")
+	ok((main.cintas_resaltado[0] as MeshInstance2D).mesh.get_rid() == rid0, "cambiar el zoom no rehace la malla del contorno")
+	ok(main._cintas_de_anillos(celdas) == malla0, "la malla del contorno se guarda en caché")
+	# la malla: 2 vértices por punto, 2 triángulos por tramo, UV de longitud ≤ 2 (inglete limitado) y COLOR.r = 0 / 1
+	var nv := 0
+	for c in cadenas:
+		nv += (c as PackedVector2Array).size() - 1
+	var arr := (malla0 as ArrayMesh).surface_get_arrays(0)
+	ok((arr[Mesh.ARRAY_VERTEX] as PackedVector2Array).size() == nv * 2 and (arr[Mesh.ARRAY_INDEX] as PackedInt32Array).size() == nv * 6,
+		"la cinta tiene 2 vértices por punto y 2 triángulos por tramo (%d puntos)" % nv)
+	var uv_ok := true
+	for u in (arr[Mesh.ARRAY_TEX_UV] as PackedVector2Array):
+		if u.length() > 2.001 or u.length() < 0.99:
+			uv_ok = false
+	ok(uv_ok, "los vectores de desplazamiento de la cinta miden entre 1 y 2")
+	main.camara.zoom = Vector2(main.camara.zoom.x / 1.7, main.camara.zoom.x / 1.7)
+	await esperar(0.2)
 	main._borrar_resaltado()
-	ok(main.resaltado.is_empty() and main.lineas_resaltado.is_empty(), "borrar el resaltado limpia todo")
+	ok(main.resaltado.is_empty() and main.lineas_resaltado.is_empty() and main.cintas_resaltado.is_empty(), "borrar el resaltado limpia todo")
 	# ya no hay efecto de país flotante
 	main._enfocar_pais("Francia", false)
 	await esperar(0.5)
