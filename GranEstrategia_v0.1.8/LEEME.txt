@@ -1,8 +1,28 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.36 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.37 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
-con sus provincias · Ctrl + clic en cuadros de tropas = selección múltiple · V = cambiar de vista · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
+con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = cambiar de vista (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña).
+
+NUEVO EN 0.1.8.37 — TRES TEMAS DE INTERFAZ, MENÚ VISTA, SELECCIÓN NUEVA, BORDES HD, ETIQUETAS ARREGLADAS, PALETA RENOVADA Y VISTA DE RELIEVE
+(Detalle técnico y rendimiento en NOTAS_TECNICAS_0.1.8.37.md. El número de versión lo elegí yo. La 0.1.8.38 será el HUD y las ventanas; la 0.1.8.39, las imágenes.)
+- 3 TEMAS: OPCIONES > PANTALLA > INTERFAZ: A Cartográfico (pergamino y tinta), B Moderno oscuro y C Mixto (marrón y bronce). Cambian EN VIVO, sin APLICAR, y se guardan (por defecto A).
+  Pintan la barra, el menú VISTA, Opciones, pausa, menú principal, avisos, tooltips y el panel de país. Las ventanas viejas (Debug, detalle) toman colores y letra pero mantienen su estructura hasta la 0.1.8.38.
+- BARRA SUPERIOR pegada al borde de arriba, a todo el ancho. A la derecha el botón VISTA (lentes): Tradicional, Internacional, RELIEVE y, en gris «próximamente», Clima, Población, Economía y Cultura y religión.
+- SELECCIÓN: relleno amarillo + resplandor que respira + borde negro nítido que sigue el contorno exacto de lo elegido. Se quitó el efecto de país flotante.
+  CTRL + CLIC: suma o quita provincias (con un país enfocado) o países (sin foco). Todo queda resaltado; el panel muestra lo último y dice cuántos hay. (Totales del grupo y órdenes a varios a la vez: 0.1.8.38.)
+- BORDES HD: OPCIONES > PANTALLA > GRÁFICOS DEL MAPA > Bordes del mapa: Baja (como antes, el más rápido), Media (líneas sin dientes de sierra) y Alta (además una sombra suave en la costa).
+  La calidad gráfica Alta / Media / Baja los pone sola. Medido por software (peor caso): Media ≈ +8 % y Alta ≈ +12 % por fotograma; con una tarjeta gráfica real casi nada.
+- ETIQUETAS ARREGLADAS: AMÉRICA DEL SUR, CHILE, ISRAEL, MYANMAR y ~25 más tenían letras al revés. Ahora cada nombre se lee en un solo sentido; los casi verticales, de abajo hacia arriba.
+- PALETA RENOVADA de los continentes: tonos más sobrios (mismo matiz). Los colores de la campaña no cambian. Si no te gusta, dime tonos y se ajusta en una tabla.
+- VISTA DE RELIEVE (VISTA > Relieve): el mundo con el ETOPO 2022 completo de la NOAA: tierra verde azulada abajo → verdes → ocres → marrones arriba, mar con su propia paleta por profundidad
+  (turquesa en la plataforma, azul marino en las fosas), sombreado de las montañas, hielo y lagos de Natural Earth. Costas, fronteras, nombres (con contorno) y selección van encima. El país enfocado
+  también se ve con relieve. La imagen depende de la calidad gráfica: Alta 8192 px, Media 4096, Baja 2048 (la primera vez que la enciendes tarda ~1 s con la de 8192).
+  Las imágenes están en datos/texturas/; se regeneran con herramientas/preparar_relieve_vista.py (el ETOPO de 465 MB está en el Release «datos-etopo» del repositorio, NO en la rama).
+- LO QUE TODAVÍA NO: tarjetas del país, Debug en cuadrícula, ventana de provincia con Edificios / Cores / Construir, ventanas movibles y redimensionables (0.1.8.38); pinturas, banderas e iconos HD (0.1.8.39);
+  filtro sepia del tema A y tarjetas con pergamino del C; las vistas Clima, Población, Economía y Cultura.
+- PRUEBAS: runner78 (temas, 74) y runner79 (mapa, 112) nuevas; 9 pruebas de la regresión sin fallos (71: 181, 72: 121, 73: 84, 75: 145, 76: 97, 77: 88, 78: 74, 79: 112, 74: 220; 1.122 en total, 0 fallos).
+NO SE PROBÓ: tu PC real (FPS de los bordes, carga y memoria de vídeo de la imagen de 8192, cómo se leen los nombres sobre el relieve), si la paleta nueva te gusta, y los temas con todas las ventanas.
 
 NUEVO EN 0.1.8.36 — LA RAMA DE DESCUBRIMIENTOS, ENLAZADA CON EL RELOJ
 (Guía en docs/DESCUBRIMIENTOS.md, detalle técnico y rendimiento en NOTAS_TECNICAS_0.1.8.36.md. El número de versión lo elegí yo.)

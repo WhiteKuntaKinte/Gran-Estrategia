@@ -12,11 +12,6 @@ extends Node
 ## Solo puedes dar órdenes a las tropas de tu país (sin país elegido —observador— puedes ordenar a cualquiera).
 
 const Tema := preload("res://scripts/tema_hud.gd")
-const C_ORO := Tema.ORO
-const C_TEXTO := Tema.TEXTO
-const C_TENUE := Tema.TENUE
-const C_OK := Tema.OK
-const C_MAL := Tema.MAL
 const MAX_FILAS := 60
 const RECLUTA_SIN_DINERO := 1.0e9           # tope cuando el país no tiene tesorería simulada (no debería pasar desde 0.1.8.1)
 
@@ -151,13 +146,13 @@ func construir(m: Node, f: Font, f_neg: Font, contenedor: Control) -> void:
 	fuente_neg = f_neg if f_neg != null else f
 	caja = contenedor
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	lbl_pais = _lbl("", 15, C_ORO, true)
+	lbl_pais = _lbl("", 15, "oro", true)
 	lbl_pais.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caja.add_child(lbl_pais)
-	lbl_fin = _lbl("", 12, C_TEXTO)
+	lbl_fin = _lbl("", 12, "texto")
 	lbl_fin.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caja.add_child(lbl_fin)
-	lbl_precio = _lbl("", 11, C_TENUE)
+	lbl_precio = _lbl("", 11, "tenue")
 	lbl_precio.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caja.add_child(lbl_precio)
 	caja.add_child(HSeparator.new())
@@ -174,7 +169,7 @@ func construir(m: Node, f: Font, f_neg: Font, contenedor: Control) -> void:
 				_pagina_rec(pg)
 			"bat":
 				_pagina_bat(pg)
-	lbl_msg = _lbl("", 12, C_OK)
+	lbl_msg = _lbl("", 12, "ok")
 	lbl_msg.custom_minimum_size = Vector2(0.0, 34.0)
 	lbl_msg.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caja.add_child(lbl_msg)
@@ -185,13 +180,22 @@ func construir(m: Node, f: Font, f_neg: Font, contenedor: Control) -> void:
 # ─────────────────────────────────────────────────────────────
 # Construcción
 # ─────────────────────────────────────────────────────────────
-func _lbl(t: String, tam: int, col: Color, negrita := false) -> Label:
+## `rol`: qué color del tema lleva el texto ("oro", "texto", "tenue", "ok" o "mal"); queda anotado en el nodo para repintarlo al cambiar de tema.
+func _lbl(t: String, tam: int, rol: String, negrita := false) -> Label:
 	var l := Label.new()
 	l.text = t
 	l.add_theme_font_override("font", fuente_neg if negrita else fuente)
 	l.add_theme_font_size_override("font_size", tam)
-	l.add_theme_color_override("font_color", col)
+	Tema.rotular(l, rol)
 	return l
+
+
+## 0.1.8.37 · Tema nuevo: repinta los textos fijos de toda la subsección y vuelve a dibujar lo que cambia con los datos.
+func aplicar_tema() -> void:
+	if caja != null:
+		Tema.repintar_roles(caja)
+	if activo:
+		refrescar_ya()
 
 
 func _boton(t: String, accion: Callable) -> Button:
@@ -231,7 +235,7 @@ func _pagina_reg(pg: VBoxContainer) -> void:
 	var fb := HBoxContainer.new()
 	fb.add_theme_constant_override("separation", 6)
 	pg.add_child(fb)
-	lbl_filtro = _lbl("", 12, C_TENUE)
+	lbl_filtro = _lbl("", 12, "tenue")
 	lbl_filtro.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	fb.add_child(lbl_filtro)
 	btn_f_prov = _boton("Esta provincia", func(): _filtrar(false))
@@ -248,10 +252,10 @@ func _pagina_reg(pg: VBoxContainer) -> void:
 	caja_lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	caja_lista.add_theme_constant_override("separation", 2)
 	sc_lista.add_child(caja_lista)
-	lbl_det = _lbl("", 12, C_TEXTO)
+	lbl_det = _lbl("", 12, "texto")
 	lbl_det.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_det)
-	lbl_cantidad = _lbl("ÓRDENES  (cantidad de soldados)", 12, C_ORO, true)
+	lbl_cantidad = _lbl("ÓRDENES  (cantidad de soldados)", 12, "oro", true)
 	pg.add_child(lbl_cantidad)
 	sl_n = HSlider.new()
 	sp_n = SpinBox.new()
@@ -292,16 +296,16 @@ func _pagina_reg(pg: VBoxContainer) -> void:
 
 
 func _pagina_rec(pg: VBoxContainer) -> void:
-	lbl_rec_prov = _lbl("", 13, C_ORO, true)
+	lbl_rec_prov = _lbl("", 13, "oro", true)
 	lbl_rec_prov.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_rec_prov)
-	pg.add_child(_lbl("Cuántos soldados reclutar (escribe la cantidad que quieras; el límite es tu dinero)", 12, C_TENUE))
+	pg.add_child(_lbl("Cuántos soldados reclutar (escribe la cantidad que quieras; el límite es tu dinero)", 12, "tenue"))
 	sp_rec = CampoNumero.new()
 	sp_rec.custom_minimum_size = Vector2(0.0, 30.0)
 	sp_rec.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	sp_rec.valor_cambiado.connect(func(_v): _refrescar_costo())
 	pg.add_child(sp_rec)
-	lbl_rec_max = _lbl("", 12, C_TENUE)
+	lbl_rec_max = _lbl("", 12, "tenue")
 	lbl_rec_max.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_rec_max)
 	var qr := HBoxContainer.new()
@@ -312,12 +316,12 @@ func _pagina_rec(pg: VBoxContainer) -> void:
 	qr.add_child(_rapido("100.000", func(): _poner_rec(100000)))
 	qr.add_child(_rapido("1 M", func(): _poner_rec(1000000)))
 	qr.add_child(_rapido("Máx", func(): _poner_rec(max_reclutar)))
-	pg.add_child(_lbl("¿Adónde van?", 12, C_TENUE))
+	pg.add_child(_lbl("¿Adónde van?", 12, "tenue"))
 	opt_rec_dest = OptionButton.new()
 	opt_rec_dest.clip_text = true
 	opt_rec_dest.item_selected.connect(func(i): _rec_dest = int(_ids_dest[i]) if i >= 0 and i < _ids_dest.size() else -1; _refrescar_costo())
 	pg.add_child(opt_rec_dest)
-	lbl_rec_costo = _lbl("", 12, C_TEXTO)
+	lbl_rec_costo = _lbl("", 12, "texto")
 	lbl_rec_costo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_rec_costo)
 	btn_rec = _boton("Reclutar", _on_reclutar)
@@ -325,14 +329,14 @@ func _pagina_rec(pg: VBoxContainer) -> void:
 
 
 func _pagina_bat(pg: VBoxContainer) -> void:
-	lbl_bat_tot = _lbl("", 12, C_TEXTO)
+	lbl_bat_tot = _lbl("", 12, "texto")
 	lbl_bat_tot.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_bat_tot)
 	caja_bat = VBoxContainer.new()
 	caja_bat.add_theme_constant_override("separation", 2)
 	pg.add_child(caja_bat)
 	pg.add_child(HSeparator.new())
-	lbl_bat_det = _lbl("", 12, C_TEXTO)
+	lbl_bat_det = _lbl("", 12, "texto")
 	lbl_bat_det.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_bat_det)
 
@@ -361,7 +365,7 @@ func _nombre_pais(tid: int) -> String:
 
 func _decir(t: String, ok := true) -> void:
 	lbl_msg.text = t
-	lbl_msg.add_theme_color_override("font_color", C_OK if ok else C_MAL)
+	lbl_msg.add_theme_color_override("font_color", Tema.OK if ok else Tema.MAL)
 
 
 func _n(x: float) -> String:
@@ -622,7 +626,7 @@ func _refrescar_cabecera() -> void:
 		t = "Tesorería: %s\n" % _dinero(tes)
 	t += "Ingresos %s/día  −  Mantenimiento %s/día  =  %s%s/día" % [_dinero(ing), _dinero(man), "+" if bal >= 0.0 else "−", _dinero(absf(bal))]
 	lbl_fin.text = t
-	lbl_fin.add_theme_color_override("font_color", C_TEXTO if bal >= 0.0 else C_MAL)
+	lbl_fin.add_theme_color_override("font_color", Tema.TEXTO if bal >= 0.0 else Tema.MAL)
 	var pu: Dictionary = m.precios_unidad_local(nombre_pais)
 	lbl_precio.text = "Una unidad (1.000 soldados): mantenerla %s al año · reclutarla %s" % [_dinero(float(pu["mant"])), _dinero(float(pu["recl"]))]
 
@@ -716,8 +720,8 @@ func _refrescar_reg() -> void:
 		b.tooltip_text = "Clic: elegir · Ctrl+clic: añadir o quitar de la selección"
 		b.set_pressed_no_signal(_elegido(int(rid)))
 		if _elegido(int(rid)):
-			b.add_theme_color_override("font_color", C_ORO)
-			b.add_theme_color_override("font_pressed_color", C_ORO)
+			b.add_theme_color_override("font_color", Tema.ORO)
+			b.add_theme_color_override("font_pressed_color", Tema.ORO)
 		var id_r := int(rid)
 		b.pressed.connect(func():
 			if _ctrl():
@@ -736,9 +740,9 @@ func _refrescar_reg() -> void:
 				if is_instance_valid(fila_sel) and is_instance_valid(sc_lista):
 					sc_lista.ensure_control_visible(fila_sel)).call()
 	if lista.is_empty():
-		caja_lista.add_child(_lbl("No hay regimientos de %s aquí. Recluta en la subsección «Reclutar»." % _nombre_pais(pais_tid), 12, C_TENUE))
+		caja_lista.add_child(_lbl("No hay regimientos de %s aquí. Recluta en la subsección «Reclutar»." % _nombre_pais(pais_tid), 12, "tenue"))
 	elif lista.size() > MAX_FILAS:
-		caja_lista.add_child(_lbl("… y %d regimientos más (los más chicos)." % (lista.size() - MAX_FILAS), 11, C_TENUE))
+		caja_lista.add_child(_lbl("… y %d regimientos más (los más chicos)." % (lista.size() - MAX_FILAS), 11, "tenue"))
 	_refrescar_detalle()
 
 
@@ -1064,7 +1068,7 @@ func _refrescar_costo() -> void:
 		if not alcanza:
 			t += "  —  NO ALCANZA"
 	lbl_rec_costo.text = t
-	lbl_rec_costo.add_theme_color_override("font_color", C_TEXTO if alcanza else C_MAL)
+	lbl_rec_costo.add_theme_color_override("font_color", Tema.TEXTO if alcanza else Tema.MAL)
 	btn_rec.disabled = not (puede_reclutar and alcanza and n > 0)
 	if not puede_ordenar:
 		btn_rec.text = "Estas tropas no son tuyas"
@@ -1139,7 +1143,7 @@ func _refrescar_bat() -> void:
 		caja_bat.add_child(b)
 		n += 1
 	if lista.is_empty():
-		caja_bat.add_child(_lbl("Todavía no hay batallas. Empiezan cuando regimientos de dos países en guerra coinciden en una provincia.", 12, C_TENUE))
+		caja_bat.add_child(_lbl("Todavía no hay batallas. Empiezan cuando regimientos de dos países en guerra coinciden en una provincia.", 12, "tenue"))
 		lbl_bat_det.text = ""
 	else:
 		if sel_bat < 0 or not lista.has(sel_bat):

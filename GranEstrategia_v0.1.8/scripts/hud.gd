@@ -8,7 +8,7 @@ extends Node
 
 signal cerrar_pedido
 signal miga_pedida(nivel: String, nombre: String)
-signal vista_pedida
+signal vista_elegida(clave: String)   # 0.1.8.37 · una entrada del menú VISTA (tradicional, internacional, relieve...)
 signal pausa_pedida
 signal atras_pedido
 signal velocidad_pedida(v: int)
@@ -24,9 +24,11 @@ const TropasScript := preload("res://scripts/hud_tropas.gd")
 const TAB_RATIO_ACTIVA := 2.4               # la pestaña abierta ocupa 2,4 × el ancho de cada una de las otras (que solo llevan icono)
 const ANCHO_PANEL_MIN := 372.0              # 0.1.8.3: HUD menos invasivo
 const ANCHO_PANEL_MAX := 420.0
-const C_ORO := Tema.ORO
-const C_TEXTO := Tema.TEXTO
-const C_TENUE := Tema.TENUE
+const ALTO_BARRA := 44.0                    # 0.1.8.37: la barra superior ocupa todo el ancho, pegada al borde de arriba
+const PANEL_Y := ALTO_BARRA + 8.0           # donde empiezan el panel de país y el de detalle (justo debajo de la barra)
+## Entradas del menú VISTA: [clave, texto, disponible]. Las no disponibles salen apagadas con «próximamente».
+const VISTAS := [["tradicional", "Tradicional", true], ["internacional", "Internacional", true], ["relieve", "Relieve", true],
+	["clima", "Clima", false], ["poblacion", "Población", false], ["economia", "Economía", false], ["cultura", "Cultura y religión", false]]
 const C_BARRAS := [Color(0.42, 0.62, 1.0), Color(0.30, 0.85, 0.70), Color(1.0, 0.62, 0.30), Color(0.93, 0.45, 0.55),
 	Color(0.80, 0.78, 0.35), Color(0.65, 0.50, 0.95), Color(0.55, 0.60, 0.70)]
 const C_ACENTO := {"continente": Color(0.42, 0.62, 1.0), "pais": Color(0.30, 0.85, 0.70), "estado": Color(0.80, 0.78, 0.35),
@@ -65,6 +67,8 @@ var lbl_hint: Label
 var btn_pausa: Button
 var btn_atras: Button
 var btn_vista: Button
+var popup_vista: PanelContainer               # 0.1.8.37: el menú VISTA (cuelga del botón de lentes)
+var botones_vista := {}                       # clave de vista -> botón del menú
 var datos: Dictionary = {}
 var pestana := "general"
 var sub_militar := "res"
@@ -92,6 +96,15 @@ var ancho_panel := 400.0                       # 0.1.8.3: ancho real del panel p
 var _compacto := false                        # 0.1.8.3: el panel solo muestra la cabecera (botón ▾/▸)
 var btn_compacto: Button
 var bloque_tabs: PanelContainer
+var cab_marco: PanelContainer                 # 0.1.8.37: lo que lleva estilo de tema (se vuelve a pintar en `_pintar`)
+var marco_bandera: PanelContainer
+var marco_jug: PanelContainer
+var barra_sec: PanelContainer
+var btn_cerrar: Button
+var _vel_actual := 0                          # velocidad puesta (a partir de la 4 la fecha va en naranja)
+var _din_perdida := false                     # el ingreso diario es negativo
+var _din_deuda := false                       # el país está en deuda
+var _estilo_btns := {}                        # Button -> margen: los botones con estilo metálico propio (cambian con el tema)
 var marco_seccion: PanelContainer
 var _alto_max := 470.0                        # alto máximo de la sección con scroll (según la altura de la ventana)
 var _ver_guerra := -1
@@ -120,37 +133,34 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 
 	# ── Panel principal ──
 	panel = PanelContainer.new()
-	panel.position = Vector2(14.0, 40.0)
+	panel.position = Vector2(14.0, PANEL_Y)
 	panel.custom_minimum_size = Vector2(ancho_panel, 0.0)
 	panel.visible = false
-	panel.add_theme_stylebox_override("panel", Tema.panel(6.0))
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 4)
 	panel.add_child(vb)
 
 	# 1) CABECERA: bandera + nombre del país + cerrar
-	var cab_marco := PanelContainer.new()
-	cab_marco.add_theme_stylebox_override("panel", Tema.cabecera(7.0))
+	cab_marco = PanelContainer.new()
 	var cab := HBoxContainer.new()
 	cab.add_theme_constant_override("separation", 10)
 	cab_marco.add_child(cab)
 	vb.add_child(cab_marco)
-	var marco := PanelContainer.new()
-	marco.add_theme_stylebox_override("panel", Tema.caja(Color(0, 0, 0, 0.5), Color(0.82, 0.88, 0.96, 0.85), 3, 2, 1))
+	marco_bandera = PanelContainer.new()
 	tex_bandera = TextureRect.new()
 	tex_bandera.custom_minimum_size = Vector2(60.0, 40.0)
 	tex_bandera.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tex_bandera.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	marco.add_child(tex_bandera)
-	cab.add_child(marco)
+	marco_bandera.add_child(tex_bandera)
+	cab.add_child(marco_bandera)
 	var col := VBoxContainer.new()
 	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	col.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_theme_constant_override("separation", 0)
-	lbl_titulo = _lbl("", 20, C_ORO, true)
+	lbl_titulo = _lbl("", 20, Tema.TITULO, true)
 	lbl_titulo.clip_text = true
 	lbl_titulo.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	lbl_sub = _lbl("", 12, C_TENUE)
+	lbl_sub = _lbl("", 12, Tema.TITULO_TENUE)
 	lbl_sub.clip_text = true
 	lbl_sub.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	col.add_child(lbl_titulo)
@@ -164,24 +174,20 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	btn_compacto.custom_minimum_size = Vector2(30.0, 30.0)
 	btn_compacto.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	btn_compacto.add_theme_font_size_override("font_size", 16)
-	btn_compacto.add_theme_color_override("font_color", Color(0.80, 0.86, 0.95))
-	btn_compacto.add_theme_color_override("font_hover_color", Color(1.0, 0.9, 0.5))
 	btn_compacto.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_compacto.pressed.connect(func(): alternar_compacto())
 	cab.add_child(btn_compacto)
-	var x := Button.new()
-	x.text = "✕"
-	x.flat = true
-	x.focus_mode = Control.FOCUS_NONE
-	x.tooltip_text = "Cerrar"
-	x.custom_minimum_size = Vector2(30.0, 30.0)
-	x.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	x.add_theme_font_size_override("font_size", 16)
-	x.add_theme_color_override("font_color", Color(0.90, 0.72, 0.72))
-	x.add_theme_color_override("font_hover_color", Color(1.0, 0.45, 0.45))
-	x.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	x.pressed.connect(func(): cerrar_pedido.emit())
-	cab.add_child(x)
+	btn_cerrar = Button.new()
+	btn_cerrar.text = "✕"
+	btn_cerrar.flat = true
+	btn_cerrar.focus_mode = Control.FOCUS_NONE
+	btn_cerrar.tooltip_text = "Cerrar"
+	btn_cerrar.custom_minimum_size = Vector2(30.0, 30.0)
+	btn_cerrar.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	btn_cerrar.add_theme_font_size_override("font_size", 16)
+	btn_cerrar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn_cerrar.pressed.connect(func(): cerrar_pedido.emit())
+	cab.add_child(btn_cerrar)
 
 	caja_migas = HFlowContainer.new()
 	caja_migas.add_theme_constant_override("h_separation", 4)
@@ -190,7 +196,6 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 
 	# 2) FILA DE PESTAÑAS: su propia subsección, justo debajo del nombre
 	bloque_tabs = PanelContainer.new()
-	bloque_tabs.add_theme_stylebox_override("panel", Tema.caja(Color(0.040, 0.052, 0.074, 0.92), Tema.ACERO_OSCURO, 4, 4, 1))
 	fila_pestanas = HBoxContainer.new()
 	fila_pestanas.add_theme_constant_override("separation", 3)
 	bloque_tabs.add_child(fila_pestanas)
@@ -207,10 +212,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.add_theme_font_size_override("font_size", 12)
 		b.add_theme_constant_override("icon_max_width", 16)
-		b.add_theme_stylebox_override("normal", Tema.boton("normal", 4.0))
-		b.add_theme_stylebox_override("hover", Tema.boton("sobre", 4.0))
-		b.add_theme_stylebox_override("pressed", Tema.boton("elegido", 4.0))
-		b.add_theme_stylebox_override("hover_pressed", Tema.boton("elegido", 4.0))
+		_estilo_boton(b, 4.0)
 		b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		var clave: String = t[0]
 		b.pressed.connect(func(): abrir_pestana(clave))
@@ -222,20 +224,18 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 
 	# 3) SECCIÓN DE LA PESTAÑA ABIERTA: título + (subpestañas) + contenido con scroll
 	marco_seccion = PanelContainer.new()
-	marco_seccion.add_theme_stylebox_override("panel", Tema.caja(Color(0.040, 0.052, 0.074, 0.55), Tema.ACERO_OSCURO, 5, 6, 1))
 	var vs := VBoxContainer.new()
 	vs.add_theme_constant_override("separation", 6)
 	marco_seccion.add_child(vs)
 	vb.add_child(marco_seccion)
-	var barra_sec := PanelContainer.new()
-	barra_sec.add_theme_stylebox_override("panel", Tema.cabecera(5.0))
+	barra_sec = PanelContainer.new()
 	var hs := HBoxContainer.new()
 	hs.add_theme_constant_override("separation", 8)
 	barra_sec.add_child(hs)
-	lbl_seccion = _lbl("", 14, C_ORO, true)
+	lbl_seccion = _lbl("", 14, Tema.TITULO, true)
 	lbl_seccion.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hs.add_child(lbl_seccion)
-	lbl_seccion_der = _lbl("", 11, C_TENUE)
+	lbl_seccion_der = _lbl("", 11, Tema.TITULO_TENUE)
 	hs.add_child(lbl_seccion_der)
 	vs.add_child(barra_sec)
 
@@ -252,10 +252,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 		bs.custom_minimum_size = Vector2(0.0, 28.0)
 		bs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		bs.add_theme_font_size_override("font_size", 12)
-		bs.add_theme_stylebox_override("normal", Tema.boton("normal", 3.0))
-		bs.add_theme_stylebox_override("hover", Tema.boton("sobre", 3.0))
-		bs.add_theme_stylebox_override("pressed", Tema.boton("elegido", 3.0))
-		bs.add_theme_stylebox_override("hover_pressed", Tema.boton("elegido", 3.0))
+		_estilo_boton(bs, 3.0)
 		bs.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		var sclave: String = st[0]
 		bs.pressed.connect(func(): abrir_militar(sclave))
@@ -282,7 +279,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	caja_militar.visible = false
 	cont.add_child(caja_militar)
 	vs.add_child(scroll)
-	lbl_coord = _lbl("", 11, Color(0.45, 0.92, 0.55))
+	lbl_coord = _lbl("", 11, Tema.OK)
 	vb.add_child(lbl_coord)
 	raiz.add_child(panel)
 
@@ -293,10 +290,9 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 
 	# ── Panel de detalle (aparece a la derecha del principal) ──
 	panel_det = PanelContainer.new()
-	panel_det.position = Vector2(14.0 + ancho_panel + 8.0, 40.0)
+	panel_det.position = Vector2(14.0 + ancho_panel + 8.0, PANEL_Y)
 	panel_det.custom_minimum_size = Vector2(300.0, 0.0)
 	panel_det.visible = false
-	panel_det.add_theme_stylebox_override("panel", Tema.panel(12.0))
 	var sc2 := ScrollContainer.new()
 	sc2.custom_minimum_size = Vector2(0.0, minf(380.0, _alto_max + 60.0))
 	sc2.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -307,37 +303,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	panel_det.add_child(sc2)
 	raiz.add_child(panel_det)
 
-	# ── Versión, FPS y pista ──
-	lbl_fps = _lbl("", 12, Color(1, 1, 1, 0.75))
-	lbl_fps.position = Vector2(56.0, 10.0)
-	raiz.add_child(lbl_fps)
-	btn_debug = Button.new()
-	btn_debug.position = Vector2(10.0, 4.0)
-	btn_debug.custom_minimum_size = Vector2(38.0, 30.0)
-	btn_debug.size = Vector2(38.0, 30.0)
-	btn_debug.icon = main.icono("i_debug")
-	btn_debug.expand_icon = true
-	btn_debug.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	btn_debug.add_theme_constant_override("icon_max_width", 20)
-	btn_debug.focus_mode = Control.FOCUS_NONE
-	btn_debug.tooltip_text = "Menú Debug (F1): se abre encima del juego sin pausarlo"
-	_estilo_boton(btn_debug, 3.0)
-	btn_debug.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	btn_debug.pressed.connect(func(): debug_pedido.emit())
-	raiz.add_child(btn_debug)
-	btn_ranking = Button.new()
-	btn_ranking.text = "Ranking"
-	btn_ranking.position = Vector2(10.0, 40.0)
-	btn_ranking.custom_minimum_size = Vector2(84.0, 28.0)
-	btn_ranking.size = Vector2(84.0, 28.0)
-	btn_ranking.focus_mode = Control.FOCUS_NONE
-	btn_ranking.add_theme_font_size_override("font_size", 13)
-	btn_ranking.tooltip_text = "Tabla de posiciones de la campaña (R)"
-	_estilo_boton(btn_ranking, 3.0)
-	btn_ranking.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	btn_ranking.pressed.connect(func(): ranking_pedido.emit())
-	btn_ranking.visible = false
-	raiz.add_child(btn_ranking)
+	# ── Pista de abajo (la versión, los FPS y los botones de arriba viven dentro de la barra superior: `_construir_barra`) ──
 	lbl_hint = _lbl("", 13, Color(1, 1, 1, 0.78))
 	lbl_hint.anchor_left = 0.5
 	lbl_hint.anchor_right = 0.5
@@ -357,36 +323,80 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	lbl_hint.add_theme_constant_override("outline_size", 4)
 	raiz.add_child(lbl_hint)
 
-	# ── Botones superiores derecha: vista | volver | pausa ──
-	btn_pausa = _boton_icono("i_pausa", -60.0, -12.0, "Pausa (Esc)")
-	btn_pausa.pressed.connect(func(): pausa_pedida.emit())
-	raiz.add_child(btn_pausa)
-	btn_atras = _boton_icono("i_atras", -116.0, -68.0, "Atrás (Retroceso): sube un nivel o cierra el panel")
-	btn_atras.visible = false
-	btn_atras.pressed.connect(func(): atras_pedido.emit())
-	raiz.add_child(btn_atras)
-	btn_vista = Button.new()
-	btn_vista.focus_mode = Control.FOCUS_NONE
-	btn_vista.anchor_left = 1.0
-	btn_vista.anchor_right = 1.0
-	btn_vista.offset_left = -300.0
-	btn_vista.offset_right = -124.0
-	btn_vista.offset_top = 12.0
-	btn_vista.offset_bottom = 60.0
-	btn_vista.icon = main.icono("i_vista")
-	btn_vista.expand_icon = true
-	btn_vista.add_theme_constant_override("icon_max_width", 24)
-	btn_vista.add_theme_font_size_override("font_size", 13)
-	btn_vista.tooltip_text = "Cambiar vista del mapa (V)"
-	_estilo_boton(btn_vista, 8.0)
-	btn_vista.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	btn_vista.pressed.connect(func(): vista_pedida.emit())
-	raiz.add_child(btn_vista)
 	_construir_barra()
+	_pintar()
+
+
+## 0.1.8.37 · Cambia el tema en vivo (`id` 0..2, ver tema_hud.gd): recrea el `Theme`, vuelve a pintar lo que tiene estilo propio y
+## redibuja el contenido de las pestañas (así toda la pantalla queda con los colores nuevos sin reiniciar).
+func aplicar_tema(id: int) -> void:
+	Tema.aplicar(id)
+	if raiz == null:
+		return
+	tema = Tema.crear_tema(fuente, fuente_neg)
+	raiz.theme = tema
+	_pintar()
+	if tropas != null and tropas.has_method("aplicar_tema"):
+		tropas.aplicar_tema()
+	if panel != null and datos.size() > 0:
+		_dibujar_migas()
+		_dibujar()
+		if det_clave != "" and panel_det != null and panel_det.visible:
+			_detalle(det_clave, true)
+
+
+## Estilos y colores de las piezas FIJAS del HUD (las que se construyen una vez). Lo que se dibuja en cada refresco ya sale con el tema vigente.
+func _pintar() -> void:
+	if panel == null:
+		return
+	panel.add_theme_stylebox_override("panel", Tema.panel(6.0))
+	panel_det.add_theme_stylebox_override("panel", Tema.panel(12.0))
+	popup_vel.add_theme_stylebox_override("panel", Tema.panel(6.0))
+	popup_vista.add_theme_stylebox_override("panel", Tema.panel(6.0))
+	barra.add_theme_stylebox_override("panel", Tema.barra(5.0))
+	cab_marco.add_theme_stylebox_override("panel", Tema.cabecera(7.0))
+	barra_sec.add_theme_stylebox_override("panel", Tema.cabecera(5.0))
+	marco_bandera.add_theme_stylebox_override("panel", Tema.marco_bandera(3, 2))
+	marco_jug.add_theme_stylebox_override("panel", Tema.marco_bandera(2, 1))
+	bloque_tabs.add_theme_stylebox_override("panel", Tema.caja(Tema.BLOQUE, Tema.ACERO_OSCURO, 4, 4, 1))
+	marco_seccion.add_theme_stylebox_override("panel", Tema.caja(Tema.BLOQUE_SUAVE, Tema.ACERO_OSCURO, 5, 6, 1))
+	for b in _estilo_btns.keys():
+		if is_instance_valid(b):
+			_estilo_boton(b, float(_estilo_btns[b]))
+		else:
+			_estilo_btns.erase(b)
+	for b in [btn_pausa, btn_atras, btn_vista] + botones_vel + botones_vel_extra:
+		_tintar_icono(b)
+	lbl_fps.add_theme_color_override("font_color", Tema.TENUE)
+	btn_compacto.add_theme_color_override("font_color", Tema.TITULO_TENUE)
+	btn_compacto.add_theme_color_override("font_hover_color", Tema.TITULO)
+	btn_cerrar.add_theme_color_override("font_color", Tema.TITULO_TENUE)
+	btn_cerrar.add_theme_color_override("font_hover_color", Tema.NARANJA)
+	lbl_titulo.add_theme_color_override("font_color", Tema.TITULO)
+	lbl_sub.add_theme_color_override("font_color", Tema.TITULO_TENUE)
+	lbl_seccion.add_theme_color_override("font_color", Tema.TITULO)
+	lbl_seccion_der.add_theme_color_override("font_color", Tema.TITULO_TENUE)
+	lbl_coord.add_theme_color_override("font_color", Tema.OK)
+	lbl_jugador.add_theme_color_override("font_color", Tema.ORO)
+	lbl_dinero.add_theme_color_override("font_color", Tema.MAL if _din_deuda else Tema.TEXTO)
+	lbl_ingreso.add_theme_color_override("font_color", Tema.MAL if _din_perdida else Tema.OK)
+	lbl_fecha.add_theme_color_override("font_color", Tema.NARANJA if _vel_actual >= 4 else Tema.TEXTO)
+
+
+## Los iconos de una sola tinta (pausa, atrás, velocidades) toman el color del texto del tema (oscuros sobre el pergamino, claros sobre lo oscuro);
+## sobre un botón elegido llevan el color del texto elegido.
+func _tintar_icono(b: Button) -> void:
+	b.add_theme_color_override("icon_normal_color", Tema.TEXTO)
+	b.add_theme_color_override("icon_hover_color", Tema.TEXTO)
+	b.add_theme_color_override("icon_pressed_color", Tema.TEXTO_SEL)
+	b.add_theme_color_override("icon_hover_pressed_color", Tema.TEXTO_SEL)
+	b.add_theme_color_override("icon_focus_color", Tema.TEXTO)
 
 
 ## Pone al botón los estilos metálicos con el margen pedido (los iconos y botones chicos necesitan menos margen que el tema).
+## Se acuerda del botón para volver a pintarlo cuando cambie el tema.
 func _estilo_boton(b: Button, margen: float) -> void:
+	_estilo_btns[b] = margen
 	b.add_theme_stylebox_override("normal", Tema.boton("normal", margen))
 	b.add_theme_stylebox_override("hover", Tema.boton("sobre", margen))
 	b.add_theme_stylebox_override("pressed", Tema.boton("elegido", margen))
@@ -425,30 +435,67 @@ func _boton_vel(icono: String, tip: String, grupo: ButtonGroup, ancho := 30.0) -
 
 func _construir_barra() -> void:
 	barra = PanelContainer.new()
-	barra.anchor_left = 0.5
-	barra.anchor_right = 0.5
-	barra.offset_left = -330.0
-	barra.offset_right = 330.0
-	barra.offset_top = 4.0
-	barra.add_theme_stylebox_override("panel", Tema.panel(5.0))
+	barra.anchor_left = 0.0
+	barra.anchor_right = 1.0
+	barra.offset_left = 0.0
+	barra.offset_right = 0.0
+	barra.offset_top = 0.0                                     # 0.1.8.37: pegada al borde de arriba, de lado a lado (ya no flota)
+	barra.custom_minimum_size = Vector2(0.0, ALTO_BARRA)
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 10)
+	barra.add_child(fila)
+
+	# izquierda: Debug, Ranking (solo campaña) y la versión con los FPS
+	var izq := HBoxContainer.new()
+	izq.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	izq.size_flags_stretch_ratio = 1.0
+	izq.alignment = BoxContainer.ALIGNMENT_BEGIN
+	izq.add_theme_constant_override("separation", 8)
+	fila.add_child(izq)
+	btn_debug = Button.new()
+	btn_debug.custom_minimum_size = Vector2(38.0, 32.0)
+	btn_debug.icon = main.icono("i_debug")
+	btn_debug.expand_icon = true
+	btn_debug.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	btn_debug.add_theme_constant_override("icon_max_width", 20)
+	btn_debug.focus_mode = Control.FOCUS_NONE
+	btn_debug.tooltip_text = "Menú Debug (F1): se abre encima del juego sin pausarlo"
+	_estilo_boton(btn_debug, 3.0)
+	btn_debug.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn_debug.pressed.connect(func(): debug_pedido.emit())
+	izq.add_child(btn_debug)
+	btn_ranking = Button.new()
+	btn_ranking.text = "Ranking"
+	btn_ranking.custom_minimum_size = Vector2(84.0, 32.0)
+	btn_ranking.focus_mode = Control.FOCUS_NONE
+	btn_ranking.add_theme_font_size_override("font_size", 13)
+	btn_ranking.tooltip_text = "Tabla de posiciones de la campaña (R)"
+	_estilo_boton(btn_ranking, 3.0)
+	btn_ranking.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn_ranking.pressed.connect(func(): ranking_pedido.emit())
+	btn_ranking.visible = false
+	izq.add_child(btn_ranking)
+	lbl_fps = _lbl("", 12, Tema.TENUE)
+	lbl_fps.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	izq.add_child(lbl_fps)
+
 	var h := HBoxContainer.new()
 	h.add_theme_constant_override("separation", 10)
 	h.alignment = BoxContainer.ALIGNMENT_CENTER
-	barra.add_child(h)
+	fila.add_child(h)
 
 	# país que controlas (clic: abre la pestaña General de su información, igual que pulsarlo en el mapa)
 	var caja_j := HBoxContainer.new()
 	caja_j.add_theme_constant_override("separation", 8)
-	var marco := PanelContainer.new()
-	marco.add_theme_stylebox_override("panel", Tema.caja(Color(0, 0, 0, 0.5), Color(0.82, 0.88, 0.96, 0.85), 2, 1, 1))
+	marco_jug = PanelContainer.new()
 	tex_bandera_jug = TextureRect.new()
 	tex_bandera_jug.custom_minimum_size = Vector2(34.0, 22.0)
 	tex_bandera_jug.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tex_bandera_jug.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	marco.add_child(tex_bandera_jug)
-	marco.visible = false
-	caja_j.add_child(marco)
-	lbl_jugador = _lbl("Observador", 14, C_ORO, true)
+	marco_jug.add_child(tex_bandera_jug)
+	marco_jug.visible = false
+	caja_j.add_child(marco_jug)
+	lbl_jugador = _lbl("Observador", 14, Tema.ORO, true)
 	lbl_jugador.custom_minimum_size = Vector2(120.0, 0.0)
 	lbl_jugador.clip_text = true
 	lbl_jugador.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
@@ -478,8 +525,8 @@ func _construir_barra() -> void:
 	caja_d.add_child(_icono_rect("i_moneda", 22.0))
 	var col_d := VBoxContainer.new()
 	col_d.add_theme_constant_override("separation", -2)
-	lbl_dinero = _lbl("—", 14, C_TEXTO, true)
-	lbl_ingreso = _lbl("", 10, Color(0.45, 0.92, 0.55))
+	lbl_dinero = _lbl("—", 14, Tema.TEXTO, true)
+	lbl_ingreso = _lbl("", 10, Tema.OK)
 	col_d.add_child(lbl_dinero)
 	col_d.add_child(lbl_ingreso)
 	caja_d.add_child(col_d)
@@ -490,7 +537,7 @@ func _construir_barra() -> void:
 	h.add_child(VSeparator.new())
 
 	# fecha (clic: abre las 3 velocidades extra)
-	lbl_fecha = _lbl("", 16, C_TEXTO, true)
+	lbl_fecha = _lbl("", 16, Tema.TEXTO, true)
 	lbl_fecha.custom_minimum_size = Vector2(96.0, 0.0)
 	lbl_fecha.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_fecha.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -514,16 +561,74 @@ func _construir_barra() -> void:
 		b.pressed.connect(func(): velocidad_pedida.emit(v))
 		botones_vel.append(b)
 		h.add_child(b)
+
+	# derecha: VISTA (menú de vistas), atrás y pausa
+	var der := HBoxContainer.new()
+	der.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	der.size_flags_stretch_ratio = 1.0
+	der.alignment = BoxContainer.ALIGNMENT_END
+	der.add_theme_constant_override("separation", 8)
+	fila.add_child(der)
+	btn_vista = Button.new()
+	btn_vista.focus_mode = Control.FOCUS_NONE
+	btn_vista.custom_minimum_size = Vector2(150.0, 32.0)
+	btn_vista.icon = main.icono("i_lentes")
+	btn_vista.expand_icon = true
+	btn_vista.add_theme_constant_override("icon_max_width", 20)
+	btn_vista.add_theme_font_size_override("font_size", 13)
+	btn_vista.tooltip_text = "Vista del mapa (V cambia entre tradicional e internacional)"
+	_estilo_boton(btn_vista, 6.0)
+	btn_vista.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn_vista.pressed.connect(alternar_menu_vista)
+	der.add_child(btn_vista)
+	btn_atras = _boton_icono("i_atras", "Atrás (Retroceso): sube un nivel o cierra el panel")
+	btn_atras.visible = false
+	btn_atras.pressed.connect(func(): atras_pedido.emit())
+	der.add_child(btn_atras)
+	btn_pausa = _boton_icono("i_pausa", "Pausa (Esc)")
+	btn_pausa.pressed.connect(func(): pausa_pedida.emit())
+	der.add_child(btn_pausa)
 	raiz.add_child(barra)
+
+	# menú VISTA (sale debajo del botón)
+	popup_vista = PanelContainer.new()
+	popup_vista.visible = false
+	var pvv := VBoxContainer.new()
+	pvv.add_theme_constant_override("separation", 3)
+	popup_vista.add_child(pvv)
+	pvv.add_child(_lbl("VISTA DEL MAPA", 10, Tema.TENUE))
+	var grupo_v := ButtonGroup.new()
+	for v in VISTAS:
+		var bv := Button.new()
+		bv.toggle_mode = true
+		bv.button_group = grupo_v
+		bv.focus_mode = Control.FOCUS_NONE
+		bv.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		bv.custom_minimum_size = Vector2(190.0, 30.0)
+		bv.add_theme_font_size_override("font_size", 13)
+		bv.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		var cv: String = v[0]
+		if bool(v[2]):
+			bv.text = " " + String(v[1])
+			bv.pressed.connect(func():
+				popup_vista.visible = false
+				vista_elegida.emit(cv))
+		else:
+			bv.text = " %s  ·  próximamente" % String(v[1])
+			bv.disabled = true
+		_estilo_boton(bv, 5.0)
+		botones_vista[cv] = bv
+		pvv.add_child(bv)
+	botones_vista["tradicional"].set_pressed_no_signal(true)
+	raiz.add_child(popup_vista)
 
 	# ventanita con las velocidades 4-6 (sale debajo de la fecha)
 	popup_vel = PanelContainer.new()
 	popup_vel.visible = false
-	popup_vel.add_theme_stylebox_override("panel", Tema.panel(6.0))
 	var pv := VBoxContainer.new()
 	pv.add_theme_constant_override("separation", 4)
 	popup_vel.add_child(pv)
-	pv.add_child(_lbl("MÁS RÁPIDO", 10, C_TENUE))
+	pv.add_child(_lbl("MÁS RÁPIDO", 10, Tema.TENUE))
 	var grupo2 := ButtonGroup.new()
 	var etiquetas := ["4 · Rápido", "5 · Muy rápido", "6 · Máximo"]
 	for j in 3:
@@ -544,10 +649,29 @@ func _construir_barra() -> void:
 	raiz.add_child(popup_vel)
 
 
+## Abre o cierra el menú VISTA (debajo del botón de lentes, alineado a su borde derecho).
+func alternar_menu_vista() -> void:
+	if popup_vista.visible:
+		popup_vista.visible = false
+		return
+	popup_vel.visible = false
+	popup_vista.reset_size()
+	var r := btn_vista.get_global_rect()
+	popup_vista.position = Vector2(clampf(r.end.x - popup_vista.size.x, 4.0, 4000.0), r.end.y + 6.0)
+	popup_vista.visible = true
+
+
+## Marca en el menú VISTA cuál está puesta.
+func set_vista_activa(clave: String) -> void:
+	for k in botones_vista.keys():
+		(botones_vista[k] as Button).set_pressed_no_signal(k == clave)
+
+
 func alternar_popup_vel() -> void:
 	if popup_vel.visible:
 		popup_vel.visible = false
 		return
+	popup_vista.visible = false
 	popup_vel.reset_size()
 	var r := lbl_fecha.get_global_rect()
 	popup_vel.position = Vector2(r.position.x + r.size.x * 0.5 - popup_vel.size.x * 0.5, r.end.y + 10.0)
@@ -560,6 +684,10 @@ func _input(ev: InputEvent) -> void:
 		var pos: Vector2 = ev.position
 		if not popup_vel.get_global_rect().has_point(pos) and not lbl_fecha.get_global_rect().has_point(pos):
 			popup_vel.visible = false
+	if popup_vista != null and popup_vista.visible and ev is InputEventMouseButton and ev.pressed:
+		var pos2: Vector2 = ev.position
+		if not popup_vista.get_global_rect().has_point(pos2) and not btn_vista.get_global_rect().has_point(pos2):
+			popup_vista.visible = false
 
 
 func set_fecha(t: String) -> void:
@@ -572,7 +700,8 @@ func set_velocidad(v: int) -> void:
 	for j in botones_vel_extra.size():
 		(botones_vel_extra[j] as Button).set_pressed_no_signal(4 + j == v)
 	# con una velocidad extra la fecha se tiñe de naranja para que se note que vas rápido
-	lbl_fecha.add_theme_color_override("font_color", Color(1.0, 0.72, 0.35) if v >= 4 else C_TEXTO)
+	_vel_actual = v
+	lbl_fecha.add_theme_color_override("font_color", Tema.NARANJA if v >= 4 else Tema.TEXTO)
 	var estado := "en pausa" if v == 0 else "velocidad %d" % v
 	lbl_fecha.tooltip_text = "Fecha: año, mes, día · %s. Clic: velocidades 4, 5 y 6 (más rápidas)" % estado
 
@@ -594,8 +723,10 @@ func set_jugador(nombre: String, bandera: String) -> void:
 func set_dinero(total: String, ingreso: String, perdida := false, en_deuda := false) -> void:
 	lbl_dinero.text = total
 	lbl_ingreso.text = ingreso
-	lbl_ingreso.add_theme_color_override("font_color", Color(1.0, 0.5, 0.42) if perdida else Color(0.45, 0.92, 0.55))
-	lbl_dinero.add_theme_color_override("font_color", Color(1.0, 0.5, 0.42) if en_deuda else C_TEXTO)
+	_din_perdida = perdida
+	_din_deuda = en_deuda
+	lbl_ingreso.add_theme_color_override("font_color", Tema.MAL if perdida else Tema.OK)
+	lbl_dinero.add_theme_color_override("font_color", Tema.MAL if en_deuda else Tema.TEXTO)
 
 
 # ───────────── utilidades de interfaz ─────────────
@@ -612,20 +743,17 @@ func _caja(col: Color, borde: Color, radio: int, margen: int, bw := 1) -> StyleB
 	return Tema.caja(col, borde, radio, margen, bw)
 
 
-func _boton_icono(ic: String, izq: float, der: float, tip: String) -> Button:
+## Botón cuadrado con un icono (en la barra superior).
+func _boton_icono(ic: String, tip: String) -> Button:
 	var b := Button.new()
 	b.focus_mode = Control.FOCUS_NONE
-	b.anchor_left = 1.0
-	b.anchor_right = 1.0
-	b.offset_left = izq
-	b.offset_right = der
-	b.offset_top = 12.0
-	b.offset_bottom = 60.0
+	b.custom_minimum_size = Vector2(40.0, 32.0)
 	b.icon = main.icono(ic)
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	b.add_theme_constant_override("icon_max_width", 20)
 	b.tooltip_text = tip
-	_estilo_boton(b, 8.0)
+	_estilo_boton(b, 4.0)
 	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	return b
 
@@ -729,12 +857,10 @@ func set_visible_todo(v: bool) -> void:
 func set_campana(v: bool) -> void:
 	if btn_ranking != null:
 		btn_ranking.visible = v
-	# 0.1.8.3: el botón «Ranking» (10, 40) tapaba la esquina del panel: en la campaña el panel arranca debajo de él
-	var y := 74.0 if v else 40.0
-	if panel != null:
-		panel.position.y = y
+	if panel != null:                                              # 0.1.8.37: «Ranking» está dentro de la barra: el panel siempre empieza justo debajo de ella
+		panel.position.y = PANEL_Y
 	if panel_det != null:
-		panel_det.position.y = y
+		panel_det.position.y = PANEL_Y
 
 
 func ocultar() -> void:
@@ -878,7 +1004,7 @@ func mostrar(d: Dictionary) -> void:
 			(botones_pestana[k2] as Button).set_pressed_no_signal(k2 == "general")
 		_estilizar_pestanas()
 	lbl_titulo.text = String(d.get("titulo", ""))
-	lbl_sub.text = String(d.get("subtitulo", ""))
+	lbl_sub.text = String(d.get("subtitulo", "")) + (" · %d elegidos (Ctrl+clic)" % int(d["multi"]) if int(d.get("multi", 0)) > 1 else "")
 	var bandera: String = String(d.get("bandera", "-"))
 	tex_bandera.get_parent().visible = bandera != "-"
 	if bandera != "-":
@@ -906,9 +1032,9 @@ func _dibujar_migas() -> void:
 		b.text = String(m["nombre"])
 		b.tooltip_text = String(m["tipo"])
 		b.add_theme_font_size_override("font_size", 12)
-		var ac: Color = C_ACENTO.get(nivel, C_TENUE)
-		b.add_theme_color_override("font_color", Color(1, 1, 1) if activo else Color(0.85, 0.9, 1.0))
-		b.add_theme_stylebox_override("normal", _caja(ac.darkened(0.6) if activo else Color(0.10, 0.13, 0.19, 0.95), ac.darkened(0.15), 12, 3, 1))
+		var ac: Color = C_ACENTO.get(nivel, Tema.TENUE)
+		b.add_theme_color_override("font_color", Color(1, 1, 1) if activo else Tema.TITULO)
+		b.add_theme_stylebox_override("normal", _caja(ac.darkened(0.6) if activo else Tema.CABECERA_ABAJO, ac.darkened(0.15), 12, 3, 1))
 		b.add_theme_stylebox_override("hover", _caja(ac.darkened(0.35), Color(1, 1, 1, 0.9), 12, 3, 1))
 		b.add_theme_stylebox_override("pressed", _caja(ac.darkened(0.25), Color(1, 1, 1, 0.9), 12, 3, 1))
 		b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -921,7 +1047,7 @@ func _dibujar_migas() -> void:
 		b.pressed.connect(func(): miga_pedida.emit(nivel, nom))
 		caja_migas.add_child(b)
 		if i < migas.size() - 1:
-			caja_migas.add_child(_lbl("›", 14, C_TENUE))
+			caja_migas.add_child(_lbl("›", 14, Tema.TENUE))
 	_sin_foco(caja_migas)
 
 
@@ -1026,8 +1152,8 @@ func _seccion(titulo: String) -> VBoxContainer:
 	cab.text = ("▾  " if abierta else "▸  ") + titulo.to_upper()
 	cab.add_theme_font_override("font", fuente_neg)
 	cab.add_theme_font_size_override("font_size", 12)
-	cab.add_theme_color_override("font_color", C_ORO)
-	cab.add_theme_color_override("font_hover_color", Color(1, 0.95, 0.7))
+	cab.add_theme_color_override("font_color", Tema.ORO)
+	cab.add_theme_color_override("font_hover_color", Tema.TEXTO)
 	cab.add_theme_stylebox_override("normal", Tema.cabecera(4.0))
 	cab.add_theme_stylebox_override("hover", Tema.boton("sobre", 4.0))
 	cab.add_theme_stylebox_override("pressed", Tema.boton("sobre", 4.0))
@@ -1068,14 +1194,14 @@ func _fila(padre: Node, ic: String, titulo: String, valor: String, clave := "", 
 	var col := VBoxContainer.new()
 	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	col.add_theme_constant_override("separation", 0)
-	var cap := _lbl(titulo.to_upper(), 10, C_TENUE)
-	var val := _lbl(valor, 13, C_TEXTO)
+	var cap := _lbl(titulo.to_upper(), 10, Tema.TENUE)
+	var val := _lbl(valor, 13, Tema.TEXTO)
 	val.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	col.add_child(cap)
 	col.add_child(val)
 	hb.add_child(col)
 	if clave != "":
-		hb.add_child(_lbl("›", 18, C_ORO))
+		hb.add_child(_lbl("›", 18, Tema.ORO))
 		card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		_ignorar_raton(card)
 		card.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -1092,7 +1218,7 @@ func _fila(padre: Node, ic: String, titulo: String, valor: String, clave := "", 
 func _barra(padre: Node, nombre: String, valor: float, col: Color, ancho := 150.0) -> void:
 	var hb := HBoxContainer.new()
 	hb.add_theme_constant_override("separation", 8)
-	var l := _lbl(nombre, 12, C_TEXTO)
+	var l := _lbl(nombre, 12, Tema.TEXTO)
 	l.custom_minimum_size = Vector2(118.0, 0.0)
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hb.add_child(l)
@@ -1294,7 +1420,7 @@ func _fila_pais(padre: Node, nombre: String, bandera: String, estado: String, co
 	hb.add_theme_constant_override("separation", 8)
 	card.add_child(hb)
 	var marco := PanelContainer.new()
-	marco.add_theme_stylebox_override("panel", Tema.caja(Color(0, 0, 0, 0.5), Color(0.8, 0.86, 0.95, 0.7), 2, 1, 1))
+	marco.add_theme_stylebox_override("panel", Tema.marco_bandera(2, 1))
 	var tr := TextureRect.new()
 	tr.texture = main.bandera_tex(bandera)
 	tr.custom_minimum_size = Vector2(34.0, 22.0)
@@ -1305,9 +1431,9 @@ func _fila_pais(padre: Node, nombre: String, bandera: String, estado: String, co
 	var col := VBoxContainer.new()
 	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	col.add_theme_constant_override("separation", 0)
-	col.add_child(_lbl(nombre, 13, C_TEXTO, true))
+	col.add_child(_lbl(nombre, 13, Tema.TEXTO, true))
 	if detalle != "":
-		var ld := _lbl(detalle, 11, C_TENUE)
+		var ld := _lbl(detalle, 11, Tema.TENUE)
 		ld.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		col.add_child(ld)
 	hb.add_child(col)
@@ -1543,7 +1669,7 @@ func _det_titulo(ic: String, t: String) -> void:
 	var hb := HBoxContainer.new()
 	hb.add_theme_constant_override("separation", 10)
 	hb.add_child(_icono_rect(ic, 40.0))
-	var l := _lbl(t, 20, C_ORO, true)
+	var l := _lbl(t, 20, Tema.ORO, true)
 	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	hb.add_child(l)
@@ -1575,7 +1701,7 @@ func _det_texto(bb: String) -> void:
 	r.add_theme_font_override("normal_font", fuente)
 	r.add_theme_font_override("bold_font", fuente_neg)
 	r.add_theme_font_size_override("normal_font_size", 14)
-	r.add_theme_color_override("default_color", C_TEXTO)
+	r.add_theme_color_override("default_color", Tema.TEXTO)
 	r.text = bb
 	det_box.add_child(r)
 

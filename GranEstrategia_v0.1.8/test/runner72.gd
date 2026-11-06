@@ -97,9 +97,9 @@ func t_hud() -> void:
 	await esperar(0.2)
 	# set_campana
 	hud.set_campana(false)
-	ok(cerca(hud.panel.position.y, 40.0) and cerca(hud.panel_det.position.y, 40.0), "set_campana(false): el panel arranca en y = 40")
+	ok(cerca(hud.panel.position.y, hud.PANEL_Y) and cerca(hud.panel_det.position.y, hud.PANEL_Y) and not hud.btn_ranking.visible, "set_campana(false): el panel arranca justo debajo de la barra (y = %.0f) y sin «Ranking»" % hud.PANEL_Y)
 	hud.set_campana(true)
-	ok(cerca(hud.panel.position.y, 74.0) and cerca(hud.panel_det.position.y, 74.0) and hud.btn_ranking.visible, "set_campana(true): panel en y = 74 (debajo de «Ranking»), botón visible")
+	ok(cerca(hud.panel.position.y, hud.PANEL_Y) and cerca(hud.panel_det.position.y, hud.PANEL_Y) and hud.btn_ranking.visible, "set_campana(true): el panel sigue en y = %.0f (el botón «Ranking» está dentro de la barra) y el botón se ve" % hud.PANEL_Y)
 	# botón de guerra
 	var vb := VBoxContainer.new()
 	add_child(vb)

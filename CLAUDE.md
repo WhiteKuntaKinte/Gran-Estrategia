@@ -10,16 +10,17 @@ Rama de trabajo: `v0.1.8-development` (`main` no se toca, ver README). Proyecto 
 - Cada versión: subir `VERSION` en `MapaPrincipal.gd` y `project.godot` (`runner74` lo comprueba), y escribir `NOTAS_TECNICAS_<versión>.md`, `CHECKLIST_TESTING.md`, `LEEME.txt` y `LEEME_INSTRUCCIONES.txt`.
 
 ## Mapa del código (todo en `GranEstrategia_v0.1.8/`)
-- `MapaPrincipal.gd`: dibujo del mapa, selección, entrada. `scripts/`: `entidades.gd` (Mundo, países, provincias), `base_datos.gd` (un valor por territorio y fecha), `territorio.gd` (celdas), `descubrimientos.gd`, `ejercito.gd`, `guerra.gd`, `ia.gd`, `hud.gd`, `debug_menu.gd`, `reloj.gd`…
-- `datos/`: JSON y `.bin` **generados**; no editarlos a mano. `herramientas/`: generadores en Python (`construir_*.py`, `preparar_*.py`). Los descubrimientos se editan en `herramientas/descubrimientos/` (catálogo + `anios.tsv`) y se regeneran con `construir_descubrimientos.py`.
+- `MapaPrincipal.gd`: dibujo del mapa, selección, entrada, vista de Relieve. `scripts/`: `entidades.gd` (Mundo, países, provincias), `base_datos.gd` (un valor por territorio y fecha), `territorio.gd` (celdas), `descubrimientos.gd`, `ejercito.gd`, `guerra.gd`, `ia.gd`, `hud.gd` (barra y menú VISTA), `tema_hud.gd` (los 3 temas de interfaz), `debug_menu.gd`, `reloj.gd`…
+- `datos/`: JSON y `.bin` **generados**; no editarlos a mano. `herramientas/`: generadores en Python (`construir_*.py`, `preparar_*.py`). Los descubrimientos se editan en `herramientas/descubrimientos/` (catálogo + `anios.tsv`) y se regeneran con `construir_descubrimientos.py`. Las imágenes de la vista de Relieve (`datos/texturas/relieve_vista_*.jpg`) salen de `preparar_relieve_vista.py` (ETOPO 2022 + Natural Earth; el .tif de 465 MB está en el Release `datos-etopo`, no en la rama; lo lee `leer_etopo.py` sin GDAL). `renovar_paleta.py` cambia los colores de continente ya horneados.
 - `docs/`: `DESCUBRIMIENTOS.md`, `MAPA_CELDAS.md`, `NATURAL_EARTH.md`, `DIAGRAMA_BASE_DE_DATOS.md`. Lo hecho en cada versión: `NOTAS_TECNICAS_*.md`.
 
 ## Probar
-- Godot 4.3 sin ventana: `Godot_v4.3-stable_linux.x86_64 --headless --path GranEstrategia_v0.1.8 res://test/runner77.tscn` (se baja de github.com/godotengine/godot/releases; el entorno solo alcanza github.com y los registros de paquetes). Cada prueba imprime `FALLOS: 0` si todo va bien.
+- Godot 4.3 sin ventana: `Godot_v4.3-stable_linux.x86_64 --headless --path GranEstrategia_v0.1.8 res://test/runner79.tscn` (se baja de github.com/godotengine/godot/releases; el entorno solo alcanza github.com y los registros de paquetes). Cada prueba imprime `FALLOS: 0` si todo va bien.
 - `runner74` necesita ventana: `xvfb-run -a godot --path … --rendering-driver opengl3 res://test/runner74.tscn`. Primera vez en una carpeta limpia: `--import`.
-- Pruebas incluidas: `test/runner71`–`77` y `89` (rendimiento); ver `test/LEEME_PRUEBAS.txt`. Las ~80 antiguas y los datos históricos reales no están en el repo.
+- Pruebas incluidas: `test/runner71`–`79` y `89` (rendimiento); ver `test/LEEME_PRUEBAS.txt`. Las ~80 antiguas y los datos históricos reales no están en el repo.
 - Auditoría estática: `python3 herramientas/auditar_codigo.py GranEstrategia_v0.1.8 salida.json`.
 
 ## Estado
-Versión actual **0.1.8.36** (rama de descubrimientos enlazada con el reloj): ver `NOTAS_TECNICAS_0.1.8.36.md` y `docs/DESCUBRIMIENTOS.md`.
-Pendiente conocido: etiquetas verticales del mapa (AMÉRICA DEL SUR y otras 20 tienen tramos con la curva fuera de ±90° y letras invertidas), rediseño visual, HUD de país/provincia, menú Debug en cuadrícula, vista de relieve, pinturas e iconos de divisa.
+Versión actual **0.1.8.37** (3 temas de interfaz, barra y menú VISTA, selección nueva con Ctrl+clic, bordes HD Baja/Media/Alta, etiquetas verticales arregladas, paleta renovada y vista de Relieve con ETOPO 2022): ver `NOTAS_TECNICAS_0.1.8.37.md`. Antes: `NOTAS_TECNICAS_0.1.8.36.md` y `docs/DESCUBRIMIENTOS.md`.
+Plan siguiente: **0.1.8.38** = HUD y ventanas (menú Debug en cuadrícula con migas, país con tarjetas, HUD de provincia con Edificios / dos Cores / Ingreso / Población y ventana Construir con los 109 edificios, ventanas movibles y redimensionables, totales y órdenes de grupo con Ctrl+clic, avisos y tooltips flotantes); **0.1.8.39** = imágenes (sistema de pinturas por carpeta y nombre, banderas, iconos de materias primas y de divisas en HD, iconos y migas rediseñados).
+Pendiente conocido: filtro sepia del tema A y tarjetas con pergamino del C; vistas Clima / Población / Economía / Cultura (en el menú como «próximamente»).

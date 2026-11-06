@@ -6,13 +6,17 @@ extends VBoxContainer
 ## La lógica de valores (válidos, por defecto, guardar/cargar, aplicar) vive en ajustes.gd; aquí solo está la interfaz.
 ## 0.1.8.32: además de la pantalla, la ventana tiene una sección GRÁFICOS DEL MAPA (calidad Alta/Media/Baja y cada ajuste por separado) y la
 ## prioridad de la simulación: lo que de verdad sube los FPS en un PC flojo.
+## 0.1.8.37: arriba de todo hay una sección INTERFAZ con el tema (Cartográfico / Moderno oscuro / Mixto). Ese ajuste NO espera a APLICAR: cambia en vivo
+## y se guarda al momento (señal `tema_elegido`), porque no mueve la ventana y así se ve el resultado mientras se elige.
 
 const AjustesScript := preload("res://scripts/ajustes.gd")
+const TemaHud := preload("res://scripts/tema_hud.gd")
 const SEGUNDOS_CONFIRMAR := 10
 const ALTO_AREA := 330.0                 ## alto del área con los controles (los de más abajo se alcanzan con la barra de desplazamiento)
 
 signal aplicado(ajustes: Dictionary)      ## se confirmó (o no hacía falta confirmar) y quedó guardado
 signal volver_pedido                      ## el jugador pulsó VOLVER
+signal tema_elegido(id: int)              ## 0.1.8.37 · se eligió otro tema de interfaz: ya quedó guardado y hay que repintar el juego
 
 var ruta := AjustesScript.RUTA            ## dónde se guarda (las pruebas usan otro archivo)
 var vigente: Dictionary = {}              ## lo último aplicado y guardado: a esto vuelve «REVERTIR»
@@ -30,6 +34,9 @@ var _lbl_nota: Label
 var _gen_verif := 0                       ## número del último APLICAR: una comprobación vieja no pisa a la nueva
 var _lbl_estado: Label                    ## resultado del último APLICAR (qué quedó realmente aplicado, o por qué no)
 var _timer: Timer
+var _op_tema: OptionButton
+var _lbl_tema: Label                      ## una línea que describe el tema elegido
+var _op_bordes: OptionButton
 var _op_modo: OptionButton
 var _op_res: OptionButton
 var _lbl_res: Label                       ## el título de esa fila cambia: «Resolución de la ventana» / «Resolución interna (pantalla completa)»
@@ -85,6 +92,14 @@ func _construir_cuerpo() -> void:
 	_filas.add_theme_constant_override("separation", 10)
 	_filas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_filas)
+	_seccion("INTERFAZ")
+	_op_tema = _desplegable(TemaHud.NOMBRES, func(i: int): _elegir_tema(i))
+	_fila("Estilo de la interfaz", _op_tema)
+	_lbl_tema = Label.new()
+	_lbl_tema.add_theme_font_size_override("font_size", 13)
+	_lbl_tema.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	TemaHud.rotular(_lbl_tema, "tenue")
+	_filas.add_child(_lbl_tema)
 	_seccion("PANTALLA")
 	_op_modo = _desplegable(AjustesScript.MODOS, func(i: int): poner("modo", i))
 	_fila("Modo de pantalla", _op_modo)
@@ -110,6 +125,8 @@ func _construir_cuerpo() -> void:
 	_fila("Mar", _op_mar)
 	_op_costa = _desplegable(AjustesScript.COSTA_NOMBRES, func(i: int): poner("costa", i))
 	_fila("Costas", _op_costa)
+	_op_bordes = _desplegable(AjustesScript.BORDES_NOMBRES, func(i: int): poner("bordes", i))
+	_fila("Bordes del mapa", _op_bordes)
 	_chk_prov = _casilla("Dibujar al acercar (campaña)", func(v: bool): poner("lineas_prov", v))
 	_fila("Líneas de provincia", _chk_prov)
 	_chk_ciudades = _casilla("Dibujar al acercar", func(v: bool): poner("ciudades", v))
@@ -123,7 +140,7 @@ func _construir_cuerpo() -> void:
 	_lbl_nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_lbl_nota.custom_minimum_size = Vector2(560.0, 0.0)
 	_lbl_nota.add_theme_font_size_override("font_size", 13)
-	_lbl_nota.add_theme_color_override("font_color", Color(0.67, 0.72, 0.82))
+	TemaHud.rotular(_lbl_nota, "nota")
 	_cuerpo.add_child(_lbl_nota)
 	var botones := HBoxContainer.new()
 	botones.add_theme_constant_override("separation", 10)
@@ -198,7 +215,7 @@ func _seccion(titulo: String) -> void:
 	var l := Label.new()
 	l.text = titulo
 	l.add_theme_font_size_override("font_size", 14)
-	l.add_theme_color_override("font_color", Color(0.55, 0.75, 1.0))
+	TemaHud.rotular(l, "oro")
 	_filas.add_child(l)
 
 
@@ -221,6 +238,20 @@ func poner_calidad(i: int) -> void:
 	if confirmando:
 		return
 	pendiente = AjustesScript.con_preset(pendiente, i)
+	_refrescar()
+
+
+## Elige el tema de interfaz: se aplica y se guarda YA (no pasa por APLICAR ni por «¿Mantener?»), y la ventana se repinta con él.
+func _elegir_tema(i: int) -> void:
+	if confirmando:
+		return
+	vigente["tema"] = i
+	pendiente["tema"] = i
+	vigente = AjustesScript.sanear(vigente)
+	pendiente = AjustesScript.sanear(pendiente)
+	AjustesScript.guardar(vigente, ruta)
+	tema_elegido.emit(int(vigente["tema"]))
+	TemaHud.repintar_roles(self)
 	_refrescar()
 
 
@@ -266,12 +297,15 @@ func _refrescar() -> void:
 			_op_res.add_item(AjustesScript.texto_resolucion(v))
 		_op_res.select(_resoluciones.find(Vector2i(int(pendiente["ancho"]), int(pendiente["alto"]))))
 	_op_modo.select(int(pendiente["modo"]))
+	_op_tema.select(int(pendiente["tema"]))
+	_lbl_tema.text = String(TemaHud.DESCRIPCIONES[int(pendiente["tema"])])
 	_op_vsync.select(int(pendiente["vsync"]))
 	_op_fps.select(AjustesScript.FPS_OPCIONES.find(int(pendiente["fps_max"])))
 	_op_msaa.select(int(pendiente["msaa"]))
 	_op_calidad.select(AjustesScript.preset_de(pendiente))
 	_op_mar.select(int(pendiente["mar"]))
 	_op_costa.select(int(pendiente["costa"]))
+	_op_bordes.select(int(pendiente["bordes"]))
 	_op_sim.select(int(pendiente["sim_prio"]))
 	_chk_prov.set_pressed_no_signal(bool(pendiente["lineas_prov"]))
 	_chk_ciudades.set_pressed_no_signal(bool(pendiente["ciudades"]))
@@ -351,7 +385,7 @@ func _poner_estado(texto: String, es_aviso: bool) -> void:
 		return
 	_lbl_estado.text = texto
 	_lbl_estado.visible = texto != ""
-	_lbl_estado.add_theme_color_override("font_color", Color(1.0, 0.72, 0.35) if es_aviso else Color(0.55, 0.9, 0.6))
+	TemaHud.rotular(_lbl_estado, "naranja" if es_aviso else "ok")
 
 
 func _texto_cuenta() -> String:

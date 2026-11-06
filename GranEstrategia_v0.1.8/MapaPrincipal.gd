@@ -22,7 +22,7 @@ const AjustesScript := preload("res://scripts/ajustes.gd")
 const MenuPantallaScript := preload("res://scripts/menu_pantalla.gd")
 const PerfilScript := preload("res://scripts/perfil.gd")
 
-const VERSION := "0.1.8.36"
+const VERSION := "0.1.8.37"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -45,12 +45,15 @@ const ZOOM_PROVINCIAS := 4.2       # a partir de aquí los nombres de país cede
 # Grosores en PÍXELES de pantalla (iguales a cualquier zoom). Costa = contorno de los continentes: la línea más gruesa y negra; la línea entre
 # continentes (cont) es un poco más angosta; la frontera entre países (frontera) es una franja negra/clara.
 const GROSOR_PX := {"costa": 2.8, "cont": 1.8, "frontera": 2.6, "prov": 1.4, "estado": 2.4, "prov_todas": 1.0}
+## 0.1.8.37 · Bordes HD (Opciones > Pantalla > Bordes del mapa): píxeles extra de malla a cada lado para suavizar el borde de la línea, y la sombra suave de la
+## costa (solo Alta). Baja = 0 px = borde duro de siempre (el más barato).
+const BORDE_EXT_PX := [0.0, 0.8, 2.0]
+const BORDE_HALO := [0.0, 0.0, 0.16]
 const PERIODO_FRANJA_PX := 9.0     # largo de cada franja de la frontera continental (en pantalla)
 const PERIODO_FRONTERA_PX := 8.0   # largo de cada franja de la frontera entre países (negro + claro)
 const NEGRO_FRONTERA := 0.60       # fracción de cada franja de frontera que es línea negra (el resto es hueco transparente)
 
 # Pop-out al hacer clic en un país (0.1.8.2a: antes era doble clic)
-const POP_ESCALA := 1.035
 const FOCO_DERECHA := 0.17         # el país se coloca a esta fracción del ancho a la derecha del centro de pantalla
 const TESELA := 300.0
 
@@ -65,11 +68,20 @@ shader_type canvas_item;
 uniform float half_width = 0.5;
 uniform vec4 col : source_color = vec4(0.04, 0.05, 0.09, 1.0);
 uniform float alfa = 1.0;
+uniform float nucleo = 1.0;                     // 0.1.8.37: medio grosor de la línea, en píxeles de pantalla
+uniform float ext_px = 0.0;                     // píxeles extra de malla a cada lado para el suavizado (0 = calidad Baja: borde duro de siempre)
+uniform float halo = 0.0;                       // calidad Alta: intensidad de la sombra suave que rodea la línea
 void vertex() {
 	VERTEX += UV * half_width;
 }
 void fragment() {
-	COLOR = vec4(col.rgb, col.a * alfa);
+	float a = 1.0;
+	if (ext_px > 0.0) {
+		float d = length(UV) * (nucleo + ext_px);
+		a = clamp(nucleo - d + 0.5, 0.0, 1.0);
+		a = max(a, halo * (1.0 - smoothstep(nucleo, nucleo + ext_px, d)));
+	}
+	COLOR = vec4(col.rgb, col.a * alfa * a);
 }
 """
 
@@ -83,6 +95,8 @@ uniform float negro = 0.5;                      // fracción de cada periodo que
 uniform vec4 col : source_color = vec4(0.04, 0.05, 0.09, 1.0);
 uniform vec4 col2 : source_color = vec4(0.93, 0.90, 0.78, 1.0);
 uniform float alfa = 1.0;
+uniform float nucleo = 1.0;                     // 0.1.8.37: ver SHADER_BORDE
+uniform float ext_px = 0.0;
 varying float recorrido;
 void vertex() {
 	recorrido = (COLOR.r * 255.0 * 255.0 + COLOR.g * 255.0) / 20.0;
@@ -91,7 +105,11 @@ void vertex() {
 void fragment() {
 	float f = fract(recorrido / periodo);
 	vec3 c = f < negro ? col.rgb : col2.rgb;
-	COLOR = vec4(c, alfa);
+	float a = 1.0;
+	if (ext_px > 0.0) {
+		a = clamp(nucleo - length(UV) * (nucleo + ext_px) + 0.5, 0.0, 1.0);
+	}
+	COLOR = vec4(c, alfa * a);
 }
 """
 
@@ -105,6 +123,8 @@ uniform float negro = 0.6;                      // fracción de cada periodo que
 uniform float suave = 0.12;                     // ancho del suavizado, como fracción del periodo (1 píxel de pantalla)
 uniform vec4 col : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float alfa = 1.0;
+uniform float nucleo = 1.0;                     // 0.1.8.37: ver SHADER_BORDE
+uniform float ext_px = 0.0;
 varying float recorrido;
 void vertex() {
 	recorrido = (COLOR.r * 255.0 * 255.0 + COLOR.g * 255.0) / 20.0;
@@ -113,6 +133,9 @@ void vertex() {
 void fragment() {
 	float f = fract(recorrido / periodo);
 	float a = smoothstep(0.0, suave, f) * (1.0 - smoothstep(negro - suave, negro, f));
+	if (ext_px > 0.0) {
+		a *= clamp(nucleo - length(UV) * (nucleo + ext_px) + 0.5, 0.0, 1.0);
+	}
 	COLOR = vec4(col.rgb, alfa * a);
 }
 """
@@ -308,6 +331,112 @@ func _cargar_relieve_archivo() -> void:
 	poner_textura_relieve(ImageTexture.create_from_image(img))
 
 
+# ── 0.1.8.37 · VISTA «RELIEVE» ────────────────────────────────────────────────────────────────────────────────────────────────────────
+# El mapa entero se pinta con una imagen ya preparada (herramientas/preparar_relieve_vista.py, a partir de ETOPO 2022 y Natural Earth): tierra por altura
+# (verde azulado abajo → verdes → ocres → marrones arriba), mar por profundidad con su propia paleta, hielo y lagos. Es UNA capa rectangular encima del
+# relleno y el mar (que se apagan mientras tanto, así no cuesta de más); las costas, fronteras, nombres y la selección se dibujan encima como siempre.
+# La imagen se elige con la calidad gráfica: Alta 8192 px, Media 4096 px, Baja 2048 px. Se carga la primera vez que se enciende la vista.
+const SHADER_RELIEVE_VISTA := """
+shader_type canvas_item;
+uniform sampler2D relieve : filter_linear_mipmap, repeat_enable;
+uniform vec2 mapa = vec2(2400.0, 1200.0);
+uniform vec2 desp = vec2(0.0);
+varying vec2 pm;
+void vertex() {
+	pm = VERTEX + desp;
+}
+void fragment() {
+	COLOR = vec4(texture(relieve, vec2(pm.x / mapa.x, clamp(pm.y / mapa.y, 0.0005, 0.9995))).rgb, 1.0);
+}
+"""
+const RELIEVE_CONTORNO_TEXTO := 10                      # grosor del contorno de los nombres sobre el relieve (puntos de la fuente base)
+const RELIEVE_VISTA_TAMANOS := [8192, 4096, 2048]     # de más a menos detalle
+const RUTA_RELIEVE_VISTA := "res://datos/texturas/relieve_vista_%d.jpg"
+var capa_relieve_vista: ColorRect                       # null hasta que se enciende la vista por primera vez
+var mat_rel_mundo: ShaderMaterial                       # el rectángulo que cubre el mundo (y sus dos copias a los lados)
+var mat_rel_sil: ShaderMaterial                         # la silueta del país enfocado, con la misma imagen
+var tex_relieve_vista: Texture2D
+var relieve_vista_tam := 0                              # ancho en píxeles de la imagen cargada (0 = ninguna)
+var foco_sil: MeshInstance2D                            # la silueta del país enfocado (para pintarla con el relieve)
+
+
+## Tamaño de imagen que pide la calidad gráfica vigente: Alta 8192, Media 4096, Baja 2048 (personalizada: 4096).
+func _tam_relieve_pedido() -> int:
+	var q := AjustesScript.preset_de(ajustes)
+	return int(RELIEVE_VISTA_TAMANOS[q]) if q >= 0 and q < RELIEVE_VISTA_TAMANOS.size() else 4096
+
+
+## Carga (o cambia) la imagen del relieve según la calidad. Si falta el archivo pedido usa el de menos detalle que sí exista, y si no hay ninguno devuelve false.
+func _preparar_relieve_vista() -> bool:
+	var pedido := _tam_relieve_pedido()
+	var orden: Array = [pedido]
+	for t in RELIEVE_VISTA_TAMANOS:
+		if int(t) < pedido:
+			orden.append(int(t))
+	for t in RELIEVE_VISTA_TAMANOS:
+		if int(t) > pedido:
+			orden.append(int(t))
+	var tam := 0
+	for t in orden:
+		var ruta: String = RUTA_RELIEVE_VISTA % int(t)
+		if ResourceLoader.exists(ruta) or FileAccess.file_exists(ruta):
+			tam = int(t)
+			break
+	if tam == 0:
+		return false
+	if tex_relieve_vista != null and relieve_vista_tam == tam:
+		return true
+	var tex0: Texture2D = _cargar_png(RUTA_RELIEVE_VISTA % tam)
+	if tex0 == null:
+		return false
+	var img: Image = tex0.get_image()
+	if img == null or img.is_empty():
+		return false
+	if img.is_compressed():
+		img.decompress()
+	img.generate_mipmaps()
+	tex_relieve_vista = ImageTexture.create_from_image(img)
+	relieve_vista_tam = tam
+	if mat_rel_mundo == null:
+		var sh := Shader.new()
+		sh.code = SHADER_RELIEVE_VISTA
+		mat_rel_mundo = ShaderMaterial.new()
+		mat_rel_mundo.shader = sh
+		mat_rel_mundo.set_shader_parameter("mapa", Vector2(ANCHO_MAPA, 1200.0))
+		mat_rel_mundo.set_shader_parameter("desp", Vector2(-ANCHO_MAPA, 0.0))
+		mat_rel_sil = ShaderMaterial.new()
+		mat_rel_sil.shader = sh
+		mat_rel_sil.set_shader_parameter("mapa", Vector2(ANCHO_MAPA, 1200.0))
+	mat_rel_mundo.set_shader_parameter("relieve", tex_relieve_vista)
+	mat_rel_sil.set_shader_parameter("relieve", tex_relieve_vista)
+	if capa_relieve_vista == null:
+		capa_relieve_vista = ColorRect.new()
+		capa_relieve_vista.position = Vector2(-ANCHO_MAPA, 0.0)
+		capa_relieve_vista.size = Vector2(ANCHO_MAPA * 3.0, 1200.0)
+		capa_relieve_vista.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		capa_relieve_vista.z_index = 1                    # encima del relleno y de los lagos (mismo z, más tarde en el árbol) y debajo de costas y fronteras
+		capa_relieve_vista.material = mat_rel_mundo
+		capa_relieve_vista.visible = false
+		add_child(capa_relieve_vista)
+	return true
+
+
+## Deja visibles las capas que toca según la vista: con el relieve puesto el relleno y el mar quedan apagados (los tapa la imagen) y la silueta del país
+## enfocado se pinta con la misma imagen.
+func _aplicar_capas_relieve() -> void:
+	var activo := modo_relieve and capa_relieve_vista != null
+	if capa_relieve_vista != null:
+		capa_relieve_vista.visible = activo
+	if activo:
+		if capa_pais != null:
+			capa_pais.visible = false
+		if capa_mar != null:
+			capa_mar.visible = false
+	if is_instance_valid(foco_sil):
+		foco_sil.material = mat_rel_sil if activo else foco_sil.get_meta("mat_pais")
+	CapaTexto.poner_contorno(RELIEVE_CONTORNO_TEXTO if activo else 0)
+
+
 @onready var camara: Camera2D = $Camera2D
 
 var fuente: SystemFont
@@ -364,7 +493,6 @@ var mat_estado: ShaderMaterial
 var mat_cont: ShaderMaterial
 var mat_ea: ShaderMaterial
 var mat_popout: ShaderMaterial
-var mat_sombra: ShaderMaterial
 var mat_ciudad: ShaderMaterial
 
 # Capas de texto globales (países, continentes)
@@ -372,6 +500,7 @@ var capas_texto: Array = []
 
 # Foco de país (un clic)
 var vista := "tradicional"        # "tradicional" | "internacional"
+var modo_relieve := false         # 0.1.8.37 · el mapa se ve como relieve (alturas y fondos marinos) en vez de colores por país
 var pais_foco := ""
 var grupo_pop: Node2D
 var dim_overlay: ColorRect
@@ -482,11 +611,34 @@ class CapaTexto extends Node2D:
 			cols[i] = cols0[i] if visible_ else Color(cols0[i], 0.0)
 		queue_redraw()
 
+	## 0.1.8.37 · Contorno de las letras (en puntos de la fuente base de 48): 0 = sin contorno. La vista de relieve lo enciende para que los nombres se lean sobre
+	## cualquier color de terreno; el contorno es oscuro si la letra es clara y claro si la letra es oscura.
+	static var contorno := 0
+	static var capas_vivas: Array = []                 # todas las capas de texto (para pedirles que se redibujen al cambiar el contorno)
+
+	func _init() -> void:
+		capas_vivas.append(self)
+
+	func _exit_tree() -> void:
+		capas_vivas.erase(self)
+
+	static func poner_contorno(px: int) -> void:
+		if px == contorno:
+			return
+		contorno = px
+		for c in capas_vivas:
+			if is_instance_valid(c):
+				(c as Node2D).queue_redraw()
+
 	func _draw() -> void:
 		for dx in desplazamientos:
 			for i in chars.size():
 				draw_set_transform(pos[i] + Vector2(dx, 0.0), ang[i], Vector2(esc[i], esc[i]))
-				draw_char(fuente, Vector2(-anc[i] * 0.5, 17.0), chars[i], 48, cols[i])
+				var x0 := Vector2(-anc[i] * 0.5, 17.0)
+				if contorno > 0 and cols[i].a > 0.01:
+					var claro := cols[i].get_luminance() > 0.5
+					draw_char_outline(fuente, x0, chars[i], 48, contorno, Color(0.04, 0.06, 0.09, 0.8 * cols[i].a) if claro else Color(0.98, 0.96, 0.9, 0.75 * cols[i].a))
+				draw_char(fuente, x0, chars[i], 48, cols[i])
 
 
 # ─────────────────────────────────────────────────────────────
@@ -778,6 +930,7 @@ func rend_poner_capa(clave: String, visible_: bool) -> void:
 	_actualizar_zoom()
 	_actualizar_ciudades()
 	_aplicar_capas_ocultas()
+	_aplicar_capas_relieve()
 
 
 func _aplicar_capas_ocultas() -> void:
@@ -1122,9 +1275,6 @@ func _construir_mapa() -> void:
 	sh_p.code = SHADER_POPOUT
 	mat_popout = ShaderMaterial.new()
 	mat_popout.shader = sh_p
-	mat_sombra = ShaderMaterial.new()
-	mat_sombra.shader = sh_p
-	mat_sombra.set_shader_parameter("sombra", 1.0)
 
 	estado_bytes = {"v": _leer_bytes("malla_estado_v.bin"), "uv": _leer_bytes("malla_estado_uv.bin"), "i": _leer_bytes("malla_estado_i.bin")}
 
@@ -1323,7 +1473,14 @@ func _poner_alfa_nodo(n: Node2D, a: float) -> void:
 # Herramienta de grosor constante: fija el ancho de un borde en PÍXELES de pantalla, sea cual sea el zoom.
 func _fijar_grosor(mat: ShaderMaterial, clave: String, z: float, alfa: float) -> void:
 	var px: float = GROSOR_PX[clave]
-	mat.set_shader_parameter("half_width", px * 0.5 / z)
+	var ext: float = BORDE_EXT_PX[q_bordes]
+	if clave == "prov" or clave == "prov_todas":
+		ext = minf(ext, 0.8)                                                 # líneas finas: sin sombra ni margen grande
+	mat.set_shader_parameter("half_width", (px * 0.5 + ext) / z)
+	mat.set_shader_parameter("nucleo", px * 0.5)
+	mat.set_shader_parameter("ext_px", ext)
+	if clave == "costa":
+		mat.set_shader_parameter("halo", BORDE_HALO[q_bordes])             # (solo la costa lleva sombra; los demás materiales ni tienen ese parámetro)
 	mat.set_shader_parameter("alfa", alfa)
 	if clave == "cont":
 		mat.set_shader_parameter("periodo", PERIODO_FRANJA_PX / z)
@@ -1408,9 +1565,7 @@ func _actualizar_zoom() -> void:
 
 	for l in lineas_resaltado:
 		if is_instance_valid(l):
-			l.width = 2.4 / z
-	if grupo_pop:
-		_ajustar_sombra()
+			l.width = float((l as Node).get_meta("px", 2.4)) / z
 
 
 func _normalizar_camara() -> void:
@@ -1665,6 +1820,19 @@ func etiqueta_tramo(lab: Dictionary, largo: float) -> Array:
 	return [(largo - lt) * 0.5, lt, float(m["k"]) * float(FUENTE_BASE)]
 
 
+## 0.1.8.37 · Sentido de lectura de una etiqueta. Antes cada letra se daba vuelta por su cuenta al pasar de ±90°, y en las etiquetas casi verticales (AMÉRICA DEL SUR,
+## CHILE, ISRAEL...) unas letras quedaban al derecho y otras al revés. Ahora se decide UNA vez para toda la línea: se lee de izquierda a derecha y, si es casi
+## vertical, de abajo hacia arriba (cuerda entre -105° y +75°); si la línea va al otro lado se invierte entera. Luego cada letra sigue la curva con tope en ±90°.
+func _orientar_linea_etiqueta(P: PackedVector2Array) -> PackedVector2Array:
+	var cuerda := (P[P.size() - 1] - P[0]).angle()
+	if cuerda > deg_to_rad(75.0) or cuerda <= deg_to_rad(-105.0):
+		var R := PackedVector2Array()
+		for i in range(P.size() - 1, -1, -1):
+			R.append(P[i])
+		return R
+	return P
+
+
 func _colocar_texto(lab: Dictionary, capa: CapaTexto) -> void:
 	var texto: String = lab["t"]
 	var g: String = lab["g"]
@@ -1674,6 +1842,7 @@ func _colocar_texto(lab: Dictionary, capa: CapaTexto) -> void:
 		P.append(Vector2(flat[i], flat[i + 1]))
 	if P.size() < 2:
 		return
+	P = _orientar_linea_etiqueta(P)                       # 0.1.8.37: una sola dirección de lectura para TODA la etiqueta
 	var cum := PackedFloat32Array([0.0])
 	for i in range(1, P.size()):
 		cum.append(cum[i - 1] + P[i].distance_to(P[i - 1]))
@@ -1700,12 +1869,7 @@ func _colocar_texto(lab: Dictionary, capa: CapaTexto) -> void:
 			var a := _posicion_en_linea(P, cum, c0 - w * 0.5)
 			var b := _posicion_en_linea(P, cum, c0 + w * 0.5)
 			var c := _posicion_en_linea(P, cum, c0)
-			var angulo := (b - a).angle()
-			# Evita que las letras queden invertidas cuando la curva cambia de dirección.
-			if angulo > PI * 0.5:
-				angulo -= PI
-			elif angulo < -PI * 0.5:
-				angulo += PI
+			var angulo := clampf((b - a).angle(), -PI * 0.5, PI * 0.5)     # ninguna letra se da vuelta: tope en vertical (la dirección ya se fijó para toda la línea)
 			capa.agregar(texto[i], c, angulo, k, anchos[i], color_texto)
 		s += w + extra
 	if _registrar_etiq and g == "c" and String(lab.get("k", "")) != "":
@@ -1833,6 +1997,8 @@ func _anillo_bajo(pos: Vector2) -> Array:
 
 
 func _seleccionar(pos: Vector2) -> void:
+	if _ctrl_pulsado() and _ciudad_en(pos) < 0 and _seleccionar_varias(pos):
+		return                                                    # Ctrl+clic sobre una provincia o un país: se suma a la selección (o se quita)
 	_limpiar_seleccion()
 	var zc := camara.zoom.x
 	var ci := _ciudad_en(pos)
@@ -1869,6 +2035,90 @@ func _seleccionar(pos: Vector2) -> void:
 		# 0.1.8.2a: UN solo clic elige el país Y lo enfoca (provincias con nombre; las de los vecinos, solo el contorno)
 		_enfocar_pais(pais, _foco_debe_mover(pais))
 		_seleccion_pais(pais, cont, p)
+
+
+## 0.1.8.37 · SELECCIÓN MÚLTIPLE (Ctrl+clic): suma o quita la provincia (con un país enfocado) o el país (sin foco) bajo el cursor. Todo lo elegido queda resaltado;
+## el panel muestra lo último que sumaste y avisa de cuántas hay. Devuelve false si el clic no cayó en tierra (entonces se trata como un clic normal).
+## (Los totales del grupo y las órdenes a varias unidades a la vez llegan con la ventana de grupo en la 0.1.8.38.)
+func _seleccionar_varias(pos: Vector2) -> bool:
+	var r := _anillo_bajo(pos)
+	var i: int = r[0]
+	if i < 0:
+		return false
+	var p: Vector2 = r[1]
+	var a: Dictionary = anillos[i]
+	var pi := int(a["p"])
+	var pais := _pais_de(pi)
+	var cont := String(a["k"])
+	ultimo_p = p
+	var u := {"tipo": "provincia" if (pais_foco != "" and pais == pais_foco) else "pais", "pi": pi, "pais": pais, "cont": cont}
+	if multi_sel.is_empty():                                      # lo que había elegido hasta ahora pasa a ser el primero del grupo
+		var actual := _unidad_elegida()
+		if not actual.is_empty():
+			multi_sel.append(actual)
+	var k := _clave_unidad(u)
+	var quitada := false
+	for j in multi_sel.size():
+		if _clave_unidad(multi_sel[j]) == k:
+			multi_sel.remove_at(j)
+			quitada = true
+			break
+	if not quitada:
+		multi_sel.append(u)
+	_multi_dibujar(p)
+	return true
+
+
+## Qué hay elegido ahora con un clic normal, como unidad de selección múltiple (vacío si nada, o si es otra cosa: ciudad, mar, continente...).
+func _unidad_elegida() -> Dictionary:
+	if hud == null or not hud.esta_abierto():
+		return {}                                                 # con el panel cerrado no hay nada elegido (sel_tipo guarda lo último que se vio)
+	match sel_tipo:
+		"provincia":
+			return {"tipo": "provincia", "pi": int(sel_ref["pi"]), "pais": String(sel_ref["pais"]), "cont": String(sel_ref.get("cont", ""))}
+		"pais":
+			var pais := String(sel_ref["pais"])
+			if mundo != null and mundo.paises.has(pais) and not mundo.paises[pais].provincias.is_empty():
+				return {"tipo": "pais", "pi": int(mundo.paises[pais].provincias[0]), "pais": pais, "cont": String(sel_ref.get("cont", ""))}
+	return {}
+
+
+func _clave_unidad(u: Dictionary) -> String:
+	return ("p%d" % int(u["pi"])) if String(u["tipo"]) == "provincia" else ("c" + String(u["pais"]))
+
+
+## Vuelve a dibujar el resaltado de todo `multi_sel` y manda al panel la última unidad (o lo cierra si ya no queda ninguna).
+func _multi_dibujar(p: Vector2) -> void:
+	var copia := multi_sel.duplicate()
+	var hay_otro_pais := false
+	for u in copia:
+		if String(u["pais"]) != pais_foco:
+			hay_otro_pais = true
+	if pais_foco != "" and hay_otro_pais:
+		_salir_foco()                                             # con varios países elegidos no se enfoca ninguno (el resto del mapa no se atenúa)
+		multi_sel = copia
+	_borrar_resaltado()
+	for u in multi_sel:
+		if String(u["tipo"]) == "provincia":
+			_resaltar_anillos(mundo.provincias[int(u["pi"])].anillos, true)
+		else:
+			_resaltar_anillos(_anillos_de_pais(String(u["pais"])), true, true)
+	if multi_sel.is_empty():
+		sel_tipo = ""
+		sel_ref = {}
+		if hud:
+			hud.ocultar()
+		_soltar_seleccion_tropas()
+		_actualizar_hint()
+		return
+	var ult: Dictionary = multi_sel.back()
+	_multi_activo = true
+	if String(ult["tipo"]) == "provincia":
+		_seleccion_provincia(int(ult["pi"]), String(ult["cont"]), p)
+		_tras_elegir_provincia(int(ult["pi"]))
+	else:
+		_seleccion_pais(String(ult["pais"]), String(ult["cont"]), p)
+	_multi_activo = false
 
 
 ## ¿Hay que mover la cámara al enfocar con un clic? Solo si el país no se ve entero o se ve diminuto: si ya está bien a la vista,
@@ -1915,6 +2165,15 @@ func _doble_click(pos: Vector2) -> void:
 
 
 func _limpiar_seleccion() -> void:
+	multi_sel.clear()
+	_borrar_resaltado()
+
+
+## Quita del mapa lo resaltado (relleno, resplandor y borde) y apaga la respiración; no toca la selección múltiple.
+func _borrar_resaltado() -> void:
+	if tween_resp != null:
+		tween_resp.kill()
+		tween_resp = null
 	for n in resaltado:
 		if is_instance_valid(n):
 			n.queue_free()
@@ -1948,37 +2207,149 @@ func _anillos_de_pais(pais: String) -> Array:
 	return lista
 
 
-func _resaltar_anillos(lista: Array, contorno: bool) -> void:
+## 0.1.8.37 · Aspecto de la selección: relleno amarillo y resplandor amarillo que «respiran» (suben y bajan de intensidad), y encima un borde NEGRO fino
+## y nítido (suavizado) que no cambia: se ve igual sobre cualquier color de país. Los países llevan un relleno más tenue que las provincias.
+const COLOR_SEL := Color(1.0, 0.85, 0.1)
+const SEL_RELLENO := Vector2(0.28, 0.52)               # alfa del relleno (mínimo, máximo) de una provincia
+const SEL_RELLENO_PAIS := Vector2(0.12, 0.26)          # ídem para un país entero
+const SEL_BRILLO := Vector2(0.18, 0.72)                # alfa del resplandor del borde
+const SEL_BORDE_PX := 2.0                              # grosor del borde negro en pantalla (px, a cualquier zoom)
+const SEL_BRILLO_PX := 7.0                             # grosor del resplandor
+const SEL_PERIODO := 2.4                               # segundos de una respiración completa
+var tween_resp: Tween
+var multi_sel: Array = []                              # Ctrl+clic: unidades elegidas, {"tipo": "provincia" | "pais", "pi", "pais", "cont"}; vacío = selección normal
+var _multi_activo := false                             # true mientras se dibuja el HUD de una selección múltiple (el resaltado lo pone `_multi_dibujar`)
+var _cache_contorno: Dictionary = {}                   # hash de la lista de celdas -> contorno ya calculado (así refrescar la selección cada día no lo recalcula)
+
+
+## Contorno exterior de un conjunto de celdas: las aristas que NO comparten con otra celda del conjunto, encadenadas en líneas (una por contorno cerrado,
+## con el primer punto repetido al final). Una arista que aparece dos veces es interna y se cancela.
+func _contorno_de_anillos(lista: Array) -> Array:
+	var h := hash(lista)
+	if _cache_contorno.has(h):
+		return _cache_contorno[h]
+	var presentes := {}                                    # arista (sin dirección) -> true, si queda una sola vez
+	var punto := {}                                        # llave de punto -> posición real
+	for ri in lista:
+		var pts := _puntos_anillo(anillos[int(ri)])
+		var n := pts.size()
+		if n < 3:
+			continue
+		var ka := Vector2i(roundi(pts[n - 1].x * 50.0), roundi(pts[n - 1].y * 50.0))
+		punto[ka] = pts[n - 1]
+		for k in n:
+			var kb := Vector2i(roundi(pts[k].x * 50.0), roundi(pts[k].y * 50.0))
+			punto[kb] = pts[k]
+			if ka != kb:
+				var a4 := Vector4i(ka.x, ka.y, kb.x, kb.y) if (ka.x < kb.x or (ka.x == kb.x and ka.y < kb.y)) else Vector4i(kb.x, kb.y, ka.x, ka.y)
+				if presentes.has(a4):
+					presentes.erase(a4)
+				else:
+					presentes[a4] = true
+			ka = kb
+	var vecinos := {}                                      # llave de punto -> llaves de los puntos unidos a él por una arista del contorno
+	for a4 in presentes:
+		var p1 := Vector2i(a4.x, a4.y)
+		var p2 := Vector2i(a4.z, a4.w)
+		if not vecinos.has(p1):
+			vecinos[p1] = []
+		if not vecinos.has(p2):
+			vecinos[p2] = []
+		(vecinos[p1] as Array).append(p2)
+		(vecinos[p2] as Array).append(p1)
+	var cadenas: Array = []
+	for inicio in vecinos.keys():
+		while not (vecinos[inicio] as Array).is_empty():
+			var cad := PackedVector2Array()
+			cad.append(punto[inicio])
+			var actual: Vector2i = inicio
+			while true:
+				var lv: Array = vecinos[actual]
+				if lv.is_empty():
+					break
+				var sig: Vector2i = lv.pop_back()
+				(vecinos[sig] as Array).erase(actual)
+				cad.append(punto[sig])
+				actual = sig
+				if actual == inicio:
+					break
+			if cad.size() >= 3:
+				cadenas.append(cad)
+	if _cache_contorno.size() > 24:
+		_cache_contorno.clear()
+	_cache_contorno[h] = cadenas
+	return cadenas
+
+
+## Una línea de la selección: `px` es su grosor en pantalla (se reescala con el zoom).
+func _linea_seleccion(pts: PackedVector2Array, dx: float, col: Color, px: float, z: float) -> Line2D:
+	var l := Line2D.new()
+	l.points = pts
+	l.position = Vector2(dx, 0.0)
+	l.width = px / z
+	l.default_color = col
+	l.joint_mode = Line2D.LINE_JOINT_ROUND
+	l.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	l.end_cap_mode = Line2D.LINE_CAP_ROUND
+	l.antialiased = true
+	l.set_meta("px", px)
+	return l
+
+
+## Resalta un conjunto de celdas: relleno amarillo (`suave`: más tenue, para un país entero) y, con `contorno`, resplandor + borde negro por su contorno exterior.
+func _resaltar_anillos(lista: Array, contorno: bool, suave := false) -> void:
 	if lista.is_empty():
 		return
-	# con un país enfocado el resaltado vive dentro del grupo que "salta", para quedar alineado con su silueta
+	# con un país enfocado el resaltado vive dentro de su grupo, para quedar alineado con su silueta
 	var en_foco := pais_foco != "" and grupo_pop != null and is_instance_valid(grupo_pop)
 	var padre: Node = grupo_pop if en_foco else self
 	var copias: Array = [0.0] if en_foco else [-ANCHO_MAPA, 0.0, ANCHO_MAPA]
 	var malla := _malla_de_anillos(lista)
+	var rango: Vector2 = SEL_RELLENO_PAIS if suave else SEL_RELLENO
 	for dx in copias:
 		var mi := MeshInstance2D.new()
 		mi.mesh = malla
 		mi.position = Vector2(dx, 0.0)
-		mi.modulate = Color(1.0, 1.0, 1.0, 0.42)
+		mi.modulate = Color(COLOR_SEL.r, COLOR_SEL.g, COLOR_SEL.b, lerpf(rango.x, rango.y, 0.5))
+		mi.set_meta("resp", rango)
 		mi.z_index = 8 if en_foco else 12
 		padre.add_child(mi)
 		resaltado.append(mi)
 	if contorno:
 		var z := _zoom_real()
-		for ri in lista:
-			var pts := _puntos_anillo(anillos[int(ri)])
-			pts.append(pts[0])
+		for cad in _contorno_de_anillos(lista):
 			for dx in copias:
-				var l := Line2D.new()
-				l.points = pts
-				l.position = Vector2(dx, 0.0)
-				l.width = 2.4 / z
-				l.default_color = Color(1.0, 0.85, 0.1, 1.0)
-				l.joint_mode = Line2D.LINE_JOINT_ROUND
-				l.z_index = 9 if en_foco else 13
-				padre.add_child(l)
-				lineas_resaltado.append(l)
+				var brillo := _linea_seleccion(cad, dx, COLOR_SEL, SEL_BRILLO_PX, z)
+				brillo.modulate.a = lerpf(SEL_BRILLO.x, SEL_BRILLO.y, 0.5)
+				brillo.set_meta("resp", SEL_BRILLO)
+				brillo.z_index = 9 if en_foco else 13
+				padre.add_child(brillo)
+				lineas_resaltado.append(brillo)
+				var borde := _linea_seleccion(cad, dx, Color(0.0, 0.0, 0.0, 1.0), SEL_BORDE_PX, z)
+				borde.z_index = 10 if en_foco else 14
+				padre.add_child(borde)
+				lineas_resaltado.append(borde)
+	_iniciar_respiracion()
+
+
+## La respiración: un bucle que sube y baja el alfa de todo lo resaltado que lo pide (meta «resp» = alfa mínimo y máximo). Se apaga solo cuando no hay selección.
+func _iniciar_respiracion() -> void:
+	if tween_resp != null and tween_resp.is_valid():
+		return
+	tween_resp = create_tween().set_loops()
+	tween_resp.tween_method(_pulso_seleccion, 0.0, TAU, SEL_PERIODO)
+
+
+func _pulso_seleccion(f: float) -> void:
+	var k := 0.5 - 0.5 * cos(f)
+	for n in resaltado:
+		if is_instance_valid(n) and (n as Node).has_meta("resp"):
+			var r: Vector2 = (n as Node).get_meta("resp")
+			(n as CanvasItem).modulate.a = lerpf(r.x, r.y, k)
+	for l in lineas_resaltado:
+		if is_instance_valid(l) and (l as Node).has_meta("resp"):
+			var r2: Vector2 = (l as Node).get_meta("resp")
+			(l as CanvasItem).modulate.a = lerpf(r2.x, r2.y, k)
 
 
 func _resaltar_mar(m: Dictionary) -> void:
@@ -2162,6 +2533,8 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 	var ctx := _ctx_tropas()
 	if not ctx.is_empty():
 		d["ctx"] = ctx
+	if multi_sel.size() > 1:
+		d["multi"] = multi_sel.size()                              # 0.1.8.37: el panel avisa de que hay varias unidades elegidas
 	if _en_refresco:
 		hud.refrescar(d)                                          # el mismo elemento otra vez: si no cambió nada visible, no se reconstruye
 	else:
@@ -2176,7 +2549,7 @@ func _seleccion_continente(cont: String, p: Vector2) -> void:
 	for i in anillos.size():
 		if String(anillos[i]["k"]) == cont:
 			lista.append(i)
-	_resaltar_anillos(lista, false)
+	_resaltar_anillos(lista, false, true)
 	var d: Dictionary = info.get("cont", {}).get(cont, {})
 	sel_tipo = "continente"
 	sel_ref = {"cont": cont}
@@ -2194,8 +2567,8 @@ func _seleccion_continente(cont: String, p: Vector2) -> void:
 
 
 func _seleccion_pais(pais: String, cont: String, p: Vector2) -> void:
-	if pais_foco != pais:
-		_resaltar_anillos(_anillos_de_pais(pais), false)
+	if not _multi_activo:
+		_resaltar_anillos(_anillos_de_pais(pais), true, true)
 	var d: Dictionary = info.get("pais", {}).get(pais, {}).duplicate()
 	_actualizar_datos_pais(d, pais)
 	sel_tipo = "pais"
@@ -2236,7 +2609,7 @@ func _seleccion_estado(pais: String, estado: String, p: Vector2) -> void:
 	var lista := []
 	for pi in es.provincias:
 		lista.append_array(mundo.provincias[int(pi)].anillos)
-	_resaltar_anillos(lista, false)
+	_resaltar_anillos(lista, true, true)
 	var d: Dictionary = info.get("estado", {}).get(k, {})
 	var cont: String = mundo.paises[pais].continente
 	sel_tipo = "estado"
@@ -2256,7 +2629,8 @@ func _seleccion_estado(pais: String, estado: String, p: Vector2) -> void:
 
 func _seleccion_provincia(pi: int, cont: String, p: Vector2) -> void:
 	var pr = mundo.provincias[pi]
-	_resaltar_anillos(pr.anillos, true)
+	if not _multi_activo:
+		_resaltar_anillos(pr.anillos, true)
 	var pais: String = pr.pais
 	var fila: Array = []
 	if info.has("prov") and pi < info["prov"].size():
@@ -2388,9 +2762,9 @@ func _actualizar_hint() -> void:
 			hud.set_hint("Mover %s soldados: clic en la provincia de destino (se muestra la ruta y los días) · Esc cancela" % fmt_n(float(orden_mover["n"])))
 		return
 	if pais_foco != "":
-		hud.set_hint("%s · Provincias de %s · clic fuera del país, ↩ o Retroceso para salir · V cambia de vista" % [v, pais_foco])
+		hud.set_hint("%s · Provincias de %s · clic fuera del país, ↩ o Retroceso para salir · Ctrl+clic: sumar o quitar provincias · V cambia de vista" % [v, pais_foco])
 	else:
-		hud.set_hint("Clic en un país: ver sus provincias (las de los vecinos, solo el contorno) · Doble clic en una provincia: ir a ella · V: vista · Espacio: pausar el tiempo · 1-6: velocidad (clic en la fecha) · F1: Debug · Clic en un cuadrito de tropas: elegirlas (Ctrl+clic: varias a la vez) · clic derecho en una provincia (o arrastrar el cuadrito hasta ella): moverlas")
+		hud.set_hint("Clic en un país: ver sus provincias (las de los vecinos, solo el contorno) · Ctrl+clic: varios países a la vez · Doble clic en una provincia: ir a ella · V: vista · Espacio: pausar el tiempo · 1-6: velocidad (clic en la fecha) · F1: Debug · Clic en un cuadrito de tropas: elegirlas (Ctrl+clic: varias a la vez) · clic derecho en una provincia (o arrastrar el cuadrito hasta ella): moverlas")
 
 
 
@@ -2408,7 +2782,7 @@ func _crear_hud() -> void:
 	hud.construir(self, fuente_ui, fuente_ui_neg)
 	hud.cerrar_pedido.connect(cerrar_seleccion)
 	hud.miga_pedida.connect(_on_miga)
-	hud.vista_pedida.connect(_cambiar_vista)
+	hud.vista_elegida.connect(_elegir_vista)
 	hud.pausa_pedida.connect(_mostrar_menu_pausa)
 	hud.atras_pedido.connect(_atras)
 	hud.velocidad_pedida.connect(_poner_velocidad)
@@ -2417,7 +2791,7 @@ func _crear_hud() -> void:
 	hud.debug_pedido.connect(_alternar_debug)
 	hud.personalizar_pedido.connect(_abrir_personalizar)
 	hud.ranking_pedido.connect(_alternar_ranking)
-	hud.set_vista_texto("Vista tradicional")
+	_refrescar_texto_vista()
 	hud.set_fecha(reloj.texto())
 	hud.set_velocidad(reloj.velocidad)
 	_actualizar_barra()
@@ -2435,11 +2809,30 @@ func _cargar_ajustes(ruta := AjustesScript.RUTA) -> void:
 		AjustesScript.aplicar(ajustes, get_window())
 	else:
 		ajustes = AjustesScript.leer_actual(get_window())
+	TemaHud.aplicar(int(ajustes.get("tema", 0)))                     # 0.1.8.37: el tema de interfaz elegido (antes de construir ningún menú ni el HUD)
+
+
+## 0.1.8.37 · Cambia el tema de interfaz en vivo: HUD, menú principal / pausa (el que esté abierto) y avisos. `id`: 0 Cartográfico, 1 Moderno oscuro, 2 Mixto.
+func _aplicar_tema(id: int) -> void:
+	TemaHud.aplicar(id)
+	ajustes["tema"] = TemaHud.ID
+	if hud != null:
+		hud.aplicar_tema(TemaHud.ID)
+	if panel_menu_nodo != null and is_instance_valid(panel_menu_nodo):
+		var centro := panel_menu_nodo.get_parent() as Control
+		if centro != null:
+			centro.theme = TemaHud.crear_tema(fuente_ui, fuente_ui_neg)
+		panel_menu_nodo.add_theme_stylebox_override("panel", TemaHud.panel(26.0))
+		if menu_contenido != null and is_instance_valid(menu_contenido):
+			TemaHud.repintar_roles(menu_contenido)
+	if popup_guerra != null and is_instance_valid(popup_guerra) and popup_guerra.has_method("aplicar_tema"):
+		popup_guerra.aplicar_tema()
 
 
 ## 0.1.8.32 · Gráficos del mapa y prioridad de la simulación (Opciones > Pantalla). Con los valores por defecto el juego queda como siempre.
 const COLOR_MAR_LISO := Color(0.06, 0.24, 0.43)
 var presupuesto_us := RelojScript.PRESUPUESTO_US     # lo que puede gastar la simulación de días por fotograma (µs), según Ajustes `sim_prio`
+var q_bordes := 2                                      # 0.1.8.37: calidad de los bordes del mapa (0 Baja, 1 Media, 2 Alta)
 var q_lineas_prov := true                            # la capa de líneas de provincia de la campaña puede verse
 var q_ciudades := true                               # las ciudades pueden verse
 var q_lagos := true                                  # los lagos se dibujan
@@ -2457,6 +2850,7 @@ func _aplicar_calidad(a: Dictionary) -> void:
 			capa_mar.color = Color.WHITE
 	costa_nivel_min = int(c["costa"])
 	q_lineas_prov = bool(c["lineas_prov"])
+	q_bordes = int(c["bordes"])
 	q_ciudades = bool(c["ciudades"])
 	q_lagos = bool(c["lagos"])
 	presupuesto_us = AjustesScript.presupuesto_sim_us(c)
@@ -2464,6 +2858,9 @@ func _aplicar_calidad(a: Dictionary) -> void:
 	_aplicar_relieve()
 	for n in capa_lagos:
 		n.visible = q_lagos and not rend_ocultas.has("lagos")
+	if modo_relieve:
+		_preparar_relieve_vista()                          # la calidad también elige el tamaño de la imagen del relieve
+		_aplicar_capas_relieve()
 	costa_nivel = -1                                       # que _actualizar_zoom vuelva a elegir el detalle de la costa
 	zoom_aplicado = -1.0
 	if camara != null and capa_frontera != null:
@@ -2485,16 +2882,49 @@ func _actualizar_fps(delta: float) -> void:
 
 
 # ─────────────────────────────────────────────────────────────
-# Vistas: tradicional / internacional
+# Vistas: tradicional / internacional (cómo se agrupan las provincias) y, aparte, el mapa de relieve (0.1.8.37)
 # ─────────────────────────────────────────────────────────────
+## Una entrada del menú VISTA: «tradicional» o «internacional» cambian la subdivisión; «relieve» enciende el mapa de relieve (cualquier otra
+## vista lo apaga y deja la subdivisión que se pida).
+func _elegir_vista(clave: String) -> void:
+	if clave == "relieve":
+		_poner_modo_relieve(true)
+	else:
+		_poner_modo_relieve(false)
+		if (clave == "tradicional" or clave == "internacional") and clave != vista:
+			_cambiar_vista()
+	_refrescar_texto_vista()
+
+
+## El botón VISTA de la barra muestra la vista puesta y el menú la marca.
+func _refrescar_texto_vista() -> void:
+	var clave := "relieve" if modo_relieve else vista
+	hud.set_vista_texto("Relieve" if modo_relieve else ("Tradicional" if vista == "tradicional" else "Internacional"))
+	hud.set_vista_activa(clave)
+
+
 func _cambiar_vista() -> void:
 	vista = "internacional" if vista == "tradicional" else "tradicional"
-	hud.set_vista_texto("Vista tradicional" if vista == "tradicional" else "Vista internacional")
+	_refrescar_texto_vista()
 	_aplicar_vista()
 	if sel_tipo == "provincia" or sel_tipo == "estado":
 		var pais := String(sel_ref.get("pais", pais_foco))
 		_limpiar_seleccion()
 		_seleccion_pais(pais, String(sel_ref.get("cont", "")), ultimo_p)
+
+
+## 0.1.8.37 · Enciende o apaga la vista de relieve (ver «VISTA “RELIEVE”»). Si no encuentra ninguna imagen avisa y se queda en la vista de antes.
+func _poner_modo_relieve(v: bool) -> void:
+	if v and not _preparar_relieve_vista():
+		hud_aviso("Falta la imagen del relieve (datos/texturas/relieve_vista_*.jpg)")
+		v = false
+	modo_relieve = v
+	if not v:
+		if capa_pais != null:
+			capa_pais.visible = not rend_ocultas.has("relleno")
+		if capa_mar != null:
+			capa_mar.visible = not rend_ocultas.has("mar")
+	_aplicar_capas_relieve()
 
 
 func _aplicar_vista() -> void:
@@ -2508,10 +2938,8 @@ func _aplicar_vista() -> void:
 
 
 # ─────────────────────────────────────────────────────────────
-# Foco de país (un clic): la silueta "salta" sobre el mapa y la cámara la lleva al costado derecho
+# Foco de país (un clic): se atenúa el resto del mapa y la cámara lleva al país al costado derecho (0.1.8.37: la silueta ya no «salta»)
 # ─────────────────────────────────────────────────────────────
-var foco_contornos: Array = []
-var nodo_sombra: MeshInstance2D
 
 
 func _escala_pop() -> float:
@@ -2604,13 +3032,12 @@ func _enfocar_pais(pais: String, mover: bool) -> void:
 	_poblar_vecinos(pais)
 
 	hud.set_atras_visible(true)
-	_poner_escala_pop(1.0)
+	_poner_escala_pop(1.0)                                        # 0.1.8.37: el país ya no «salta» ni lleva sombra: solo se atenúa el resto del mapa
 	_aplicar_vista()
 
 	if tween_pop:
 		tween_pop.kill()
-	tween_pop = create_tween().set_parallel(true)
-	tween_pop.tween_method(_poner_escala_pop, 1.0, POP_ESCALA, 0.38).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween_pop = create_tween()
 	tween_pop.tween_property(dim_overlay, "modulate:a", 1.0, 0.30)
 	if mover:
 		_mover_camara_a(Rect2(bb.position + Vector2(foco_dx, 0.0), bb.size), 0.55, 0.78, 1.05, 14.0)
@@ -2624,16 +3051,13 @@ func _poblar_foco(pais: String) -> void:
 	m_sil.shader = mat_popout.shader
 	var col_pais := _color_de_pais(pais)
 	m_sil.set_shader_parameter("base", col_pais)
-	nodo_sombra = MeshInstance2D.new()
-	nodo_sombra.mesh = malla
-	nodo_sombra.material = mat_sombra
-	nodo_sombra.z_index = -1
-	grupo_pop.add_child(nodo_sombra)
 	var sil := MeshInstance2D.new()
 	sil.mesh = malla
 	sil.material = m_sil
+	sil.set_meta("mat_pais", m_sil)
 	grupo_pop.add_child(sil)
-	_ajustar_sombra()
+	foco_sil = sil
+	_aplicar_capas_relieve()                                      # con la vista de relieve la silueta lleva el relieve y no el color del país
 
 	# Líneas de provincia: todos los pares de provincias vecinas que son de este país (incluye las costuras de países fusionados)
 	foco_lineas_prov.clear()
@@ -2723,7 +3147,6 @@ func _refrescar_foco() -> void:
 	for h in grupo_pop.get_children():
 		grupo_pop.remove_child(h)
 		h.queue_free()
-	foco_contornos.clear()
 	_poblar_foco(pais_foco)
 	_poblar_vecinos(pais_foco)
 	_aplicar_vista()
@@ -2738,10 +3161,10 @@ func _salir_foco() -> void:
 	if is_instance_valid(grupo_pop):
 		grupo_pop.queue_free()
 	grupo_pop = null
+	foco_sil = null
 	if is_instance_valid(grupo_vecinos):
 		grupo_vecinos.queue_free()
 	grupo_vecinos = null
-	nodo_sombra = null
 	if is_instance_valid(dim_overlay):
 		dim_overlay.visible = false
 	foco_lineas_prov.clear()
@@ -2752,12 +3175,6 @@ func _salir_foco() -> void:
 	hud.set_atras_visible(false)
 	_actualizar_hint()
 	_actualizar_zoom()
-
-
-# La sombra y los contornos mantienen su tamaño en pantalla (px) a cualquier zoom.
-func _ajustar_sombra() -> void:
-	if nodo_sombra != null and is_instance_valid(nodo_sombra):
-		nodo_sombra.position = Vector2(5.0, 7.0) / _zoom_real()
 
 
 # Lleva la cámara a ver `r` (en unidades de mapa) ocupando como mucho fw x fh de la pantalla,
@@ -2832,7 +3249,7 @@ func _titulo_menu(texto: String) -> void:
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.add_theme_font_override("font", fuente_ui_neg)
 	titulo.add_theme_font_size_override("font_size", 27)
-	titulo.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
+	TemaHud.rotular(titulo, "oro")                                       # 0.1.8.37: el color sale del tema vigente
 	menu_contenido.add_child(titulo)
 
 
@@ -2918,7 +3335,7 @@ func _columna_modo(fila: HBoxContainer, titulo: String, descripcion: String, acc
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.add_theme_font_override("font", fuente_ui)
 	l.add_theme_font_size_override("font_size", 14)
-	l.add_theme_color_override("font_color", Color(0.72, 0.78, 0.9))
+	TemaHud.rotular(l, "tenue")
 	col.add_child(l)
 	return b
 
@@ -2928,7 +3345,7 @@ func _etiqueta_menu(texto: String) -> void:
 	l.text = texto
 	l.add_theme_font_override("font", fuente_ui_neg)
 	l.add_theme_font_size_override("font_size", 15)
-	l.add_theme_color_override("font_color", Color(0.93, 0.78, 0.28))
+	TemaHud.rotular(l, "oro")
 	menu_contenido.add_child(l)
 
 
@@ -2961,7 +3378,7 @@ func _mostrar_campana() -> void:
 	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	nota.add_theme_font_override("font", fuente_ui)
 	nota.add_theme_font_size_override("font_size", 13)
-	nota.add_theme_color_override("font_color", Color(0.67, 0.72, 0.82))
+	TemaHud.rotular(nota, "nota")
 	menu_contenido.add_child(nota)
 	_boton_menu("COMENZAR", _comenzar_campana_menu)
 	_boton_menu("VOLVER", _mostrar_modos)
@@ -3409,6 +3826,7 @@ func _mostrar_opciones_pantalla() -> void:
 	ventana_pantalla.aplicado.connect(func(a: Dictionary):
 		ajustes = a.duplicate()
 		_aplicar_calidad(ajustes))
+	ventana_pantalla.tema_elegido.connect(func(id: int): _aplicar_tema(id))
 	ventana_pantalla.volver_pedido.connect(_mostrar_opciones)
 
 
@@ -3426,7 +3844,7 @@ func _mostrar_opciones_info() -> void:
 	var texto_datos := Label.new()
 	texto_datos.add_theme_font_override("font", fuente_ui)
 	texto_datos.add_theme_font_size_override("font_size", 17)
-	texto_datos.add_theme_color_override("font_color", Color(0.91, 0.93, 0.98))
+	TemaHud.rotular(texto_datos, "texto")
 	texto_datos.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	texto_datos.text = "Países / soberanías: %d\nProvincias administrativas: %d\nUnidades territoriales representadas: %d" % [paises.size(), cantidad_provincias, provincias.size()]
 	menu_contenido.add_child(texto_datos)
@@ -3436,7 +3854,7 @@ func _mostrar_opciones_info() -> void:
 	nota.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	nota.add_theme_font_override("font", fuente_ui)
 	nota.add_theme_font_size_override("font_size", 12)
-	nota.add_theme_color_override("font_color", Color(0.67, 0.72, 0.82))
+	TemaHud.rotular(nota, "nota")
 	menu_contenido.add_child(nota)
 	if epoca_meta.has("creditos"):                                    # escenarios con fuentes de terceros: se citan aquí (la licencia CC BY lo exige)
 		panel_menu_nodo.custom_minimum_size = Vector2(560.0, 420.0)
@@ -3446,14 +3864,14 @@ func _mostrar_opciones_info() -> void:
 		cred.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cred.add_theme_font_override("font", fuente_ui)
 		cred.add_theme_font_size_override("font_size", 12)
-		cred.add_theme_color_override("font_color", Color(0.67, 0.72, 0.82))
+		TemaHud.rotular(cred, "nota")
 		menu_contenido.add_child(cred)
 	var version := Label.new()
 	version.text = "Versión %s" % VERSION
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	version.add_theme_font_override("font", fuente_ui)
 	version.add_theme_font_size_override("font_size", 13)
-	version.add_theme_color_override("font_color", Color(0.67, 0.72, 0.82))
+	TemaHud.rotular(version, "nota")
 	menu_contenido.add_child(version)
 	_boton_menu("VOLVER", _mostrar_opciones)
 
@@ -4808,6 +5226,9 @@ func refrescar_todo(con_mapa := true) -> void:
 
 
 func _refrescar_seleccion() -> void:
+	if not multi_sel.is_empty():
+		_multi_dibujar(ultimo_p)                                  # selección múltiple: se vuelve a dibujar todo el grupo
+		return
 	var pais := String(sel_ref.get("pais", ""))
 	var cont := String(sel_ref.get("cont", ""))
 	match sel_tipo:

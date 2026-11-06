@@ -79,7 +79,7 @@ func restaurar() -> void:
 func t_sanear() -> void:
 	print("[T] ── Ajustes: por_defecto, sanear, iguales")
 	var d := AjustesScript.por_defecto()
-	ok(d.keys().size() == 16 and d.has("ancho_fs") and d.has("alto_fs") and d.has("modo") and d.has("sin_bordes") and d.has("ancho") and d.has("alto") and d.has("vsync") and d.has("fps_max") and d.has("msaa") and d.has("mostrar_fps") and d.has("mar") and d.has("costa") and d.has("lineas_prov") and d.has("ciudades") and d.has("lagos") and d.has("sim_prio"), "por_defecto: las 16 claves (10 de ventana + 6 de gráficos)")
+	ok(d.keys().size() == 18 and d.has("tema") and d.has("bordes") and d.has("ancho_fs") and d.has("alto_fs") and d.has("modo") and d.has("sin_bordes") and d.has("ancho") and d.has("alto") and d.has("vsync") and d.has("fps_max") and d.has("msaa") and d.has("mostrar_fps") and d.has("mar") and d.has("costa") and d.has("lineas_prov") and d.has("ciudades") and d.has("lagos") and d.has("sim_prio"), "por_defecto: las 18 claves (10 de ventana + 6 de gráficos + tema y bordes del mapa)")
 	ok(d["mar"] == 0 and d["costa"] == 0 and d["lineas_prov"] == true and d["ciudades"] == true and d["lagos"] == true and d["sim_prio"] == 1, "por_defecto: gráficos como siempre (mar con profundidad, costa detallada, todo visible, simulación equilibrada)")
 	ok(d["modo"] == 0 and d["ancho"] == 1280 and d["alto"] == 720 and d["vsync"] == 1 and d["fps_max"] == 0 and d["msaa"] == 1 and d["mostrar_fps"] == true and d["sin_bordes"] == false, "por_defecto: ventana 1280×720, VSync, 2x, FPS visibles")
 	ok(AjustesScript.iguales(AjustesScript.sanear(d), d), "sanear(por_defecto) no cambia nada")
@@ -535,7 +535,7 @@ func t_menu() -> void:
 			n_prov += 1
 	ok(t.has("INFORMACIÓN") and t.has("Países / soberanías: %d\nProvincias administrativas: %d\nUnidades territoriales representadas: %d" % [paises.size(), n_prov, main.provincias.size()]), "INFORMACIÓN: los tres datos del mapa de siempre (%d países, %d provincias, %d unidades)" % [paises.size(), n_prov, main.provincias.size()])
 	ok(t.has("Las provincias son subdivisiones de los países; no se cuentan como países independientes."), "INFORMACIÓN: la nota de siempre")
-	ok(t.has("Versión %s" % main.VERSION) and main.VERSION == "0.1.8.36", "INFORMACIÓN: muestra la versión (%s)" % main.VERSION)
+	ok(t.has("Versión %s" % main.VERSION) and main.VERSION == "0.1.8.37", "INFORMACIÓN: muestra la versión (%s)" % main.VERSION)
 	ok(textos_botones(main.menu_contenido) == ["VOLVER"], "INFORMACIÓN: un botón VOLVER")
 	boton(main.menu_contenido, "VOLVER").pressed.emit()
 	ok(textos_botones(main.menu_contenido) == ["PANTALLA", "INFORMACIÓN", "VOLVER"], "VOLVER de INFORMACIÓN regresa a OPCIONES")
@@ -559,12 +559,12 @@ func t_menu() -> void:
 	main.fps_acum = 0.6
 	main.fps_cuenta = 30
 	main._actualizar_fps(0.0)
-	ok(main.hud.lbl_fps.text == "v0.1.8.36", "contador apagado: la esquina solo muestra la versión (%s)" % main.hud.lbl_fps.text)
+	ok(main.hud.lbl_fps.text == "v0.1.8.37", "contador apagado: la esquina solo muestra la versión (%s)" % main.hud.lbl_fps.text)
 	main.ajustes["mostrar_fps"] = true
 	main.fps_acum = 0.6
 	main.fps_cuenta = 29                                          # _actualizar_fps suma un fotograma: 30 / 0,6 s = 50 FPS
 	main._actualizar_fps(0.0)
-	ok(main.hud.lbl_fps.text == "v0.1.8.36 · 50 FPS", "contador encendido: versión y FPS (%s)" % main.hud.lbl_fps.text)
+	ok(main.hud.lbl_fps.text == "v0.1.8.37 · 50 FPS", "contador encendido: versión y FPS (%s)" % main.hud.lbl_fps.text)
 	panel.volver_pedido.emit()
 	ok(textos_botones(main.menu_contenido) == ["PANTALLA", "INFORMACIÓN", "VOLVER"] and main.panel_menu_nodo.custom_minimum_size.x < 500.0, "VOLVER de PANTALLA regresa a OPCIONES con el panel estrecho")
 	boton(main.menu_contenido, "VOLVER").pressed.emit()

@@ -33,16 +33,17 @@ def hexc(h):
     h = h.lstrip('#')
     return tuple(int(h[i:i + 2], 16) / 255.0 for i in (0, 2, 4))
 
+# 0.1.8.37: paleta renovada (ver herramientas/renovar_paleta.py, que pone estos mismos colores en datos ya generados)
 COLOR_CONT = {
-    'Europa': hexc('#1d4ed8'), 'Asia': hexc('#dc2626'), 'África': hexc('#eab308'),
-    'América del Sur': hexc('#ea580c'), 'América del Norte': hexc('#15803d'),
-    'Oceanía': hexc('#7c3aed'), 'Antártida': hexc('#94a3b8'),
+    'Europa': hexc('#4f83d1'), 'Asia': hexc('#d15147'), 'África': hexc('#d1a63f'),
+    'América del Sur': hexc('#d1763f'), 'América del Norte': hexc('#58d174'),
+    'Oceanía': hexc('#9764d1'), 'Antártida': hexc('#b8c5d1'),
 }
 # (matiz, saturación base, variación de matiz permitida)
 BASE_PAIS = {  # ajusta aquí los colores base de cada continente en zoom-in
-    'Europa': (0.615, 0.80, 0.040), 'África': (0.125, 0.85, 0.022), 'Asia': (0.995, 0.80, 0.030),
-    'América del Sur': (0.070, 0.88, 0.022), 'América del Norte': (0.360, 0.75, 0.040),
-    'Oceanía': (0.750, 0.65, 0.035), 'Antártida': (0.580, 0.14, 0.01),
+    'Europa': (0.600, 0.62, 0.040), 'África': (0.118, 0.70, 0.022), 'Asia': (0.012, 0.66, 0.030),
+    'América del Sur': (0.063, 0.70, 0.022), 'América del Norte': (0.372, 0.58, 0.040),
+    'Oceanía': (0.745, 0.52, 0.035), 'Antártida': (0.580, 0.12, 0.01),
 }
 
 def smooth(a, b, x):

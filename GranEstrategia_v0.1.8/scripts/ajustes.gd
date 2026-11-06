@@ -17,6 +17,9 @@ extends RefCounted
 ##   ciudades     true = marcadores y nombres de ciudades al acercar
 ##   lagos        true = se dibujan los lagos
 ##   sim_prio     0 = fluidez (la simulación gasta como mucho 4 ms por fotograma), 1 = equilibrada (9 ms), 2 = velocidad del tiempo (14 ms)
+## 0.1.8.37 · Interfaz y bordes:
+##   tema         0 = Cartográfico, 1 = Moderno oscuro, 2 = Mixto (ver tema_hud.gd). Cambia en vivo desde Opciones y se guarda al momento
+##   bordes       calidad de los bordes del mapa: 0 = Baja (línea fina de siempre), 1 = Media, 2 = Alta (borde HD: línea más gruesa y suave, con trazo de contorno)
 ## Todo lo que no toca la ventana real (valores por defecto, validación, listas, textos) es lógica pura y está probado en runner74.
 
 const RUTA := "user://ajustes.cfg"
@@ -33,13 +36,14 @@ const MAR_NOMBRES := ["Con profundidad", "Color liso (más rápido)"]
 const COSTA_NOMBRES := ["Detallada", "Detalle medio", "Detalle bajo (más rápido)"]
 const SIM_NOMBRES := ["Fluidez (el tiempo puede ir más lento)", "Equilibrada", "Velocidad del tiempo"]
 const SIM_PRESUPUESTO_US := [4000, 9000, 14000]                  # microsegundos por fotograma que gasta la simulación de días, según `sim_prio`
+const BORDES_NOMBRES := ["Baja (más rápido)", "Media", "Alta (HD)"]
 const PRESETS_NOMBRES := ["Alta", "Media", "Baja", "Personalizada"]
 const PRESET_PERSONALIZADA := 3
 ## Qué valores fija cada calidad (la de por defecto es «Alta»: el juego como siempre). Todo lo demás (resolución, VSync, FPS...) no entra.
 const PRESETS := [
-	{"mar": 0, "costa": 0, "lineas_prov": true, "ciudades": true, "lagos": true, "msaa": 1},
-	{"mar": 0, "costa": 1, "lineas_prov": true, "ciudades": true, "lagos": false, "msaa": 0},
-	{"mar": 1, "costa": 2, "lineas_prov": false, "ciudades": true, "lagos": false, "msaa": 0},
+	{"mar": 0, "costa": 0, "lineas_prov": true, "ciudades": true, "lagos": true, "msaa": 1, "bordes": 2},
+	{"mar": 0, "costa": 1, "lineas_prov": true, "ciudades": true, "lagos": false, "msaa": 0, "bordes": 1},
+	{"mar": 1, "costa": 2, "lineas_prov": false, "ciudades": true, "lagos": false, "msaa": 0, "bordes": 0},
 ]
 const BASE_PROYECTO := Vector2i(1280, 720)                       # display/window/size del proyecto: la base de la escala «canvas_items»
 const TAM_MIN := Vector2i(640, 360)
@@ -49,7 +53,7 @@ const TAM_MAX := Vector2i(7680, 4320)
 ## Lo que se usa si no hay nada guardado: ventana de 1280×720, VSync y suavizado 2x como trae el proyecto, FPS visibles.
 static func por_defecto() -> Dictionary:
 	return {"modo": MODO_VENTANA, "sin_bordes": false, "ancho": 1280, "alto": 720, "ancho_fs": 0, "alto_fs": 0, "vsync": 1, "fps_max": 0, "msaa": 1, "mostrar_fps": true,
-		"mar": 0, "costa": 0, "lineas_prov": true, "ciudades": true, "lagos": true, "sim_prio": 1}
+		"mar": 0, "costa": 0, "lineas_prov": true, "ciudades": true, "lagos": true, "sim_prio": 1, "tema": 0, "bordes": 2}
 
 
 ## Devuelve un ajuste completo y válido a partir de cualquier Dictionary: lo que falta o viene roto (un archivo editado a mano, una versión
@@ -63,6 +67,8 @@ static func sanear(d: Dictionary) -> Dictionary:
 	r["mar"] = _entero_en(d.get("mar", null), [0, 1], int(r["mar"]))
 	r["costa"] = _entero_en(d.get("costa", null), [0, 1, 2], int(r["costa"]))
 	r["sim_prio"] = _entero_en(d.get("sim_prio", null), [0, 1, 2], int(r["sim_prio"]))
+	r["tema"] = _entero_en(d.get("tema", null), [0, 1, 2], int(r["tema"]))
+	r["bordes"] = _entero_en(d.get("bordes", null), [0, 1, 2], int(r["bordes"]))
 	r["ancho"] = _entero_acotado(d.get("ancho", null), TAM_MIN.x, TAM_MAX.x, int(r["ancho"]))
 	r["alto"] = _entero_acotado(d.get("alto", null), TAM_MIN.y, TAM_MAX.y, int(r["alto"]))
 	var fs := _res_interna(d.get("ancho_fs", null), d.get("alto_fs", null))

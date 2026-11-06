@@ -1,7 +1,7 @@
-PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.36
+PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.37
 =============================================
 
-Qué son: siete escenas de Godot que ejecutan el código del juego y comprueban sus resultados
+Qué son: nueve escenas de Godot que ejecutan el código del juego y comprueban sus resultados
 (sin tocar el juego ni tus partidas). Cubren las funciones añadidas o cambiadas desde la 0.1.8.2a y el menú de Opciones (0.1.8.31 a 0.1.8.33) y los escenarios (2026 y año 1 d. C.).
 
   runner71  lógica: Perfil, Reloj, Mundo, IA, Guerra, reglas del mapa, etiquetas, órdenes de marcha, cierre del periodo por trozos (181 comprobaciones)
@@ -11,11 +11,13 @@ Qué son: siete escenas de Godot que ejecutan el código del juego y comprueban 
   runner75  PARIDAD DE ESCENARIOS: el año 1 d. C. con las mismas mecánicas que 2026 (datos del escenario, menú MODO DEV > ESCENARIO, arranque, HUD con sus cinco pestañas, economía, ejércitos, reloj, guerra, IA, Debug, tierras sin reclamar, cada cultura en su sitio, 2026 intacto, la campaña recarga 2026) (144 comprobaciones)
   runner76  TERRITORIO (0.1.8.35): el mapa en celdas; mover / fusionar / ceder / dividir celdas, clic, colores y fronteras tras cada cambio, deshacer y restablecer, baile aleatorio con comprobación de tablas, gancho de texturas, herramientas del Debug y el año 1 d. C. (~100 comprobaciones)
   runner77  DESCUBRIMIENTOS (0.1.8.36): coherencia del catálogo (1.730, todos con año, prerrequisitos y era), frontera histórica contra una cuenta por fuerza bruta en 31 años, cierre de prerrequisitos, avanzar mes a mes = empezar directo, saltos hacia adelante y hacia atrás, conceder / quitar / reiniciar por país, disponibles, textos de año, coste, y dentro del juego: 2026, 1 d. C. y la pestaña Descub. del Debug (88 comprobaciones)
+  runner78  TEMAS DE INTERFAZ (0.1.8.37): las tres paletas (válidas, distintas, legibles), ajustes «tema» y «bordes», el selector «Interfaz» de Opciones con cambio en vivo y guardado, el HUD que se repinta sin reiniciar, menú principal y pausa (74 comprobaciones)
+  runner79  MAPA (0.1.8.37): menú VISTA, selección (borde negro, relleno, respiración, Ctrl+clic), bordes Baja / Media / Alta, sentido de lectura de las etiquetas, paleta renovada y vista de Relieve (imágenes, capas, silueta, calidad) (112 comprobaciones)
   runner89  (no es una prueba: es el BANCO DE RENDIMIENTO de los escenarios; imprime líneas «[B]» con ms por fotograma, llamadas de dibujo y memoria de 2026 y del año 1. Úsalo para comparar versiones.)
 
 Cómo correrlas:
   1. Abre el proyecto en Godot.
-  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72, 73, 74, 75, 76 o 77).
+  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72, 73, 74, 75, 76, 77, 78 o 79).
   3. Pulsa F6 (ejecutar escena actual).
   4. Mira el panel «Salida»: cada comprobación imprime «OK» o «FALLO»; al final dice
      «N comprobaciones OK · FALLOS: 0». Si sale algún FALLO, copia esa línea y mándamela.

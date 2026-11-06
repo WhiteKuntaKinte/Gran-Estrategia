@@ -7,9 +7,6 @@ extends Node
 signal cerrada
 
 const Tema := preload("res://scripts/tema_hud.gd")
-const C_ORO := Tema.ORO
-const C_TEXTO := Tema.TEXTO
-const C_TENUE := Tema.TENUE
 
 var main
 var fuente: Font
@@ -80,7 +77,7 @@ func construir(m: Node, f: Font, titulo: String, tam: Vector2, pos: Vector2, ico
 	if "fuente_ui_neg" in main:
 		t.add_theme_font_override("font", main.fuente_ui_neg)
 	t.add_theme_font_size_override("font_size", 16)
-	t.add_theme_color_override("font_color", C_ORO)
+	t.add_theme_color_override("font_color", Tema.TITULO)
 	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	h.add_child(t)
@@ -105,7 +102,7 @@ func construir(m: Node, f: Font, titulo: String, tam: Vector2, pos: Vector2, ico
 	grip.text = "◢"
 	grip.tooltip_text = "Arrastra para cambiar el tamaño de la ventana"
 	grip.add_theme_font_size_override("font_size", 16)
-	grip.add_theme_color_override("font_color", C_TENUE)
+	grip.add_theme_color_override("font_color", Tema.TENUE)
 	grip.mouse_filter = Control.MOUSE_FILTER_STOP
 	grip.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
 	grip.gui_input.connect(_on_grip_input)
