@@ -385,12 +385,16 @@ static func crear_tema(f: Font, f_negrita: Font = null) -> Theme:
 		t.set_color("icon_disabled_color", tipo, Color(1, 1, 1, 0.45))
 	t.set_stylebox("pressed_mirrored", "OptionButton", boton("pulsado"))
 	t.set_stylebox("normal_mirrored", "OptionButton", boton("normal"))
-	# casillas
-	t.set_color("font_color", "CheckBox", TEXTO)
-	t.set_color("font_hover_color", "CheckBox", hover_txt)
-	t.set_stylebox("focus", "CheckBox", StyleBoxEmpty.new())
-	t.set_color("font_color", "CheckButton", TEXTO)
-	t.set_stylebox("focus", "CheckButton", StyleBoxEmpty.new())
+	# casillas (sin el marco de botón: solo la marca y el texto; si no, marcada se veía como una barra del color de selección)
+	for tipo_c in ["CheckBox", "CheckButton"]:
+		for est in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+			t.set_stylebox(est, tipo_c, StyleBoxEmpty.new())
+		t.set_color("font_color", tipo_c, TEXTO)
+		t.set_color("font_hover_color", tipo_c, hover_txt)
+		t.set_color("font_pressed_color", tipo_c, TEXTO)
+		t.set_color("font_hover_pressed_color", tipo_c, hover_txt)
+		t.set_color("font_focus_color", tipo_c, TEXTO)
+		t.set_color("font_disabled_color", tipo_c, TEXTO_APAGADO)
 	# campos de texto y numéricos
 	for tipo2 in ["LineEdit", "SpinBox"]:
 		t.set_stylebox("normal", tipo2, caja(CAMPO, ACERO, 3, 5))
@@ -405,6 +409,16 @@ static func crear_tema(f: Font, f_negrita: Font = null) -> Theme:
 	t.set_stylebox("hover", "PopupMenu", caja(POPUP_SOBRE, sin, 3, 3, 0))
 	t.set_color("font_color", "PopupMenu", TEXTO)
 	t.set_color("font_hover_color", "PopupMenu", hover_txt)
+	# listas (ItemList: países, historial, descubrimientos…): fondo de campo y selección con los colores del tema
+	t.set_stylebox("panel", "ItemList", caja(CAMPO, ACERO_OSCURO, 3, 4))
+	t.set_stylebox("focus", "ItemList", StyleBoxEmpty.new())
+	t.set_stylebox("selected", "ItemList", caja(SELECCION_ARRIBA, sin, 3, 2, 0))
+	t.set_stylebox("selected_focus", "ItemList", caja(SELECCION_ARRIBA, sin, 3, 2, 0))
+	t.set_stylebox("hovered", "ItemList", caja(POPUP_SOBRE, sin, 3, 2, 0))
+	t.set_color("font_color", "ItemList", TEXTO)
+	t.set_color("font_hovered_color", "ItemList", hover_txt)
+	t.set_color("font_selected_color", "ItemList", TEXTO_SEL)
+	t.set_color("guide_color", "ItemList", SEPARADOR)
 	# barras y deslizadores
 	t.set_stylebox("slider", "HSlider", _pista(caja(CAMPO, ACERO_OSCURO, 3, 0)))
 	t.set_stylebox("grabber_area", "HSlider", _pista(caja(SELECCION_ABAJO, sin, 3, 0, 0)))

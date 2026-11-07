@@ -535,7 +535,7 @@ func t_menu() -> void:
 			n_prov += 1
 	ok(t.has("INFORMACIÓN") and t.has("Países / soberanías: %d\nProvincias administrativas: %d\nUnidades territoriales representadas: %d" % [paises.size(), n_prov, main.provincias.size()]), "INFORMACIÓN: los tres datos del mapa de siempre (%d países, %d provincias, %d unidades)" % [paises.size(), n_prov, main.provincias.size()])
 	ok(t.has("Las provincias son subdivisiones de los países; no se cuentan como países independientes."), "INFORMACIÓN: la nota de siempre")
-	ok(t.has("Versión %s" % main.VERSION) and main.VERSION == "0.1.8.37a", "INFORMACIÓN: muestra la versión (%s)" % main.VERSION)
+	ok(t.has("Versión %s" % main.VERSION) and main.VERSION == "0.1.8.38", "INFORMACIÓN: muestra la versión (%s)" % main.VERSION)
 	ok(textos_botones(main.menu_contenido) == ["VOLVER"], "INFORMACIÓN: un botón VOLVER")
 	boton(main.menu_contenido, "VOLVER").pressed.emit()
 	ok(textos_botones(main.menu_contenido) == ["PANTALLA", "INFORMACIÓN", "VOLVER"], "VOLVER de INFORMACIÓN regresa a OPCIONES")
@@ -559,12 +559,12 @@ func t_menu() -> void:
 	main.fps_acum = 0.6
 	main.fps_cuenta = 30
 	main._actualizar_fps(0.0)
-	ok(main.hud.lbl_fps.text == "v0.1.8.37a", "contador apagado: la esquina solo muestra la versión (%s)" % main.hud.lbl_fps.text)
+	ok(main.hud.lbl_fps.text == "v0.1.8.38", "contador apagado: la esquina solo muestra la versión (%s)" % main.hud.lbl_fps.text)
 	main.ajustes["mostrar_fps"] = true
 	main.fps_acum = 0.6
 	main.fps_cuenta = 29                                          # _actualizar_fps suma un fotograma: 30 / 0,6 s = 50 FPS
 	main._actualizar_fps(0.0)
-	ok(main.hud.lbl_fps.text == "v0.1.8.37a · 50 FPS", "contador encendido: versión y FPS (%s)" % main.hud.lbl_fps.text)
+	ok(main.hud.lbl_fps.text == "v0.1.8.38 · 50 FPS", "contador encendido: versión y FPS (%s)" % main.hud.lbl_fps.text)
 	panel.volver_pedido.emit()
 	ok(textos_botones(main.menu_contenido) == ["PANTALLA", "INFORMACIÓN", "VOLVER"] and main.panel_menu_nodo.custom_minimum_size.x < 500.0, "VOLVER de PANTALLA regresa a OPCIONES con el panel estrecho")
 	boton(main.menu_contenido, "VOLVER").pressed.emit()

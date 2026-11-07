@@ -1,8 +1,11 @@
-GRAN ESTRATEGIA — 0.1.8.37a (DESARROLLO)
+GRAN ESTRATEGIA — 0.1.8.38 (DESARROLLO)
 
 1. Abre la carpeta del proyecto (donde está project.godot) con Godot 4. (La 0.1.8.37 se sube a GitHub, rama v0.1.8-development; no hay ZIP.)
    NUEVO 0.1.8.37: el botón de lentes de la barra (VISTA) cambia entre Tradicional, Internacional y Relieve; Ctrl+clic elige varias provincias o países; en Opciones > Pantalla
    eliges el TEMA (INTERFAZ) y los Bordes del mapa (Baja / Media / Alta). Ver LEEME.txt.
+   NUEVO 0.1.8.38: el panel del país se MUEVE (arrastra su cabecera; doble clic = vuelve a su sitio) y se REDIMENSIONA (bordes izquierdo, derecho y de abajo; ancho y se reparte en 2 o 3 columnas de tarjetas);
+   el Debug (F1) abre en una CUADRÍCULA de secciones con migas «Menú Debug › Sección»; Debug, Mi país y Ranking se agrandan desde cualquier borde y recuerdan dónde los dejaste;
+   los avisos salen apilados arriba a la derecha y los tooltips son fichas (título, detalle y atajo). HUD de provincia, Construir y los totales de grupo: 0.1.8.38b.
 2. F5 para ejecutar. Rueda = zoom, arrastrar o W A S D = mover, UN clic en un país = lo elige y muestra sus provincias.
    Al pulsar JUGAR eliges MODO DEV (mundo entero, sin IA salvo la que actives) o CAMPAÑA (solo Europa + Rusia y Turquía, IA en todos los países menos el tuyo, y Ranking: tecla R;
    la primera opción de la lista, «— Ninguno: solo observar —», te deja mirar sin jugar). Ver LEEME.txt.

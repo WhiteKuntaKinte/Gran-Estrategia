@@ -1,7 +1,7 @@
-PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.37a
+PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.38
 =============================================
 
-Qué son: nueve escenas de Godot que ejecutan el código del juego y comprueban sus resultados
+Qué son: diez escenas de Godot que ejecutan el código del juego y comprueban sus resultados
 (sin tocar el juego ni tus partidas). Cubren las funciones añadidas o cambiadas desde la 0.1.8.2a y el menú de Opciones (0.1.8.31 a 0.1.8.33) y los escenarios (2026 y año 1 d. C.).
 
   runner71  lógica: Perfil, Reloj, Mundo, IA, Guerra, reglas del mapa, etiquetas, órdenes de marcha, cierre del periodo por trozos (181 comprobaciones)
@@ -13,12 +13,13 @@ Qué son: nueve escenas de Godot que ejecutan el código del juego y comprueban 
   runner77  DESCUBRIMIENTOS (0.1.8.36): coherencia del catálogo (1.730, todos con año, prerrequisitos y era), frontera histórica contra una cuenta por fuerza bruta en 31 años, cierre de prerrequisitos, avanzar mes a mes = empezar directo, saltos hacia adelante y hacia atrás, conceder / quitar / reiniciar por país, disponibles, textos de año, coste, y dentro del juego: 2026, 1 d. C. y la pestaña Descub. del Debug (88 comprobaciones)
   runner78  TEMAS DE INTERFAZ (0.1.8.37): las tres paletas (válidas, distintas, legibles), ajustes «tema» y «bordes», el selector «Interfaz» de Opciones con cambio en vivo y guardado, el HUD que se repinta sin reiniciar, menú principal y pausa (74 comprobaciones)
   runner79  MAPA (0.1.8.37): menú VISTA, selección (borde negro, relleno, respiración, Ctrl+clic), bordes Baja / Media / Alta, sentido de lectura de las etiquetas, paleta renovada y vista de Relieve (imágenes, capas, silueta, calidad) (120 comprobaciones; en la 0.1.8.37a el contorno de la selección son cintas con shader)
+  runner80  HUD Y VENTANAS (0.1.8.38): panel del país movible y redimensionable (cabecera, bordes, topes, memoria, doble clic para volver), tarjetas en 1–3 columnas, avisos apilados (apilar, ×N, máximo 5, clic, hover, tema, desvanecido real), fichas (formato, tamaño, posición, esquinas), Debug en cuadrícula (las 11 secciones y sus migas) y ventanas con bordes y memoria de sitio (128 comprobaciones)
   runner90  (no es una prueba: es el BANCO DE ZOOM; simula la rueda paso a paso con el mundo vacío y con el país más grande enfocado y elegido (y con Relieve) e imprime líneas «[Z]» con el coste de cada paso. Con --headless solo cuentan los scripts; con xvfb incluye el dibujo por software.)
   runner89  (no es una prueba: es el BANCO DE RENDIMIENTO de los escenarios; imprime líneas «[B]» con ms por fotograma, llamadas de dibujo y memoria de 2026 y del año 1. Úsalo para comparar versiones.)
 
 Cómo correrlas:
   1. Abre el proyecto en Godot.
-  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72, 73, 74, 75, 76, 77, 78 o 79).
+  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72, 73, 74, 75, 76, 77, 78, 79 o 80).
   3. Pulsa F6 (ejecutar escena actual).
   4. Mira el panel «Salida»: cada comprobación imprime «OK» o «FALLO»; al final dice
      «N comprobaciones OK · FALLOS: 0». Si sale algún FALLO, copia esa línea y mándamela.

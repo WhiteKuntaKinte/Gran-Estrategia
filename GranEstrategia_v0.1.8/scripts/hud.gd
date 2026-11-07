@@ -113,6 +113,20 @@ var _guerra_pendiente := -1                   # 0.1.8.3: ID del país al que el 
 var _msg_guerra := ""                         # último resultado de declarar una guerra (se muestra en Diplomacia)
 var _guerra_tid_vista := -2                   # país cuya ficha se vio la última vez (al cambiar se olvida la confirmación pendiente)
 
+# 0.1.8.38 · Panel movible y redimensionable + tarjetas en columnas
+const ANCHO_PANEL_USUARIO_MIN := 320.0       # lo más angosto que se puede dejar el panel arrastrando
+const ANCHO_TARJETA := 340.0                 # ancho mínimo de una columna de tarjetas: el panel ancho las reparte en 2 o 3 columnas
+const AGARRE_PANEL := 7.0                    # grosor (px) del borde del panel que se puede agarrar para cambiar su tamaño
+const PB_IZQ := 1
+const PB_DER := 2
+const PB_ABA := 4
+var _panel_mueve := false                    # arrastrando el panel por su cabecera
+var _panel_borde := 0                        # bordes que se están arrastrando (suma de PB_*)
+var _panel_movido := false                   # el jugador lo movió o le cambió el tamaño (si no, vuelve solo a su sitio)
+var _items_cuerpo: Array = []                # lo que se dibujó en `cuerpo`, en su orden (para repartirlo en columnas)
+var _cols_cuerpo: HBoxContainer              # las columnas de tarjetas (solo hay si caben 2 o más)
+var _ult_cols := 1
+
 
 func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	main = m
@@ -134,14 +148,24 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	# ── Panel principal ──
 	panel = PanelContainer.new()
 	panel.position = Vector2(14.0, PANEL_Y)
+	if "geo_ventanas" in main and (main.geo_ventanas as Dictionary).has("panel_pais"):
+		var g: Array = (main.geo_ventanas as Dictionary)["panel_pais"]            # vuelve donde y como lo dejaste
+		ancho_panel = clampf((g[1] as Vector2).x, ANCHO_PANEL_USUARIO_MIN, maxf(vp.x - 16.0, ANCHO_PANEL_USUARIO_MIN))
+		_alto_max = clampf((g[1] as Vector2).y, 150.0, maxf(vp.y - 200.0, 150.0))
+		panel.position = Vector2(clampf((g[0] as Vector2).x, 0.0, maxf(vp.x - 120.0, 0.0)), clampf((g[0] as Vector2).y, ALTO_BARRA, maxf(vp.y - 100.0, ALTO_BARRA)))
+		_panel_movido = true
 	panel.custom_minimum_size = Vector2(ancho_panel, 0.0)
 	panel.visible = false
+	panel.gui_input.connect(_on_panel_input)
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 4)
 	panel.add_child(vb)
 
 	# 1) CABECERA: bandera + nombre del país + cerrar
 	cab_marco = PanelContainer.new()
+	cab_marco.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	cab_marco.tooltip_text = "Mover el panel\nArrastra la cabecera para moverlo. Doble clic: vuelve a su sitio y a su tamaño."
+	cab_marco.gui_input.connect(_on_cab_input)
 	var cab := HBoxContainer.new()
 	cab.add_theme_constant_override("separation", 10)
 	cab_marco.add_child(cab)
@@ -170,7 +194,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	btn_compacto.text = "▾"
 	btn_compacto.flat = true
 	btn_compacto.focus_mode = Control.FOCUS_NONE
-	btn_compacto.tooltip_text = "Encoger el panel (deja solo el nombre) / volver a abrirlo"
+	btn_compacto.tooltip_text = "Encoger el panel\nDeja solo el nombre; el mismo botón lo vuelve a abrir."
 	btn_compacto.custom_minimum_size = Vector2(30.0, 30.0)
 	btn_compacto.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	btn_compacto.add_theme_font_size_override("font_size", 16)
@@ -290,7 +314,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 
 	# ── Panel de detalle (aparece a la derecha del principal) ──
 	panel_det = PanelContainer.new()
-	panel_det.position = Vector2(14.0 + ancho_panel + 8.0, PANEL_Y)
+	panel_det.position = Vector2(panel.position.x + ancho_panel + 8.0, panel.position.y)
 	panel_det.custom_minimum_size = Vector2(300.0, 0.0)
 	panel_det.visible = false
 	var sc2 := ScrollContainer.new()
@@ -459,7 +483,7 @@ func _construir_barra() -> void:
 	btn_debug.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn_debug.add_theme_constant_override("icon_max_width", 20)
 	btn_debug.focus_mode = Control.FOCUS_NONE
-	btn_debug.tooltip_text = "Menú Debug (F1): se abre encima del juego sin pausarlo"
+	btn_debug.tooltip_text = "Menú Debug\nSe abre encima del juego sin pausarlo.\nAtajo: F1"
 	_estilo_boton(btn_debug, 3.0)
 	btn_debug.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_debug.pressed.connect(func(): debug_pedido.emit())
@@ -469,7 +493,7 @@ func _construir_barra() -> void:
 	btn_ranking.custom_minimum_size = Vector2(84.0, 32.0)
 	btn_ranking.focus_mode = Control.FOCUS_NONE
 	btn_ranking.add_theme_font_size_override("font_size", 13)
-	btn_ranking.tooltip_text = "Tabla de posiciones de la campaña (R)"
+	btn_ranking.tooltip_text = "Ranking\nTabla de posiciones de la campaña.\nAtajo: R"
 	_estilo_boton(btn_ranking, 3.0)
 	btn_ranking.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_ranking.pressed.connect(func(): ranking_pedido.emit())
@@ -511,7 +535,7 @@ func _construir_barra() -> void:
 	btn_editar.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn_editar.add_theme_constant_override("icon_max_width", 18)
 	btn_editar.custom_minimum_size = Vector2(26.0, 26.0)
-	btn_editar.tooltip_text = "Personalizar tu país (nombre, moneda, impuestos, desarrollo...) en cualquier momento"
+	btn_editar.tooltip_text = "Mi país\nPersonaliza tu país en cualquier momento: nombre, moneda, impuestos, desarrollo…"
 	btn_editar.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_editar.visible = false
 	btn_editar.pressed.connect(func(): personalizar_pedido.emit())
@@ -543,7 +567,7 @@ func _construir_barra() -> void:
 	lbl_fecha.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	lbl_fecha.mouse_filter = Control.MOUSE_FILTER_STOP
 	lbl_fecha.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	lbl_fecha.tooltip_text = "Fecha: año, mes, día. Clic: velocidades 4, 5 y 6 (más rápidas)"
+	lbl_fecha.tooltip_text = "Fecha\nAño, mes, día. Clic: velocidades 4, 5 y 6 (más rápidas)."
 	lbl_fecha.mouse_entered.connect(func(): lbl_fecha.modulate = Color(1.25, 1.2, 1.0))
 	lbl_fecha.mouse_exited.connect(func(): lbl_fecha.modulate = Color(1, 1, 1))
 	lbl_fecha.gui_input.connect(func(ev: InputEvent):
@@ -576,7 +600,7 @@ func _construir_barra() -> void:
 	btn_vista.expand_icon = true
 	btn_vista.add_theme_constant_override("icon_max_width", 20)
 	btn_vista.add_theme_font_size_override("font_size", 13)
-	btn_vista.tooltip_text = "Vista del mapa (V cambia entre tradicional e internacional)"
+	btn_vista.tooltip_text = "Vista del mapa\nCambia entre tradicional e internacional.\nAtajo: V"
 	_estilo_boton(btn_vista, 6.0)
 	btn_vista.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_vista.pressed.connect(alternar_menu_vista)
@@ -703,7 +727,7 @@ func set_velocidad(v: int) -> void:
 	_vel_actual = v
 	lbl_fecha.add_theme_color_override("font_color", Tema.NARANJA if v >= 4 else Tema.TEXTO)
 	var estado := "en pausa" if v == 0 else "velocidad %d" % v
-	lbl_fecha.tooltip_text = "Fecha: año, mes, día · %s. Clic: velocidades 4, 5 y 6 (más rápidas)" % estado
+	lbl_fecha.tooltip_text = "Fecha\nAño, mes, día · %s. Clic: velocidades 4, 5 y 6 (más rápidas)." % estado
 
 
 ## nombre "" = sin país controlado (modo observador).
@@ -857,10 +881,9 @@ func set_visible_todo(v: bool) -> void:
 func set_campana(v: bool) -> void:
 	if btn_ranking != null:
 		btn_ranking.visible = v
-	if panel != null:                                              # 0.1.8.37: «Ranking» está dentro de la barra: el panel siempre empieza justo debajo de ella
+	if panel != null and not _panel_movido:                        # 0.1.8.37: «Ranking» está dentro de la barra: el panel empieza justo debajo de ella (salvo que lo hayas movido)
 		panel.position.y = PANEL_Y
-	if panel_det != null:
-		panel_det.position.y = PANEL_Y
+	_acomodar_det()
 
 
 func ocultar() -> void:
@@ -1054,6 +1077,8 @@ func _dibujar_migas() -> void:
 # ───────────── contenido por pestaña ─────────────
 func _dibujar() -> void:
 	_limpiar(cuerpo)
+	_items_cuerpo = []                                              # las tarjetas se anotan solas en `_seccion`
+	_cols_cuerpo = null
 	var tipo := String(datos.get("tipo", ""))
 	var hay := _hay_ctx()
 	var en_tropas: bool = pestana == "militar" and hay and sub_militar != "res"
@@ -1081,6 +1106,7 @@ func _dibujar() -> void:
 		"economia":
 			_tab_economia()
 	_sin_foco(cuerpo)
+	_ult_cols = _columnas_tarjetas()
 	_ajustar_alto()
 
 
@@ -1131,6 +1157,188 @@ func _ajustar_alto() -> void:
 	panel.reset_size()
 
 
+## ─────────── 0.1.8.38 · Panel movible y redimensionable ───────────
+## Cabecera: arrastrar mueve el panel; doble clic lo devuelve a su sitio y tamaño de siempre.
+func _on_cab_input(ev: InputEvent) -> void:
+	if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT:
+		if ev.pressed and ev.double_click:
+			volver_panel()
+			return
+		_panel_mueve = ev.pressed
+		if not ev.pressed:
+			_guardar_geo_panel()
+	elif ev is InputEventMouseMotion and _panel_mueve:
+		mover_panel(ev.relative)
+
+
+func mover_panel(rel: Vector2) -> void:
+	var vp := raiz.get_viewport().get_visible_rect().size
+	panel.position = Vector2(clampf(panel.position.x + rel.x, 120.0 - panel.size.x, maxf(vp.x - 120.0, 0.0)), clampf(panel.position.y + rel.y, ALTO_BARRA, maxf(vp.y - 60.0, ALTO_BARRA)))
+	_panel_movido = true
+	_acomodar_det()
+
+
+## Devuelve el panel a su sitio, su ancho y su alto de siempre.
+func volver_panel() -> void:
+	var vp := raiz.get_viewport().get_visible_rect().size
+	_alto_max = clampf(vp.y * 0.36, 170.0, 460.0)
+	ancho_panel = clampf(vp.x * 0.30, ANCHO_PANEL_MIN, ANCHO_PANEL_MAX)
+	panel.custom_minimum_size.x = ancho_panel
+	panel.position = Vector2(14.0, PANEL_Y)
+	_panel_movido = false
+	panel.reset_size()
+	_acomodar_tarjetas()
+	_ajustar_alto()
+	_acomodar_det()
+	if "geo_ventanas" in main:
+		(main.geo_ventanas as Dictionary).erase("panel_pais")
+
+
+func _guardar_geo_panel() -> void:
+	if _panel_movido and "geo_ventanas" in main:
+		(main.geo_ventanas as Dictionary)["panel_pais"] = [panel.position, Vector2(ancho_panel, _alto_max)]
+
+
+## Qué bordes del panel toca un punto (coordenadas del panel): izquierdo, derecho o de abajo (el de arriba no se agarra: el alto lo da el contenido).
+func _borde_panel_en(p: Vector2) -> int:
+	var b := 0
+	if p.x <= AGARRE_PANEL:
+		b |= PB_IZQ
+	elif p.x >= panel.size.x - AGARRE_PANEL:
+		b |= PB_DER
+	if p.y >= panel.size.y - AGARRE_PANEL and not _compacto:
+		b |= PB_ABA
+	return b
+
+
+func _on_panel_input(ev: InputEvent) -> void:
+	if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT:
+		_panel_borde = _borde_panel_en(ev.position) if ev.pressed else 0
+		if not ev.pressed:
+			_guardar_geo_panel()
+	elif ev is InputEventMouseMotion:
+		if _panel_borde != 0:
+			arrastrar_borde_panel(_panel_borde, ev.relative)
+		else:
+			var b := _borde_panel_en(ev.position)
+			if b == (PB_IZQ | PB_ABA) or b == (PB_DER | PB_ABA):
+				panel.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE if b == (PB_DER | PB_ABA) else Control.CURSOR_BDIAGSIZE
+			elif b & (PB_IZQ | PB_DER):
+				panel.mouse_default_cursor_shape = Control.CURSOR_HSIZE
+			elif b & PB_ABA:
+				panel.mouse_default_cursor_shape = Control.CURSOR_VSIZE
+			else:
+				panel.mouse_default_cursor_shape = Control.CURSOR_ARROW
+
+
+## Cambia el ancho (bordes izquierdo y derecho) o el alto máximo de la sección con scroll (borde de abajo) lo que se movió el ratón.
+func arrastrar_borde_panel(b: int, rel: Vector2) -> void:
+	var vp := raiz.get_viewport().get_visible_rect().size
+	var tope_ancho := maxf(vp.x - 16.0, ANCHO_PANEL_USUARIO_MIN)
+	var antes := ancho_panel
+	if b & PB_DER:
+		ancho_panel = clampf(ancho_panel + rel.x, ANCHO_PANEL_USUARIO_MIN, tope_ancho)
+	if b & PB_IZQ:
+		ancho_panel = clampf(ancho_panel - rel.x, ANCHO_PANEL_USUARIO_MIN, tope_ancho)
+		panel.position.x += antes - ancho_panel
+	if b & PB_ABA:
+		var resto := panel.size.y - scroll_cuerpo.size.y                       # lo que ocupan cabecera, pestañas y pie: el panel no debe salirse por abajo
+		_alto_max = clampf(_alto_max + rel.y, 150.0, maxf(vp.y - panel.position.y - resto - 8.0, 150.0))
+	_panel_movido = true
+	panel.custom_minimum_size.x = ancho_panel
+	panel.reset_size()
+	if _columnas_tarjetas() != _ult_cols:
+		_acomodar_tarjetas()
+	_ajustar_alto()
+	_acomodar_det()
+
+
+## El panel de detalle va pegado al lado del panel principal (a la derecha; si ya no cabe, a la izquierda).
+func _acomodar_det() -> void:
+	if panel_det == null or panel == null:
+		return
+	var vp := raiz.get_viewport().get_visible_rect().size
+	var ancho_det := maxf(panel_det.size.x, panel_det.custom_minimum_size.x)
+	var x := panel.position.x + maxf(panel.size.x, ancho_panel) + 8.0
+	if x + ancho_det > vp.x:
+		x = panel.position.x - ancho_det - 8.0
+	panel_det.position = Vector2(clampf(x, 0.0, maxf(vp.x - ancho_det, 0.0)), panel.position.y)
+
+
+## Cuántas columnas de tarjetas caben en el ancho actual del panel (1 = el panel de siempre).
+func _columnas_tarjetas() -> int:
+	return clampi(int(floor((ancho_panel - 28.0) / ANCHO_TARJETA)), 1, 3)
+
+
+## Reparte lo dibujado en `cuerpo` en columnas (cada tarjeta, a la columna más baja); con una sola columna lo deja como siempre, una debajo de otra.
+func _acomodar_tarjetas() -> void:
+	if cuerpo == null:
+		return
+	if _columnas_tarjetas() <= 1 and _cols_cuerpo == null:               # ya están una debajo de otra, tal como se dibujaron: no hay que tocar nada (mover cientos de nodos cuesta)
+		_ult_cols = 1
+		return
+	for it in _items_cuerpo:
+		if is_instance_valid(it) and (it as Node).get_parent() != null:
+			(it as Node).get_parent().remove_child(it)
+	if _cols_cuerpo != null and is_instance_valid(_cols_cuerpo):
+		_cols_cuerpo.get_parent().remove_child(_cols_cuerpo)
+		_cols_cuerpo.queue_free()
+	_cols_cuerpo = null
+	var n := _columnas_tarjetas()
+	_ult_cols = n
+	if n <= 1 or _items_cuerpo.size() < 2:
+		for it in _items_cuerpo:
+			if is_instance_valid(it):
+				cuerpo.add_child(it)
+		return
+	_crear_columnas(n)
+	var altos: Array = []
+	for i in n:
+		altos.append(0.0)
+	for it in _items_cuerpo:
+		if not is_instance_valid(it):
+			continue
+		var k := 0
+		for i in n:
+			if float(altos[i]) < float(altos[k]):
+				k = i
+		_cols_cuerpo.get_child(k).add_child(it)
+		altos[k] = float(altos[k]) + (it as Control).get_combined_minimum_size().y + 6.0
+
+
+## Crea las `n` columnas vacías de tarjetas dentro de `cuerpo`.
+func _crear_columnas(n: int) -> void:
+	_cols_cuerpo = HBoxContainer.new()
+	_cols_cuerpo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_cols_cuerpo.add_theme_constant_override("separation", 6)
+	for i in n:
+		var c := VBoxContainer.new()
+		c.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		c.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		c.add_theme_constant_override("separation", 6)
+		_cols_cuerpo.add_child(c)
+	cuerpo.add_child(_cols_cuerpo)
+
+
+## Pone una tarjeta recién dibujada: debajo de las demás si hay una sola columna; si hay varias, en la columna más baja en este momento
+## (así se arma directo, sin mover nodos después).
+func _poner_tarjeta(card: Control) -> void:
+	var n := _columnas_tarjetas()
+	if n <= 1:
+		cuerpo.add_child(card)
+		return
+	if _cols_cuerpo == null:
+		_crear_columnas(n)
+	var k := 0
+	var menor := 1e30
+	for i in _cols_cuerpo.get_child_count():
+		var h := (_cols_cuerpo.get_child(i) as Control).get_combined_minimum_size().y
+		if h < menor - 0.5:
+			menor = h
+			k = i
+	_cols_cuerpo.get_child(k).add_child(card)
+
+
 ## Texto pequeño a la derecha del título de la sección: de qué país o territorio habla.
 func _contexto_seccion() -> String:
 	var tipo := String(datos.get("tipo", ""))
@@ -1143,8 +1351,12 @@ func _contexto_seccion() -> String:
 
 
 func _seccion(titulo: String) -> VBoxContainer:
+	var card := PanelContainer.new()                                  # 0.1.8.38: cada tema es una tarjeta con marco
+	card.add_theme_stylebox_override("panel", Tema.caja(Tema.BLOQUE_SUAVE, Tema.ACERO_OSCURO, 5, 5, 1))
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 4)
+	card.add_child(vb)
 	var abierta: bool = secciones_abiertas.get(titulo, true)
 	var cab := Button.new()
 	cab.flat = true
@@ -1170,7 +1382,8 @@ func _seccion(titulo: String) -> VBoxContainer:
 		secciones_abiertas[titulo] = nueva
 		cab.text = ("▾  " if nueva else "▸  ") + titulo.to_upper()
 		_ajustar_alto())
-	cuerpo.add_child(vb)
+	_items_cuerpo.append(card)
+	_poner_tarjeta(card)
 	return contenido
 
 
@@ -1719,6 +1932,7 @@ func _detalle_fin(f: Dictionary) -> void:
 	_sin_foco(det_box)
 	panel_det.visible = true
 	panel_det.reset_size()
+	_acomodar_det()
 
 
 func _vs(parte: float, todo: float) -> float:
@@ -1829,6 +2043,7 @@ func _detalle(k: String, forzar := false) -> void:
 	_sin_foco(det_box)
 	panel_det.visible = true
 	panel_det.reset_size()
+	_acomodar_det()
 
 
 ## Mientras la pestaña Diplomacia está abierta se pone al día sola cuando empieza o termina una guerra.

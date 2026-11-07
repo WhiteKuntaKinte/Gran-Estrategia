@@ -392,12 +392,12 @@ func t_ordenes() -> void:
 	var pi_ajena: int = int(m.paises[v[2]].provincias[0])
 	var n_marchas: int = ej.marchas.size()
 	main._mandar_tropas(rid, pi_ajena)
-	ok(ej.marchas.size() == n_marchas and String(hud.lbl_hint.text).begins_with("No estás en guerra con"), "_mandar_tropas a territorio ajeno sin guerra: se bloquea con el aviso (no sale ninguna columna)")
+	ok(ej.marchas.size() == n_marchas and String(main.avisos.ultimo_texto).begins_with("No estás en guerra con"), "_mandar_tropas a territorio ajeno sin guerra: se bloquea con el aviso (no sale ninguna columna)")
 	main._mandar_tropas(rid, -1)
-	ok(String(hud.lbl_hint.text).begins_with("Eso es mar"), "_mandar_tropas a un punto de mar: avisa")
+	ok(String(main.avisos.ultimo_texto).begins_with("Eso es mar"), "_mandar_tropas a un punto de mar: avisa")
 	var origen: int = int(ej._prov_de_tid[ej.prov_de(rid)].idx)
 	main._mandar_tropas(rid, origen)
-	ok(String(hud.lbl_hint.text).contains("ya están en esa provincia"), "_mandar_tropas a la provincia donde ya están: avisa")
+	ok(String(main.avisos.ultimo_texto).contains("ya están en esa provincia"), "_mandar_tropas a la provincia donde ya están: avisa")
 	# regimiento ajeno
 	var rid_f := -1
 	for r in ej.regs_pais.get(ft, []):
@@ -405,7 +405,7 @@ func t_ordenes() -> void:
 		break
 	if rid_f >= 0:
 		main._mandar_tropas(rid_f, origen)
-		ok(String(hud.lbl_hint.text).begins_with("Esas tropas no son tuyas"), "_mandar_tropas con tropas de otro país: «no son tuyas»")
+		ok(String(main.avisos.ultimo_texto).begins_with("Esas tropas no son tuyas"), "_mandar_tropas con tropas de otro país: «no son tuyas»")
 	main._mandar_tropas(-999, origen)
 	ok(ej.marchas.size() == n_marchas, "_mandar_tropas con un regimiento que no existe: no hace nada (y no se rompe)")
 	# con guerra declarada, la orden sale
@@ -416,7 +416,7 @@ func t_ordenes() -> void:
 	for mm in ej.marchas.values():
 		rid_marcha = int(mm["reg"])
 	main._mandar_tropas(rid_marcha, pi_ajena)
-	ok(String(hud.lbl_hint.text).contains("ya va en marcha") and ej.marchas.size() == n_marchas + 1, "…y no se puede ordenar dos veces a una columna que ya marcha")
+	ok(String(main.avisos.ultimo_texto).contains("ya va en marcha") and ej.marchas.size() == n_marchas + 1, "…y no se puede ordenar dos veces a una columna que ya marcha")
 	cerrar_guerras()
 
 

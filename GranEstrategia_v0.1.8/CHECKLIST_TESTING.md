@@ -1,4 +1,4 @@
-# Checklist de testing — Gran Estrategia 0.1.8.37a
+# Checklist de testing — Gran Estrategia 0.1.8.38
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
@@ -27,6 +27,15 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 - ✅ `runner29` — capturas del menú principal, Debug, «Mi país», pausa y Política (sin comprobaciones: se revisan a ojo).
 - ✅ `runner25` — portado al HUD nuevo: Militar dentro del país, Diplomacia con «Firmar la paz», 0 fallos.
 - ✅ `runner9` y `runner17` — ajustados a los nombres nuevos (pestaña «militar»; un clic en un cuadro de pila = `abrir_ordenes` con ese regimiento). Una vez `runner17` falló mientras otra prueba corría a la vez en el servidor y las dos repeticiones siguientes pasaron limpias: es una prueba sensible al tiempo (arrastres simulados), no un fallo reproducible.
+
+### HUD y ventanas, 1.ª parte (0.1.8.38)
+- ✅ `runner80` (nuevo) — **128 comprobaciones**, 0 fallos: panel del país (mover con topes arriba / abajo / izquierda / derecha, agarres de borde y esquina, ensanchar / angostar con mínimo 320 px y máximo la pantalla, alto máximo sin salirse por abajo, panel de detalle pegado a derecha o izquierda, volver a su sitio, doble clic en la cabecera, arrastre simulado de la cabecera, memoria: un HUD nuevo lo restaura y una geometría absurda se corrige); tarjetas (columnas 1 / 2 / 3 según el ancho; en las 5 pestañas con el panel ancho todas las tarjetas siguen en el árbol); avisos apilados (apilar, «×N», máximo 5, color por nivel, posición arriba a la derecha, clic, hover, repintado de tema, desvanecido real tras 5 s, `hud_aviso` no pisa la línea de ayuda); fichas (partir título / detalle / atajo, `ficha` en vivo, tamaño y posición, esquina de abajo a la derecha, apagadas, tooltip nativo apagado, repintado de tema); Debug (cuadrícula de 11 tarjetas, cada sección se abre y su miga dice «Menú Debug › …», ←, tema en vivo); ventanas (bordes y esquinas, crecer hacia la izquierda con la ventana pegada a la derecha, mínimo y pantalla, memoria de Debug y de Mi país).
+- ✅ `runner73` ajustado: los mensajes de las órdenes de marcha se comprueban en `main.avisos.ultimo_texto`. `runner74` pide la versión 0.1.8.38.
+- ✅ **Capturas revisadas a ojo** (servidor, dibujo por software): panel del país en 1 y 2 columnas, movido, pestaña Diplomacia ancha y de vuelta a su sitio; avisos apilados y ficha del botón Debug en los temas A y B; Debug en cuadrícula en los tres temas.
+- ✅ **Revisión de variables y código**: 27 archivos, 1.101 funciones, 0 duplicadas, 0 variables repetidas, 0 funciones y 0 variables sin uso; `datos/variables.json` sin cambios.
+- ✅ **Revisión de rendimiento** (frente a la 0.1.8.37a, dos pasadas): `runner89` por software — mundo 104–115 / 107–111 ms por fotograma (nueva / 37a), Europa 102–104 / 105–107, Roma 73 / 73–75, 40 pasos de zoom+arrastre 93–95 / 91–96, simular 1 día con 249 IA 6,7–7,0 / 6,4–6,7, `_process` 0,08 igual, memoria 307 / 306 MB, +12 nodos: dentro del ruido. `runner90` (banco de zoom): 6,9 ms por fotograma en todos los casos, igual que la 37a. Se encontró un costo real en las tarjetas (redibujar el panel del país 31 → 51 ms por mover los nodos de sitio) y se corrigió (ahora se arman directo en su columna): 31–32 ms con 1 y con 2 columnas, igual que la 37a.
+- ✅ **Regresión final de la 0.1.8.38**: runner71 181, runner72 121, runner73 84, runner75 145, runner76 97, runner77 88, runner78 74, runner79 120, runner80 128 (headless) y runner74 220 (con ventana, xvfb): **1.258 comprobaciones, 0 fallos y 0 errores de script**. (Una vez `runner73` falló «anota los días del último paso (62)»: es un chequeo con el reloj real —un paso nunca debe pasar de 31 días en un fotograma— y esa vez cupieron dos pasos de 31 días en un fotograma; repetida cinco veces suelta, en la 0.1.8.38 y en la 0.1.8.37a, dio 84/84 todas.)
+- ⬜ NO probado: tu PC real (cómo se siente arrastrar y redimensionar con el ratón de verdad, los cursores de borde, la demora de las fichas y la posición de los avisos); el panel con tu resolución y escala; y el HUD de provincia / Construir / totales de grupo, que son de la 0.1.8.38b.
 
 ### Temas, mapa y vista de Relieve (0.1.8.37)
 - ✅ `runner78` (nuevo) — **74 comprobaciones**, 0 fallos: las tres paletas de tema (válidas, distintas, texto legible según contraste WCAG), `aplicar(id)`, ajustes `tema` y `bordes` (sanear, guardar, cargar), el selector «Interfaz» de Opciones (cambio en vivo + guardado al momento + no deja APLICAR activo + se ignora durante «¿Mantener estos cambios?»), el HUD que se repinta sin reiniciar y el menú principal y la pausa con el tema nuevo.
@@ -175,6 +184,15 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 
 ## B. Lo que tienes que probar tú en tu PC (⬜)
 Marca cada casilla cuando lo hayas probado y dime qué pasó.
+
+### 0.1.8.38 (para probar en tu PC)
+- ⬜ Elige un país y ARRASTRA la cabecera del panel (el nombre y la bandera): ¿se mueve suave y no se sale de la pantalla? DOBLE CLIC en la cabecera: ¿vuelve a su sitio y a su tamaño?
+- ⬜ Pon el ratón en el borde derecho, el izquierdo y el de abajo del panel: ¿cambia el cursor y se redimensiona? Ensánchalo hasta unos 710 px y luego unos 1.050: ¿las tarjetas pasan a 2 y a 3 columnas sin quedar huecos raros? Cambia de pestaña (Diplomacia, Militar…): ¿se acomoda bien?
+- ⬜ Cierra y vuelve a elegir un país, y empieza otra partida: ¿el panel aparece donde y como lo dejaste?
+- ⬜ F1: ¿la cuadrícula de secciones se lee bien con los tres temas (OPCIONES > PANTALLA > INTERFAZ)? Entra a una sección y usa «← Menú Debug»: ¿vuelve? ¿Las migas dicen lo correcto?
+- ⬜ Agranda el Debug desde la izquierda y desde arriba, ciérralo con F1 y ábrelo: ¿aparece como lo dejaste? Lo mismo con «Mi país» (el lápiz de la barra) y Ranking (R).
+- ⬜ Manda tropas al mar o a un país con el que no estás en guerra: ¿el aviso sale arriba a la derecha con su color, se apila y se desvanece? Si repites el mismo clic, ¿suma «×2»? ¿La línea de abajo conserva el «Esc cancela»?
+- ⬜ Deja el ratón quieto sobre el botón Debug, Ranking, la fecha y las pestañas: ¿sale la ficha con título y atajo? ¿La demora te parece bien (0,45 s)? ¿Salen dos tooltips a la vez en algún sitio? (no deberían).
 
 ### 0.1.8.36 (para probar en tu PC)
 - ⬜ F1 > pestaña «Descub.»: ¿se abre rápido? Arriba debe decir el año del reloj y «la historia conoce 1.699 de 1.730» en 2026. ¿La lista muestra los descubrimientos alrededor de la fecha, y los que faltan salen en gris?

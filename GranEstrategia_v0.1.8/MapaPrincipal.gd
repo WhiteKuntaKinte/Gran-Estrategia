@@ -21,8 +21,10 @@ const PopupGuerraScript := preload("res://scripts/popup_guerra.gd")
 const AjustesScript := preload("res://scripts/ajustes.gd")
 const MenuPantallaScript := preload("res://scripts/menu_pantalla.gd")
 const PerfilScript := preload("res://scripts/perfil.gd")
+const AvisosScript := preload("res://scripts/avisos.gd")
+const FichasScript := preload("res://scripts/fichas.gd")
 
-const VERSION := "0.1.8.37a"
+const VERSION := "0.1.8.38"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -562,6 +564,7 @@ var en_menu := true
 var en_pausa := false
 var reloj                      # RelojScript
 var debug_menu                 # DebugScript (overlay, mientras está abierto)
+var geo_ventanas: Dictionary = {}   # 0.1.8.38: clave de ventana flotante -> [posición, tamaño] de la última vez que se cerró (así vuelve donde la dejaste)
 var panel_pers                 # PersonalizarScript (ventana "Mi país", mientras está abierta)
 var capa_tropas                # CapaTropasScript: cuadritos de tropas y columnas en marcha sobre el mapa (0.1.7.9.9E)
 var panel_ordenes:                # manejo de tropas (scripts/hud_tropas.gd): vive DENTRO del HUD de país (pestaña Militar); este atajo lo devuelve
@@ -602,6 +605,8 @@ var campana_activa := false           # (campaña) la cámara se limita al terri
 var campana_rect := Rect2()           # territorio de la campaña en coordenadas del mapa (Chukotka queda a la derecha de x = 2400)
 var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
+var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
+var fichas                            # FichasScript (0.1.8.38): fichas al pasar el ratón (reemplazan al tooltip nativo)
 var popup_guerra                      # PopupGuerraScript (0.1.8.2a): avisos «te declararon la guerra» y «fin de la guerra»; se crea al primer aviso
 var _vel_aviso := 1                   # velocidad que llevaba el juego cuando salió el aviso (0 = ya estaba en pausa)
 var etiq_cont := {}                   # continente -> [[CapaTexto, primer carácter, último carácter]] de su nombre horneado
@@ -2900,6 +2905,12 @@ func _crear_hud() -> void:
 	hud = HudScript.new()
 	add_child(hud)
 	hud.construir(self, fuente_ui, fuente_ui_neg)
+	avisos = AvisosScript.new()
+	add_child(avisos)
+	avisos.construir(self, fuente_ui)
+	fichas = FichasScript.new()
+	add_child(fichas)
+	fichas.construir(self, fuente_ui)
 	hud.cerrar_pedido.connect(cerrar_seleccion)
 	hud.miga_pedida.connect(_on_miga)
 	hud.vista_elegida.connect(_elegir_vista)
@@ -2947,6 +2958,12 @@ func _aplicar_tema(id: int) -> void:
 			TemaHud.repintar_roles(menu_contenido)
 	if popup_guerra != null and is_instance_valid(popup_guerra) and popup_guerra.has_method("aplicar_tema"):
 		popup_guerra.aplicar_tema()
+	if debug_menu != null and is_instance_valid(debug_menu):
+		debug_menu.aplicar_tema()
+	if avisos != null:
+		avisos.aplicar_tema()
+	if fichas != null:
+		fichas.aplicar_tema()
 
 
 ## 0.1.8.32 · Gráficos del mapa y prioridad de la simulación (Opciones > Pantalla). Con los valores por defecto el juego queda como siempre.
@@ -3527,6 +3544,8 @@ func _requiere_recarga(p: Dictionary) -> bool:
 
 
 func _iniciar_partida(p: Dictionary) -> void:
+	if avisos != null:
+		avisos.limpiar()                                          # los avisos de la partida anterior no pasan a la nueva
 	_fases.clear()                                                # un día a medias de la partida anterior no pasa a la nueva
 	if reloj != null:
 		reloj.ocupado = false
@@ -4742,10 +4761,15 @@ func proponer_paz(a_tid: int, b_tid: int, clave: String) -> Dictionary:
 	return res
 
 
-## Aviso corto en la línea de ayuda de abajo.
+## Aviso apilado (arriba a la derecha). `nivel`: "info", "ok", "aviso" o "mal". La línea de ayuda de abajo queda para la ayuda del modo actual.
+func aviso(t: String, nivel := "info") -> void:
+	if avisos != null:
+		avisos.mostrar(t, nivel)
+
+
+## Aviso neutro (azul acero): lo usan el HUD y el popup de guerra para avisar de una guerra o una paz.
 func hud_aviso(t: String) -> void:
-	if hud != null:
-		hud.set_hint(t)
+	aviso(t, "info")
 
 
 # Atrás (botón ↩ / tecla Retroceso): sube un nivel y, al llegar arriba, cierra el panel. Sirve para todo tipo de selección.
@@ -5474,7 +5498,7 @@ func _abrir_personalizar() -> void:
 	if mundo == null or en_menu:
 		return
 	if mundo.jugador == "":
-		hud.set_hint("Aún no controlas ningún país: elígelo en Debug (bicho de arriba a la izquierda o F1)")
+		aviso("Aún no controlas ningún país: elígelo en Debug (bicho de arriba a la izquierda o F1)", "aviso")
 		return
 	if panel_pers != null and is_instance_valid(panel_pers):
 		_cerrar_personalizar()
@@ -5509,7 +5533,7 @@ func _on_dinero_pedido() -> void:
 
 func _jugador_valido() -> bool:
 	if mundo == null or mundo.jugador == "" or not mundo.paises.has(mundo.jugador):
-		hud.set_hint("Aún no controlas ningún país: elígelo en Debug (bicho de arriba a la izquierda o F1)")
+		aviso("Aún no controlas ningún país: elígelo en Debug (bicho de arriba a la izquierda o F1)", "aviso")
 		return false
 	return true
 
@@ -5727,7 +5751,7 @@ func _destino_bajo_cursor() -> void:
 func _clic_destino(pos: Vector2) -> void:
 	var pi := provincia_en(pos)
 	if pi < 0:
-		hud.set_hint("Eso es mar" + (" o está fuera de la campaña" if campana_activa else "") + ": elige una provincia de tierra (Esc cancela)")
+		aviso("Eso es mar" + (" o está fuera de la campaña" if campana_activa else "") + ": elige una provincia de tierra", "aviso")
 		return
 	var res: Dictionary
 	var pais_orden := -1
@@ -5739,7 +5763,7 @@ func _clic_destino(pos: Vector2) -> void:
 		pais_orden = mundo.ejercito.pais_de_reg(int(orden_mover["reg"]))
 	var aviso_g := _aviso_sin_guerra(pais_orden, pi)
 	if aviso_g != "":
-		hud.set_hint(aviso_g + " · elige otra provincia o pulsa Esc")
+		aviso(aviso_g, "mal")
 		return
 	if orden_mover.has("grupo"):
 		res = _ordenar_grupo(orden_mover["grupo"], pi)
@@ -5749,7 +5773,7 @@ func _clic_destino(pos: Vector2) -> void:
 		cancelar_destino()
 		_orden_dada(res)
 	else:
-		hud.set_hint(String(res.get("msg", "")) + " · elige otra provincia o pulsa Esc")
+		aviso(String(res.get("msg", "")), "mal")
 		if panel_ordenes != null:
 			panel_ordenes.resultado_orden(res)
 
@@ -5791,7 +5815,7 @@ func _orden_dada(res: Dictionary) -> void:
 	if not bool(res.get("grupo", false)):
 		capa_tropas.sel = {"t": "marcha", "id": int(res["marcha"])}
 	capa_tropas.refrescar()
-	hud.set_hint(String(res["msg"]))
+	aviso(String(res["msg"]), "ok")
 	hud.refrescar_ejercito()
 	_actualizar_barra()
 	if panel_ordenes != null:
@@ -5826,16 +5850,16 @@ func _mandar_grupo(grupo: Array, pi: int) -> void:
 	if grupo.is_empty():
 		return
 	if not _es_mio(ej.pais_de_reg(int(grupo[0]))):
-		hud.set_hint("Esas tropas no son tuyas: solo puedes mirarlas")
+		aviso("Esas tropas no son tuyas: solo puedes mirarlas", "aviso")
 		return
 	if pi < 0:
-		hud.set_hint("Eso es mar: suéltalas (o haz clic derecho) sobre una provincia de tierra")
+		aviso("Eso es mar: suéltalas (o haz clic derecho) sobre una provincia de tierra", "aviso")
 		return
 	var res: Dictionary = _ordenar_grupo(grupo, pi)
 	if bool(res.get("ok", false)):
 		_orden_dada(res)
 	else:
-		hud.set_hint(String(res.get("msg", "")))
+		aviso(String(res.get("msg", "")), "mal")
 		if panel_ordenes != null:
 			panel_ordenes.resultado_orden(res)
 
@@ -5848,21 +5872,21 @@ func _mandar_tropas(rid: int, pi: int) -> void:
 		return
 	var pais_tid: int = ej.pais_de_reg(rid)
 	if not _es_mio(pais_tid):
-		hud.set_hint("Esas tropas no son tuyas: solo puedes mirarlas")
+		aviso("Esas tropas no son tuyas: solo puedes mirarlas", "aviso")
 		return
 	if ej.en_marcha_reg(rid):
-		hud.set_hint("Ese regimiento ya va en marcha")
+		aviso("Ese regimiento ya va en marcha", "aviso")
 		return
 	if pi < 0:
-		hud.set_hint("Eso es mar: suéltalas (o haz clic derecho) sobre una provincia de tierra")
+		aviso("Eso es mar: suéltalas (o haz clic derecho) sobre una provincia de tierra", "aviso")
 		return
 	var origen = ej.provincia_por_tid(ej.prov_de(rid))
 	if origen != null and int(origen.idx) == pi:
-		hud.set_hint("Esas tropas ya están en esa provincia")
+		aviso("Esas tropas ya están en esa provincia", "aviso")
 		return
 	var aviso_g := _aviso_sin_guerra(pais_tid, pi)
 	if aviso_g != "":
-		hud.set_hint(aviso_g)
+		aviso(aviso_g, "mal")
 		return
 	var n := 0
 	if panel_ordenes != null and panel_ordenes.activo and panel_ordenes.sel_reg == rid:
@@ -5871,7 +5895,7 @@ func _mandar_tropas(rid: int, pi: int) -> void:
 	if bool(res.get("ok", false)):
 		_orden_dada(res)
 	else:
-		hud.set_hint(String(res.get("msg", "")))
+		aviso(String(res.get("msg", "")), "mal")
 		if panel_ordenes != null:
 			panel_ordenes.resultado_orden(res)
 
@@ -5917,7 +5941,7 @@ func _soltar_drag_tropas() -> void:
 	capa_tropas.terminar_destino()
 	var pr_o = mundo.ejercito.provincia_por_tid(int(d["prov"]))
 	if pr_o != null and int(pr_o.idx) == pi:         # 0.1.8.2a: soltar en la misma provincia de salida = no hacer nada (antes mandaba el resto del grupo ahí)
-		hud.set_hint("Soltaste en la misma provincia: no se movió nada")
+		aviso("Soltaste en la misma provincia: no se movió nada", "info")
 		return
 	if panel_ordenes != null and panel_ordenes.es_multiple() and panel_ordenes.sel_multi.has(int(d["reg"])):
 		_mandar_grupo(panel_ordenes.grupo(), pi)             # el cuadro arrastrado era parte de la selección múltiple: va todo el grupo
@@ -5931,7 +5955,7 @@ func _cancelar_drag_tropas() -> void:
 	if activo and capa_tropas != null:
 		capa_tropas.quitar_fantasma()
 		capa_tropas.terminar_destino()
-		hud.set_hint("Movimiento cancelado")
+		aviso("Movimiento cancelado", "info")
 
 
 func _volver_menu_principal() -> void:
@@ -5941,6 +5965,10 @@ func _volver_menu_principal() -> void:
 	_cerrar_debug()
 	_cerrar_personalizar()
 	_cerrar_ordenes()
+	if avisos != null:
+		avisos.limpiar()
+	if fichas != null:
+		fichas.ocultar()
 	get_tree().paused = false
 	en_pausa = false
 	if is_instance_valid(menu_pausa):

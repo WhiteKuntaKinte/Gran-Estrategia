@@ -23,15 +23,31 @@ const C_ORO := Color(0.93, 0.78, 0.28)
 const C_TEXTO := Color(0.95, 0.97, 1.0)
 const C_TENUE := Color(0.62, 0.70, 0.86)
 const C_OK := Color(0.45, 0.92, 0.55)
-const PESTANAS := [["jugador", "Jugador"], ["ia", "IA"], ["anexar", "Anexar"], ["prov", "Provincia"], ["tiempo", "Tiempo"], ["mundo", "Mundo"], ["datos", "Datos"], ["historia", "Historia"], ["ejercito", "Ejército"], ["desc", "Descub."], ["rend", "Rend."]]
+const Tema := preload("res://scripts/tema_hud.gd")
+## 0.1.8.38 · Las secciones del Debug: [clave, título, icono, descripción corta]. La pantalla de inicio es una cuadrícula de tarjetas con estas secciones.
+const SECCIONES := [
+	["jugador", "Jugador", "i_pais", "Elige con qué país juegas, o suéltalo para solo observar."],
+	["ia", "IA", "i_gob", "Qué países maneja la IA y cuántos hay activos."],
+	["anexar", "Anexar", "i_cont", "Pasa un país a manos de otro."],
+	["prov", "Provincia", "i_prov", "Busca una provincia: dueño, población y forma del territorio."],
+	["tiempo", "Tiempo", "i_vel3", "Fecha del juego, velocidad del reloj y dinero."],
+	["mundo", "Mundo", "i_pob", "Ritmo de desarrollo y población de todo el mundo."],
+	["datos", "Datos", "i_info", "Los valores del territorio elegido y su historial."],
+	["historia", "Historia", "i_desc", "Viaja a una fecha: qué estados existían y quién gobernaba."],
+	["ejercito", "Ejército", "i_ejercito", "Reclutar, causar bajas, mover pelotones y devastar."],
+	["desc", "Descub.", "i_estrella", "Busca descubrimientos y concede o quita los de cada fecha."],
+	["rend", "Rend.", "i_dens", "Tu equipo, los FPS y qué capas apagar para ir más ligero."],
+]
 
 var main
 var fuente: Font
 var vf: VentanaScript
 var contenedor: Control
 var paginas := {}
-var botones_pestana := {}
-var pestana_actual := "jugador"
+var pestana_actual := ""                  # "" = la cuadrícula de inicio; si no, la clave de la sección abierta
+var pagina_menu: ScrollContainer          # 0.1.8.38: la cuadrícula de secciones (pantalla de inicio)
+var caja_migas: HBoxContainer             # «Menú Debug › Sección» (con el botón ← para volver a la cuadrícula)
+var _tarjetas: Dictionary = {}            # clave de sección -> botón-tarjeta de la cuadrícula
 var lbl_msg: Label
 var chk_seguir: CheckBox
 
@@ -152,37 +168,18 @@ func construir(m: Node, f: Font) -> void:
 	add_child(vf)
 	var vp := get_viewport().get_visible_rect().size
 	var tam := Vector2(minf(470.0, vp.x - 24.0), minf(560.0, vp.y - 100.0))          # 0.1.8.3: más chica de arranque; se ensancha con « » o arrastrando ◢
-	vf.construir(main, fuente, "MENÚ DEBUG", tam, Vector2(maxf(vp.x - tam.x - 12.0, 8.0), 66.0), "i_debug")
+	vf.construir(main, fuente, "MENÚ DEBUG", tam, Vector2(maxf(vp.x - tam.x - 12.0, 8.0), 66.0), "i_debug", "debug")
 	vf.cerrada.connect(func(): cerrado.emit())
 	var cont: VBoxContainer = vf.contenido
 
-	var intro := vf.lbl("Herramienta de pruebas · no se guarda · el juego sigue corriendo · F1 abre/cierra", 11, C_TENUE)
+	var intro := _lbl("Herramienta de pruebas · no se guarda · el juego sigue corriendo · F1 abre/cierra", 11, C_TENUE)
 	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART          # 0.1.8.3: se parte en líneas para que la ventana pueda angostarse
 	intro.custom_minimum_size = Vector2(10.0, 0.0)
 	cont.add_child(intro)
 
-	# pestañas (0.1.8.3: en filas que se parten solas, para poder angostar la ventana)
-	var fila := HFlowContainer.new()
-	fila.add_theme_constant_override("h_separation", 4)
-	fila.add_theme_constant_override("v_separation", 4)
-	cont.add_child(fila)
-	var grupo := ButtonGroup.new()
-	for p in PESTANAS:
-		var b := Button.new()
-		b.toggle_mode = true
-		b.button_group = grupo
-		b.focus_mode = Control.FOCUS_NONE
-		b.text = String(p[1])
-		b.custom_minimum_size = Vector2(0.0, 30.0)
-		b.add_theme_font_size_override("font_size", 12)
-		b.add_theme_stylebox_override("normal", vf._caja(Color(0.09, 0.13, 0.22, 0.95), Color(0.2, 0.28, 0.45), 6, 3, 1))
-		b.add_theme_stylebox_override("hover", vf._caja(Color(0.14, 0.2, 0.33, 1.0), Color(0.6, 0.65, 0.8), 6, 3, 1))
-		b.add_theme_stylebox_override("pressed", vf._caja(Color(0.2, 0.3, 0.5, 1.0), C_ORO, 6, 3, 2))
-		b.add_theme_stylebox_override("hover_pressed", vf._caja(Color(0.2, 0.3, 0.5, 1.0), C_ORO, 6, 3, 2))
-		var clave: String = p[0]
-		b.pressed.connect(func(): _ir_a(clave))
-		botones_pestana[clave] = b
-		fila.add_child(b)
+	caja_migas = HBoxContainer.new()
+	caja_migas.add_theme_constant_override("separation", 4)
+	cont.add_child(caja_migas)
 
 	contenedor = Control.new()
 	contenedor.custom_minimum_size = Vector2(0.0, 140.0)
@@ -197,11 +194,12 @@ func construir(m: Node, f: Font) -> void:
 	chk_seguir.add_theme_font_size_override("font_size", 12)
 	cont.add_child(chk_seguir)
 
-	lbl_msg = vf.lbl("", 12, C_OK)
+	lbl_msg = _lbl("", 12, C_OK)
 	lbl_msg.custom_minimum_size = Vector2(0.0, 34.0)
 	lbl_msg.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	cont.add_child(lbl_msg)
 
+	_construir_cuadricula()
 	_pagina_jugador()
 	_pagina_ia()
 	_pagina_anexar()
@@ -213,10 +211,10 @@ func construir(m: Node, f: Font) -> void:
 	_pagina_ejercito()
 	_pagina_descubrimientos()
 	_pagina_rendimiento()
-	_ir_a("jugador")
+	_ir_menu()
 	if main.mundo.jugador != "":
 		_seleccionar_en(sel_jugador, main.mundo.jugador)
-	_decir("Elige una pestaña. Arrastra la barra de título para mover la ventana.")
+	_decir("Elige una sección. Arrastra la barra de título para mover la ventana.")
 	seleccion_cambio(String(main.sel_tipo))
 	_sin_foco(vf.ventana)
 
@@ -238,9 +236,138 @@ func _sin_foco(n: Node) -> void:
 		_sin_foco(h)
 
 
+# ───────────── Cuadrícula de inicio y migas (0.1.8.38) ─────────────
+func _construir_cuadricula() -> void:
+	pagina_menu = ScrollContainer.new()
+	pagina_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pagina_menu.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	contenedor.add_child(pagina_menu)
+	var fila := HFlowContainer.new()
+	fila.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fila.add_theme_constant_override("h_separation", 8)
+	fila.add_theme_constant_override("v_separation", 8)
+	pagina_menu.add_child(fila)
+	for sec in SECCIONES:
+		var b := _tarjeta(String(sec[0]), String(sec[1]), String(sec[2]), String(sec[3]))
+		_tarjetas[String(sec[0])] = b
+		fila.add_child(b)
+
+
+## Una tarjeta de la cuadrícula: icono, título y una línea que dice para qué sirve la sección.
+func _tarjeta(clave: String, titulo: String, icono: String, desc: String) -> Button:
+	var b := Button.new()
+	b.focus_mode = Control.FOCUS_NONE
+	b.custom_minimum_size = Vector2(150.0, 104.0)
+	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	b.tooltip_text = desc
+	b.pressed.connect(func(): _ir_a(clave))
+	var mc := MarginContainer.new()
+	mc.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	mc.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for lado in ["left", "right", "top", "bottom"]:
+		mc.add_theme_constant_override("margin_" + lado, 9)
+	b.add_child(mc)
+	var vb := VBoxContainer.new()
+	vb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.add_theme_constant_override("separation", 3)
+	mc.add_child(vb)
+	var cab := HBoxContainer.new()
+	cab.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cab.add_theme_constant_override("separation", 6)
+	vb.add_child(cab)
+	var ic := TextureRect.new()
+	ic.texture = main.icono(icono)
+	ic.custom_minimum_size = Vector2(20.0, 20.0)
+	ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cab.add_child(ic)
+	var t := _lbl(titulo, 15, C_TEXTO)
+	if "fuente_ui_neg" in main:
+		t.add_theme_font_override("font", main.fuente_ui_neg)
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cab.add_child(t)
+	var d := vf.lbl_rol(desc, 11, "nota")
+	d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	d.custom_minimum_size = Vector2(120.0, 0.0)
+	d.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vb.add_child(d)
+	_pintar_tarjeta(b)
+	return b
+
+
+func _pintar_tarjeta(b: Button) -> void:
+	b.add_theme_stylebox_override("normal", Tema.tarjeta(false, 0.0))
+	b.add_theme_stylebox_override("hover", Tema.tarjeta(true, 0.0))
+	b.add_theme_stylebox_override("pressed", Tema.tarjeta(true, 0.0))
+	b.add_theme_stylebox_override("hover_pressed", Tema.tarjeta(true, 0.0))
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+
+## «← Menú Debug › Sección»: el botón ← y la miga «Menú Debug» vuelven a la cuadrícula; la sección actual es solo texto.
+func _dibujar_migas() -> void:
+	for h in caja_migas.get_children():
+		caja_migas.remove_child(h)
+		h.queue_free()
+	if pestana_actual != "":
+		var volver := vf.boton("←", _ir_menu)
+		volver.custom_minimum_size = Vector2(34.0, 28.0)
+		volver.tooltip_text = "Volver al menú del Debug"
+		caja_migas.add_child(volver)
+	var raiz_miga := Button.new()
+	raiz_miga.text = "Menú Debug"
+	raiz_miga.flat = true
+	raiz_miga.focus_mode = Control.FOCUS_NONE
+	raiz_miga.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	raiz_miga.disabled = pestana_actual == ""
+	raiz_miga.add_theme_font_size_override("font_size", 14)
+	raiz_miga.add_theme_color_override("font_color", Tema.ORO)
+	raiz_miga.add_theme_color_override("font_hover_color", Tema.ORO.lightened(0.25))
+	raiz_miga.add_theme_color_override("font_disabled_color", Tema.ORO)
+	raiz_miga.pressed.connect(_ir_menu)
+	caja_migas.add_child(raiz_miga)
+	if pestana_actual != "":
+		caja_migas.add_child(vf.lbl_rol("›", 14, "tenue"))
+		var nombre := pestana_actual
+		for sec in SECCIONES:
+			if sec[0] == pestana_actual:
+				nombre = String(sec[1])
+		var actual := vf.lbl_rol(nombre, 14, "texto")
+		if "fuente_ui_neg" in main:
+			actual.add_theme_font_override("font", main.fuente_ui_neg)
+		caja_migas.add_child(actual)
+	_sin_foco(caja_migas)
+
+
+## Cambio de tema en vivo: la ventana, las tarjetas y las migas se vuelven a pintar (los textos con rol se repintan solos).
+func aplicar_tema() -> void:
+	if vf == null:
+		return
+	vf.aplicar_tema()
+	for k in _tarjetas:
+		_pintar_tarjeta(_tarjetas[k])
+	_dibujar_migas()
+
+
 # ───────────── utilidades ─────────────
+## Un texto del Debug. Los cuatro colores de siempre (oro, texto, tenue, ok) son ahora roles del tema (cambian solos con el tema); cualquier otro color se respeta tal cual.
 func _lbl(t: String, tam: int, col: Color) -> Label:
+	var rol := _rol_de(col)
+	if rol != "":
+		return vf.lbl_rol(t, tam, rol)
 	return vf.lbl(t, tam, col)
+
+
+func _rol_de(col: Color) -> String:
+	if col == C_ORO:
+		return "oro"
+	if col == C_TEXTO:
+		return "texto"
+	if col == C_TENUE:
+		return "tenue"
+	if col == C_OK:
+		return "ok"
+	return ""
 
 
 func _boton(t: String, accion: Callable) -> Button:
@@ -249,7 +376,7 @@ func _boton(t: String, accion: Callable) -> Button:
 
 func _decir(t: String, ok := true) -> void:
 	lbl_msg.text = t
-	lbl_msg.add_theme_color_override("font_color", C_OK if ok else Color(1.0, 0.55, 0.45))
+	Tema.rotular(lbl_msg, "ok" if ok else "mal")
 
 
 ## Ejecuta un cambio marcándolo en el historial de la base de datos con el motivo «Debug».
@@ -261,12 +388,23 @@ func _dbg(accion: Callable) -> void:
 	bd.motivo_ctx = m0
 
 
+## La cuadrícula de inicio del Debug (0.1.8.38).
+func _ir_menu() -> void:
+	pestana_actual = ""
+	for k in paginas:
+		paginas[k].visible = false
+	pagina_menu.visible = true
+	chk_seguir.visible = false
+	_dibujar_migas()
+
+
 func _ir_a(clave: String) -> void:
 	pestana_actual = clave
+	pagina_menu.visible = false
+	chk_seguir.visible = true
 	for k in paginas:
 		paginas[k].visible = (k == clave)
-	for k2 in botones_pestana:
-		(botones_pestana[k2] as Button).set_pressed_no_signal(k2 == clave)
+	_dibujar_migas()
 	match clave:
 		"jugador":
 			_refrescar_jugador()

@@ -1,8 +1,26 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.37a (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.38 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = cambiar de vista (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña).
+
+NUEVO EN 0.1.8.38 — HUD Y VENTANAS (1.ª PARTE): DEBUG EN CUADRÍCULA, PANEL Y VENTANAS MOVIBLES Y REDIMENSIONABLES, TARJETAS, AVISOS Y FICHAS
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.38.md. El número de versión lo elegí yo. La 0.1.8.38 se entrega en dos partes: esta y la 0.1.8.38b, con el HUD de provincia, Construir y los totales de grupo. La 0.1.8.39 son las imágenes.)
+- DEBUG (F1) EN CUADRÍCULA: al abrirlo ves una tarjeta por sección (Jugador, IA, Anexar, Provincia, Tiempo, Mundo, Datos, Historia, Ejército, Descub., Rend.) con una línea que explica qué hace.
+  Al entrar a una, arriba aparece «← Menú Debug › Sección»: la flecha o «Menú Debug» vuelven a la cuadrícula. Se ve bien con los tres temas y cambia en vivo con ellos.
+- PANEL DEL PAÍS MOVIBLE: arrastra su cabecera (donde está el nombre y la bandera) y lo pones donde quieras. DOBLE CLIC en la cabecera = vuelve a su sitio y a su tamaño de siempre.
+- PANEL DEL PAÍS REDIMENSIONABLE: agarra su borde izquierdo, derecho o de abajo y arrastra (el cursor cambia). Más ancho = más tarjetas lado a lado: con unos 710 px caben 2 columnas y con unos 1.050 px, 3.
+  El borde de abajo cambia cuánto se ve de la lista antes del scroll. El panel de detalle va pegado a su lado (a la izquierda si ya no cabe a la derecha). Recuerda dónde y cómo lo dejaste mientras tengas el juego abierto.
+- TARJETAS: cada tema del panel (Naturaleza, Descripción, Economía…) es un bloque con marco, plegable como antes. En el ancho normal siguen una debajo de otra; con el panel ancho se acomodan en columnas.
+- VENTANAS (Debug, Mi país, Ranking): ahora se agrandan y se achican desde cualquier borde o esquina (no solo la esquina de abajo), y al cerrarlas y abrirlas aparecen donde y como las dejaste.
+- AVISOS APILADOS: los mensajes cortos («Eso es mar…», «No estás en guerra con…», «Esas tropas no son tuyas», orden dada, guerra declarada, «aún no controlas ningún país») salen arriba a la derecha, uno encima de otro, con un color según el tipo
+  (azul acero = información, verde = bien, naranja = ojo, rojo = no se pudo). Se desvanecen solos (5–8 s); si pasas el ratón por encima se quedan; un clic los quita. Si repites lo mismo suma «×2», «×3»…
+  La línea de ayuda de abajo ya no se pisa: queda para la ayuda del modo en que estés (por ejemplo «clic en la provincia de destino · Esc cancela»).
+- FICHAS: al dejar el ratón quieto sobre un botón, una pestaña o una tarjeta sale una ficha con título, explicación y, si hay, el atajo de teclado (por ejemplo «Menú Debug … Atajo: F1»). Reemplaza al tooltip simple de antes.
+- PRUEBAS: runner80 nueva (128 comprobaciones); runner73 adaptada (los mensajes ahora son avisos). Regresión: 71: 181, 72: 121, 73: 84, 75: 145, 76: 97, 77: 88, 78: 74, 79: 120, 80: 128, 74: 220; 1.258 en total, 0 fallos.
+- LO QUE TODAVÍA NO (0.1.8.38b): HUD de provincia con Edificios / dos Cores (nacional y cultural) / Ingreso / Población, ventana Construir con los 109 edificios, totales y órdenes de grupo con Ctrl+clic.
+  Después (0.1.8.39): pinturas, banderas e iconos HD. Pendiente: filtro sepia del tema A, tarjetas con pergamino del C, vistas Clima / Población / Economía / Cultura.
+NO SE PROBÓ: tu PC real (cómo se siente arrastrar y redimensionar, los cursores de borde, si los avisos te estorban donde están, si las fichas salen con la demora justa).
 
 CORRECCIÓN 0.1.8.37a — TIRONES AL HACER ZOOM
 - Con la 0.1.8.37 el juego daba tirones al acercar y alejar con la rueda (sobre todo con un país elegido). Era el borde negro y el resplandor de la selección: se rehacían enteros en cada paso de zoom.

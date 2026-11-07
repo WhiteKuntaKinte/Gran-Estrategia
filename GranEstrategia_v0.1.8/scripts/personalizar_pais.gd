@@ -47,7 +47,7 @@ func construir(m: Node, f: Font) -> void:
 	add_child(vf)
 	var vp := get_viewport().get_visible_rect().size
 	var tam := Vector2(450.0, minf(620.0, vp.y - 100.0))
-	vf.construir(main, fuente, "MI PAÍS · " + String(main.mundo.paises[pais].nombre_visible).to_upper(), tam, Vector2(minf(430.0, maxf(vp.x - tam.x - 8.0, 8.0)), 66.0), "i_editar")
+	vf.construir(main, fuente, "MI PAÍS · " + String(main.mundo.paises[pais].nombre_visible).to_upper(), tam, Vector2(minf(430.0, maxf(vp.x - tam.x - 8.0, 8.0)), 66.0), "i_editar", "mipais")
 	vf.cerrada.connect(func(): cerrada.emit())
 
 	var sc := ScrollContainer.new()

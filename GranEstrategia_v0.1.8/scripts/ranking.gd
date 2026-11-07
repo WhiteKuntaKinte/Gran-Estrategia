@@ -31,7 +31,7 @@ func construir(m: Node, f: Font) -> void:
 	add_child(vf)
 	var vp := get_viewport().get_visible_rect().size
 	var tam := Vector2(560.0, minf(560.0, vp.y - 100.0))
-	vf.construir(main, fuente, "RANKING · CAMPAÑA", tam, Vector2(10.0, 66.0), "")
+	vf.construir(main, fuente, "RANKING · CAMPAÑA", tam, Vector2(10.0, 66.0), "", "ranking")
 	vf.cerrada.connect(func(): cerrada.emit())
 	var sc := ScrollContainer.new()
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
