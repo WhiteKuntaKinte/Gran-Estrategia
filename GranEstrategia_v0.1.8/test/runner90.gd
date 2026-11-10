@@ -1,8 +1,9 @@
 extends Node
 ## BANCO DE ZOOM (0.1.8.38): simula la rueda del ratón (paso a paso, un paso por fotograma) y mide lo que cuesta cada paso: el reajuste de zoom del mapa
 ## (`ms_zoom`), todo el `_process` del mapa y el tiempo del fotograma (promedio, p95 y máximo = el «bajón» que se nota). No comprueba nada: imprime líneas «[Z]».
-## Escenarios: mundo sin elegir nada · país enfocado y elegido (el de más provincias) · lo mismo con la vista de Relieve.
+## Escenarios: mundo sin elegir nada · país enfocado y elegido (el de más provincias) · lo mismo con la vista de Relieve · (0.1.8.39) campaña de Europa con el tiempo corriendo, sin y con Relieve.
 ## Con pantalla virtual (xvfb) incluye el dibujo por software (solo vale para comparar) y con --headless solo el coste de los scripts.
+const MP := preload("res://MapaPrincipal.gd")
 var main
 
 
@@ -20,9 +21,14 @@ func zoomear(nombre: String, z_ini: float, z_fin: float, pasos: int) -> void:
 	var procs: Array = []
 	var draws := 0.0
 	var t_prev := Time.get_ticks_usec()
+	MP.CapaCiudades.ms_dibujo = 0.0                   # 0.1.8.39: también lo que cuesta redibujar las ciudades y las tropas con cada paso
+	MP.CapaCiudades.n_dibujos = 0
+	var ms_trop := 0.0
 	for i in pasos * 2:
 		main._zoom_en_cursor(f if i < pasos else 1.0 / f)
 		await get_tree().process_frame
+		if main.capa_tropas != null:
+			ms_trop += float(main.capa_tropas.ms_dibujo)
 		var t := Time.get_ticks_usec()
 		tiempos.append(float(t - t_prev) / 1000.0)
 		t_prev = t
@@ -43,6 +49,7 @@ func zoomear(nombre: String, z_ini: float, z_fin: float, pasos: int) -> void:
 		return m
 	print("[Z] %-34s fotograma: prom %6.1f p95 %6.1f máx %6.1f ms · _actualizar_zoom: prom %5.2f máx %5.2f · _process: prom %5.2f máx %5.2f · draws %4.0f" % [
 		nombre, prom.call(tiempos), ord[int(ord.size() * 0.95)], mx.call(tiempos), prom.call(zooms), mx.call(zooms), prom.call(procs), mx.call(procs), draws / float(tiempos.size())])
+	print("[Z]     └ ciudades: %d redibujos, %.2f ms por paso · tropas (último dibujo por paso): %.2f ms" % [MP.CapaCiudades.n_dibujos, MP.CapaCiudades.ms_dibujo / float(tiempos.size()), ms_trop / float(tiempos.size())])
 
 
 func run() -> void:
@@ -86,6 +93,19 @@ func run() -> void:
 		await esperar(10)
 		await zoomear("país elegido + vista de Relieve", 0.9, 5.0, 30)
 		main._poner_modo_relieve(false)
+	# 0.1.8.39 · la CAMPAÑA de Europa con el tiempo corriendo (IA, tropas en marcha, contornos de todas las provincias, ciudades): es donde más se juega
+	main._iniciar_partida({"modo": "campana", "pais": "España", "ia": 1})
+	await get_tree().create_timer(1.0).timeout
+	main._salir_foco()
+	main._limpiar_seleccion()
+	main._poner_velocidad(3)
+	main.camara.position = Vector2(1250.0, 330.0)
+	await zoomear("campaña · Europa, tiempo corriendo", 1.0, 9.0, 40)
+	await zoomear("campaña · Europa (otra vez)", 1.0, 9.0, 40)
+	main._poner_modo_relieve(true)
+	await esperar(10)
+	await zoomear("campaña · Europa + Relieve", 1.0, 9.0, 40)
+	main._poner_modo_relieve(false)
 	get_tree().quit()
 
 

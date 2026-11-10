@@ -58,22 +58,23 @@ func punto_de_celda(ri: int) -> Vector2:
 func t_vista() -> void:
 	print("[T] ── menú VISTA")
 	var h = main.hud
-	ok(h.VISTAS.size() == 7, "el menú VISTA tiene 7 entradas")
+	ok(h.VISTAS.size() == 6, "el menú VISTA tiene 6 entradas")
 	var activas: Array = []
 	var proximas: Array = []
 	for v in h.VISTAS:
 		(activas if bool(v[2]) else proximas).append(String(v[0]))
-	ok(activas == ["tradicional", "internacional", "relieve"], "activas: Tradicional, Internacional y Relieve")
+	ok(activas == ["tradicional", "relieve"], "activas: Tradicional y Relieve (la Internacional se quitó en la 0.1.8.39)")
+	ok(not h.botones_vista.has("internacional"), "ya no hay botón de vista Internacional")
 	ok(proximas.size() == 4, "las otras 4 vistas están como «próximamente»")
 	for k in activas:
 		ok(h.botones_vista.has(k), "hay botón para la vista %s" % k)
 	main._elegir_vista("tradicional")
 	ok(not main.modo_relieve and h.btn_vista.text.strip_edges() == "Tradicional", "Tradicional: el botón de la barra dice «Tradicional»")
-	main._elegir_vista("internacional")
-	ok(main.vista == "internacional" and h.btn_vista.text.strip_edges() == "Internacional", "Internacional cambia la subdivisión y el texto del botón")
-	ok(bool((h.botones_vista["internacional"] as Button).button_pressed) and not bool((h.botones_vista["tradicional"] as Button).button_pressed), "el menú marca la vista puesta")
+	main._elegir_vista("relieve")
+	ok(main.modo_relieve and h.btn_vista.text.strip_edges() == "Relieve", "Relieve: el botón de la barra dice «Relieve»")
+	ok(bool((h.botones_vista["relieve"] as Button).button_pressed) and not bool((h.botones_vista["tradicional"] as Button).button_pressed), "el menú marca la vista puesta")
 	main._elegir_vista("tradicional")
-	ok(main.vista == "tradicional", "volver a Tradicional")
+	ok(not main.modo_relieve and bool((h.botones_vista["tradicional"] as Button).button_pressed), "volver a Tradicional")
 	h.alternar_menu_vista()
 	ok(h.popup_vista.visible, "el botón de lentes abre el menú")
 	h.alternar_menu_vista()
@@ -385,7 +386,8 @@ func t_relieve() -> void:
 	main._elegir_vista("tradicional")
 	await esperar(0.3)
 	ok(not main.modo_relieve and not main.capa_relieve_vista.visible, "volver a Tradicional apaga el relieve")
-	ok(main.capa_mar.visible and main.capa_pais.visible, "…y devuelve el mar y el relleno")
+	# el relleno vuelve como malla o, con el mundo lejos (ventana de prueba 64×64), como imagen guardada
+	ok(main.capa_mar.visible and (main.capa_pais.visible or main.cache_rel_activo), "…y devuelve el mar y el relleno")
 	ok(main.CapaTexto.contorno == 0, "…y quita el contorno de los nombres")
 	ok(main.foco_sil.material == mat_pais, "…y la silueta recupera el color de su país")
 	# dentro de «Debug > Rendimiento», las capas apagadas a mano siguen apagadas en relieve

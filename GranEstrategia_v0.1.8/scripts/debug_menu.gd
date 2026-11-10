@@ -155,6 +155,8 @@ var lbl_rend_hw: Label
 var lbl_rend_informe: Label
 var chk_capas := {}
 var btn_prueba: Button
+var btn_grabar: Button                # 0.1.8.39 · grabador de rendimiento
+var lbl_grab: Label
 var _t_rend := 0.0
 var _prueba_en_curso := false
 var _informe := ""
@@ -1840,6 +1842,23 @@ func _pagina_rendimiento() -> void:
 		_decir("Informe copiado. Pégalo en el chat con Ctrl+V.")))
 	lbl_rend_informe = _lbl("", 11, C_TEXTO)
 	pg.add_child(lbl_rend_informe)
+	pg.add_child(HSeparator.new())
+	pg.add_child(_lbl("Grabador de rendimiento (juega normal y mándame el resumen)", 13, C_ORO))
+	var nota3 := _lbl("Anota cuánto tarda cada fotograma mientras juegas de verdad (zoom, arrastre, tiempo corriendo). Empieza a grabar, haz lo que te va mal (por ejemplo, zoom in y zoom out por Europa) y detén la grabación: queda un resumen en el portapapeles y un archivo CSV con todo. Con F9 se enciende y se apaga sin abrir este panel; F8 pone una marca.", 11, C_TENUE)
+	nota3.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(nota3)
+	btn_grabar = _boton("● Empezar a grabar (F9)", func(): main.alternar_grabacion())
+	pg.add_child(btn_grabar)
+	pg.add_child(_boton("Copiar el último resumen", func():
+		if main.grabador.ultimo_resumen == "":
+			_decir("Todavía no hay grabación: empieza una con F9.", false)
+			return
+		DisplayServer.clipboard_set(main.grabador.ultimo_resumen)
+		_decir("Resumen copiado. Pégalo en el chat con Ctrl+V.")))
+	pg.add_child(_boton("Abrir la carpeta de grabaciones", func(): OS.shell_open(main.grabador.ruta_carpeta())))
+	lbl_grab = _lbl("", 11, C_TEXTO)
+	lbl_grab.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_grab)
 
 
 func _texto_equipo() -> String:
@@ -1861,6 +1880,14 @@ func _refrescar_rend() -> void:
 	var prim := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME))
 	lbl_rend.text = "%d FPS · %.1f ms por fotograma\nzoom %.2f · costa nivel %d · %d llamadas de dibujo · %d objetos · %s triángulos" % [
 		int(round(fps)), ms, main.camara.zoom.x, int(main.costa_nivel), dibujos, objetos, _miles(prim)]
+	var g = main.grabador
+	btn_grabar.text = "■ Detener y guardar (F9)" if g.grabando else "● Empezar a grabar (F9)"
+	if g.grabando:
+		lbl_grab.text = "● GRABANDO · %d fotogramas anotados" % g.n_filas
+	elif g.ultimo_archivo != "":
+		lbl_grab.text = "Última grabación guardada en:\n%s" % ProjectSettings.globalize_path(g.ultimo_archivo)
+	else:
+		lbl_grab.text = ""
 
 
 func _miles(n: int) -> String:

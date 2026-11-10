@@ -1,8 +1,24 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.38 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.39 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
-con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = cambiar de vista (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
-F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña).
+con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
+F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.39 — RENDIMIENTO Y ARREGLOS: ZOOM LEJANO MÁS LIVIANO, GRABADOR DE RENDIMIENTO, SIN VISTA INTERNACIONAL, NOMBRES LEGIBLES EN RELIEVE, CAMPAÑA SIEMPRE DE 2026
+(Detalle técnico y medidas en NOTAS_TECNICAS_0.1.8.39.md. El número de versión lo elegí yo. Responde a tus notas tras la 0.1.8.38.)
+- ZOOM LEJANO MÁS LIVIANO: con el mundo (o Europa) a la vista el relleno de países ya no dibuja ~390 mil triángulos: se muestra UNA imagen guardada del relleno y las mallas solo se usan al acercar.
+  Se rehace sola cuando cambia un dueño (como mucho cada 0,4 s) y se ve igual que las mallas. Dónde cambia depende de tu pantalla: en 1080p la imagen se usa hasta un zoom de ≈ 1,1; en 4K solo en el zoom mínimo.
+  Medido por software (solo para comparar): mundo entero 113 → 61 ms por fotograma, Europa 110 → 57 ms, 40 pasos de zoom 102 → 82 ms. Con el mapa de cerca no cambia nada.
+  OJO: en tu PC con tarjeta gráfica los números reales son otros: para saber dónde se te traba de verdad, usa el grabador (siguiente punto).
+- GRABADOR DE RENDIMIENTO: F9 (o Debug > Rend. > «Grabar rendimiento») empieza a grabar fotograma a fotograma; haz zoom in y zoom out por donde se te ponga mal (F8 pone una marca) y vuelve a pulsar F9.
+  El RESUMEN queda copiado en el portapapeles (pégalo en el chat) y el CSV completo queda en la carpeta de grabaciones (botón «Abrir la carpeta de grabaciones» en Debug > Rend.).
+  El resumen trae tu equipo, FPS medios, los fotogramas más lentos, una tabla por vista y nivel de zoom y los 12 peores fotogramas. Mientras graba, el contador de FPS dice «● REC».
+- VISTA INTERNACIONAL QUITADA: quedan Tradicional y Relieve. V (o el botón de lentes) alterna entre las dos. Los estados / condados siguen funcionando igual.
+- NOMBRES LEGIBLES EN RELIEVE: letra blanca en negrita con halo oscuro (más grueso en los nombres chicos), así se leen sobre el terreno claro. En Tradicional no cambia nada.
+- CAMPAÑA SIEMPRE DE 2026: el menú CAMPAÑA lista los 51 países de Europa + Rusia y Turquía de 2026 (archivo fijo datos/campana_2026.json), aunque vengas del escenario del año 1 d. C. o de un viaje en el tiempo.
+- LO QUE TODAVÍA NO: el Relieve sigue con las imágenes de 2048 / 4096 / 8192 px (se pixela de cerca): la versión de relieve de altísima calidad (teselas) va aparte, cuando tú la pidas.
+  0.1.8.40: HUD de provincia (Edificios / dos Cores / Ingreso / Población), ventana Construir con los 109 edificios, totales y órdenes de grupo con Ctrl+clic y tus cambios del HUD principal. 0.1.8.41: pinturas, banderas e iconos HD.
+  Pendiente: filtro sepia del tema A, tarjetas con pergamino del C, vistas Clima / Población / Economía / Cultura.
 
 NUEVO EN 0.1.8.38 — HUD Y VENTANAS (1.ª PARTE): DEBUG EN CUADRÍCULA, PANEL Y VENTANAS MOVIBLES Y REDIMENSIONABLES, TARJETAS, AVISOS Y FICHAS
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.38.md. El número de versión lo elegí yo. La 0.1.8.38 se entrega en dos partes: esta y la 0.1.8.38b, con el HUD de provincia, Construir y los totales de grupo. La 0.1.8.39 son las imágenes.)
@@ -32,7 +48,7 @@ NUEVO EN 0.1.8.37 — TRES TEMAS DE INTERFAZ, MENÚ VISTA, SELECCIÓN NUEVA, BOR
 (Detalle técnico y rendimiento en NOTAS_TECNICAS_0.1.8.37.md. El número de versión lo elegí yo. La 0.1.8.38 será el HUD y las ventanas; la 0.1.8.39, las imágenes.)
 - 3 TEMAS: OPCIONES > PANTALLA > INTERFAZ: A Cartográfico (pergamino y tinta), B Moderno oscuro y C Mixto (marrón y bronce). Cambian EN VIVO, sin APLICAR, y se guardan (por defecto A).
   Pintan la barra, el menú VISTA, Opciones, pausa, menú principal, avisos, tooltips y el panel de país. Las ventanas viejas (Debug, detalle) toman colores y letra pero mantienen su estructura hasta la 0.1.8.38.
-- BARRA SUPERIOR pegada al borde de arriba, a todo el ancho. A la derecha el botón VISTA (lentes): Tradicional, Internacional, RELIEVE y, en gris «próximamente», Clima, Población, Economía y Cultura y religión.
+- BARRA SUPERIOR pegada al borde de arriba, a todo el ancho. A la derecha el botón VISTA (lentes): Tradicional, Internacional (quitada en la 0.1.8.39), RELIEVE y, en gris «próximamente», Clima, Población, Economía y Cultura y religión.
 - SELECCIÓN: relleno amarillo + resplandor que respira + borde negro nítido que sigue el contorno exacto de lo elegido. Se quitó el efecto de país flotante.
   CTRL + CLIC: suma o quita provincias (con un país enfocado) o países (sin foco). Todo queda resaltado; el panel muestra lo último y dice cuántos hay. (Totales del grupo y órdenes a varios a la vez: 0.1.8.38.)
 - BORDES HD: OPCIONES > PANTALLA > GRÁFICOS DEL MAPA > Bordes del mapa: Baja (como antes, el más rápido), Media (líneas sin dientes de sierra) y Alta (además una sombra suave en la costa).

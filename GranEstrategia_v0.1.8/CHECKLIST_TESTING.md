@@ -1,4 +1,4 @@
-# Checklist de testing — Gran Estrategia 0.1.8.38
+# Checklist de testing — Gran Estrategia 0.1.8.39
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
@@ -27,6 +27,16 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 - ✅ `runner29` — capturas del menú principal, Debug, «Mi país», pausa y Política (sin comprobaciones: se revisan a ojo).
 - ✅ `runner25` — portado al HUD nuevo: Militar dentro del país, Diplomacia con «Firmar la paz», 0 fallos.
 - ✅ `runner9` y `runner17` — ajustados a los nombres nuevos (pestaña «militar»; un clic en un cuadro de pila = `abrir_ordenes` con ese regimiento). Una vez `runner17` falló mientras otra prueba corría a la vez en el servidor y las dos repeticiones siguientes pasaron limpias: es una prueba sensible al tiempo (arrastres simulados), no un fallo reproducible.
+
+### Rendimiento y arreglos (0.1.8.39)
+- ✅ `runner81` (nuevo) — **64 comprobaciones**, 0 fallos: vista Internacional quitada (menú VISTA con 6 entradas, V alterna Tradicional ↔ Relieve, botón de lentes, línea de ayuda, funciones y listas borradas); lista de CAMPAÑA fija (51 países, nombres sin sufijos, `campana_2026.json` = lo que da el mundo de 2026); nombres en Relieve (contorno, negrita, halo por pasos, letras ocultas sin dibujar); imagen guardada del relleno (SubViewport 4096×2048, 3 copias, 4 instancias por tesela, se usa por debajo de 1,7 px/unidad y las mallas vuelven sobre 2,0, histéresis, se rehace al cambiar un dueño, con Relieve y con la capa apagada no se ve nada); grabador (F9 enciende/apaga, CSV con cabecera y 21 columnas, marca con F8, resumen y portapapeles, botón de Debug > Rend.).
+- ✅ `runner79`, `runner74`, `runner75` y `runner80` ajustados: el menú VISTA tiene 6 entradas (2 activas), V alterna Tradicional / Relieve, la campaña desde el año 1 sigue listando 2026, el relleno puede ser malla o imagen guardada y la versión se lee de `main.VERSION` (antes estaba escrita a mano en dos pruebas).
+- ✅ **Capturas revisadas a ojo** (servidor, dibujo por software): nombres en Relieve (FRANCIA, UCRANIA, TURQUÍA, países chicos) antes y después; la imagen guardada contra las mallas (zoom 0,8 y 1,2: ~0,09 % de píxeles distintos, todos de borde).
+- ✅ **Revisión de variables y código**: 28 archivos, 1.114 funciones, 0 duplicadas, 0 variables repetidas, sin funciones ni variables nuevas sin uso; recursiones y escrituras directas idénticas a la 0.1.8.38; `datos/variables.json` sin cambios.
+- ✅ **Revisión de rendimiento** (frente a la 0.1.8.38, dos pasadas, dibujo por software: solo sirve para comparar): mundo entero 113,5 / 115,7 → 61,3 / 61,2 ms por fotograma (533.600 → 119.459 triángulos); Europa 110,0 / 103,1 → 56,8 / 59,8 ms (400.244 → 54.225 triángulos); Roma de cerca 73,9 / 74,7 → 82,6 / 73,3 ms (sin cambio: ahí no se usa la imagen); 40 pasos de zoom + arrastre 102,0 / 95,5 → 82,3 / 82,7 ms; simular 1 día con 249 IA 6,8 / 5,8 → 6,7 / 6,2 ms. `runner90` (headless): `_actualizar_zoom` ≈ 0,1–0,4 ms y `_process` ≈ 0,1 ms: los scripts no son el problema, lo es el dibujo.
+- ✅ **Regresión final de la 0.1.8.39**: runner71 181, runner72 121, runner73 84, runner75 147, runner76 97, runner77 88, runner78 74, runner79 120, runner80 128, runner81 64 (headless) y runner74 220 (con ventana, xvfb): **1.324 comprobaciones, 0 fallos y 0 errores de script**.
+- 🟡 Probado solo en servidor: la imagen guardada y el grabador se comprobaron con dibujo por software y sin tarjeta gráfica; los milisegundos reales de tu PC los dirá el grabador.
+- ⬜ NO probado: tu PC real (tirones de zoom con tu tarjeta; en qué zoom exacto entra la imagen guardada con tu resolución; si el grabador anota bien los tiempos de GPU en tu equipo).
 
 ### HUD y ventanas, 1.ª parte (0.1.8.38)
 - ✅ `runner80` (nuevo) — **128 comprobaciones**, 0 fallos: panel del país (mover con topes arriba / abajo / izquierda / derecha, agarres de borde y esquina, ensanchar / angostar con mínimo 320 px y máximo la pantalla, alto máximo sin salirse por abajo, panel de detalle pegado a derecha o izquierda, volver a su sitio, doble clic en la cabecera, arrastre simulado de la cabecera, memoria: un HUD nuevo lo restaura y una geometría absurda se corrige); tarjetas (columnas 1 / 2 / 3 según el ancho; en las 5 pestañas con el panel ancho todas las tarjetas siguen en el árbol); avisos apilados (apilar, «×N», máximo 5, color por nivel, posición arriba a la derecha, clic, hover, repintado de tema, desvanecido real tras 5 s, `hud_aviso` no pisa la línea de ayuda); fichas (partir título / detalle / atajo, `ficha` en vivo, tamaño y posición, esquina de abajo a la derecha, apagadas, tooltip nativo apagado, repintado de tema); Debug (cuadrícula de 11 tarjetas, cada sección se abre y su miga dice «Menú Debug › …», ←, tema en vivo); ventanas (bordes y esquinas, crecer hacia la izquierda con la ventana pegada a la derecha, mínimo y pantalla, memoria de Debug y de Mi país).
@@ -184,6 +194,13 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 
 ## B. Lo que tienes que probar tú en tu PC (⬜)
 Marca cada casilla cuando lo hayas probado y dime qué pasó.
+
+### 0.1.8.39 (para probar en tu PC)
+- ⬜ **Grabador**: pulsa F9 (¿la esquina dice «● REC»?), haz zoom in y zoom out por donde se te trababa, pulsa F8 en el peor momento y F9 otra vez. Pega aquí el resumen (ya queda en el portapapeles; si no, Debug > Rend. > «Copiar el último resumen»). Si puedes, manda también el CSV (botón «Abrir la carpeta de grabaciones»).
+- ⬜ **Zoom**: con el mundo entero y con Europa, ¿se siente más fluido que en la 0.1.8.38? ¿Notas algún salto al cruzar el zoom donde cambia de la imagen guardada a las mallas (el relleno no debería cambiar de aspecto)? Cambia un dueño (Debug > Anexar) con el mundo lejos: ¿el color nuevo aparece en menos de un segundo?
+- ⬜ **Relieve**: V o el botón de lentes: ¿alterna solo Tradicional y Relieve? ¿Se leen los nombres (FRANCIA, UCRANIA, TURQUÍA, y los países chicos al acercar)? ¿Se ven demasiado gruesos o negros los bordes de las letras?
+- ⬜ **Menú VISTA**: ¿ya no sale «Internacional»? ¿Siguen las entradas grises «próximamente»?
+- ⬜ **Campaña**: entra a CAMPAÑA viniendo de otro escenario (1 d. C. o un viaje en el tiempo del Debug): ¿la lista son los países de 2026 y al COMENZAR no cambia?
 
 ### 0.1.8.38 (para probar en tu PC)
 - ⬜ Elige un país y ARRASTRA la cabecera del panel (el nombre y la bandera): ¿se mueve suave y no se sale de la pantalla? DOBLE CLIC en la cabecera: ¿vuelve a su sitio y a su tamaño?

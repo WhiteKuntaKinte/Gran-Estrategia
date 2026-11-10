@@ -364,7 +364,7 @@ func t_economia_ejercito() -> void:
 
 # ─────────────────────────────────────────────────────────────
 func t_debug_y_vista() -> void:
-	print("[T] ── Debug y vista internacional en el año 1")
+	print("[T] ── Debug y vista (V) en el año 1")
 	main._abrir_debug()
 	await esperar(0.3)
 	ok(main.debug_menu != null and is_instance_valid(main.debug_menu), "F1 abre el Debug también en el año 1")
@@ -379,14 +379,23 @@ func t_debug_y_vista() -> void:
 	main.debug_menu.queue_free()
 	await esperar(0.2)
 	main.debug_menu = null
-	var v0: String = main.vista
-	main._cambiar_vista()
-	ok(main.vista != v0, "V cambia la vista (de «%s» a «%s»)" % [v0, main.vista])
+	var r0: bool = main.modo_relieve
+	main._elegir_vista("tradicional" if r0 else "relieve")
+	ok(main.modo_relieve != r0, "V cambia entre Tradicional y Relieve (relieve %s → %s)" % [r0, main.modo_relieve])
 	await esperar(0.2)
-	main._cambiar_vista()
-	ok(main.vista == v0, "V vuelve a la vista anterior")
+	main._elegir_vista("tradicional" if main.modo_relieve else "relieve")
+	ok(main.modo_relieve == r0, "V vuelve a la vista anterior")
 	main.camara.zoom = Vector2(0.6, 0.6)
 	await esperar(0.2)
+	# 0.1.8.39 · el menú de la CAMPAÑA lista siempre los países de 2026, aunque el mundo cargado sea el del año 1 (antes salían pueblos antiguos)
+	var lc: Array = main._paises_campana_2026()
+	ok(lc.size() == 51 and lc.has("España") and lc.has("Rusia") and lc.has("Turquía"), "campaña desde el año 1: la lista tiene los 51 países de 2026 (%d)" % lc.size())
+	var del_mundo: Array = main.mundo.paises_de_campana()
+	var distintos := 0
+	for n in del_mundo:
+		if not lc.has(String(n)):
+			distintos += 1
+	ok(distintos > 0 and not lc.has("Imperio romano"), "…aunque el mundo cargado (año 1) trae otros nombres (%d que no son de 2026)" % distintos)
 
 
 # ─────────────────────────────────────────────────────────────

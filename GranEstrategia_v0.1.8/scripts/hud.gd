@@ -8,7 +8,7 @@ extends Node
 
 signal cerrar_pedido
 signal miga_pedida(nivel: String, nombre: String)
-signal vista_elegida(clave: String)   # 0.1.8.37 · una entrada del menú VISTA (tradicional, internacional, relieve...)
+signal vista_elegida(clave: String)   # 0.1.8.37 · una entrada del menú VISTA (tradicional, relieve...)
 signal pausa_pedida
 signal atras_pedido
 signal velocidad_pedida(v: int)
@@ -27,7 +27,7 @@ const ANCHO_PANEL_MAX := 420.0
 const ALTO_BARRA := 44.0                    # 0.1.8.37: la barra superior ocupa todo el ancho, pegada al borde de arriba
 const PANEL_Y := ALTO_BARRA + 8.0           # donde empiezan el panel de país y el de detalle (justo debajo de la barra)
 ## Entradas del menú VISTA: [clave, texto, disponible]. Las no disponibles salen apagadas con «próximamente».
-const VISTAS := [["tradicional", "Tradicional", true], ["internacional", "Internacional", true], ["relieve", "Relieve", true],
+const VISTAS := [["tradicional", "Tradicional", true], ["relieve", "Relieve", true],
 	["clima", "Clima", false], ["poblacion", "Población", false], ["economia", "Economía", false], ["cultura", "Cultura y religión", false]]
 const C_BARRAS := [Color(0.42, 0.62, 1.0), Color(0.30, 0.85, 0.70), Color(1.0, 0.62, 0.30), Color(0.93, 0.45, 0.55),
 	Color(0.80, 0.78, 0.35), Color(0.65, 0.50, 0.95), Color(0.55, 0.60, 0.70)]
@@ -600,7 +600,7 @@ func _construir_barra() -> void:
 	btn_vista.expand_icon = true
 	btn_vista.add_theme_constant_override("icon_max_width", 20)
 	btn_vista.add_theme_font_size_override("font_size", 13)
-	btn_vista.tooltip_text = "Vista del mapa\nCambia entre tradicional e internacional.\nAtajo: V"
+	btn_vista.tooltip_text = "Vista del mapa\nCambia entre la vista tradicional y el relieve.\nAtajo: V"
 	_estilo_boton(btn_vista, 6.0)
 	btn_vista.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_vista.pressed.connect(alternar_menu_vista)

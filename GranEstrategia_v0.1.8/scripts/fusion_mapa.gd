@@ -250,6 +250,8 @@ func pintar(dueno: PackedInt32Array, color_de: Dictionary) -> int:
 	_celdas_sucias.clear()
 	for ti in tocadas:
 		_reconstruir_tesela(int(ti))
+	if not tocadas.is_empty():
+		main.cache_rel_sucia = true                  # 0.1.8.39: la imagen guardada del relleno (vista de lejos) ya no vale
 	provincias_repintadas = n
 	ms_relleno = float(Time.get_ticks_usec() - t0) / 1000.0
 	return n

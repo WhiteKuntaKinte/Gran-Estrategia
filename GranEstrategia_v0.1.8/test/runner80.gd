@@ -473,4 +473,4 @@ func t_ventanas() -> void:
 		main._cerrar_personalizar()
 		await esperar(0.4)
 		ok(main.geo_ventanas.has("mipais"), "«Mi país» recuerda su sitio y tamaño")
-	ok(String(ProjectSettings.get_setting("application/config/name", "")).contains("0.1.8.38"), "project.godot lleva la versión 0.1.8.38")
+	ok(String(ProjectSettings.get_setting("application/config/name", "")).contains(main.VERSION), "project.godot lleva la versión %s" % main.VERSION)
