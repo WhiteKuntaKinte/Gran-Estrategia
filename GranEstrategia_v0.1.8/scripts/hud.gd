@@ -900,10 +900,12 @@ func esta_abierto() -> bool:
 
 
 ## Pestañas que tiene cada tipo de selección. El mar solo tiene General; los continentes no tienen diplomacia ni política propias.
-func pestanas_de(tipo: String) -> Array:
+func pestanas_de(tipo: String, con_tropas := false) -> Array:
 	match tipo:
 		"mar":
 			return ["general"]
+		"libre":
+			return ["general", "militar"] if con_tropas else ["general"]       # 0.1.8.39a: tierras sin reclamar: sin gobierno, diplomacia ni economía
 		"continente":
 			return ["general", "militar", "economia"]
 		"pais":
@@ -1018,7 +1020,7 @@ func mostrar(d: Dictionary) -> void:
 	det_clave = ""
 	panel_det.visible = false
 	var tipo := String(d.get("tipo", ""))
-	var lista := pestanas_de(tipo)
+	var lista := pestanas_de(tipo, _hay_ctx())
 	for k in botones_pestana:
 		(botones_pestana[k] as Button).visible = lista.has(k)
 	if not lista.has(pestana):
@@ -1492,6 +1494,9 @@ func _tab_general() -> void:
 	var sd := _seccion("Descripción")
 	for par in datos.get("desc", []):
 		_fila(sd, String(par[2]) if par.size() > 2 else "i_info", String(par[0]), String(par[1]), String(par[3]) if par.size() > 3 else "")
+	if String(datos.get("tipo", "")) == "libre":                      # 0.1.8.39a: tierras sin reclamar: sin población, etnias, ciudades ni economía
+		_nota(sd, "Nadie gobierna esta zona: no tiene población registrada, ejército, diplomacia ni economía.")
+		return
 	var sp := _seccion("Población")
 	if not d.is_empty():
 		var pob := float(d["pob"])

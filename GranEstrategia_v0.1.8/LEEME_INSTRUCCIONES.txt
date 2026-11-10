@@ -1,4 +1,4 @@
-GRAN ESTRATEGIA — 0.1.8.39 (DESARROLLO)
+GRAN ESTRATEGIA — 0.1.8.39a (DESARROLLO)
 
 1. Abre la carpeta del proyecto (donde está project.godot) con Godot 4. (La 0.1.8.37 se sube a GitHub, rama v0.1.8-development; no hay ZIP.)
    NUEVO 0.1.8.37: el botón de lentes de la barra (VISTA) cambia entre Tradicional y Relieve (la vista Internacional se quitó en la 0.1.8.39); Ctrl+clic elige varias provincias o países; en Opciones > Pantalla
@@ -6,6 +6,8 @@ GRAN ESTRATEGIA — 0.1.8.39 (DESARROLLO)
    NUEVO 0.1.8.38: el panel del país se MUEVE (arrastra su cabecera; doble clic = vuelve a su sitio) y se REDIMENSIONA (bordes izquierdo, derecho y de abajo; ancho y se reparte en 2 o 3 columnas de tarjetas);
    el Debug (F1) abre en una CUADRÍCULA de secciones con migas «Menú Debug › Sección»; Debug, Mi país y Ranking se agrandan desde cualquier borde y recuerdan dónde los dejaste;
    los avisos salen apilados arriba a la derecha y los tooltips son fichas (título, detalle y atajo). HUD de provincia, Construir y los totales de grupo: 0.1.8.38b.
+   NUEVO 0.1.8.39a: en las tierras sin reclamar (año 1) un clic elige solo esa zona y su ficha solo tiene la pestaña General; el centro de Europa ya no queda sin reclamar; las plataformas de hielo de la Antártida
+   se pueden elegir; y mientras giras la rueda del zoom los cuadros de tropas se desvanecen y vuelven al parar (sin tirones). Ver LEEME.txt.
    NUEVO 0.1.8.39: con el mundo a la vista el relleno de países se dibuja como una imagen guardada (mucho más liviano); la vista Internacional se quitó (V alterna Tradicional / Relieve);
    los nombres se leen en Relieve; el menú CAMPAÑA siempre lista los países de 2026. GRABADOR DE RENDIMIENTO: pulsa F9, haz zoom in / out por donde se te trabe (F8 = marca) y pulsa F9 otra vez:
    el resumen queda en el portapapeles (pégalo en el chat) y el CSV en la carpeta de grabaciones (Debug > Rend. > «Abrir la carpeta de grabaciones»). Ver LEEME.txt.

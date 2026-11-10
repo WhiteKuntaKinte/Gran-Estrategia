@@ -75,6 +75,14 @@ const PERIODO_FLECHAS_MS := 33      # tope de redibujos de las flechas (30 por s
 ## más rápido de lo que se pueden leer y cada redibujo cuesta decenas de ms: se redibuja menos (lo que hace el jugador —cámara, zoom, selección— sigue al instante).
 const PERIODO_PILAS_VEL := [70, 70, 70, 70, 160, 320, 500]       # pilas quietas, por velocidad 0..6
 const PERIODO_MARCHAS_VEL := [40, 40, 40, 40, 90, 160, 260]      # columnas y rutas, por velocidad 0..6
+## 0.1.8.39a · RÁFAGA DE ZOOM. Con la rueda girando, cada paso pedía redibujar todos los cuadros de tropas (decenas de ms en un equipo modesto): en el CSV de
+## Camilo 159 de los 181 fotogramas de más de 50 ms eran un redibujo de pilas, y 206 de 268 redibujos venían del zoom (39 ráfagas). Ahora, si el zoom cambia dos
+## veces con menos de ZOOM_RAFAGA_MS entre una y otra, los cuadros se desvanecen (sin redibujar) y se rehacen UNA vez cuando la rueda para ZOOM_REPOSO_MS.
+## Un solo paso de zoom aislado se redibuja al instante, como antes.
+const ZOOM_RAFAGA_MS := 260
+const ZOOM_REPOSO_MS := 140
+const FADE_SALIDA_S := 0.10
+const FADE_ENTRADA_S := 0.16
 const Z_CAJAS_PILAS := 200            # z_index (relativo a esta capa, que está en 14): por encima de ciudades (20), nombres (13), rutas y flechas
 const Z_CAJAS_MARCHAS := 201          # las columnas en marcha van encima de las pilas quietas (también al hacer clic)
 
@@ -129,6 +137,10 @@ var _centro_pilas := Vector2(-1.0e9, 0.0)
 var _centro_marchas := Vector2(-1.0e9, 0.0)
 var _tam_vista := Vector2(1280.0, 720.0)
 var _t_pilas := 0
+var _zc_ant := -1.0                 # zoom de la cámara en el fotograma anterior (para detectar la ráfaga)
+var _t_zoom_ult := -100000          # cuándo cambió el zoom por última vez (ms)
+var rafaga_zoom := false            # la rueda está girando: las cajas de pilas esperan (y se ven desvanecidas)
+var n_dibujos_pilas := 0            # cuántas veces se han redibujado las pilas (para medir y para las pruebas)
 var _banderas := {}
 var _anchos := {}
 var _nombre_pais := {}              # ID de país -> nombre (clave de Mundo.paises)
@@ -199,7 +211,7 @@ func _frac_dia() -> float:
 	return _frac
 
 
-func _process(_d: float) -> void:
+func _process(d: float) -> void:
 	if main == null or main.mundo == null:
 		return
 	var ej = main.mundo.ejercito
@@ -217,19 +229,32 @@ func _process(_d: float) -> void:
 	_tam_vista = vps / zc
 	var cam: Vector2 = main.camara.position
 	var ahora := Time.get_ticks_msec()
+	# ráfaga de zoom: dos cambios seguidos = la rueda gira; termina cuando para ZOOM_REPOSO_MS
+	if absf(zc - _zc_ant) > 1.0e-6:
+		if ahora - _t_zoom_ult < ZOOM_RAFAGA_MS:
+			rafaga_zoom = true
+		_t_zoom_ult = ahora
+		_zc_ant = zc
+	elif rafaga_zoom and ahora - _t_zoom_ult >= ZOOM_REPOSO_MS:
+		rafaga_zoom = false
 	# pilas: lo que hace el jugador (zoom, selección, foco, cámara) redibuja ya (tope 70 ms); lo que cambia la simulación, con el tope de la velocidad
 	var gv: int = main.mundo.guerra.version if main.mundo.guerra != null else 0
 	var vel: int = clampi(main.reloj.velocidad if main.reloj != null else 0, 0, RelojScript.VEL_MAX)
 	var sp := [zc, sel, sel_regs, foco, esc, fc, main.mundo.jugador, vps, modo_destino, dest_pi]
+	if rafaga_zoom and _sig_pilas.size() == sp.size():
+		sp[0] = _sig_pilas[0]                                                # mientras gira la rueda, el zoom (y lo que se mueve con él) no pide redibujar
+		sp[4] = _sig_pilas[4]
+		sp[5] = _sig_pilas[5]
 	var sp_t := [ej.version_pilas, gv, ej.version_marchas]
 	var mv: Vector2 = (cam - _centro_pilas).abs()
 	var mueve := mv.x > _tam_vista.x * 0.12 or mv.y > _tam_vista.y * 0.12
 	var dt_p := ahora - _t_pilas
-	if ((sp != _sig_pilas or mueve) and dt_p >= 70) or (sp_t != _sig_pilas_t and dt_p >= int(PERIODO_PILAS_VEL[vel])):
+	if ((sp != _sig_pilas or (mueve and not rafaga_zoom)) and dt_p >= 70) or (sp_t != _sig_pilas_t and dt_p >= int(PERIODO_PILAS_VEL[vel]) and not rafaga_zoom):
 		_sig_pilas = sp
 		_sig_pilas_t = sp_t
 		_t_pilas = ahora
 		capa_cajas_pilas.queue_redraw()
+	_desvanecer_pilas(d)
 	# columnas
 	var hay: bool = not ej.marchas.is_empty() or modo_destino
 	# Lo que cambia por una acción del jugador se redibuja al instante; lo que cambia por el paso del tiempo (avance de las columnas, zoom corriendo)
@@ -256,6 +281,17 @@ func _process(_d: float) -> void:
 	elif _flechas_dibujadas:
 		_flechas_dibujadas = false
 		capa_flechas.queue_redraw()                  # una última vez para borrar lo que quedó dibujado
+
+
+## Los cuadros de pilas se desvanecen mientras gira la rueda (no se redibujan) y vuelven cuando para (ver ZOOM_RAFAGA_MS). Con alfa 0 la capa se apaga del todo.
+func _desvanecer_pilas(d: float) -> void:
+	var obj := 0.0 if rafaga_zoom else 1.0
+	var a: float = capa_cajas_pilas.modulate.a
+	if a == obj:
+		return
+	a = move_toward(a, obj, d / (FADE_SALIDA_S if obj < a else FADE_ENTRADA_S))
+	capa_cajas_pilas.modulate.a = a
+	capa_cajas_pilas.visible = a > 0.01
 
 
 # ─────────────────────────────────────────────────────────────
@@ -691,6 +727,7 @@ func _vista_pt(c: Vector2, fs: float) -> Vector2:
 
 func _pintar_pilas(ci: CanvasItem) -> void:
 	var t0 := Time.get_ticks_usec()
+	n_dibujos_pilas += 1
 	_dib_pilas = []
 	n_marcas = 0
 	if main == null or main.mundo == null:

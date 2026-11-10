@@ -39,7 +39,7 @@ Nombres según el catálogo publicado de Natural Earth. Antes de usar una capa n
 |---|---|
 | `land`, `coastline`, `minor_islands`, `ocean` | Una costa oficial más limpia (hoy la costa sale de unir países y lagos) y las islas menores |
 | `rivers_lake_centerlines` (+ `rivers_europe`, `rivers_north_america`) | **Ríos**: líneas para dibujar y una variable «agua dulce / navegabilidad» por celda |
-| `glaciated_areas`, `antarctic_ice_shelves_polys` | Hielo: textura del polo y una variable «terreno inhóspito» |
+| `glaciated_areas`, `antarctic_ice_shelves_polys` | Hielo: textura del polo y una variable «terreno inhóspito». (0.1.8.39a: `antarctic_ice_shelves_polys` YA se usa para el contorno de la Antártida: Ross, Ronne-Filchner, Amery… se unen a la provincia `ata_00_` con `herramientas/epoca/unir_plataformas.gd`; ver `NOTAS_TECNICAS_0.1.8.39a.md`) |
 | `geography_regions_polys` | Desiertos, cordilleras, mesetas, selvas… → variable de tipo de terreno por celda |
 | `reefs`, `playas`, `lakes_historic` | Detalles de costa y de lagos secos |
 | `geographic_lines` | Ecuador, trópicos, círculos polares (adornos del mapa) |

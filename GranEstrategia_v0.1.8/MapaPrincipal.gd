@@ -25,7 +25,7 @@ const AvisosScript := preload("res://scripts/avisos.gd")
 const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 
-const VERSION := "0.1.8.39"
+const VERSION := "0.1.8.39a"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -2158,6 +2158,11 @@ func _seleccionar(pos: Vector2) -> void:
 		return
 	if pais_foco != "":
 		_salir_foco()
+	if _es_libre(pais) and not (zc < ZOOM_CONTINENTE_MAX and not campana_activa):
+		# 0.1.8.39a: las tierras sin reclamar NO son un país: un clic elige solo esa zona (antes enfocaba todas las del continente)
+		_seleccion_provincia(pi, cont, p)
+		_tras_elegir_provincia(pi)
+		return
 	if zc < ZOOM_CONTINENTE_MAX and not campana_activa:           # en la campaña no hay continentes que elegir: se elige el país directamente
 		_seleccion_continente(cont, p)
 	else:
@@ -2180,7 +2185,7 @@ func _seleccionar_varias(pos: Vector2) -> bool:
 	var pais := _pais_de(pi)
 	var cont := String(a["k"])
 	ultimo_p = p
-	var u := {"tipo": "provincia" if (pais_foco != "" and pais == pais_foco) else "pais", "pi": pi, "pais": pais, "cont": cont}
+	var u := {"tipo": "provincia" if ((pais_foco != "" and pais == pais_foco) or _es_libre(pais)) else "pais", "pi": pi, "pais": pais, "cont": cont}
 	if multi_sel.is_empty():                                      # lo que había elegido hasta ahora pasa a ser el primero del grupo
 		var actual := _unidad_elegida()
 		if not actual.is_empty():
@@ -2283,6 +2288,12 @@ func _doble_click(pos: Vector2) -> void:
 	_limpiar_seleccion()
 	if pais == pais_foco:
 		_ir_a_unidad(pi)
+		_seleccion_provincia(pi, String(a["k"]), p)
+		_tras_elegir_provincia(pi)
+		return
+	if _es_libre(pais):
+		_salir_foco()                                             # 0.1.8.39a: tierras sin reclamar: se va a esa zona, sin enfocar «el país» entero
+		_mover_camara_a(_bbox_anillos(mundo.provincias[pi].anillos), 0.5, 0.7, 2.0, 28.0)
 		_seleccion_provincia(pi, String(a["k"]), p)
 		_tras_elegir_provincia(pi)
 		return
@@ -2739,10 +2750,14 @@ func _ctx_tropas() -> Dictionary:
 		return {}
 	var tid := int(mundo.paises[pais].tid)
 	var jug: String = mundo.jugador
+	var tuyas := false
 	if prov >= 0 and jug != "" and pais != jug and mundo.paises.has(jug):
 		var jt := int(mundo.paises[jug].tid)
 		if mundo.ejercito.soldados_en_provincia(prov, jt) > 0:       # provincia ajena donde tienes tropas: se ven (y ordenan) las tuyas
 			tid = jt
+			tuyas = true
+	if _es_libre(pais) and not tuyas:
+		return {}                                                     # tierras sin reclamar: sin gobierno, sin ejército que manejar
 	return {"pais_tid": tid, "prov_tid": prov, "pais_nombre": _nombre_vis(pais)}
 
 
@@ -2845,6 +2860,12 @@ func _seleccion_estado(pais: String, estado: String, p: Vector2) -> void:
 		"ciudades": _top_ciudades(ids), "soberania": [["Soberanía", pais]]}, p)
 
 
+## 0.1.8.39a · ¿Son «tierras sin reclamar» (la nación inerte de un continente en un escenario antiguo)? No son un país: no tienen gobierno ni pestañas,
+## y se eligen de zona en zona.
+func _es_libre(pais: String) -> bool:
+	return mundo != null and mundo.es_inerte(pais)
+
+
 func _seleccion_provincia(pi: int, cont: String, p: Vector2) -> void:
 	var pr = mundo.provincias[pi]
 	if not _multi_activo:
@@ -2858,6 +2879,12 @@ func _seleccion_provincia(pi: int, cont: String, p: Vector2) -> void:
 		d = {"pob": pr.poblacion, "area": fila[1], "alt": fila[2], "altmax": fila[3], "bio": fila[4], "reino": fila[5]}
 	sel_tipo = "provincia"
 	sel_ref = {"pi": pi, "pais": pais, "cont": cont}
+	if _es_libre(pais):
+		_enviar_hud({"tipo": "libre", "titulo": pr.nombre, "subtitulo": "Tierras sin reclamar · %s" % cont, "bandera": "-",
+			"migas": [_miga("continente", "Continente", cont, ""), _miga("provincia", "Tierras sin reclamar", pr.nombre, "")], "d": d,
+			"desc": [["Tipo", "Tierras sin reclamar", "i_prov"], ["Gobierno", "Ninguno: ningún pueblo ni estado las reclama", "i_gob"],
+				["Continente", cont, "i_cont"], ["Superficie", "%s km²" % fmt_n(float(d.get("area", 0.0))), "i_area"]]}, p)
+		return
 	var ids: Array = pr.ciudades
 	var tipo := _tipo_provincia(pais)
 	var desc := [["Tipo", tipo if bool(provincias[pi]["m"]) else "Territorio", "i_prov"], ["Pertenece a", pais, "i_pais"]]

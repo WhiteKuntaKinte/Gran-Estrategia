@@ -1,8 +1,24 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.39 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.39a (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.39a — TIERRAS SIN RECLAMAR, ANTÁRTIDA Y ZOOM SIN TIRONES DE TROPAS
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.39a.md. Responde a tus notas tras probar la 0.1.8.39 en el año 1. «a» = arreglo sobre la 0.1.8.39; el número lo elegí yo.)
+- UN CLIC EN TIERRAS SIN RECLAMAR ELIGE SOLO ESA ZONA (antes elegía «todas las tierras sin reclamar del continente»). Con zoom de país: clic = esa zona, Ctrl+clic = suma zonas sueltas, doble clic = te lleva a esa zona.
+  Con el zoom lejano (continente) un clic sigue eligiendo el continente, como con cualquier tierra.
+- UNA ZONA SIN RECLAMAR YA NO TIENE LAS OPCIONES DE UN PAÍS: solo la pestaña General (superficie, continente, «Gobierno: ninguno»). Sin Diplomacia, Militar, Política ni Economía, porque nadie la gobierna.
+  (Si tienes tropas tuyas ahí, aparece Militar.)
+- EL CENTRO DE EUROPA YA NO ESTÁ «SIN RECLAMAR» EN EL AÑO 1: tenías razón, no era historia, era un fallo mío al armar el escenario: los polígonos de las fuentes dejaban huecos y astillas (Baden-Wurtemberg, Istria, Roma,
+  Ravena, Hungría, Viena…). Ahora todo lo habitable (bosque templado, mediterráneo, estepa, sabana) que quedaba sin dueño pasa al pueblo o estado vecino, y su población crece en proporción.
+  Siguen libres solo lo inhóspito (Sáhara, Siberia, taiga, tundra, selvas, Groenlandia, hielo) y las islas aisladas (Azores, Feroe…). El mundo pasa de 4.110 a 4.181 provincias y de 237,5 a 254,4 millones de habitantes; Europa conserva 0,89 millones de km² libres (antes 1,68).
+- ANTÁRTIDA: las zonas blancas (plataformas de hielo de Ross, Ronne-Filchner, Amery, Larsen…) ahora son tierra con límites: se pueden elegir y tienen provincia, en Tradicional, Relieve, 2026 y año 1.
+- ZOOM SIN TIRONES DE TROPAS: tu grabación F9 mostró que 159 de los 181 fotogramas de más de 50 ms eran el redibujo de los cuadros de tropas con cada paso de la rueda. Ahora, mientras giras la rueda,
+  los cuadros se desvanecen y se rehacen UNA vez cuando paras (~0,3 s después). Un solo paso de rueda redibuja al instante. Si prefieres que se queden visibles mientras haces zoom (a costa de tirones), dímelo.
+- LO QUE TODAVÍA NO: ~12 % de tus fotogramas lentos no venían de las tropas (picos de ~140 ms con poco script: sospecho de la tarjeta/ANGLE); para saber más, repite el recorrido con F9 en esta versión y mándame el resumen.
+  El Relieve de altísima calidad (teselas) sigue para cuando lo pidas. 0.1.8.40: HUD de provincia (Edificios / dos Cores / Ingreso / Población), ventana Construir, totales y órdenes de grupo. 0.1.8.41: pinturas, banderas e iconos HD.
+NO SE PROBÓ: tu PC real (tirones de zoom con tu tarjeta; si el desvanecido de las cajas te gusta).
 
 NUEVO EN 0.1.8.39 — RENDIMIENTO Y ARREGLOS: ZOOM LEJANO MÁS LIVIANO, GRABADOR DE RENDIMIENTO, SIN VISTA INTERNACIONAL, NOMBRES LEGIBLES EN RELIEVE, CAMPAÑA SIEMPRE DE 2026
 (Detalle técnico y medidas en NOTAS_TECNICAS_0.1.8.39.md. El número de versión lo elegí yo. Responde a tus notas tras la 0.1.8.38.)
@@ -104,10 +120,10 @@ NUEVO EN 0.1.8.34 — EL AÑO 1 d. C. ES EL MISMO JUEGO QUE 2026 (OTROS DATOS, M
   economía por provincia y por nación, ejércitos con sus pelotones y mandos, guerra, diplomacia, IA, ciudades, Debug, el botón de vista (sin estados que agrupar en esa época) y pausa/opciones.
 - EL MAPA DEL AÑO 1 SE REHIZO: 186 naciones con tierra (45 estados con las fronteras de Cliopatria / Seshat Global History Databank, CC BY 4.0, y 141 pueblos y culturas que dibujé a mano:
   caledonios, brigantes, germanos por tribu, dacios, sármatas, bereberes, bantúes, mayas, moche, hohokam, aborígenes, polinesios…) más «Tierras sin reclamar» de cada continente.
-  4.110 PROVINCIAS (en vez de las 7.653 de hoy): cada nación tiene sus provincias, con bordes irregulares y sin los cuadrados y óvalos de la 0.1.8.33. El 31 % de la tierra (desiertos, selvas
+  4.181 PROVINCIAS (en vez de las 7.653 de hoy): cada nación tiene sus provincias, con bordes irregulares y sin los cuadrados y óvalos de la 0.1.8.33. El 24 % de la tierra (desiertos, selvas
   y tundra sin gente organizada, los polos) queda SIN RECLAMAR: no todo el planeta estaba ocupado.
 - TIERRAS SIN RECLAMAR: son territorio inerte. No tienen gobierno, ejército ni IA, no se pueden controlar ni conquistar ni declararles la guerra; las tropas pueden caminar por ellas sin guerra.
-- POBLACIÓN Y ECONOMÍA DEL AÑO 1: 237,5 millones en el mundo (Han 58 M, Roma 55 M, Satavahana 14 M, Partia 10 M…), repartidos según la habitabilidad de cada región. Ejércitos con tasas
+- POBLACIÓN Y ECONOMÍA DEL AÑO 1: 254,4 millones en el mundo (Han 58 M, Roma 55 M, Satavahana 14 M, Partia 10 M…), repartidos según la habitabilidad de cada región. Ejércitos con tasas
   de la época (el ejército romano ≈ 300.000). Banderas: de relleno, generadas por programa (el color de cada nación con una forma simple); no son las reales.
 - MENÚ: JUGAR > MODO DEV > ESCENARIO: «2026» o «AÑO 1 d. C.». Elegir otro escenario recarga el mundo (otros datos). La CAMPAÑA sigue siendo la de Europa de 2026.
 - OPCIONES > INFORMACIÓN cita las fuentes del escenario (Cliopatria, CC BY 4.0).

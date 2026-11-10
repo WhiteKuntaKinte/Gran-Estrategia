@@ -325,6 +325,144 @@ def nodar(nuevas, eps=0.03):
     print('   nodado: %d vértices insertados en aristas vecinas' % insertados)
 
 
+# ───────────────────────── 2a. Huecos habitados (0.1.8.39a) ─────────────────────────
+HAB_RECLAMA = 0.60        # habitabilidad mínima (HAB, más abajo) de una pieza libre para que un vecino pueda reclamarla: bosque templado, mediterráneo, estepa, sabana… (la selva, el manglar, la taiga, el desierto y la tundra se quedan libres)
+RONDAS_RECLAMA = 8        # cuántas «capas» hacia dentro puede crecer un pueblo sobre un hueco habitado (cada capa = una pieza de profundidad)
+AREA_ASTILLA = 40.0       # px² (≈ 11.000 km²): un ESTADO solo puede quedarse piezas libres de este tamaño o menos (las astillas de costa que deja
+                          # un polígono grueso); los huecos grandes solo los reclaman pueblos (un estado no se come la Germania libre)
+MAX_CRECE_POB = 3.0       # un pueblo no triplica su población por los huecos que reclama
+MAX_CRECE_ESTADO = 0.30   # un ESTADO solo puede ampliar su territorio hasta un 30 % (en área) con astillas y rincones libres: no se come regiones enteras a base de piezas chicas
+
+
+CERCA_PX = 0.45           # px: un lado a menos de esto de un punto cuenta como «tocar»
+
+
+def _dist_a_anillos(x, y, anillos, tope):
+    """¿Hay algún lado de los anillos a menos de `tope` del punto (x, y)? (o el punto está dentro de uno de ellos)"""
+    t2 = tope * tope
+    for r in anillos:
+        n = len(r)
+        dentro = False
+        for k in range(n):
+            ax, ay = r[k]
+            bx, by = r[(k + 1) % n]
+            if (ay > y) != (by > y) and x < (bx - ax) * (y - ay) / (by - ay) + ax:
+                dentro = not dentro
+            dx, dy = bx - ax, by - ay
+            L2 = dx * dx + dy * dy
+            u = 0.0 if L2 <= 0 else max(0.0, min(1.0, ((x - ax) * dx + (y - ay) * dy) / L2))
+            ex, ey = ax + u * dx - x, ay + u * dy - y
+            if ex * ex + ey * ey <= t2:
+                return True
+        if dentro:
+            return True
+    return False
+
+
+def hab_pieza(fila):
+    """Habitabilidad (0–1) de lo que hay en una provincia de hoy, según sus biomas (fila de info.json: [pob, área, alt, altmax, [[bioma, %]...], reino])."""
+    bio = fila[4] if len(fila) > 4 else []
+    tot = float(sum(b[1] for b in bio)) or 1.0
+    return sum(HAB.get(b[0], 0.5) * b[1] for b in bio) / tot
+
+
+def reclamar_huecos(items, hab_de, es_estado, continente_libre_ok):
+    """Las tierras HABITADAS no pueden quedar «sin reclamar»: los polígonos de Cliopatria y los dibujados a mano dejan astillas de costa (Roma, Creta, Ravena…)
+    y huecos enteros (Germania, la estepa rusa…) entre los pueblos. Aquí cada pieza libre con habitabilidad >= HAB_RECLAMA pasa a la nación vecina con la que más
+    vértices comparte, capa por capa (todas las de una capa a la vez, para que ningún vecino gane por orden), hasta RONDAS_RECLAMA capas.
+    Los estados solo se quedan astillas (<= AREA_ASTILLA). Lo que queda libre: desiertos, tundra, taiga, hielo y lo que está muy lejos de todo.
+    Devuelve {territorio: [px² reclamados, px² reclamados × habitabilidad]}."""
+    n = len(items)
+    donde = {}
+    for i, it in enumerate(items):
+        ks = set()
+        for r in it['r']:
+            for x, y in r:
+                ks.add((int(round(x * 5)), int(round(y * 5))))
+        for k in ks:
+            donde.setdefault(k, []).append(i)
+    nb = [dict() for _ in range(n)]
+    for lst in donde.values():
+        if len(lst) < 2 or len(lst) > 8:
+            continue
+        for i in lst:
+            for j in lst:
+                if i != j:
+                    nb[i][j] = nb[i].get(j, 0) + 1
+    del donde
+    hab = [hab_de(it['padre']) for it in items]
+    area_de = {}
+    for it in items:
+        if it['e'] != '':
+            area_de[it['e']] = area_de.get(it['e'], 0.0) + it['a']
+    ampliado = {}                                  # estado -> px² que ya se le han sumado
+    # Las astillas (Viena, Győr, Pécs…) casi nunca comparten un vértice exacto con su vecina (cada recorte calcula sus propios cortes y las vecinas tienen lados
+    # largos con pocos vértices): para ellas el vecino es quien tenga un LADO a menos de CERCA_PX de varios puntos de su contorno. Las islas aisladas
+    # (Azores, Feroe) no tienen a nadie tan cerca y se quedan libres.
+    chicas = [i for i, it in enumerate(items) if it['e'] == '' and hab[i] >= HAB_RECLAMA and it['a'] < AREA_ASTILLA and continente_libre_ok(it['c'])]
+    if chicas:
+        cajas = []
+        for it in items:
+            xs = [q[0] for r in it['r'] for q in r]
+            ys = [q[1] for r in it['r'] for q in r]
+            cajas.append((min(xs), min(ys), max(xs), max(ys)))
+        for i in chicas:
+            puntos = []
+            for r in items[i]['r']:
+                for k in range(len(r)):
+                    a_, b_ = r[k], r[(k + 1) % len(r)]
+                    puntos.append((a_[0], a_[1]))
+                    puntos.append(((a_[0] + b_[0]) / 2.0, (a_[1] + b_[1]) / 2.0))
+            if len(puntos) > 60:
+                puntos = puntos[::len(puntos) // 60 + 1]
+            bx0, by0, bx1, by1 = cajas[i]
+            cand = [j for j, c in enumerate(cajas) if j != i and c[0] <= bx1 + CERCA_PX and c[2] >= bx0 - CERCA_PX and c[1] <= by1 + CERCA_PX and c[3] >= by0 - CERCA_PX]
+            for j in cand:
+                if items[j]['e'] == '' and not items[j]['r']:
+                    continue
+                c = 0
+                for (px_, py_) in puntos:
+                    if _dist_a_anillos(px_, py_, items[j]['r'], CERCA_PX):
+                        c += 1
+                if c >= 2:
+                    nb[i][j] = max(nb[i].get(j, 0), c)
+    ganado = {}
+    total = 0
+    for _ronda in range(RONDAS_RECLAMA):
+        cambios = []
+        for i, it in enumerate(items):
+            if it['e'] != '' or hab[i] < HAB_RECLAMA or not continente_libre_ok(it['c']):
+                continue
+            cand = {}
+            for j, c in nb[i].items():
+                ej = items[j]['e']
+                if ej == '' or c < 2:
+                    continue
+                if es_estado(ej) and (it['a'] >= AREA_ASTILLA or ampliado.get(ej, 0.0) + it['a'] > MAX_CRECE_ESTADO * area_de.get(ej, 0.0)):
+                    continue
+                cand[ej] = cand.get(ej, 0) + c
+            if cand:
+                cambios.append((i, max(cand.items(), key=lambda t: (t[1], t[0]))[0]))
+        if not cambios:
+            break
+        hechos = 0
+        for i, k in cambios:
+            if es_estado(k):                       # tope de ampliación de los estados (los pueblos no tienen: su tierra era «la región»)
+                if ampliado.get(k, 0.0) + items[i]['a'] > MAX_CRECE_ESTADO * area_de.get(k, 0.0):
+                    continue
+                ampliado[k] = ampliado.get(k, 0.0) + items[i]['a']
+            items[i]['e'] = k
+            g = ganado.setdefault(k, [0.0, 0.0])
+            g[0] += items[i]['a']
+            g[1] += items[i]['a'] * hab[i]
+            hechos += 1
+        total += hechos
+        if hechos == 0:
+            break
+    print('   huecos habitados: %d piezas libres pasan a la nación vecina (%d naciones crecen)' % (total, len(ganado)))
+    return ganado
+
+
 def construir_fuente(ents, piezas, build):
     import construir_mapa as CM
     base = json.load(open(os.path.join(BASE, 'fuente_provincias.json'), encoding='utf-8'))
@@ -354,7 +492,6 @@ def construir_fuente(ents, piezas, build):
         if pz['e'] and retiene.get(pz['e'], 1.0) == 0.0:
             pz['e'] = ''
     items = []
-    ids_usados = set()
     sub_orden = {}
     for pz in piezas['piezas']:
         par = base[pz['p']]
@@ -372,12 +509,31 @@ def construir_fuente(ents, piezas, build):
         if sub:
             sub_orden[(pz['p'], clave)] = sub_orden.get((pz['p'], clave), 0) + 1
             nombre_prov = '%s · zona %d' % (nombre_prov, sub_orden[(pz['p'], clave)])
-        pid = '%s~%s%s' % (par['id'], clave or 'sr', ('.%d' % sub) if sub else '')
+        items.append({'padre': pz['p'], 'e': clave, 'sub': sub, 'r': list(rings), 'rp': [pz['p']] * len(rings), 'conts': list(conts), 'a': sum(ar), 'amax': ar[mayor],
+                      'c': conts[mayor], 'nombre': nombre_prov, 'id': '', 'miembros': [(pz['p'], sum(ar))], 'par_id': par['id']})
+    # 0.1.8.39a: las tierras habitadas no se quedan sin reclamar (antes: Baden-Wurtemberg, Istria, Roma… «sin reclamar»)
+    info_hoy = json.load(open(os.path.join(BASE, 'info.json'), encoding='utf-8'))['prov']
+    estados_k = {e['clave'] for e in ents if e['es_estado']}
+    ganado = reclamar_huecos(items, lambda p_: hab_pieza(info_hoy[p_]), lambda k: k in estados_k, lambda c: c != 'Antártida')
+    por_clave_e = {e['clave']: e for e in ents}
+    orig_w = {}
+    for it in items:
+        if it['e'] != '':
+            orig_w[it['e']] = orig_w.get(it['e'], 0.0) + it['a'] * hab_pieza(info_hoy[it['padre']])
+    for k, (a_g, w_g) in ganado.items():
+        e = por_clave_e.get(k)
+        if e is None:
+            continue
+        w0 = max(orig_w.get(k, 0.0) - w_g, 1.0)                    # lo que ya tenía (sin lo reclamado ahora)
+        f = min(MAX_CRECE_POB, 1.0 + w_g / w0)
+        e['pob'] = e['pob'] * f
+    ids_usados = set()
+    for it in items:
+        pid = '%s~%s%s' % (it['par_id'], it['e'] or 'sr', ('.%d' % it['sub']) if it['sub'] else '')
         while pid in ids_usados:
             pid += '+'
         ids_usados.add(pid)
-        items.append({'padre': pz['p'], 'e': clave, 'sub': sub, 'r': list(rings), 'rp': [pz['p']] * len(rings), 'conts': list(conts), 'a': sum(ar), 'amax': ar[mayor],
-                      'c': conts[mayor], 'nombre': nombre_prov, 'id': pid, 'miembros': [(pz['p'], sum(ar))]})
+        it['id'] = pid
     n0 = len(items)
     items = agrupar(items, lambda it: AREA_AGRUPAR_VACIO if it['e'] == '' else AREA_AGRUPAR)
     nuevas, meta = [], []
