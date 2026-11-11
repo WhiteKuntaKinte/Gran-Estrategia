@@ -6,17 +6,22 @@ name: Traer pinturas de dominio público (Wikimedia Commons)
 #             en el Release "datos-pinturas-candidatos" (candidatos.json).
 #   bajar  -> baja las obras elegidas en herramientas/pinturas/elegidas.json, las reduce a 1280 px y las publica en el Release
 #             "datos-pinturas" (pinturas.zip + creditos.json).
-# Se ejecuta solo al subir este archivo (modo buscar) o a mano desde la pestaña Actions (workflow_dispatch). No toca el juego.
+# Se ejecuta a mano (workflow_dispatch). No toca el juego.
 on:
-  push:
-    branches: [v0.1.8-development]
-    paths: ['.github/workflows/traer-pinturas.yml']
   workflow_dispatch:
     inputs:
       modo:
         description: 'buscar o bajar'
         required: true
         default: 'buscar'
+      lista:
+        description: 'lista de búsqueda (modo buscar)'
+        required: false
+        default: 'lista_busqueda.json'
+      etiqueta:
+        description: 'etiqueta del Release de candidatos (modo buscar)'
+        required: false
+        default: 'datos-pinturas-candidatos'
 
 permissions:
   contents: write
@@ -34,18 +39,18 @@ jobs:
           python-version: '3.12'
       - run: pip install pillow
       - name: Buscar candidatos
-        if: ${{ github.event_name == 'push' || github.event.inputs.modo == 'buscar' }}
+        if: ${{ github.event.inputs.modo == 'buscar' }}
         working-directory: GranEstrategia_v0.1.8/herramientas/pinturas
         run: |
-          python3 commons_pinturas.py buscar lista_busqueda.json /tmp/candidatos.json
+          python3 commons_pinturas.py buscar ${{ github.event.inputs.lista }} /tmp/candidatos.json
           ls -l /tmp/candidatos.json
       - name: Publicar candidatos
-        if: ${{ github.event_name == 'push' || github.event.inputs.modo == 'buscar' }}
+        if: ${{ github.event.inputs.modo == 'buscar' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete datos-pinturas-candidatos --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
-          gh release create datos-pinturas-candidatos /tmp/candidatos.json \
+          gh release delete ${{ github.event.inputs.etiqueta }} --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create ${{ github.event.inputs.etiqueta }} /tmp/candidatos.json \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
             --title "Candidatos de pinturas (Commons)" \
             --notes "Resultado de la búsqueda en Wikimedia Commons (solo dominio público o CC0). Insumo para elegir las pinturas del juego; no es parte del juego."

@@ -1,0 +1,324 @@
+{
+ "ayuda": "Segunda pasada de búsqueda: reintenta las claves que quedaron vacías o con candidatos malos en la primera (mapas náuticos, planos, fotos).",
+ "entradas": [
+  {
+   "epoca": "2026",
+   "clave": "croacia",
+   "q": [
+    "Vlaho Bukovac",
+    "Croatian painting 19th century",
+    "Dubrovnik painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "colombia",
+   "q": [
+    "Ramón Torres Méndez",
+    "Comisión Corográfica Henry Price",
+    "Colombian painting 19th century",
+    "Andrés de Santa María painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "peru",
+   "q": [
+    "Francisco Laso",
+    "Pancho Fierro",
+    "Peruvian painting 19th century",
+    "Cusco school painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "cuba",
+   "q": [
+    "Landaluze",
+    "Eduardo Laplante ingenios de Cuba",
+    "Cuban painting 19th century",
+    "Havana painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "pakistan",
+   "q": [
+    "Lahore Fort painting",
+    "Mughal painting Lahore",
+    "Khyber Pass painting",
+    "Indus painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "irak",
+   "q": [
+    "Babylon painting",
+    "Baghdad painting 19th century",
+    "Euphrates painting",
+    "Ctesiphon painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "nigeria",
+   "q": [
+    "Lagos painting 19th century",
+    "Benin City painting",
+    "Niger River painting 19th century",
+    "Yoruba painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "tanzania",
+   "q": [
+    "Zanzibar painting 19th century",
+    "Kilimanjaro painting",
+    "Swahili coast painting",
+    "Livingstone painting Africa"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "republica_democratica_del_congo",
+   "q": [
+    "Congo River painting",
+    "Livingstone Africa painting",
+    "African village painting 19th century",
+    "Stanley Congo painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "madagascar",
+   "q": [
+    "Madagascar painting 19th century",
+    "Antananarivo painting",
+    "Madagascar landscape painting",
+    "Madagascar queen portrait painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "kenia",
+   "q": [
+    "Maasai painting",
+    "Mount Kenya painting",
+    "Kenya landscape painting",
+    "East Africa painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "armenia",
+   "q": [
+    "Mount Ararat painting",
+    "Armenian painting 19th century",
+    "Hovhannes Aivazovsky Armenia",
+    "Yerevan painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "imperio_parto",
+   "q": [
+    "Parthian horse archer",
+    "Battle of Carrhae",
+    "Death of Crassus",
+    "Surena painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "dacios",
+   "q": [
+    "Decebalus",
+    "Dacian warriors painting",
+    "Trajan's Column Dacian",
+    "Dacian Wars"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "hibernios_irlanda_gaelica",
+   "q": [
+    "Cú Chulainn",
+    "Irish mythology painting",
+    "Táin Bó Cúailnge painting",
+    "Celtic Ireland painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "cimbrios_anglos_y_daneses",
+   "q": [
+    "Cimbri",
+    "Battle of Vercellae",
+    "Marius Cimbri painting",
+    "Germanic warriors painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "sarmatas_roxolanos_y_aorsos",
+   "q": [
+    "Sarmatians",
+    "Scythians painting",
+    "Siemiradzki Scythian",
+    "Steppe horsemen painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "confederacion_xiongnu",
+   "q": [
+    "Wang Zhaojun",
+    "Xiongnu",
+    "Han dynasty horsemen painting",
+    "Steppe nomads painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_nabateo",
+   "q": [
+    "Petra Treasury painting",
+    "David Roberts Petra",
+    "Petra Edward Lear",
+    "Petra 19th century painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_del_bosforo",
+   "q": [
+    "Scythian painting Siemiradzki",
+    "Crimea painting 19th century",
+    "Kerch painting",
+    "Panticapaeum"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "tribus_arabes_de_neyed_y_hiyaz",
+   "q": [
+    "Bedouin painting",
+    "Arabian horse painting 19th century",
+    "Orientalist Bedouin Arabia",
+    "Arabian desert painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_mon_y_de_suvarnabhumi",
+   "q": [
+    "Bagan mural painting",
+    "Burmese painting 19th century",
+    "Thai temple mural",
+    "Pagan Burma painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_de_aksum",
+   "q": [
+    "Axum obelisk painting",
+    "Ethiopian painting 19th century",
+    "Ethiopian manuscript painting",
+    "Aksum"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_de_la_costa_suahili",
+   "q": [
+    "Zanzibar painting 19th century",
+    "Swahili coast painting",
+    "Kilwa painting",
+    "Dhow painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_indoescita",
+   "q": [
+    "Gandhara painting",
+    "Kushan painting",
+    "Indo-Scythian",
+    "Buddhist Gandhara painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "godos_gutones_del_vistula",
+   "q": [
+    "Goths painting",
+    "Alaric painting",
+    "Gothic warriors painting 19th century",
+    "Germanic tribes painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "catuvelaunos_y_britones_del_sureste",
+   "q": [
+    "Caractacus painting",
+    "Cassivellaunus painting",
+    "Ancient Britons painting",
+    "Julius Caesar Britain painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_del_ponto",
+   "q": [
+    "Mithridates painting",
+    "Mithridates VI Eupator painting",
+    "Pontus painting",
+    "Black Sea painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "civilizacion_zapoteca",
+   "q": [
+    "Monte Albán painting",
+    "Oaxaca painting 19th century",
+    "Mitla painting",
+    "Catherwood Mitla"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_khoisan_san_y_joikoi",
+   "q": [
+    "San rock art painting",
+    "Khoikhoi painting 19th century",
+    "Thomas Baines Bushmen",
+    "Bushmen painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "cultura_nok_y_pueblos_del_niger_benue",
+   "q": [
+    "Niger River painting",
+    "Nigeria painting 19th century",
+    "West African village painting",
+    "African savanna painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "magadha_y_bengala",
+   "q": [
+    "Ajanta mural",
+    "Ganges painting 19th century",
+    "Bengal painting 19th century",
+    "Buddha painting Magadha"
+   ]
+  }
+ ]
+}
