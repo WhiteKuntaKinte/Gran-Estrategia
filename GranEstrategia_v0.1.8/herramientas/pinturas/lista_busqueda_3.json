@@ -1,0 +1,8 @@
+{
+ "ayuda": "Tercera pasada: reemplazos para los que salieron con marco de museo o en mala calidad (Grecia, Lituania, Goguryeo).",
+ "entradas": [
+  {"epoca": "2026", "clave": "grecia", "q": ["Delacroix Greece on the Ruins of Missolonghi", "Konstantinos Volanakis", "Nikolaos Gyzis painting", "Greek War of Independence painting", "Theodoros Vryzakis"]},
+  {"epoca": "2026", "clave": "lituania", "q": ["Ciurlionis Sonata of the Sea", "Ciurlionis Fairy tale of the kings", "Ciurlionis Sonata of the Sun", "Ciurlionis Zodiac", "Lithuanian painting 19th century"]},
+  {"epoca": "1dc", "clave": "goguryeo", "q": ["Goguryeo tomb mural", "Muyongchong mural", "Jangcheon tomb mural Goguryeo", "Anak Tomb No. 3 mural", "Goguryeo Dancers Tomb"]}
+ ]
+}
