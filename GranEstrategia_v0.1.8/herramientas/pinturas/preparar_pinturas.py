@@ -7,7 +7,7 @@ Deja las pinturas bajadas por el flujo «Traer pinturas» listas para el juego (
 CARPETA_BAJADA = lo que trae el Release «datos-pinturas» ya descomprimido (contiene <carpeta>/<clave>.jpg y creditos.json). Se pueden pasar varias:
 las últimas ganan (así se mezcla una pasada de correcciones sobre la completa).
 Para cada imagen: recorta bordes blancos, la reduce a 960 px de ancho (máx. 1100 de alto) y la guarda como JPEG calidad 80.
-Escribe DESTINO/creditos.json con título, autor, año, licencia y enlace LIMPIOS (los textos de Commons traen restos de Wikidata) y DESTINO/CREDITOS.txt legible.
+Escribe DESTINO/creditos.json con título, autor, año (de fichas.json), licencia y enlace y DESTINO/CREDITOS.txt legible.
 Solo biblioteca estándar + pillow.
 """
 import json, os, re, sys
@@ -17,25 +17,9 @@ ANCHO, ALTO_MAX, CALIDAD = 960, 1100, 80
 FOTOGRAFOS = {"Gary Todd", "Daderot", "Prof Ranga Sai", "Rudolph.A.furtado", "Immanuel Giel", "Luisalvaz", "Nasjonalbiblioteket", "Judgefloro",
               "Didier Descouens", "Paradise Chronicle", "Tangopaso", "Joe Mabel", "Metropolitan Museum of Art", "Rijksmuseum", "Gleb Simonov", "Orfeus",
               "Uriel1022", "Gobierno CDMX", "Toto López Mesa", "Mardetanha", "Chris Woodrich", "Debotrroy Dutta"}
-# Correcciones a mano: "<carpeta>/<clave>" -> {"titulo", "artista", "fecha"}. Solo donde el texto de Commons describe la foto y no la obra.
-CORRECCIONES = {
-    "2026/china": {"titulo": "A lo largo del río durante el Festival Qingming", "artista": "Zhang Zeduan (copia fotografiada por Immanuel Giel)", "fecha": ""},
-    "general/continente_asia": {"titulo": "A lo largo del río durante el Festival Qingming", "artista": "Zhang Zeduan (copia fotografiada por Immanuel Giel)", "fecha": ""},
-    "1dc/dacios": {"titulo": "Columna de Trajano: guerras dacias", "artista": "Relieve romano (foto: Gary Todd)", "fecha": ""},
-    "1dc/confederacion_xiongnu": {"titulo": "Corona de oro xiongnu", "artista": "Orfebrería xiongnu (foto: Gary Todd)", "fecha": ""},
-    "1dc/dinastia_han": {"titulo": "Mural de una tumba Han", "artista": "Anónimo", "fecha": ""},
-    "1dc/goguryeo": {"titulo": "Pintura de la Gran Tumba de Gangseo (réplica)", "artista": "Anónimo, Goguryeo (foto: Gary Todd)", "fecha": ""},
-    "1dc/reino_de_aksum": {"titulo": "Icono de la Virgen con el Niño", "artista": "Anónimo, Etiopía (foto: Daderot)", "fecha": ""},
-    "1dc/reino_de_anuradhapura": {"titulo": "Frescos de Sigiriya", "artista": "Anónimo, Sri Lanka (foto: Rudolph A. Furtado)", "fecha": ""},
-    "1dc/pueblos_khoisan_san_y_joikoi": {"titulo": "Arte rupestre de Spitzkoppe", "artista": "Pueblo san (foto)", "fecha": ""},
-    "1dc/sami_y_pueblos_de_la_fenoscandia_septentrional": {"titulo": "Sami de la costa en el Ulfsfjord", "artista": "Fotografía histórica (Biblioteca Nacional de Noruega)", "fecha": ""},
-    "1dc/sarmatas_roxolanos_y_aorsos": {"titulo": "Guerreros sármatas (reconstrucción)", "artista": "Costumes of All Nations", "fecha": "1882"},
-    "1dc/reino_indoescita": {"titulo": "Pintura mural kushán de Shiva y Oesho", "artista": "Anónimo, siglo III", "fecha": ""},
-    "1dc/dinastia_satavahana": {"titulo": "Bodhisattva Padmapani, cueva 1 de Ajanta", "artista": "Anónimo", "fecha": ""},
-    "2026/tailandia": {"titulo": "Mural del Ramakien", "artista": "Anónimo, Tailandia (foto: Prof Ranga Sai)", "fecha": ""},
-    "general/region_mesoamerica_caribe": {"titulo": "Valle de México desde el cerro del Tepeyac", "artista": "José María Velasco", "fecha": "1883"},
-    "2026/ghana": {"titulo": "La fiesta del ñame de los ashanti", "artista": "Thomas E. Bowdich", "fecha": "1817"},
-}
+# Título, autor y año en español de cada pintura: fichas.json ("<carpeta>/<clave>" -> {titulo, artista, fecha}). Los de Commons traen restos de Wikidata y
+# a veces describen la foto y no la obra, así que se escriben a mano; solo si falta una ficha se usa el texto de Commons limpiado.
+FICHAS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fichas.json"), encoding="utf-8"))
 
 
 def limpia_titulo(t, clave):
@@ -102,7 +86,10 @@ def main():
         art = limpia_artista(v.get("artista", ""))
         e = {"titulo": limpia_titulo(v.get("titulo", ""), k), "artista": art, "fecha": "" if art in FOTOGRAFOS else anio(v.get("fecha", "")),
              "licencia": v.get("licencia", ""), "url": v.get("url", ""), "archivo_commons": v.get("archivo_commons", ""), "ancho": im.width, "alto": im.height}
-        e.update(CORRECCIONES.get(k, {}))
+        if k in FICHAS:
+            e.update(FICHAS[k])
+        else:
+            print("SIN FICHA", k)
         salida[k] = e
     json.dump(salida, open(os.path.join(destino, "creditos.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     with open(os.path.join(destino, "CREDITOS.txt"), "w", encoding="utf-8") as f:

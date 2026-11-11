@@ -1,0 +1,687 @@
+{
+ "2026/afganistan": {
+  "titulo": "Valle de Logar, mirando hacia Kabul",
+  "artista": "John Frederick Irwin",
+  "fecha": "1880"
+ },
+ "2026/alemania": {
+  "titulo": "El caminante sobre el mar de nubes",
+  "artista": "Caspar David Friedrich",
+  "fecha": "1818"
+ },
+ "2026/arabia_saudita": {
+  "titulo": "Caravana camino de La Meca",
+  "artista": "Félix Ziem",
+  "fecha": "1880"
+ },
+ "2026/argelia": {
+  "titulo": "Mujeres de Argel en su apartamento",
+  "artista": "Eugène Delacroix",
+  "fecha": "1849"
+ },
+ "2026/argentina": {
+  "titulo": "Un alto en el campo",
+  "artista": "Prilidiano Pueyrredón",
+  "fecha": "1861"
+ },
+ "2026/armenia": {
+  "titulo": "El arca de Noé sobre el monte Ararat",
+  "artista": "Simon de Myle",
+  "fecha": "1570"
+ },
+ "2026/australia": {
+  "titulo": "La esquila de los carneros",
+  "artista": "Tom Roberts",
+  "fecha": "1890"
+ },
+ "2026/austria": {
+  "titulo": "El beso",
+  "artista": "Gustav Klimt",
+  "fecha": "1908"
+ },
+ "2026/azerbaiyan": {
+  "titulo": "La Torre de la Doncella en Bakú, junto al Caspio",
+  "artista": "Paul von Franken",
+  "fecha": "1880"
+ },
+ "2026/belgica": {
+  "titulo": "Cazadores en la nieve",
+  "artista": "Pieter Brueghel el Viejo",
+  "fecha": "1565"
+ },
+ "2026/brasil": {
+  "titulo": "Independencia o muerte (el grito de Ipiranga)",
+  "artista": "Pedro Américo",
+  "fecha": "1888"
+ },
+ "2026/canada": {
+  "titulo": "El pino",
+  "artista": "Tom Thomson",
+  "fecha": "1916"
+ },
+ "2026/chequia": {
+  "titulo": "Los eslavos en su patria original",
+  "artista": "Alfons Mucha",
+  "fecha": "1912"
+ },
+ "2026/chile": {
+  "titulo": "Huasos maulinos",
+  "artista": "Johann Moritz Rugendas",
+  "fecha": "1836"
+ },
+ "2026/china": {
+  "titulo": "A lo largo del río durante el Festival Qingming",
+  "artista": "Zhang Zeduan (copia fotografiada por Immanuel Giel)",
+  "fecha": ""
+ },
+ "2026/colombia": {
+  "titulo": "Vendedoras de papas",
+  "artista": "Ramón Torres Méndez",
+  "fecha": "1860"
+ },
+ "2026/corea_del_sur": {
+  "titulo": "Danopungjeong (el festival de Dano)",
+  "artista": "Shin Yun-bok (Hyewon)",
+  "fecha": ""
+ },
+ "2026/croacia": {
+  "titulo": "Antiguo palacio de Ombla, cerca de Gruž",
+  "artista": "Anton Perko",
+  "fecha": "1905"
+ },
+ "2026/cuba": {
+  "titulo": "Ingenio Flor de Cuba",
+  "artista": "Justo Germán Cantero",
+  "fecha": "1857"
+ },
+ "2026/dinamarca": {
+  "titulo": "Tarde de verano en la playa sur de Skagen",
+  "artista": "P. S. Krøyer",
+  "fecha": "1893"
+ },
+ "2026/egipto": {
+  "titulo": "La sala hipóstila del Gran Templo de Abu Simbel",
+  "artista": "David Roberts",
+  "fecha": "1849"
+ },
+ "2026/eslovenia": {
+  "titulo": "Verano",
+  "artista": "Ivana Kobilca",
+  "fecha": "1889"
+ },
+ "2026/espana": {
+  "titulo": "El 3 de mayo de 1808 en Madrid",
+  "artista": "Francisco de Goya",
+  "fecha": "1814"
+ },
+ "2026/estados_unidos": {
+  "titulo": "Washington cruzando el Delaware",
+  "artista": "Emanuel Leutze",
+  "fecha": "1851"
+ },
+ "2026/etiopia": {
+  "titulo": "Jinetes y mártires (iglesia de Abbas Antonios)",
+  "artista": "Anónimo",
+  "fecha": ""
+ },
+ "2026/filipinas": {
+  "titulo": "Spoliarium",
+  "artista": "Juan Luna",
+  "fecha": "1884"
+ },
+ "2026/finlandia": {
+  "titulo": "Tríptico del mito de Aino",
+  "artista": "Akseli Gallen-Kallela",
+  "fecha": "1891"
+ },
+ "2026/francia": {
+  "titulo": "La libertad guiando al pueblo",
+  "artista": "Eugène Delacroix",
+  "fecha": "1830"
+ },
+ "2026/georgia": {
+  "titulo": "Banquete a la orilla",
+  "artista": "Niko Pirosmani",
+  "fecha": ""
+ },
+ "2026/ghana": {
+  "titulo": "La fiesta del ñame de los ashanti",
+  "artista": "Thomas E. Bowdich",
+  "fecha": "1817"
+ },
+ "2026/grecia": {
+  "titulo": "Grecia sobre las ruinas de Mesolongi",
+  "artista": "Eugène Delacroix",
+  "fecha": "1826"
+ },
+ "2026/hungria": {
+  "titulo": "La conquista (Honfoglalás)",
+  "artista": "Mihály Munkácsy",
+  "fecha": "1893"
+ },
+ "2026/india": {
+  "titulo": "Shakuntala escribiendo una carta",
+  "artista": "Raja Ravi Varma",
+  "fecha": ""
+ },
+ "2026/indonesia": {
+  "titulo": "El arresto de Diponegoro",
+  "artista": "Raden Saleh",
+  "fecha": "1857"
+ },
+ "2026/irak": {
+  "titulo": "Harún al-Rashid recibe a una embajada de Carlomagno en Bagdad",
+  "artista": "Julius Köckert",
+  "fecha": "1864"
+ },
+ "2026/iran": {
+  "titulo": "La Sala de los Espejos",
+  "artista": "Kamal-ol-Molk",
+  "fecha": ""
+ },
+ "2026/irlanda": {
+  "titulo": "El matrimonio de Strongbow y Aoife",
+  "artista": "Daniel Maclise",
+  "fecha": "1854"
+ },
+ "2026/islandia": {
+  "titulo": "Þingvellir",
+  "artista": "Þórarinn B. Þorláksson",
+  "fecha": "1900"
+ },
+ "2026/israel": {
+  "titulo": "Jerusalén desde el monte de los Olivos",
+  "artista": "David Roberts",
+  "fecha": "1839"
+ },
+ "2026/italia": {
+  "titulo": "La escuela de Atenas",
+  "artista": "Rafael",
+  "fecha": "1511"
+ },
+ "2026/japon": {
+  "titulo": "La gran ola de Kanagawa",
+  "artista": "Katsushika Hokusai",
+  "fecha": "1831"
+ },
+ "2026/kazajistan": {
+  "titulo": "Junto a la muralla de la fortaleza: «¡Que pasen!»",
+  "artista": "Vasili Vereshchagin",
+  "fecha": "1871"
+ },
+ "2026/kenia": {
+  "titulo": "Monte Kenia",
+  "artista": "Akseli Gallen-Kallela",
+  "fecha": "1909"
+ },
+ "2026/libia": {
+  "titulo": "Ruinas romanas en Leptis Magna",
+  "artista": "Plinio Nomellini",
+  "fecha": ""
+ },
+ "2026/lituania": {
+  "titulo": "Funeral del gran duque Gediminas",
+  "artista": "Kazimierz Alchimowicz",
+  "fecha": ""
+ },
+ "2026/marruecos": {
+  "titulo": "Fantasía árabe",
+  "artista": "Mariano Fortuny",
+  "fecha": "1867"
+ },
+ "2026/mexico": {
+  "titulo": "El valle de México desde el cerro de Santa Isabel",
+  "artista": "José María Velasco",
+  "fecha": "1875"
+ },
+ "2026/mongolia": {
+  "titulo": "Retrato de Gengis Kan",
+  "artista": "Anónimo, álbum de retratos de la dinastía Yuan",
+  "fecha": ""
+ },
+ "2026/noruega": {
+  "titulo": "Boda en el fiordo de Hardanger",
+  "artista": "Adolph Tidemand y Hans Gude",
+  "fecha": "1848"
+ },
+ "2026/nueva_zelanda": {
+  "titulo": "Tamati Waka Nene",
+  "artista": "Gottfried Lindauer",
+  "fecha": "1890"
+ },
+ "2026/paises_bajos": {
+  "titulo": "La ronda de noche",
+  "artista": "Rembrandt",
+  "fecha": "1642"
+ },
+ "2026/pakistan": {
+  "titulo": "Los sijs ante Lahore",
+  "artista": "Anónimo, siglo XIX",
+  "fecha": ""
+ },
+ "2026/peru": {
+  "titulo": "Los desposorios de la Virgen",
+  "artista": "Escuela cuzqueña, anónimo",
+  "fecha": ""
+ },
+ "2026/polonia": {
+  "titulo": "La batalla de Grunwald",
+  "artista": "Jan Matejko",
+  "fecha": "1878"
+ },
+ "2026/portugal": {
+  "titulo": "Paneles de San Vicente de Fora",
+  "artista": "Nuno Gonçalves",
+  "fecha": ""
+ },
+ "2026/reino_unido": {
+  "titulo": "El Temerario remolcado a su último fondeadero",
+  "artista": "J. M. W. Turner",
+  "fecha": "1839"
+ },
+ "2026/republica_democratica_del_congo": {
+  "titulo": "Padrão erigido por los portugueses en la desembocadura del Zaire",
+  "artista": "Roque Gameiro",
+  "fecha": "1917"
+ },
+ "2026/rumania": {
+  "titulo": "Retrato de campesina",
+  "artista": "Nicolae Grigorescu",
+  "fecha": ""
+ },
+ "2026/rusia": {
+  "titulo": "Los sirgadores del Volga",
+  "artista": "Iliá Repin",
+  "fecha": "1873"
+ },
+ "2026/senegal": {
+  "titulo": "El puerto de Dakar con la isla de Gorée al fondo",
+  "artista": "Christian Benjamin Olsen",
+  "fecha": "1891"
+ },
+ "2026/serbia": {
+  "titulo": "La migración de los serbios",
+  "artista": "Paja Jovanović",
+  "fecha": "1896"
+ },
+ "2026/siria": {
+  "titulo": "Una calle de Damasco",
+  "artista": "Gustav Bauernfeind",
+  "fecha": "1890"
+ },
+ "2026/sudafrica": {
+  "titulo": "Carreta cruzando un vado, Natal",
+  "artista": "Thomas Baines",
+  "fecha": "1874"
+ },
+ "2026/suecia": {
+  "titulo": "Midvinterblot (el sacrificio de pleno invierno)",
+  "artista": "Carl Larsson",
+  "fecha": "1915"
+ },
+ "2026/suiza": {
+  "titulo": "El lago de Thun con Blüemlisalp y Niesen",
+  "artista": "Ferdinand Hodler",
+  "fecha": ""
+ },
+ "2026/tailandia": {
+  "titulo": "Mural del Ramakien",
+  "artista": "Anónimo, Tailandia (foto: Prof Ranga Sai)",
+  "fecha": ""
+ },
+ "2026/tunez": {
+  "titulo": "Kairuán",
+  "artista": "Paul Klee",
+  "fecha": ""
+ },
+ "2026/turquia": {
+  "titulo": "El domador de tortugas",
+  "artista": "Osman Hamdi Bey",
+  "fecha": "1906"
+ },
+ "2026/ucrania": {
+  "titulo": "Los cosacos zaporogos escriben una carta al sultán de Turquía",
+  "artista": "Iliá Repin",
+  "fecha": "1891"
+ },
+ "2026/uzbekistan": {
+  "titulo": "La madrasa Shir-Dor en la plaza Registán de Samarcanda",
+  "artista": "Vasili Vereshchagin",
+  "fecha": "1869"
+ },
+ "2026/venezuela": {
+  "titulo": "Miranda en La Carraca",
+  "artista": "Arturo Michelena",
+  "fecha": "1896"
+ },
+ "2026/vietnam": {
+  "titulo": "Phù Đổng Thiên Vương",
+  "artista": "Anónimo, grabado popular de Đông Hồ",
+  "fecha": ""
+ },
+ "general/continente_africa": {
+  "titulo": "Isla del templo de Filé",
+  "artista": "David Roberts",
+  "fecha": "1838"
+ },
+ "general/continente_america_del_norte": {
+  "titulo": "Tormenta en las Montañas Rocosas, monte Rosalie",
+  "artista": "Albert Bierstadt",
+  "fecha": "1866"
+ },
+ "general/continente_america_del_sur": {
+  "titulo": "El corazón de los Andes",
+  "artista": "Frederic Edwin Church",
+  "fecha": "1859"
+ },
+ "general/continente_antartida": {
+  "titulo": "Los buques Erebus y Terror en el mar de Ross",
+  "artista": "John Edward Davis",
+  "fecha": "1850"
+ },
+ "general/continente_asia": {
+  "titulo": "A lo largo del río durante el Festival Qingming",
+  "artista": "Zhang Zeduan (copia fotografiada por Immanuel Giel)",
+  "fecha": ""
+ },
+ "general/continente_europa": {
+  "titulo": "Los síndicos del gremio de pañeros",
+  "artista": "Rembrandt",
+  "fecha": "1662"
+ },
+ "general/continente_oceania": {
+  "titulo": "Sydney Heads",
+  "artista": "Eugene von Guérard",
+  "fecha": "1865"
+ },
+ "general/mundo": {
+  "titulo": "La torre de Babel",
+  "artista": "Pieter Brueghel el Viejo",
+  "fecha": "1563"
+ },
+ "general/region_africa_norte": {
+  "titulo": "La Gran Esfinge y las pirámides de Guiza",
+  "artista": "David Roberts",
+  "fecha": "1839"
+ },
+ "general/region_africa_subsahariana": {
+  "titulo": "Baobab, Sudáfrica",
+  "artista": "Thomas Baines",
+  "fecha": "1861"
+ },
+ "general/region_asia_central": {
+  "titulo": "Triunfantes",
+  "artista": "Vasili Vereshchagin",
+  "fecha": "1872"
+ },
+ "general/region_asia_este": {
+  "titulo": "Viento sur, cielo claro (el Fuji rojo)",
+  "artista": "Katsushika Hokusai",
+  "fecha": "1831"
+ },
+ "general/region_asia_sur": {
+  "titulo": "Aldeanos en Rania (Haryana)",
+  "artista": "Atribuido al taller de Ghulam ʿAli Khan",
+  "fecha": "1816"
+ },
+ "general/region_europa_este": {
+  "titulo": "Mañana en un bosque de pinos",
+  "artista": "Iván Shishkin y Konstantín Savitski",
+  "fecha": "1889"
+ },
+ "general/region_europa_norte": {
+  "titulo": "El monje junto al mar",
+  "artista": "Caspar David Friedrich",
+  "fecha": "1810"
+ },
+ "general/region_europa_occidental": {
+  "titulo": "El carro de heno",
+  "artista": "John Constable",
+  "fecha": "1821"
+ },
+ "general/region_mediterraneo": {
+  "titulo": "Puerto con el embarque de la reina de Saba",
+  "artista": "Claudio de Lorena",
+  "fecha": "1648"
+ },
+ "general/region_mesoamerica_caribe": {
+  "titulo": "El valle de México desde el cerro del Tepeyac",
+  "artista": "José María Velasco",
+  "fecha": "1883"
+ },
+ "general/region_norteamerica": {
+  "titulo": "Las Montañas Rocosas, pico de Lander",
+  "artista": "Albert Bierstadt",
+  "fecha": "1863"
+ },
+ "general/region_oceania": {
+  "titulo": "Cordillera Dandenong desde «Beleura»",
+  "artista": "Eugene von Guérard",
+  "fecha": "1870"
+ },
+ "general/region_oriente_medio": {
+  "titulo": "Oración de la tarde en El Cairo",
+  "artista": "Jean-Léon Gérôme",
+  "fecha": "1865"
+ },
+ "general/region_sudamerica_este": {
+  "titulo": "Piña, sandías y otras frutas de Brasil",
+  "artista": "Albert Eckhout",
+  "fecha": ""
+ },
+ "general/region_sudeste_asiatico": {
+  "titulo": "Caza de ciervos",
+  "artista": "Raden Saleh",
+  "fecha": "1846"
+ },
+ "1dc/brigantes": {
+  "titulo": "Boadicea arengando a los britanos",
+  "artista": "John Opie (grabado de William Sharp)",
+  "fecha": "1793"
+ },
+ "1dc/catuvelaunos_y_britones_del_sureste": {
+  "titulo": "Carataco ante el emperador Claudio",
+  "artista": "Andrew Birrell, según Henry Fuseli",
+  "fecha": "1792"
+ },
+ "1dc/cimbrios_anglos_y_daneses": {
+  "titulo": "Mario vencedor de los cimbrios",
+  "artista": "Francesco Saverio Altamura",
+  "fecha": ""
+ },
+ "1dc/ciudades_estado_griegas": {
+  "titulo": "Leónidas en las Termópilas",
+  "artista": "Jacques-Louis David",
+  "fecha": "1814"
+ },
+ "1dc/ciudades_estado_mayas": {
+  "titulo": "Pozo y edificio en Sabacché, Yucatán",
+  "artista": "Frederick Catherwood",
+  "fecha": "1844"
+ },
+ "1dc/confederacion_xiongnu": {
+  "titulo": "Corona de oro xiongnu",
+  "artista": "Orfebrería xiongnu (foto: Gary Todd)",
+  "fecha": ""
+ },
+ "1dc/cultura_hopewell": {
+  "titulo": "Danza de la lluvia entre los mandan",
+  "artista": "George Catlin",
+  "fecha": "1837"
+ },
+ "1dc/dacios": {
+  "titulo": "Columna de Trajano: las guerras dacias",
+  "artista": "Relieve romano (foto: Gary Todd)",
+  "fecha": ""
+ },
+ "1dc/dinastia_han": {
+  "titulo": "Mural de una tumba Han",
+  "artista": "Anónimo",
+  "fecha": ""
+ },
+ "1dc/dinastia_satavahana": {
+  "titulo": "Bodhisattva Padmapani, cueva 1 de Ajanta",
+  "artista": "Anónimo",
+  "fecha": ""
+ },
+ "1dc/garamantes_fezzan": {
+  "titulo": "La caravana",
+  "artista": "Gustavo Simoni",
+  "fecha": "1883"
+ },
+ "1dc/getulos_y_pueblos_bereberes_del_atlas_y_el_sahara_septentrional": {
+  "titulo": "Tiendas de la smala de Si-Hamed-Bel-Hadj, Sáhara",
+  "artista": "Eugène Fromentin",
+  "fecha": "1850"
+ },
+ "1dc/godos_gutones_del_vistula": {
+  "titulo": "Los visigodos atacan a Clodoveo, que mata a Alarico II",
+  "artista": "Edme Bouchardon",
+  "fecha": "1738"
+ },
+ "1dc/goguryeo": {
+  "titulo": "Procesión de Dong Shou (mural de la tumba de Anak n.º 3)",
+  "artista": "Anónimo, Goguryeo",
+  "fecha": "357"
+ },
+ "1dc/hibernios_irlanda_gaelica": {
+  "titulo": "Los hijos de Lir",
+  "artista": "John Duncan",
+  "fecha": "1924"
+ },
+ "1dc/imperio_romano": {
+  "titulo": "Cicerón denuncia a Catilina en el Senado",
+  "artista": "Cesare Maccari",
+  "fecha": "1889"
+ },
+ "1dc/judea": {
+  "titulo": "El asedio y la destrucción de Jerusalén por los romanos al mando de Tito",
+  "artista": "David Roberts",
+  "fecha": "1850"
+ },
+ "1dc/magadha_y_bengala": {
+  "titulo": "Las orillas del Ganges",
+  "artista": "William Daniell",
+  "fecha": "1825"
+ },
+ "1dc/marcomanos_y_cuados": {
+  "titulo": "La batalla de Varo",
+  "artista": "Otto Albert Koch",
+  "fecha": "1909"
+ },
+ "1dc/melanesios_cultura_lapita_bismarck_salomon_y_vanuatu": {
+  "titulo": "El desembarco en Erromango",
+  "artista": "William Hodges",
+  "fecha": "1776"
+ },
+ "1dc/pueblos_aborigenes_del_sur_de_australia_murray_y_nullarbor": {
+  "titulo": "Campamento aborigen",
+  "artista": "Thomas Tyrwhitt Balcombe",
+  "fecha": "1847"
+ },
+ "1dc/pueblos_de_fiyi_tonga_y_samoa_cultura_lapita": {
+  "titulo": "Vista de la bahía de Matavai, Tahití",
+  "artista": "William Hodges",
+  "fecha": "1776"
+ },
+ "1dc/pueblos_de_java_bali_y_las_pequenas_sondas": {
+  "titulo": "Templo javanés en ruinas",
+  "artista": "Raden Saleh",
+  "fecha": "1860"
+ },
+ "1dc/pueblos_de_la_costa_noroeste_tlingit_haida_y_salish": {
+  "titulo": "Madre tótem, Kitwancool",
+  "artista": "Emily Carr",
+  "fecha": "1928"
+ },
+ "1dc/pueblos_de_las_grandes_llanuras_cazadores_de_bisontes": {
+  "titulo": "Cacería de búfalos",
+  "artista": "George Catlin",
+  "fecha": "1844"
+ },
+ "1dc/pueblos_khoisan_san_y_joikoi": {
+  "titulo": "Arte rupestre de Spitzkoppe",
+  "artista": "Pueblo san (foto)",
+  "fecha": ""
+ },
+ "1dc/pueblos_mon_y_de_suvarnabhumi": {
+  "titulo": "Un lago sagrado en Birmania",
+  "artista": "Eduard Hildebrandt",
+  "fecha": "1867"
+ },
+ "1dc/queruscos_catos_y_bructeros": {
+  "titulo": "La batalla de Arminio en el bosque de Teutoburgo",
+  "artista": "Wilhelm Lindenschmit el Viejo",
+  "fecha": "1840"
+ },
+ "1dc/reino_de_aksum": {
+  "titulo": "Icono de la Virgen con el Niño",
+  "artista": "Anónimo, Etiopía (foto: Daderot)",
+  "fecha": ""
+ },
+ "1dc/reino_de_anuradhapura": {
+  "titulo": "Frescos de Sigiriya",
+  "artista": "Anónimo, Sri Lanka (foto: Rudolph A. Furtado)",
+  "fecha": ""
+ },
+ "1dc/reino_de_armenia": {
+  "titulo": "Descenso de Noé del Ararat",
+  "artista": "Iván Aivazovski",
+  "fecha": "1889"
+ },
+ "1dc/reino_de_himyar": {
+  "titulo": "Bilqis, reina de Saba",
+  "artista": "Anónimo, álbum safávida",
+  "fecha": "1590"
+ },
+ "1dc/reino_de_kush_meroe": {
+  "titulo": "El templo de Dendur, Nubia",
+  "artista": "David Roberts",
+  "fecha": "1848"
+ },
+ "1dc/reino_del_bosforo": {
+  "titulo": "Vista de Kerch",
+  "artista": "Iván Aivazovski",
+  "fecha": "1839"
+ },
+ "1dc/reino_del_ponto": {
+  "titulo": "La tumba de Mitrídates",
+  "artista": "Carlo Bossoli",
+  "fecha": "1856"
+ },
+ "1dc/reino_indoescita": {
+  "titulo": "Pintura mural kushán de Shiva y Oesho",
+  "artista": "Anónimo, siglo III",
+  "fecha": ""
+ },
+ "1dc/reino_nabateo": {
+  "titulo": "El Deir, Petra",
+  "artista": "David Roberts",
+  "fecha": "1839"
+ },
+ "1dc/sami_y_pueblos_de_la_fenoscandia_septentrional": {
+  "titulo": "Sami de la costa en el Ulfsfjord",
+  "artista": "Fotografía histórica (Biblioteca Nacional de Noruega)",
+  "fecha": ""
+ },
+ "1dc/sarmatas_roxolanos_y_aorsos": {
+  "titulo": "Guerreros sármatas (reconstrucción)",
+  "artista": "Costumes of All Nations",
+  "fecha": "1882"
+ },
+ "1dc/teotihuacan_valle_de_mexico": {
+  "titulo": "La Pirámide del Sol en Teotihuacán",
+  "artista": "José María Velasco",
+  "fecha": "1878"
+ },
+ "1dc/tierras_sin_reclamar_de_europa": {
+  "titulo": "Tumba megalítica en la nieve",
+  "artista": "Caspar David Friedrich",
+  "fecha": "1807"
+ },
+ "1dc/tribus_arabes_de_neyed_y_hiyaz": {
+  "titulo": "Un árabe en el desierto",
+  "artista": "Charles Tschaggeny",
+  "fecha": "1858"
+ }
+}
