@@ -308,7 +308,7 @@ func t_reloj_mapa() -> void:
 	main.reloj.ocupado = false
 	var d1: int = ia.dia_n
 	main._on_dia_diferido(true, true, 2)
-	ok(main._fases.size() == 3 + 6 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 6 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
+	ok(main._fases.size() == 3 + 7 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 7 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
 	var n0: int = main._fases.size()
 	main._correr_fases(0)
 	ok(main._fases.size() < n0 and main._fases.size() >= n0 - 3, "_correr_fases(presupuesto 0): corre al menos una fase (%d → %d)" % [n0, main._fases.size()])
@@ -316,7 +316,7 @@ func t_reloj_mapa() -> void:
 	ok(main._fases.is_empty() and not main.reloj.ocupado, "_vaciar_fases: termina lo pendiente y libera al reloj")
 	ok(ia.dia_n == d1 + 2, "…y el día quedó simulado entero (2 días)")
 	main._on_dia_diferido(false, false, 1)
-	ok(main._fases.size() == 6, "sin cambio de mes: solo las 6 fases del día")
+	ok(main._fases.size() == 7, "sin cambio de mes: solo las 7 fases del día")
 	var d2: int = ia.dia_n
 	main._on_dia(false, false, 1)                       # un día nuevo termina primero el que estaba a medias
 	ok(main._fases.is_empty() and not main.reloj.ocupado and ia.dia_n == d2 + 2, "_on_dia termina antes el día que estaba a medias: 1 + 1 = 2 días (IA +%d)" % (ia.dia_n - d2))
@@ -558,7 +558,7 @@ func t_ejercito() -> void:
 		for i in a.size():
 			if not is_nan(a[i]) and not is_nan(b[i]):
 				max_dif = maxf(max_dif, absf(a[i] - b[i]))
-	ok(max_dif < 1e-6, "avanzar_mes(grupo, 3) × 3 grupos = 3 × avanzar_mes() (diferencia máxima %.2e)" % max_dif)
+	ok(max_dif < 1e-6, "avanzar_mes(grupo, 3) × 3 grupos = 3 × avanzar_mes() (diferencia máxima %s)" % str(max_dif))
 	for n in nombres:
 		bd.vars[n].col_f = (guardado[n] as PackedFloat64Array).duplicate()
 

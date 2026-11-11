@@ -236,6 +236,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 		b.button_group = grupo
 		b.text = " " + String(t[1])
 		b.icon = main.icono(String(t[2]))
+		b.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		b.expand_icon = true
 		b.custom_minimum_size = Vector2(0.0, 30.0)
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -452,6 +453,7 @@ func _boton_vel(icono: String, tip: String, grupo: ButtonGroup, ancho := 30.0) -
 	b.focus_mode = Control.FOCUS_NONE
 	b.button_group = grupo
 	b.icon = main.icono(icono)
+	b.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.add_theme_constant_override("icon_max_width", 18)
@@ -484,6 +486,7 @@ func _construir_barra() -> void:
 	btn_debug = Button.new()
 	btn_debug.custom_minimum_size = Vector2(38.0, 32.0)
 	btn_debug.icon = main.icono("i_debug")
+	btn_debug.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	btn_debug.expand_icon = true
 	btn_debug.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn_debug.add_theme_constant_override("icon_max_width", 20)
@@ -518,6 +521,7 @@ func _construir_barra() -> void:
 	caja_j.add_theme_constant_override("separation", 8)
 	marco_jug = PanelContainer.new()
 	tex_bandera_jug = TextureRect.new()
+	tex_bandera_jug.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	tex_bandera_jug.custom_minimum_size = Vector2(34.0, 22.0)
 	tex_bandera_jug.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tex_bandera_jug.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -536,6 +540,7 @@ func _construir_barra() -> void:
 	btn_editar.flat = true
 	btn_editar.focus_mode = Control.FOCUS_NONE
 	btn_editar.icon = main.icono("i_editar")
+	btn_editar.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	btn_editar.expand_icon = true
 	btn_editar.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn_editar.add_theme_constant_override("icon_max_width", 18)
@@ -603,6 +608,7 @@ func _construir_barra() -> void:
 	btn_vista.focus_mode = Control.FOCUS_NONE
 	btn_vista.custom_minimum_size = Vector2(150.0, 32.0)
 	btn_vista.icon = main.icono("i_lentes")
+	btn_vista.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	btn_vista.expand_icon = true
 	btn_vista.add_theme_constant_override("icon_max_width", 20)
 	btn_vista.add_theme_font_size_override("font_size", 13)
@@ -785,6 +791,7 @@ func _boton_icono(ic: String, tip: String) -> Button:
 	b.focus_mode = Control.FOCUS_NONE
 	b.custom_minimum_size = Vector2(40.0, 32.0)
 	b.icon = main.icono(ic)
+	b.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.add_theme_constant_override("icon_max_width", 20)
@@ -796,6 +803,7 @@ func _boton_icono(ic: String, tip: String) -> Button:
 
 func _icono_rect(nombre: String, tam: float) -> TextureRect:
 	var tr := TextureRect.new()
+	tr.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	tr.texture = main.icono(nombre)
 	tr.custom_minimum_size = Vector2(tam, tam)
 	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -1082,6 +1090,7 @@ func _dibujar_migas() -> void:
 		chip.add_child(hb)
 		var bandera := String(m.get("bandera", ""))
 		var ico := TextureRect.new()
+		ico.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		ico.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		ico.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ico.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -1445,6 +1454,7 @@ func _fila(padre: Node, ic: String, titulo: String, valor: String, clave := "", 
 	card.add_child(vb)
 	if banner != "":
 		var ban := TextureRect.new()
+		ban.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		ban.texture = main.icono("bioma_" + banner)
 		ban.custom_minimum_size = Vector2(0, 46)
 		ban.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -1598,6 +1608,7 @@ func _linea(padre: Node, t: String, v: String, col_v: Color, icono := "") -> voi
 	hb.add_theme_constant_override("separation", 8)
 	if icono != "":
 		var tr := TextureRect.new()
+		tr.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		tr.texture = main.icono(icono)
 		tr.custom_minimum_size = Vector2(22.0, 22.0)
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -1774,21 +1785,11 @@ func _card_cores(pis: Array, una: bool) -> void:
 		_fila(sec, "i_etn", "Core cultural", "%s · %s" % [cs.etiqueta_cultural(pi), "misma cultura que su dueño" if igual else "distinta a la de su dueño"])
 		_nota(sec, "El core es de quién es la tierra por historia y cultura; no cambia al conquistarla. Todavía sin efectos.")
 		return
-	var propias := 0
-	var ajenas := 0
-	var libres := 0
-	var culturas := {}
-	for pi in pis:
-		match String(cs.relacion(int(pi))):
-			"propia":
-				propias += 1
-			"ajena":
-				ajenas += 1
-			_:
-				libres += 1
-		var c: String = cs.cultural(int(pi))
-		if c != "":
-			culturas[c] = int(culturas.get(c, 0)) + 1
+	var cuenta: Dictionary = cs.contar(pis)
+	var propias: int = cuenta["propias"]
+	var ajenas: int = cuenta["ajenas"]
+	var libres: int = cuenta["libres"]
+	var culturas: Dictionary = cuenta["culturas"]
 	_fila(sec, "i_gob", "Core nacional", "%s propias · %s de otro país · %s sin core" % [fmt_num(float(propias)), fmt_num(float(ajenas)), fmt_num(float(libres))])
 	if not culturas.is_empty():
 		var ks := culturas.keys()
@@ -1970,6 +1971,7 @@ func _fila_pais(padre: Node, nombre: String, bandera: String, estado: String, co
 	var marco := PanelContainer.new()
 	marco.add_theme_stylebox_override("panel", Tema.marco_bandera(2, 1))
 	var tr := TextureRect.new()
+	tr.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	tr.texture = main.bandera_tex(bandera)
 	tr.custom_minimum_size = Vector2(34.0, 22.0)
 	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -2233,6 +2235,7 @@ func _det_titulo(ic: String, t: String) -> void:
 
 func _det_banner(cod: String) -> void:
 	var ban := TextureRect.new()
+	ban.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	ban.texture = main.icono("bioma_" + cod)
 	ban.custom_minimum_size = Vector2(0, 96)
 	ban.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

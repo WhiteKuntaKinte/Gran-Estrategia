@@ -74,6 +74,7 @@ func construir(m: Node, f: Font, titulo: String, tam: Vector2, pos: Vector2, ico
 	barra.add_child(h)
 	if icono != "":
 		var ic := TextureRect.new()
+		ic.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		ic.texture = main.icono(icono)
 		ic.custom_minimum_size = Vector2(22.0, 22.0)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

@@ -291,6 +291,7 @@ func _tarjeta(clave: String, titulo: String, icono: String, desc: String) -> But
 	cab.add_theme_constant_override("separation", 6)
 	vb.add_child(cab)
 	var ic := TextureRect.new()
+	ic.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	ic.texture = main.icono(icono)
 	ic.custom_minimum_size = Vector2(20.0, 20.0)
 	ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

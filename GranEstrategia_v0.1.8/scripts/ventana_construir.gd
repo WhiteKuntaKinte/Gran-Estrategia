@@ -147,8 +147,8 @@ func _chip(texto: String, cod: String, icono: String) -> Button:
 	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	if icono != "":
 		b.icon = main.icono(icono)
-		b.expand_icon = true
-		b.add_theme_constant_override("icon_max_width", 14)
+		b.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		b.add_theme_constant_override("icon_max_width", 18)       # sin expand_icon: con él el icono no suma al ancho mínimo y quedaba de 0 px
 	b.tooltip_text = "Mostrar solo: %s" % texto if cod != "" else "Mostrar todas las categorías"
 	b.pressed.connect(func():
 		filtro_cat = cod
@@ -172,6 +172,7 @@ func _armar_filas() -> void:
 		hb.add_theme_constant_override("separation", 8)
 		card.add_child(hb)
 		var ic := TextureRect.new()
+		ic.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		var cat_d: Dictionary = ed.categoria_de(e)
 		ic.texture = main.icono("edificios/" + String(ed.slug[e]))                       # el suyo (0.1.8.41); si faltara, el de su categoría
 		if ic.texture == null:
@@ -378,6 +379,7 @@ func _obras_en_curso() -> void:
 		var tex_ob: Texture2D = main.icono("edificios/" + String(ed.slug[int(o["e"])]))
 		if tex_ob != null:
 			var ic_ob := TextureRect.new()
+			ic_ob.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 			ic_ob.texture = tex_ob
 			ic_ob.custom_minimum_size = Vector2(26.0, 26.0)
 			ic_ob.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

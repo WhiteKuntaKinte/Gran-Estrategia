@@ -129,16 +129,16 @@ func t_modulo() -> void:
 	var rc: Dictionary = ed.construir(pais, pi, e)
 	ok(bool(rc["ok"]), "construir empieza la obra: %s" % rc["msg"])
 	ok(absf(m.paises[pais].tesoreria - (tes0 - costo_l)) < 1e-6 * maxf(1.0, costo_l), "se cobra de la tesorería")
-	ok(ed.en_obra(pi, e) == 1 and ed.total_obras() >= 1, "la obra queda registrada")
+	ok(ed.en_obra(pi, e) == 1 and ed.obras_en([pi]) >= 1, "la obra queda registrada")
 	ok(m.bd.txt("obras", m.provincias[pi].tid).begins_with(e_sl + "@"), "la obra se guarda en la variable `obras`")
 	var ob: Array = ed.obras_de(pi)
 	ok(ob.size() == 1 and int(ob[0]["falta"]) == ed.dias_de(e), "la obra tarda los días de su clase (%d)" % ed.dias_de(e))
 	if ed.tope[e] == 1:
 		ok(not bool(ed.puede(pais, pi, e)["ok"]), "no se puede repetir un edificio único mientras está en obra")
 	# avanza el tiempo
-	ed.fase_dia(ed.dias_de(e) - 1)
+	ed.fase_obras(ed.dias_de(e) - 1)
 	ok(ed.cantidad(pi, e) == 0 and ed.en_obra(pi, e) == 1, "un día antes de terminar sigue en obra")
-	ed.fase_dia(1)
+	ed.fase_obras(1)
 	ok(ed.cantidad(pi, e) == 1 and ed.en_obra(pi, e) == 0, "al cumplirse los días el edificio queda construido")
 	ok(ed.num_edificios(pi) == 1 and ed.total_pais(pais) >= 1, "num_edificios y el total del país suben")
 	ok(m.bd.txt("edificios", m.provincias[pi].tid) == e_sl + ":1", "se guarda en la variable `edificios`")
@@ -187,6 +187,16 @@ func t_modulo() -> void:
 		ed.completar_obras(int(k))
 	ok(ed.obras_en(lista) == 0, "completar_obras() las termina todas")
 	ok(ed.totales_de(lista).size() >= 1 and ed.total_en(lista) >= int(rv["hechas"]), "totales_de() y total_en() suman lo construido en el grupo (%d)" % ed.total_en(lista))
+	# lo mismo, provincia por provincia (total_en y totales_de leen las columnas directo)
+	var suma_n := 0
+	var suma_d := {}
+	for k in lista:
+		suma_n += ed.num_edificios(int(k))
+		var dk: Dictionary = ed.de_provincia(int(k))
+		for sl in dk:
+			suma_d[sl] = int(suma_d.get(sl, 0)) + int(dk[sl])
+	ok(ed.total_en(lista) == suma_n and ed.totales_de(lista) == suma_d and ed.total_pais(pais_v) == ed.total_en(m.paises[pais_v].provincias),
+		"total_en, totales_de y total_pais dan lo mismo que sumar provincia por provincia (%d)" % suma_n)
 
 
 func t_cores() -> void:
@@ -205,11 +215,18 @@ func t_cores() -> void:
 	var pi := prov_de("España" if m.paises.has("España") else String(m.paises.keys()[0]))
 	var pais: String = m.provincias[pi].pais
 	ok(cs.nacional(pi) == m.provincias[pi].pais_original, "core nacional = país original (%s)" % cs.nacional(pi))
-	ok(cs.relacion(pi) == "propia" and cs.es_core_de(pais, pi), "relación «propia» y es_core_de")
+	ok(cs.relacion(pi) == "propia", "relación «propia»")
 	ok(cs.cultural(pi) != "" and cs.etiqueta_cultural(pi) != "—", "core cultural con etiqueta (%s)" % cs.etiqueta_cultural(pi))
 	ok(cs.misma_cultura_que_dueno(pi), "la cultura coincide con la del dueño al empezar")
-	var rs: Dictionary = cs.resumen_pais(pais)
-	ok(int(rs["propias"]) > 0 and int(rs["ajenas"]) == 0, "resumen del país: propias %d, ajenas %d" % [rs["propias"], rs["ajenas"]])
+	var n_propias := 0
+	var n_ajenas := 0
+	for pj in m.paises[pais].provincias:
+		match cs.relacion(int(pj)):
+			"propia":
+				n_propias += 1
+			"ajena":
+				n_ajenas += 1
+	ok(n_propias > 0 and n_ajenas == 0, "las provincias del país: propias %d, ajenas %d" % [n_propias, n_ajenas])
 	# editar
 	ok(cs.fijar_cultural(pi, "frances") and cs.cultural(pi) == "frances", "Debug: fijar core cultural")
 	ok(not cs.fijar_cultural(pi, "no_existe"), "una cultura inexistente se rechaza")
@@ -217,6 +234,31 @@ func t_cores() -> void:
 	ok(cs.fijar_nacional(pi, otro) and cs.nacional(pi) == otro and cs.relacion(pi) == "ajena", "Debug: fijar core nacional (relación «ajena»)")
 	ok(cs.reclamos_de(otro).has(pi), "reclamos_de(): la provincia aparece en los reclamos del otro país")
 	ok(cs.fijar_nacional(pi, "") and cs.relacion(pi) == "libre", "quitar el core nacional (relación «libre»)")
+	var pj2 := -1
+	for pj in m.paises[pais].provincias:
+		if int(pj) != pi:
+			pj2 = int(pj)
+			break
+	ok(pj2 >= 0 and cs.fijar_nacional(pj2, otro) and cs.relacion(pj2) == "ajena", "otra provincia con core ajeno (para la cuenta)")
+	var cuenta: Dictionary = cs.contar(m.paises[pais].provincias)
+	var b_prop := 0
+	var b_aj := 0
+	var b_lib := 0
+	var b_cul := {}
+	for pj in m.paises[pais].provincias:
+		match cs.relacion(int(pj)):
+			"propia":
+				b_prop += 1
+			"ajena":
+				b_aj += 1
+			_:
+				b_lib += 1
+		var cu: String = cs.cultural(int(pj))
+		if cu != "":
+			b_cul[cu] = int(b_cul.get(cu, 0)) + 1
+	ok(b_lib >= 1 and b_aj >= 1 and cuenta["propias"] == b_prop and cuenta["ajenas"] == b_aj and cuenta["libres"] == b_lib and cuenta["culturas"] == b_cul,
+		"contar() = relacion() y cultural() una a una (propias %d, ajenas %d, libres %d)" % [b_prop, b_aj, b_lib])
+	cs.fijar_nacional(pj2, pais)
 	cs.fijar_nacional(pi, pais)
 	cs.fijar_cultural(pi, cs.cultura_del_dueno(pi))
 	# los cores sobreviven a la conquista

@@ -1,11 +1,11 @@
-# Diagrama de la base de datos — 0.1.8.2a (SIN cambios respecto a 0.1.8.2). 0.1.8.2 (SIN variables nuevas respecto a 0.1.8.1: la IA, el modo campaña y el ranking viven en `ia.gd`/`Mundo` y no guardan nada en la base). Lo de 0.1.8.1: (una variable nueva respecto a 0.1.8: `ocupante`, id 56, de provincia, tipo id «país que la ocupa», historial por cambio, afecta a la economía; `tesoreria` ahora la tiene CADA país con provincias, no solo el jugador, y su historial es mensual. En 0.1.8 no hubo cambios de estructura; en 9F se añadió la variable de país `anexado_a`, y el dueño legal de cada provincia sigue siendo la variable `propietario`)
+# Diagrama de la base de datos — 0.1.8.41 (CINCO variables nuevas de provincia en la 0.1.8.40, ahora 61 en total: `edificios` (57, texto «slug:cantidad;…»), `obras` (58, texto «slug@inicio@fin@pago;…», sin historial), `num_edificios` (59, número, se suma hacia país/estado/continente), `core_nacional` (60, id de país) y `core_cultural` (61, id de cultura); los diagramas PNG/SVG se regeneraron con `herramientas/hacer_diagrama_bd.py`). Antes: 0.1.8.2a (SIN cambios respecto a 0.1.8.2). 0.1.8.2 (SIN variables nuevas respecto a 0.1.8.1: la IA, el modo campaña y el ranking viven en `ia.gd`/`Mundo` y no guardan nada en la base). Lo de 0.1.8.1: (una variable nueva respecto a 0.1.8: `ocupante`, id 56, de provincia, tipo id «país que la ocupa», historial por cambio, afecta a la economía; `tesoreria` ahora la tiene CADA país con provincias, no solo el jugador, y su historial es mensual. En 0.1.8 no hubo cambios de estructura; en 9F se añadió la variable de país `anexado_a`, y el dueño legal de cada provincia sigue siendo la variable `propietario`)
 
 Cuatro imágenes (PNG y SVG; el SVG se puede ampliar sin perder calidad):
 
 | Archivo | Qué muestra |
 |---|---|
 | `diagrama_bd_general.png` | Modelo entidad-relación: TERRITORIO, VARIABLE, VALOR_ACTUAL, HISTORIAL, DIVISA |
-| `diagrama_bd_variables.png` | El ID de cada territorio conectado a las 55 variables y a su historial, una a una (0.1.7.9.9D añade las de guerra y ejército) |
+| `diagrama_bd_variables.png` | El ID de cada territorio conectado a las 61 variables y a su historial, una a una (0.1.7.9.9D añade las de guerra y ejército) |
 | `diagrama_bd_jerarquia.png` | La cadena de IDs mundo > continente > país > estado > provincia > ciudad, con rangos y cantidades reales (más entidades históricas, personas y, NUEVO en 0.1.7.9.9D, ejércitos y pelotones) |
 | `diagrama_bd_historia.png` | NUEVO en 0.1.7.9.9C: la capa histórica — entidades, nombres, banderas, personas y cargos, todo con fechas |
 

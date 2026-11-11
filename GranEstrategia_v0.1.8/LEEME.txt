@@ -1,8 +1,34 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.39a (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.41 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
-F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+B = ventana Construir · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.41 — EDIFICIOS Y CONSTRUIR (la 0.1.8.40) + TODAS LAS IMÁGENES: PINTURAS, BANDERAS HD, ICONOS DE MATERIAS, MONEDAS, INTERFAZ Y EDIFICIOS
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.40.md y NOTAS_TECNICAS_0.1.8.41.md. Me pediste saltar directo a la última versión programada y meter todo, así que esta entrega trae las dos: 0.1.8.40 y 0.1.8.41.)
+EDIFICIOS Y CONSTRUIR (0.1.8.40)
+- HUD DE PROVINCIA con tarjetas nuevas: POBLACIÓN, INGRESO, EDIFICIOS (lo construido, lo que está en obra y el botón «Construir…») y CORES. Con Ctrl+clic suman todo el grupo elegido (tarjeta «Grupo elegido»).
+- VENTANA CONSTRUIR (tecla B, o el botón «Construir…» de la tarjeta Edificios): los 109 edificios por categoría, con costo en dinero y días de obra. Solo ves los que tu país ya descubrió
+  (la casilla «mostrar también lo que no conoces» enseña los 109). Con varias provincias elegidas el botón dice «Construir ×N» y da una orden en cada provincia donde se pueda. Las obras en curso
+  muestran su avance y se pueden cancelar (devuelven la mitad). Si una provincia cambia de dueño, sus obras en curso se pierden; lo ya construido se queda con la tierra.
+- DOS CORES por provincia: NACIONAL (de qué país es la tierra por historia; no cambia al conquistarla) y CULTURAL (la cultura de su gente). Se ven en la tarjeta Cores y se editan en Debug > Edificios.
+- OJO: los edificios y los cores NO tienen efectos en el juego todavía (decisión de diseño): se construyen, se cuentan y se guardan, nada más.
+- DEBUG > EDIFICIOS: dar o quitar edificios, terminar obras y cambiar los cores de lo elegido.
+IMÁGENES (0.1.8.41)
+- PINTURAS: arriba de la pestaña General del panel sale una pintura clásica del país (137 de dominio público o CC0, de Wikimedia Commons; los pueblos del año 1 tienen la suya). Si un lugar no tiene,
+  se muestra la de su región, la de su continente o la del mundo (el tooltip lo dice). Autor, título y licencia de cada una: pinturas/CREDITOS.txt.
+- BANDERAS EN HD: la cabecera del panel y el aviso de guerra usan banderas de 256 px (937 en banderas_hd/). Las pequeñas del mapa y de las listas no cambian.
+  OJO: quité las banderas de 4 ciudades de EE. UU. (San Diego, Denver, Des Moines y Rochester) porque su licencia (CC BY / CC BY-SA) obliga a atribuir; esas ciudades llevan la bandera de su estado.
+  Así el juego se puede vender sin atribuciones.
+- ICONOS PROPIOS de las 160 materias primas (cultivos, ganado, pesca, minerales, metales, piedras, gemas, energía), los 25 rubros de la economía y 151 monedas (una por divisa, con su símbolo; los países
+  con la misma divisa comparten icono). Se ven en Finanzas, Economía, la barra superior (la moneda de tu país) y los detalles.
+- INTERFAZ REDISEÑADA: los 39 iconos de pestañas, barra y tarjetas están dibujados de nuevo en HD con un mismo estilo (los de la barra de tiempo y los botones tintados se quedan en blanco plano para que el tema los pinte).
+- MIGAS NUEVAS: la ruta continente › país › estado › provincia › ciudad del panel son píldoras con la bandera (o el icono de su nivel); la última va resaltada. Clic en una = ir a ese nivel.
+- 109 ICONOS DE EDIFICIOS: cada edificio tiene su dibujo en la ventana Construir, en las obras y en la tarjeta Edificios; las categorías usan un edificio representativo.
+- SIN ATRIBUCIONES: los iconos están dibujados por código (herramientas/iconos_materias/), las banderas salen de dominio público y las pinturas son de dominio público o CC0. Nada obliga a poner créditos en el juego.
+- PRUEBAS: runner83 a runner88 nuevas (edificios y cores 137, pinturas 62, iconos de materias 43, banderas HD 31, iconos de interfaz y migas 36, iconos de edificios 20); runner71 y runner72 ajustadas (el día tiene 7 fases).
+- LO QUE TODAVÍA NO: la vista de Relieve de altísima calidad (teselas) sigue esperando a que me digas cuándo. Pendiente: filtro sepia del tema A, tarjetas con pergamino del C, vistas Clima / Población / Economía / Cultura.
+NO SE PROBÓ: tu PC real (cómo se ven los iconos y las migas con tu pantalla y escala, y si abrir Construir por primera vez, que carga 109 iconos, se nota en tu Intel HD 520); a ojo, cada una de las 109 pinturas y 109 iconos.
 
 NUEVO EN 0.1.8.39a — TIERRAS SIN RECLAMAR, ANTÁRTIDA Y ZOOM SIN TIRONES DE TROPAS
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.39a.md. Responde a tus notas tras probar la 0.1.8.39 en el año 1. «a» = arreglo sobre la 0.1.8.39; el número lo elegí yo.)

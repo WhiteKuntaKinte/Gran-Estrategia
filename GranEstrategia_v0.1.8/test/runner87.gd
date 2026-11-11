@@ -103,7 +103,11 @@ func t_iconos() -> void:
 		if f.begins_with("i_") and f.get_extension() == "png" and not nombres.has(f.get_basename().substr(2)):
 			sobran.append(f)
 	ok(sobran.is_empty(), "no hay otros i_*.png sin revisar (sobran: %s)" % str(sobran))
-	ok(int(ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter", 1)) == 2, "el filtro de texturas por defecto es «Linear Mipmap»")
+	ok(int(ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter", 1)) == 1, "el filtro de texturas del proyecto sigue en «Linear» (el mapa no paga mipmaps)")
+	ok(main.hud.tex_bandera.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS and main.hud.btn_vista.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS,
+		"la bandera del panel y el botón de vista filtran con mipmaps")
+	ok(main.hud.raiz.texture_filter == CanvasItem.TEXTURE_FILTER_PARENT_NODE and main.hud.caja_migas.texture_filter == CanvasItem.TEXTURE_FILTER_PARENT_NODE,
+		"la raíz del HUD y la fila de migas no cambian el filtro (los fondos no pagan mipmaps)")
 	ok(main.icono("i_atras") == main.icono("i_atras"), "pedir un icono dos veces da el mismo (caché)")
 	var t0 := Time.get_ticks_usec()
 	for n in nombres:
@@ -133,6 +137,7 @@ func t_migas() -> void:
 	ok(hud.caja_migas.get_child_count() == 3 and hud.caja_migas.get_child(1) is Label, "…con un separador «›» entre las dos")
 	ok(icono_de(c[1]).texture == main.bandera_tex("p_jp") and icono_de(c[1]).custom_minimum_size.x >= 20.0, "la píldora de Japón lleva su bandera (21×14)")
 	ok(icono_de(c[0]).custom_minimum_size.x == 16.0, "la de Asia lleva un icono cuadrado de 16 px")
+	ok(icono_de(c[0]).texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS and icono_de(c[1]).texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS, "los iconos de las píldoras filtran con mipmaps")
 	ok(texto_de(c[1]).get_theme_font("font") == hud.fuente_neg and texto_de(c[0]).get_theme_font("font") == hud.fuente, "la última (donde estás) va en negrita; las otras, normal")
 	var f1: StyleBoxFlat = c[1].get_theme_stylebox("panel")
 	var f0: StyleBoxFlat = c[0].get_theme_stylebox("panel")

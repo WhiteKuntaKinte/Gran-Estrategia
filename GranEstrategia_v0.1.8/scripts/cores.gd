@@ -53,13 +53,6 @@ func etiqueta_cultural(pi: int) -> String:
 	return mundo.mandos.etiqueta_cultura(c)
 
 
-## ¿La provincia es core nacional del país `pais`?
-func es_core_de(pais: String, pi: int) -> bool:
-	if not listo or not mundo.paises.has(pais):
-		return false
-	return bd.ref("core_nacional", mundo.provincias[pi].tid) == int(mundo.paises[pais].tid)
-
-
 ## Relación de la provincia con su dueño actual: "propia" (el dueño es el del core), "ajena" (es core de otro país) o "libre" (sin core nacional).
 func relacion(pi: int) -> String:
 	var pr = mundo.provincias[pi]
@@ -81,26 +74,29 @@ func misma_cultura_que_dueno(pi: int) -> bool:
 	return c != "" and c == cultura_del_dueno(pi)
 
 
-## Provincias que `pais` controla y son core nacional suyo / ajeno. {"propias": n, "ajenas": n, "libres": n}
-func resumen_pais(pais: String) -> Dictionary:
-	var r := {"propias": 0, "ajenas": 0, "libres": 0, "misma_cultura": 0}
-	if not listo or not mundo.paises.has(pais):
-		return r
-	var col: PackedInt32Array = bd.vars["core_nacional"].col_i
+## Cuenta lo que hay en las provincias `pis` (índices): cuántas tienen core nacional propio, de otro país o ninguno, y las culturas ({id: cantidad}).
+## Mismo criterio que `relacion` y `cultural`, pero leyendo las columnas directo (un país grande tiene miles de provincias: 16 ms con las consultas una a una).
+func contar(pis: Array) -> Dictionary:
+	var propias := 0
+	var ajenas := 0
+	var libres := 0
+	var culturas := {}
+	var cn: PackedInt32Array = bd.vars["core_nacional"].col_i
+	var du: PackedInt32Array = bd.vars["propietario"].col_i
 	var cc: PackedStringArray = bd.vars["core_cultural"].col_s
-	var tid: int = mundo.paises[pais].tid
-	var cult := _cultura_de_origen(pais, mundo.paises[pais])
-	for pi in mundo.paises[pais].provincias:
-		var k: int = mundo.provincias[int(pi)].ix
-		if col[k] < 0:
-			r["libres"] += 1
-		elif col[k] == tid:
-			r["propias"] += 1
+	for pi in pis:
+		var ix: int = mundo.provincias[int(pi)].ix
+		var core: int = cn[ix]
+		if core < 0:
+			libres += 1
+		elif core == du[ix]:
+			propias += 1
 		else:
-			r["ajenas"] += 1
-		if cult != "" and cc[k] == cult:
-			r["misma_cultura"] += 1
-	return r
+			ajenas += 1
+		var c: String = cc[ix]
+		if c != "":
+			culturas[c] = int(culturas.get(c, 0)) + 1
+	return {"propias": propias, "ajenas": ajenas, "libres": libres, "culturas": culturas}
 
 
 ## Provincias (índices) de las que `pais` tiene el core nacional pero hoy controla otro: sus «reclamos».

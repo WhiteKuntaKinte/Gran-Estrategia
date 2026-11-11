@@ -16,14 +16,14 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATOS = os.path.join(RAIZ, 'datos')
 
 CATEGORIAS = [
-    ("ciu", "Vivienda y ciudad", "i_ciudad"),
-    ("tra", "Transporte y obras públicas", "i_prov"),
-    ("agu", "Agua y energía", "i_eco"),
-    ("eco", "Economía y comercio", "i_moneda"),
-    ("edu", "Educación, cultura y ciencia", "i_desc"),
-    ("sal", "Salud", "i_pob"),
-    ("def", "Defensa fija", "i_estado"),
-    ("mil", "Mando y formación militar", "i_ejercito"),
+    ("ciu", "Vivienda y ciudad", "edificios/cabana_madera"),
+    ("tra", "Transporte y obras públicas", "edificios/puente_piedra_arco"),
+    ("agu", "Agua y energía", "edificios/acueducto"),
+    ("eco", "Economía y comercio", "edificios/mercados_locales"),
+    ("edu", "Educación, cultura y ciencia", "edificios/biblioteca"),
+    ("sal", "Salud", "edificios/hospital_moderno"),
+    ("def", "Defensa fija", "edificios/murallas_urbanas"),
+    ("mil", "Mando y formación militar", "edificios/escuelas_militares"),
 ]
 
 # clase -> (fracción de la producción anual de la provincia, días de obra)

@@ -974,7 +974,7 @@ class Mundo extends RefCounted:
 		if ejercito != null:
 			r.append(Callable(ejercito, "avanzar_dia").bind(k))     # las columnas en marcha avanzan k días
 		if edificios != null:
-			r.append(Callable(edificios, "fase_dia").bind(k))       # 0.1.8.40: las obras avanzan k días (casi siempre solo una comparación)
+			r.append(Callable(edificios, "fase_obras").bind(k))       # 0.1.8.40: las obras avanzan k días (casi siempre solo una comparación)
 		if guerra != null:
 			r.append(Callable(guerra, "fase_llegadas"))             # llegadas
 			r.append(Callable(guerra, "fase_batallas").bind(k))     # batallas, por lotes

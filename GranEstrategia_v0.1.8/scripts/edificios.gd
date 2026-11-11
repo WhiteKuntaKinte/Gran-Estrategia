@@ -208,13 +208,6 @@ func provincias_en_obra() -> int:
 	return _obras.size()
 
 
-func total_obras() -> int:
-	var c := 0
-	for pi in _obras:
-		c += (_obras[pi] as Array).size()
-	return c
-
-
 # ───────────── costo, días y reglas ─────────────
 func dias_de(e: int) -> int:
 	return int(clases.get(clase[e], {}).get("dias", 30))
@@ -367,7 +360,7 @@ func cambio_de_dueno(pi: int, antes: String) -> int:
 
 
 ## Fase del día del Mundo (`Mundo.fases_dias`): `k` días de obra. Casi siempre no hace nada (una sola comparación).
-func fase_dia(k: int) -> bool:
+func fase_obras(k: int) -> bool:
 	dia_n += k
 	if dia_n < _prox_fin:
 		return false
@@ -424,13 +417,7 @@ func firma(pis: Array) -> int:
 func total_pais(pais: String) -> int:
 	if not mundo.paises.has(pais):
 		return 0
-	var col: PackedFloat64Array = bd.vars["num_edificios"].col_f
-	var t := 0
-	for pi in mundo.paises[pais].provincias:
-		var v: float = col[mundo.provincias[int(pi)].ix]
-		if not is_nan(v):
-			t += int(v)
-	return t
+	return total_en(mundo.paises[pais].provincias)
 
 
 ## Cuántos edificios hay construidos en todo el mundo.
@@ -442,10 +429,13 @@ func total_mundo() -> int:
 	return t
 
 
-## {slug: cantidad} sumando varias provincias.
+## {slug: cantidad} sumando varias provincias. Lee la columna de texto directo y salta las vacías (un país grande tiene miles de provincias).
 func totales_de(pis: Array) -> Dictionary:
 	var r := {}
+	var col: PackedStringArray = bd.vars["edificios"].col_s
 	for pi in pis:
+		if col[mundo.provincias[int(pi)].ix] == "":
+			continue
 		var d: Dictionary = de_provincia(int(pi))
 		for k in d:
 			r[k] = int(r.get(k, 0)) + int(d[k])
@@ -453,9 +443,12 @@ func totales_de(pis: Array) -> Dictionary:
 
 
 func total_en(pis: Array) -> int:
+	var col: PackedFloat64Array = bd.vars["num_edificios"].col_f
 	var t := 0
 	for pi in pis:
-		t += num_edificios(int(pi))
+		var v: float = col[mundo.provincias[int(pi)].ix]
+		if not is_nan(v):
+			t += int(v)
 	return t
 
 

@@ -140,18 +140,28 @@ func t_construir() -> void:
 	print("[T] (abrir Construir con los iconos de los 109: %.0f ms)" % ms)
 	var w = main.panel_construir
 	ok(w != null and is_instance_valid(w), "se abre la ventana")
+	ok(w.vf.raiz.texture_filter == CanvasItem.TEXTURE_FILTER_PARENT_NODE, "la raíz de la ventana no cambia el filtro (los fondos no pagan mipmaps)")
 	var distintos := 0
 	var malas := []
 	for fl in w._filas:
 		var e: int = fl["e"]
 		var card: Control = fl["card"]
 		var ic: TextureRect = (card.get_child(0) as HBoxContainer).get_child(0) as TextureRect
-		if ic.texture != main.icono("edificios/" + String(ed.slug[e])):
+		if ic.texture != main.icono("edificios/" + String(ed.slug[e])) or ic.texture_filter != CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS:
 			malas.append(String(ed.slug[e]))
 		elif ic.custom_minimum_size.x >= 40.0:
 			distintos += 1
 	ok(w._filas.size() == 109 and malas.is_empty(), "las 109 filas llevan el icono de su edificio (mal: %s)" % str(malas))
 	ok(distintos == 109, "cada icono se pide a 40 px (%d)" % distintos)
+	# chips de categoría: el icono se dibuja de verdad (con expand_icon en un botón de ancho automático quedaba de 0 px)
+	var chips_mal := []
+	for k in w._btns_cat:
+		var cb: Button = w._btns_cat[k]
+		if String(k) == "":
+			continue
+		if cb.icon == null or cb.expand_icon or cb.get_combined_minimum_size().x < cb.get_theme_font("font", "Button").get_string_size(cb.text, HORIZONTAL_ALIGNMENT_LEFT, -1, cb.get_theme_font_size("font_size", "Button")).x + 18.0:
+			chips_mal.append(String(k))
+	ok(w._btns_cat.size() == 9 and chips_mal.is_empty(), "los 8 chips de categoría llevan icono que suma al ancho del botón (mal: %s)" % str(chips_mal))
 	# una obra en curso muestra el mismo icono
 	var e_obra: int = ed.conocidos(pais)[0]
 	w._construir(e_obra)

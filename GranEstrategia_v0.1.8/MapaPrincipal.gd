@@ -29,7 +29,7 @@ const AvisosScript := preload("res://scripts/avisos.gd")
 const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 
-const VERSION := "0.1.8.39a"
+const VERSION := "0.1.8.41"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -1202,7 +1202,7 @@ func bandera_tex(clave: String) -> Texture2D:
 
 
 ## Bandera en HD (256 px, `banderas_hd/`) con mipmaps, para el panel y el aviso de guerra, donde se ve grande. Si no hay HD, la de 96 px.
-## Su TextureRect lleva `texture_filter = LINEAR_WITH_MIPMAPS` explícito (el filtro por defecto del proyecto ya es ese, pero así no depende de él).
+## Su TextureRect lleva `texture_filter = LINEAR_WITH_MIPMAPS` (como todo icono o bandera de la interfaz).
 func bandera_hd(clave: String) -> Texture2D:
 	if clave == "" or clave == "-":
 		clave = "x"
@@ -1221,7 +1221,8 @@ func bandera_hd(clave: String) -> Texture2D:
 
 
 ## Como `_cargar_png`, pero con mipmaps: para iconos y banderas, que se dibujan 4–8 veces más pequeños que su archivo (sin mipmaps se ven con dientes
-## y parpadean). Con el filtro por defecto «Linear Mipmap» de project.godot se usan solos. No usar con imágenes grandes (el relieve).
+## y parpadean). Cada TextureRect o botón con icono pone `texture_filter = LINEAR_WITH_MIPMAPS` (el filtro del proyecto sigue en Linear, y ni el mapa ni los
+## fondos de la interfaz lo usan: con Linear Mipmap global o en las raíces el mapa costaba ~3–5 ms más por paso de zoom por software). No usar con imágenes grandes (el relieve).
 func _cargar_mip(ruta: String) -> Texture2D:
 	var img: Image = null
 	if ResourceLoader.exists(ruta):
