@@ -135,3 +135,18 @@ func fijar_cultural(pi: int, cultura: String) -> bool:
 	if cultura != "" and (mundo.mandos == null or not mundo.mandos.culturas.has(cultura)):
 		return false
 	return bd.poner_s("core_cultural", mundo.provincias[pi].tid, cultura, "Debug: core cultural")
+
+
+## Vuelve los dos cores de la provincia a lo que eran al empezar (país original y su cultura).
+func restaurar(pi: int) -> void:
+	if not listo or pi < 0 or pi >= mundo.provincias.size():
+		return
+	var pr = mundo.provincias[pi]
+	var pe = mundo.paises.get(pr.pais_original)
+	if pe != null and not pe.inerte:
+		bd.poner_i("core_nacional", pr.tid, int(pe.tid), "Debug: core restaurado")
+	else:
+		bd.poner_i("core_nacional", pr.tid, -1, "Debug: core restaurado")
+	var cult := _cultura_de_origen(pr.pais_original, pe)
+	if cult != "":
+		bd.poner_s("core_cultural", pr.tid, cult, "Debug: core restaurado")

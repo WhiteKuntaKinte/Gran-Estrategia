@@ -40,6 +40,9 @@ func arrancar(anio: int) -> void:
 	add_child(main)
 	get_window().size = Vector2i(1280, 720)
 	await esperar(0.8)
+	if main.en_menu:
+		main._on_jugar()                                      # sin escenario pedido la partida empieza en el menú: se juega a mano
+		await esperar(0.2)
 
 
 func run() -> void:
@@ -47,6 +50,10 @@ func run() -> void:
 	await t_modulo()
 	await t_cores()
 	await t_conquista()
+	await t_hud()
+	await t_ventana()
+	await t_grupo()
+	await t_debug()
 	await t_escenario_1()
 	print("[T] ═══ RESULTADO runner83: %d OK, %d FALLOS" % [n_ok, fallos])
 	get_tree().quit(1 if fallos > 0 else 0)
@@ -251,6 +258,314 @@ func t_conquista() -> void:
 	ok(ed.puede(pais, pi, e2)["ok"] == false, "el antiguo dueño ya no puede construir ahí")
 	m.transferir_provincia(pi, pais, "2026,01,02", "Prueba (devolver)")
 	ok(cs.relacion(pi) == "propia", "al recuperarla vuelve a ser «propia»")
+
+
+# ─────────────────────────────────────────────────────────────
+func mp(lon: float, lat: float) -> Vector2:
+	return Vector2((lon + 180.0) * 2400.0 / 360.0, (90.0 - lat) * 1200.0 / 180.0)
+
+
+func prov_en(lon: float, lat: float) -> int:
+	var r: Array = main._anillo_bajo(mp(lon, lat))
+	return -1 if int(r[0]) < 0 else int(main.anillos[int(r[0])]["p"])
+
+
+## Todos los textos (Label y Button) que cuelgan de un nodo.
+func textos(n: Node, acc := []) -> Array:
+	if n is Label:
+		acc.append((n as Label).text)
+	elif n is Button:
+		acc.append((n as Button).text)
+	for h in n.get_children():
+		textos(h, acc)
+	return acc
+
+
+func hay_texto(n: Node, fragmento: String) -> bool:
+	for t in textos(n):
+		if String(t).findn(fragmento) >= 0:
+			return true
+	return false
+
+
+func elegir_provincia(pi: int) -> void:
+	main._seleccion_provincia(pi, main.mundo.continente_de_provincia(pi), Vector2(1200.0, 300.0))
+	await fotogramas(2)
+
+
+func t_hud() -> void:
+	print("[T] ── HUD de provincia: Población, Ingreso, Edificios, Cores")
+	await arrancar(2026)
+	var m = main.mundo
+	var pais := "España"
+	var pi := prov_en(-3.7, 40.4)
+	ok(pi >= 0 and String(m.provincias[pi].pais) == pais, "Madrid es una provincia de España (%d)" % pi)
+	await elegir_provincia(pi)
+	var hud = main.hud
+	ok(hud.datos.get("ed_pis", []) == [pi], "el mapa manda al HUD las provincias de la selección")
+	for tit in ["POBLACIÓN", "INGRESO", "EDIFICIOS", "CORES"]:
+		ok(hay_texto(hud.cuerpo, tit), "tarjeta «%s» en la pestaña General" % tit)
+	ok(hay_texto(hud.cuerpo, "Producción anual") and hay_texto(hud.cuerpo, "Aporta a la tesorería"), "Ingreso: producción anual y aporte a la tesorería")
+	ok(hay_texto(hud.cuerpo, "Core nacional") and hay_texto(hud.cuerpo, "Core cultural") and hay_texto(hud.cuerpo, "tierra propia"), "Cores: nacional (propia) y cultural")
+	ok(hay_texto(hud.cuerpo, "Todavía no hay ningún edificio"), "Edificios: sin edificios todavía")
+	ok(hay_texto(hud.cuerpo, "Construir…"), "botón «Construir…»")
+	# tras construir algo, la tarjeta lo muestra
+	var ed = m.edificios
+	var e: int = ed.indice("muralla") if ed.indice("muralla") >= 0 else 0
+	m.descubrimientos.conceder(int(m.paises[pais].tid), ed.desc_idx[e])
+	ed.dar(pi, e, 2)
+	main.refrescar_todo(false)
+	await fotogramas(2)
+	ok(hay_texto(hud.cuerpo, String(ed.nombre[e])) and hay_texto(hud.cuerpo, "×2"), "Edificios: lista «%s ×2» tras añadirlos" % ed.nombre[e])
+	ok(not hay_texto(hud.cuerpo, "Todavía no hay ningún edificio"), "ya no dice que no hay edificios")
+	# una obra se ve con su avance
+	m.paises[pais].tesoreria = 1.0e15
+	var e2 := -1
+	for k in ed.n:
+		if k != e and ed.conoce(pais, k) and bool(ed.puede(pais, pi, k)["ok"]):
+			e2 = k
+			break
+	ed.construir(pais, pi, e2)
+	main.refrescar_todo(false)
+	await fotogramas(2)
+	ok(hay_texto(hud.cuerpo, "EN OBRA (1)") and hay_texto(hud.cuerpo, "faltan"), "Edificios: la obra aparece con los días que faltan")
+	# país: totales
+	main._seleccion_pais(pais, "Europa", Vector2(1200.0, 300.0))
+	await fotogramas(2)
+	ok(hud.datos.get("ed_pis", []).size() == m.paises[pais].provincias.size(), "país: ed_pis = todas sus provincias")
+	ok(hay_texto(hud.cuerpo, "EDIFICIOS") and hay_texto(hud.cuerpo, "CORES") and hay_texto(hud.cuerpo, "propias"), "país: tarjetas de totales de Edificios y Cores")
+	ok(not hay_texto(hud.cuerpo, "INGRESO"), "país: la tarjeta Ingreso es solo de provincia")
+	# tierras sin reclamar: nada de esto
+	await arrancar(1)
+	var libre := -1
+	for pr in main.mundo.provincias:
+		if main._es_libre(String(pr.pais)):
+			libre = pr.idx
+			break
+	ok(libre >= 0, "año 1: hay tierras sin reclamar")
+	main._seleccion_provincia(libre, "Europa", Vector2(1200.0, 300.0))
+	await fotogramas(2)
+	ok(not main.hud.datos.has("ed_pis") and not hay_texto(main.hud.cuerpo, "Construir…"), "tierras sin reclamar: sin edificios ni cores")
+	await arrancar(2026)
+
+
+func fila_de(e: int) -> Dictionary:
+	for fl in main.panel_construir._filas:
+		if int(fl["e"]) == e:
+			return fl
+	return {}
+
+
+func t_ventana() -> void:
+	print("[T] ── Ventana Construir")
+	var m = main.mundo
+	var ed = m.edificios
+	var pais := "España"
+	var pi := prov_en(-3.7, 40.4)
+	m.paises[pais].tesoreria = 1.0e15
+	await elegir_provincia(pi)
+	main._abrir_construir()
+	await fotogramas(2)
+	var w = main.panel_construir
+	ok(w != null and is_instance_valid(w), "se abre con _abrir_construir()")
+	ok(w.pis == [pi] and w.pais == pais and w.validas == [pi], "atiende la provincia elegida")
+	ok(String(w._lbl_dest.text).find(String(m.provincias[pi].nombre)) >= 0, "cabecera: %s" % w._lbl_dest.text)
+	var conocidos: int = ed.conocidos(pais).size()
+	ok(w.filas_visibles == conocidos and conocidos > 0, "solo se ven los edificios que conoce el país (%d)" % conocidos)
+	w._chk.set_pressed(true)
+	await fotogramas(1)
+	ok(w.filas_visibles == 109, "«mostrar también lo que no conoces»: los 109 (%d)" % w.filas_visibles)
+	w._chk.set_pressed(false)
+	# categorías
+	var cat_con := 0
+	for e in ed.conocidos(pais):
+		if String(ed.cat[e]) == "def":
+			cat_con += 1
+	w.filtro_cat = "def"
+	w._marcar_chips()
+	w.refrescar(true)
+	ok(w.filas_visibles == cat_con, "filtro por categoría «def»: %d" % cat_con)
+	w.filtro_cat = ""
+	w._marcar_chips()
+	w.refrescar(true)
+	# construir desde un botón
+	var e_ok := -1
+	for e in ed.conocidos(pais):
+		if bool(ed.puede(pais, pi, e)["ok"]):
+			e_ok = e
+			break
+	ok(e_ok >= 0, "hay un edificio que se puede construir (%s)" % ed.nombre[e_ok])
+	var fl := fila_de(e_ok)
+	var btn: Button = fl["btn"]
+	ok(not btn.disabled and btn.text == "Construir", "botón activo")
+	var tes0: float = m.paises[pais].tesoreria
+	btn.pressed.emit()
+	await fotogramas(2)
+	ok(ed.en_obra(pi, e_ok) == 1 and m.paises[pais].tesoreria < tes0, "pulsar Construir empieza la obra y cobra")
+	ok(String(main.avisos.ultimo_texto).begins_with("Obra empezada"), "aviso: «%s»" % main.avisos.ultimo_texto)
+	ok(ed.tope[e_ok] > 1 or btn.disabled, "si es único, el botón se apaga")
+	ok(w.obras_mostradas == 1 and w._tit_obras.visible, "«Obras en curso» muestra la obra")
+	# cancelar
+	var tes1: float = m.paises[pais].tesoreria
+	var bc: Button = null
+	for h in w._caja_obras.get_children():
+		for x in h.get_children():
+			if x is Button:
+				bc = x
+	ok(bc != null and not bc.disabled, "botón de cancelar la obra")
+	bc.pressed.emit()
+	await fotogramas(2)
+	ok(ed.en_obra(pi, e_ok) == 0 and m.paises[pais].tesoreria > tes1, "cancelar quita la obra y devuelve dinero")
+	ok(w.obras_mostradas == 0 and not w._tit_obras.visible, "«Obras en curso» se oculta sin obras")
+	# sin dinero: el botón avisa
+	m.paises[pais].tesoreria = 0.0
+	w.refrescar(true)
+	ok(btn.disabled and String(btn.tooltip_text).find("tesorería") >= 0, "sin dinero el botón se apaga y dice por qué")
+	m.paises[pais].tesoreria = 1.0e15
+	# país ajeno: solo ver
+	m.fijar_jugador("Francia")
+	w.refrescar(true)
+	ok(not w.puede_ordenar() and btn.disabled and w._lbl_sin.visible, "con otro país como jugador no se puede ordenar y la ventana lo dice")
+	m.fijar_jugador("")
+	w.refrescar(true)
+	ok(w.puede_ordenar() and not btn.disabled, "como observador sí")
+	# la ventana sigue a la selección
+	var pi2 := prov_en(2.17, 41.39)
+	await elegir_provincia(pi2)
+	ok(w.pis == [pi2], "al elegir otra provincia la ventana la sigue")
+	# tema y teclado
+	main._aplicar_tema(1)
+	await fotogramas(1)
+	ok(is_instance_valid(w) and w.filas_visibles > 0, "cambiar de tema no la rompe")
+	main._aplicar_tema(0)
+	main._alternar_construir()
+	await fotogramas(2)
+	ok(main.panel_construir == null, "_alternar_construir() la cierra")
+	ok("construir" in main.geo_ventanas, "recuerda su sitio y tamaño al cerrarse")
+	main._alternar_construir()
+	await fotogramas(2)
+	ok(main.panel_construir != null and main.panel_construir.pis == [pi2], "y la abre otra vez sobre lo elegido")
+	main._cerrar_construir()
+
+
+func t_grupo() -> void:
+	print("[T] ── Totales y órdenes de grupo (Ctrl+clic)")
+	var m = main.mundo
+	var ed = m.edificios
+	var pais := "España"
+	m.paises[pais].tesoreria = 1.0e15
+	var pa := prov_en(-3.7, 40.4)
+	var pb := prov_en(2.17, 41.39)
+	var pc := prov_en(-5.99, 37.39)
+	await elegir_provincia(pa)
+	main._enfocar_pais(pais, false)
+	main._seleccion_provincia(pa, "Europa", mp(-3.7, 40.4))
+	main._seleccionar_varias(mp(2.17, 41.39))
+	main._seleccionar_varias(mp(-5.99, 37.39))
+	await fotogramas(2)
+	var hud = main.hud
+	ok(int(hud.datos.get("multi", 0)) == 3, "tres unidades elegidas con Ctrl+clic")
+	var esperadas := [pa, pb, pc]
+	esperadas.sort()
+	var ped: Array = hud.datos.get("ed_pis", [])
+	ped.sort()
+	ok(ped == esperadas, "ed_pis = la unión de las tres provincias (%s)" % str(ped))
+	ok(hay_texto(hud.cuerpo, "GRUPO ELEGIDO") and hay_texto(hud.cuerpo, "Población total") and hay_texto(hud.cuerpo, "Producción anual total"), "tarjeta «Grupo elegido» con los totales")
+	ok(hay_texto(hud.cuerpo, "Construir en el grupo…"), "botón «Construir en el grupo…»")
+	ok(not hay_texto(hud.cuerpo, "INGRESO"), "con grupo no sale la tarjeta de Ingreso de una sola provincia")
+	# abrir desde el botón y construir en las tres
+	hud.construir_pedido.emit(ped)
+	await fotogramas(2)
+	var w = main.panel_construir
+	ok(w != null and w.validas.size() == 3, "la ventana se abre con las 3 provincias")
+	ok(String(w._lbl_dest.text).begins_with("3 provincias"), "cabecera de grupo: «%s»" % w._lbl_dest.text)
+	var e_ok := -1
+	for e in ed.conocidos(pais):
+		if ed.tope[e] >= 1 and bool(ed.puede(pais, pa, e)["ok"]) and bool(ed.puede(pais, pb, e)["ok"]) and bool(ed.puede(pais, pc, e)["ok"]):
+			e_ok = e
+			break
+	ok(e_ok >= 0, "hay un edificio construible en las tres (%s)" % ed.nombre[e_ok])
+	var fl := fila_de(e_ok)
+	ok(String((fl["btn"] as Button).text) == "Construir ×3", "botón «%s»" % (fl["btn"] as Button).text)
+	ok(String((fl["lbl_costo"] as Label).text).find("en total") >= 0, "el costo muestra el total del grupo: «%s»" % (fl["lbl_costo"] as Label).text)
+	var tes0: float = m.paises[pais].tesoreria
+	(fl["btn"] as Button).pressed.emit()
+	await fotogramas(2)
+	ok(ed.en_obra(pa, e_ok) == 1 and ed.en_obra(pb, e_ok) == 1 and ed.en_obra(pc, e_ok) == 1, "orden de grupo: obra en cada una de las tres")
+	ok(absf((tes0 - m.paises[pais].tesoreria) - (ed.costo_local(pa, e_ok) + ed.costo_local(pb, e_ok) + ed.costo_local(pc, e_ok))) < 1.0e-3 * tes0 * 1.0e-6 + 1.0, "se cobra la suma de las tres")
+	ok(w.obras_mostradas == 3, "«Obras en curso» lista las 3 obras")
+	ok(hud.datos.get("ed_sig", 0) != 0 and hay_texto(hud.cuerpo, "EN OBRA (3)"), "el HUD de grupo muestra las 3 obras")
+	# un país entero cuenta como grupo (Ctrl+clic en países)
+	main._limpiar_seleccion()
+	main._cerrar_construir()
+	main._seleccion_pais(pais, "Europa", mp(-3.7, 40.4))
+	await fotogramas(2)
+	main._abrir_construir()
+	await fotogramas(2)
+	ok(main.panel_construir.validas.size() == m.paises[pais].provincias.size(), "país entero: la ventana atiende todas sus provincias (%d)" % main.panel_construir.validas.size())
+	var t0 := Time.get_ticks_usec()
+	main.panel_construir.refrescar(true)
+	var ms := float(Time.get_ticks_usec() - t0) / 1000.0
+	ok(ms < 400.0, "refrescar la ventana con el país entero cuesta %.0f ms" % ms)
+	main._cerrar_construir()
+
+
+func t_debug() -> void:
+	print("[T] ── Debug > Edificios")
+	var m = main.mundo
+	var ed = m.edificios
+	var pais := "España"
+	var pa := prov_en(-3.7, 40.4)
+	await elegir_provincia(pa)
+	main._abrir_debug()
+	await fotogramas(2)
+	var d = main.debug_menu
+	ok(d != null and d.paginas.has("edif"), "el Debug tiene la sección Edificios")
+	d._ir_a("edif")
+	await fotogramas(2)
+	ok(d.lista_edif.item_count == ed.n, "la lista muestra los %d edificios (%d)" % [ed.n, d.lista_edif.item_count])
+	d.filtro_edif.text = "muralla"
+	d._refrescar_edif()
+	ok(d.lista_edif.item_count > 0 and d.lista_edif.item_count < ed.n, "el filtro «muralla» deja %d" % d.lista_edif.item_count)
+	d.filtro_edif.text = ""
+	d._refrescar_edif()
+	d.lista_edif.select(0)
+	d.edif_sel = int(d.ids_lista_edif[0])
+	var e: int = d.edif_sel
+	var antes: int = ed.cantidad(pa, e)
+	var total0: int = ed.total_mundo()
+	d._edif_dar(true)
+	ok(ed.cantidad(pa, e) == antes + 1 and ed.total_mundo() == total0 + 1, "DAR ×1 suma un edificio sin cobrar")
+	ok(d.edif_sel == e, "la selección de la lista se conserva después de actuar")
+	d._edif_dar(false)
+	ok(ed.cantidad(pa, e) == antes, "QUITAR ×1 lo devuelve")
+	m.paises[pais].tesoreria = 1.0e15
+	var conocido := -1
+	for x in ed.conocidos(pais):
+		if ed.puede(pais, pa, int(x))["ok"]:
+			conocido = int(x)
+			break
+	d._edif_obras(false)                                      # limpia lo que dejaron las pruebas anteriores
+	var r: Dictionary = ed.construir(pais, pa, conocido) if conocido >= 0 else {"ok": false}
+	ok(bool(r["ok"]) and ed.obras_de(pa).size() == 1, "hay una obra en curso para probar los botones")
+	var ya: int = ed.cantidad(pa, conocido)
+	d._edif_obras(true)
+	ok(ed.obras_de(pa).is_empty() and ed.cantidad(pa, conocido) == ya + 1, "TERMINAR OBRAS la completa")
+	ed.construir(pais, pa, conocido)
+	d._edif_obras(false)
+	ok(ed.obras_de(pa).is_empty(), "CANCELAR OBRAS la quita sin reembolso")
+	d._core_nacional("Francia")
+	ok(m.cores.nacional(pa) == "Francia", "FIJAR CORE NACIONAL → Francia")
+	d._core_nacional("")
+	ok(m.cores.nacional(pa) == "", "QUITARLO deja la provincia sin core nacional")
+	d.opt_cultura.select(0)
+	d._core_cultural()
+	ok(m.cores.cultural(pa) == String(d.ids_cultura[0]), "FIJAR CORE CULTURAL")
+	d._core_restaurar()
+	ok(m.cores.nacional(pa) == "España" and m.cores.cultural(pa) == m.cores.cultura_del_dueno(pa), "CORES = LOS DE ORIGEN los restaura")
+	ok(d.lbl_edif_res.text.contains("Elegido"), "el resumen dice qué hay elegido")
+	main._cerrar_debug()
+	await fotogramas(1)
 
 
 func t_escenario_1() -> void:

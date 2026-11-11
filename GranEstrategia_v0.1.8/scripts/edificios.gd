@@ -40,6 +40,7 @@ var version := 0                         # sube con cualquier cambio de edificio
 var _obras := {}                         # índice de provincia -> Array de [e, ini, fin, pago_usd]
 var _prox_fin := SIN_FIN
 var _cache := {}                         # tid de provincia -> [texto, Dictionary slug->cantidad]
+var _pc_cache := {}                      # país -> [versión económica de la base, producción anual por habitante en US$]
 
 
 ## Carga el catálogo (datos/edificios.json). Devuelve false si falta o está mal.
@@ -221,12 +222,19 @@ func dias_de(e: int) -> int:
 
 func _prod_base_usd(pi: int) -> float:
 	var pr = mundo.provincias[pi]
-	var pais: String = pr.pais
+	return maxf(pr.ingreso_anual_usd(), _prod_por_hab(pr.pais) * FRAC_PISO_HAB)
+
+
+## Producción anual por habitante del país (US$), guardada hasta que cambie la economía de la base (recorrer sus provincias en cada consulta era O(n²) en las órdenes de grupo).
+func _prod_por_hab(pais: String) -> float:
+	var c = _pc_cache.get(pais)
+	if c != null and int(c[0]) == bd.version_eco:
+		return float(c[1])
 	var pc := 0.0
 	if mundo.paises.has(pais):
-		var pob: float = mundo.poblacion_de(pais)
-		pc = mundo.produccion_anual_usd(pais) / maxf(pob, 1.0)
-	return maxf(pr.ingreso_anual_usd(), pc * FRAC_PISO_HAB)
+		pc = mundo.produccion_anual_usd(pais) / maxf(mundo.poblacion_de(pais), 1.0)
+	_pc_cache[pais] = [bd.version_eco, pc]
+	return pc
 
 
 ## Costo en US$ de construir `e` en la provincia `pi`.
@@ -333,6 +341,17 @@ func cancelar(pi: int, i: int) -> Dictionary:
 	return {"ok": true, "msg": "Obra cancelada: %s." % nombre[int(o[0])], "reembolso": ree_l}
 
 
+## Quita la obra número `i` sin devolver nada (Debug).
+func cancelar_sin_reembolso(pi: int, i: int) -> bool:
+	var lista: Array = _obras.get(pi, [])
+	if i < 0 or i >= lista.size():
+		return false
+	lista.remove_at(i)
+	_obras[pi] = lista
+	_escribir_obras(pi)
+	return true
+
+
 ## La provincia cambió de dueño: las obras en curso se pierden (el dinero ya se gastó, no hay reembolso); lo construido se queda con la tierra.
 ## `antes` = el país que la perdía. Devuelve cuántas obras se perdieron.
 func cambio_de_dueno(pi: int, antes: String) -> int:
@@ -395,6 +414,12 @@ func completar_obras(pi: int) -> int:
 
 
 # ───────────── totales ─────────────
+## Huella de lo que muestran las tarjetas de edificios para estas provincias: cambia cuando se construye o termina algo, y cada día mientras haya obras (el avance).
+func firma(pis: Array) -> int:
+	var en_obra := obras_en(pis)
+	return hash([version, dia_n if en_obra > 0 else -1, en_obra, pis.size()])
+
+
 ## Cuántos edificios hay en las provincias del país (todas las que controla hoy).
 func total_pais(pais: String) -> int:
 	if not mundo.paises.has(pais):
@@ -403,6 +428,15 @@ func total_pais(pais: String) -> int:
 	var t := 0
 	for pi in mundo.paises[pais].provincias:
 		var v: float = col[mundo.provincias[int(pi)].ix]
+		if not is_nan(v):
+			t += int(v)
+	return t
+
+
+## Cuántos edificios hay construidos en todo el mundo.
+func total_mundo() -> int:
+	var t := 0
+	for v in bd.vars["num_edificios"].col_f:
 		if not is_nan(v):
 			t += int(v)
 	return t

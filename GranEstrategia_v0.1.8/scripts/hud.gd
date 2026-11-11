@@ -17,6 +17,7 @@ signal dinero_pedido             # clic en el dinero de la barra superior: abre 
 signal debug_pedido              # botón del bicho (o F1)
 signal personalizar_pedido       # lápiz junto al nombre de tu país
 signal ranking_pedido            # botón «Ranking» (solo en la campaña)
+signal construir_pedido(pis: Array)   # 0.1.8.40 · botón «Construir…» de las tarjetas Edificios (provincias elegidas, índices de Mundo.provincias)
 
 const Tema := preload("res://scripts/tema_hud.gd")
 const TropasScript := preload("res://scripts/hud_tropas.gd")
@@ -1477,6 +1478,7 @@ func _d() -> Dictionary:
 ## GENERAL: naturaleza, descripción, población, etnias y ciudades (lo que antes estaba repartido entre General y Demografía).
 func _tab_general() -> void:
 	var d := _d()
+	_card_grupo()
 	var biomas: Dictionary = main.info.get("biomas", {})
 	var bio: Array = d.get("bio", [])
 	var reino := String(d.get("reino", "PAL"))
@@ -1513,6 +1515,7 @@ func _tab_general() -> void:
 			_barra(cj, "Superficie", 100.0 * float(d["area"]) / maxf(float(padre["area"]), 1.0), C_BARRAS[1])
 	else:
 		_nota(sp, "Sin datos de población.")
+	_tarjetas_provincia()
 	var etn: Array = datos.get("etn", [])
 	if not etn.is_empty() or not d.is_empty():
 		var se := _seccion("Etnias")
@@ -1527,6 +1530,189 @@ func _tab_general() -> void:
 		var sc := _seccion("Ciudades principales")
 		for c in ciu:
 			_fila(sc, "i_ciudad", String(c[0]), "%s hab." % fmt_num(float(c[1])))
+
+
+# ───────────── 0.1.8.40 · tarjetas de provincia: Ingreso, Edificios, Cores, y el resumen de un grupo (Ctrl+clic) ─────────────
+## Las provincias que cubre lo elegido (las manda el mapa en `datos["ed_pis"]`: la provincia, todas las del país o estado, o la unión del grupo).
+func _pis_ed() -> Array:
+	return datos.get("ed_pis", [])
+
+
+## [símbolo, unidades por US$] de la divisa del país.
+func _moneda(pais: String) -> Array:
+	var dv = main.mundo.divisa_de(pais)
+	return [String(dv.simbolo) if dv != null else "US$", float(dv.por_usd) if dv != null else 1.0]
+
+
+## Una línea pequeña «texto · valor» (sin la tarjeta con icono de `_fila`): para listas largas de edificios u obras.
+func _linea(padre: Node, t: String, v: String, col_v: Color) -> void:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 8)
+	var a := _lbl(t, 12, Tema.TEXTO)
+	a.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	a.clip_text = true
+	a.custom_minimum_size = Vector2(110.0, 0.0)
+	hb.add_child(a)
+	hb.add_child(_lbl(v, 12, col_v))
+	padre.add_child(hb)
+
+
+## GRUPO (Ctrl+clic): cuántas unidades hay elegidas y lo que suman. Va arriba de todo.
+func _card_grupo() -> void:
+	var n_sel := int(datos.get("multi", 0))
+	var pis := _pis_ed()
+	if n_sel < 2 or pis.is_empty() or main.mundo.edificios == null:
+		return
+	var m = main.mundo
+	var ed = m.edificios
+	var sec := _seccion("Grupo elegido")
+	var tids := []
+	var prod := 0.0
+	var paises := {}
+	for pi in pis:
+		var pr = m.provincias[int(pi)]
+		tids.append(pr.tid)
+		prod += pr.ingreso_anual_usd()
+		paises[String(pr.pais)] = true
+	_fila(sec, "i_prov", "Elegido", "%d unidades · %s provincias de %d %s" % [n_sel, fmt_num(float(pis.size())), paises.size(), "país" if paises.size() == 1 else "países"])
+	_fila(sec, "i_pob", "Población total", fmt_pob(m.bd.suma("poblacion", tids)))
+	_fila(sec, "i_eco", "Producción anual total", main.fmt_dinero(prod, "US$"))
+	_fila(sec, "i_prov", "Edificios", "%s construidos · %d obras en curso" % [fmt_num(float(ed.total_en(pis))), ed.obras_en(pis)])
+	var b := _boton(sec, "Construir en el grupo…", func(): construir_pedido.emit(pis.duplicate()))
+	b.tooltip_text = "Construir en el grupo\nAbre la ventana Construir con todas las provincias elegidas. Una orden se reparte en cada provincia donde se pueda."
+	_nota(sec, "Ctrl+clic suma o quita unidades. Las órdenes de construcción solo valen para provincias de tu país.")
+
+
+## Ingreso, Edificios y Cores: de la provincia (o ciudad) elegida; o los totales si es un país, un estado o un grupo.
+func _tarjetas_provincia() -> void:
+	var pis := _pis_ed()
+	var m = main.mundo
+	if pis.is_empty() or m.edificios == null:
+		return
+	var tipo := String(datos.get("tipo", ""))
+	var una := (tipo == "provincia" or tipo == "ciudad") and pis.size() == 1 and int(datos.get("multi", 0)) < 2
+	if una:
+		_card_ingreso(int(pis[0]))
+	_card_edificios(pis, una)
+	_card_cores(pis, una)
+
+
+func _card_ingreso(pi: int) -> void:
+	var m = main.mundo
+	var pr = m.provincias[pi]
+	var pais: String = pr.pais
+	var mon := _moneda(pais)
+	var sim: String = mon[0]
+	var por: float = mon[1]
+	var sec := _seccion("Ingreso")
+	var prod: float = pr.ingreso_anual_usd()
+	_fila(sec, "i_eco", "Producción anual", "%s%s" % [main.fmt_dinero(prod * por, sim), "" if sim == "US$" else "  (≈ %s)" % main.fmt_dinero(prod, "US$")])
+	var rend: float = pr.rendimiento_usd()
+	var f_rend: float = (0.5 + pr.favorabilidad / 100.0) * (1.0 - main.E.DEVASTACION_EFECTO * pr.devastacion)
+	_fila(sec, "i_moneda", "Rendimiento real", "%s al año · ×%s" % [main.fmt_dinero(rend * por, sim), ("%.2f" % f_rend).replace(".", ",")])
+	var tasa: float = m.paises[pais].tasa_fiscal if m.paises.has(pais) else 0.25
+	var diario: float = pr.ingreso_efectivo_usd() * tasa / 365.25 * por
+	if pr.ocupante >= 0:
+		_fila(sec, "i_devast", "Aporta a la tesorería", "0 · ocupada por %s" % m.bd.nombre_de(pr.ocupante))
+	else:
+		_fila(sec, "i_moneda", "Aporta a la tesorería", "%s por día (impuesto %d %%)" % [main.fmt_dinero(diario, sim), int(roundf(tasa * 100.0))])
+	var total: float = m.produccion_anual_usd(pais)
+	if total > 0.0 and pr.ocupante < 0:
+		_fila(sec, "i_pais", "Peso en los ingresos del país", pct(100.0 * rend / maxf(total, 1.0)))
+	_nota(sec, "Favorabilidad %d · devastación %d %%: una población descontenta o una tierra arrasada rinde menos." % [int(roundf(pr.favorabilidad)), int(roundf(pr.devastacion * 100.0))])
+
+
+func _card_edificios(pis: Array, una: bool) -> void:
+	var m = main.mundo
+	var ed = m.edificios
+	var sec := _seccion("Edificios")
+	var total: int = ed.total_en(pis)
+	var obras: int = ed.obras_en(pis)
+	var tot: Dictionary = ed.totales_de(pis)
+	_fila(sec, "i_prov", "Construidos", "%s edificios (%d tipos)%s" % [fmt_num(float(total)), tot.size(),
+		"" if una else " en %s provincias" % fmt_num(float(pis.size()))])
+	if not tot.is_empty():
+		var claves := tot.keys()
+		claves.sort_custom(func(a, b): return int(tot[a]) > int(tot[b]) or (int(tot[a]) == int(tot[b]) and ed.indice(a) < ed.indice(b)))
+		var caja := VBoxContainer.new()
+		caja.add_theme_constant_override("separation", 2)
+		sec.add_child(caja)
+		for i in mini(claves.size(), 8):
+			var e: int = ed.indice(String(claves[i]))
+			_linea(caja, String(ed.nombre[e]), "×%d" % int(tot[claves[i]]), Tema.ORO)
+		if claves.size() > 8:
+			_nota(caja, "… y %d tipos más (ventana Construir)." % (claves.size() - 8))
+	else:
+		_nota(sec, "Todavía no hay ningún edificio." if una else "Todavía no hay edificios en estas provincias.")
+	if obras > 0:
+		var ob_caja := VBoxContainer.new()
+		ob_caja.add_theme_constant_override("separation", 2)
+		sec.add_child(ob_caja)
+		ob_caja.add_child(_lbl("EN OBRA (%d)" % obras, 10, Tema.TENUE))
+		var filas := []
+		for pi in pis:
+			for o in ed.obras_de(int(pi)):
+				filas.append(o)
+		filas.sort_custom(func(a, b): return int(a["falta"]) < int(b["falta"]))
+		for i in mini(filas.size(), 6):
+			var o: Dictionary = filas[i]
+			_linea(ob_caja, String(ed.nombre[int(o["e"])]), "%d %% · faltan %d d" % [int(roundf(float(o["pct"]))), int(o["falta"])], Tema.TENUE)
+		if filas.size() > 6:
+			_nota(ob_caja, "… y %d obras más." % (filas.size() - 6))
+	var b := _boton(sec, "Construir…", func(): construir_pedido.emit(pis.duplicate()))
+	b.tooltip_text = "Construir\nAbre la ventana Construir: los edificios que conoces, su costo en dinero y sus días de obra."
+	_nota(sec, "Cuestan dinero de la tesorería y tardan días. Todavía no tienen efectos en el juego.")
+
+
+func _card_cores(pis: Array, una: bool) -> void:
+	var m = main.mundo
+	if m.cores == null or not m.cores.listo:
+		return
+	var cs = m.cores
+	var sec := _seccion("Cores")
+	if una:
+		var pi := int(pis[0])
+		var nac: String = cs.nacional(pi)
+		var rel: String = cs.relacion(pi)
+		var txt_nac: String = "Sin core nacional" if nac == "" else main._nombre_vis(nac)
+		if rel == "propia":
+			txt_nac += " · tierra propia"
+		elif rel == "ajena":
+			txt_nac += " · hoy la controla %s" % main._nombre_vis(String(m.provincias[pi].pais))
+		_fila(sec, "i_gob", "Core nacional", txt_nac)
+		var igual: bool = cs.misma_cultura_que_dueno(pi)
+		_fila(sec, "i_etn", "Core cultural", "%s · %s" % [cs.etiqueta_cultural(pi), "misma cultura que su dueño" if igual else "distinta a la de su dueño"])
+		_nota(sec, "El core es de quién es la tierra por historia y cultura; no cambia al conquistarla. Todavía sin efectos.")
+		return
+	var propias := 0
+	var ajenas := 0
+	var libres := 0
+	var culturas := {}
+	for pi in pis:
+		match String(cs.relacion(int(pi))):
+			"propia":
+				propias += 1
+			"ajena":
+				ajenas += 1
+			_:
+				libres += 1
+		var c: String = cs.cultural(int(pi))
+		if c != "":
+			culturas[c] = int(culturas.get(c, 0)) + 1
+	_fila(sec, "i_gob", "Core nacional", "%s propias · %s de otro país · %s sin core" % [fmt_num(float(propias)), fmt_num(float(ajenas)), fmt_num(float(libres))])
+	if not culturas.is_empty():
+		var ks := culturas.keys()
+		ks.sort_custom(func(a, b): return int(culturas[a]) > int(culturas[b]))
+		var partes := []
+		for i in mini(ks.size(), 3):
+			partes.append("%s (%s)" % [m.mandos.etiqueta_cultura(String(ks[i])) if m.mandos != null else String(ks[i]), fmt_num(float(culturas[ks[i]]))])
+		_fila(sec, "i_etn", "Core cultural", ", ".join(PackedStringArray(partes)) + (" y %d más" % (ks.size() - 3) if ks.size() > 3 else ""))
+	var pais_sel: String = String(main.sel_ref.get("pais", "")) if main.sel_tipo == "pais" and int(datos.get("multi", 0)) < 2 else ""
+	if pais_sel != "":
+		var recl: Array = cs.reclamos_de(pais_sel)
+		if not recl.is_empty():
+			_fila(sec, "i_prov", "Provincias que reclama", "%s con su core nacional que hoy controla otro país" % fmt_num(float(recl.size())))
+	_nota(sec, "Todavía sin efectos en el juego.")
 
 
 func _tab_mar() -> void:

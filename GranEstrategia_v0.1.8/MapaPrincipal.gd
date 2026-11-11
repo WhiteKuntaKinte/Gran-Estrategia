@@ -17,6 +17,7 @@ const FusionScript := preload("res://scripts/fusion_mapa.gd")
 const TerritorioScript := preload("res://scripts/territorio.gd")
 const TemaHud := preload("res://scripts/tema_hud.gd")
 const RankingScript := preload("res://scripts/ranking.gd")
+const ConstruirScript := preload("res://scripts/ventana_construir.gd")
 const PopupGuerraScript := preload("res://scripts/popup_guerra.gd")
 const AjustesScript := preload("res://scripts/ajustes.gd")
 const MenuPantallaScript := preload("res://scripts/menu_pantalla.gd")
@@ -610,6 +611,7 @@ var campana_activa := false           # (campaña) la cámara se limita al terri
 var campana_rect := Rect2()           # territorio de la campaña en coordenadas del mapa (Chukotka queda a la derecha de x = 2400)
 var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
+var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
 var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
 var fichas                            # FichasScript (0.1.8.38): fichas al pasar el ratón (reemplazan al tooltip nativo)
 var grabador                          # GrabadorScript (0.1.8.39): graba el rendimiento fotograma a fotograma (F9; Debug > Rendimiento)
@@ -1826,6 +1828,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.keycode == KEY_R and not en_menu and not en_pausa and campana_activa:
 			_alternar_ranking()
 			return
+		if event.keycode == KEY_B and not en_menu and not en_pausa:
+			_alternar_construir()
+			return
 		if not en_menu and not en_pausa:
 			match event.keycode:
 				KEY_SPACE:
@@ -2769,6 +2774,13 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 		d["ctx"] = ctx
 	if multi_sel.size() > 1:
 		d["multi"] = multi_sel.size()                              # 0.1.8.37: el panel avisa de que hay varias unidades elegidas
+	if mundo != null and mundo.edificios != null and String(d.get("tipo", "")) in ["provincia", "ciudad", "pais", "estado"]:
+		var pis := _provincias_elegidas()                          # 0.1.8.40: las tarjetas Edificios / Cores / Ingreso y la ventana Construir trabajan sobre estas provincias
+		if not pis.is_empty():
+			d["ed_pis"] = pis
+			d["ed_sig"] = mundo.edificios.firma(pis)               # cambia al construir o terminar una obra (y cada día mientras haya obras): el panel se redibuja
+			if panel_construir != null and is_instance_valid(panel_construir) and panel_construir.pis != pis:
+				panel_construir.fijar_objetivo(pis)
 	if _en_refresco:
 		hud.refrescar(d)                                          # el mismo elemento otra vez: si no cambió nada visible, no se reconstruye
 	else:
@@ -2776,6 +2788,77 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 	_actualizar_hint()
 	if debug_menu != null and is_instance_valid(debug_menu):
 		debug_menu.seleccion_cambio(sel_tipo)
+
+
+## 0.1.8.40 · Las provincias que cubre lo elegido (índices de Mundo.provincias): la provincia (o la de la ciudad), todas las del país o estado,
+## o la unión de todo el grupo (Ctrl+clic). Las tierras sin reclamar no cuentan: no se construye en ellas.
+func _provincias_elegidas() -> Array:
+	var r := []
+	if mundo == null:
+		return r
+	var vistos := {}
+	var unidades: Array = multi_sel if multi_sel.size() > 1 else [{"tipo": sel_tipo, "pi": int(sel_ref.get("pi", -1)), "pais": String(sel_ref.get("pais", "")),
+		"estado": String(sel_ref.get("estado", "")), "id": int(sel_ref.get("id", -1))}]
+	for u in unidades:
+		for pi in _provincias_de_unidad(u):
+			if not vistos.has(pi):
+				vistos[pi] = true
+				r.append(pi)
+	return r
+
+
+func _provincias_de_unidad(u: Dictionary) -> Array:
+	var r := []
+	var pais := String(u.get("pais", ""))
+	match String(u.get("tipo", "")):
+		"provincia":
+			var pi := int(u.get("pi", -1))
+			if pi >= 0 and pi < mundo.provincias.size() and not _es_libre(String(mundo.provincias[pi].pais)):
+				r.append(pi)
+		"pais":
+			if mundo.paises.has(pais) and not _es_libre(pais):
+				r = mundo.paises[pais].provincias.duplicate()
+		"estado":
+			var k := "%s|%s" % [pais, String(u.get("estado", ""))]
+			if mundo.estados.has(k) and not _es_libre(pais):
+				for pi in mundo.estados[k].provincias:
+					if String(mundo.provincias[int(pi)].pais) == pais:
+						r.append(int(pi))
+		"ciudad":
+			var id := int(u.get("id", -1))
+			if id >= 0 and id < mundo.ciudades.size():
+				var pi := int(mundo.ciudades[id].provincia)
+				if pi >= 0 and not _es_libre(String(mundo.provincias[pi].pais)):
+					r.append(pi)
+	return r
+
+
+## Abre (o pone al día) la ventana Construir sobre estas provincias (las elegidas en el mapa si no se dice cuáles).
+func _abrir_construir(pis: Array = []) -> void:
+	if mundo == null or mundo.edificios == null or en_menu:
+		return
+	if pis.is_empty():
+		pis = _provincias_elegidas()
+	if panel_construir != null and is_instance_valid(panel_construir):
+		panel_construir.fijar_objetivo(pis)
+		return
+	panel_construir = ConstruirScript.new()
+	add_child(panel_construir)
+	panel_construir.construir(self, fuente_ui, pis)
+	panel_construir.cerrada.connect(_cerrar_construir)
+
+
+func _alternar_construir() -> void:
+	if panel_construir != null and is_instance_valid(panel_construir):
+		_cerrar_construir()
+	else:
+		_abrir_construir()
+
+
+func _cerrar_construir() -> void:
+	if panel_construir != null and is_instance_valid(panel_construir):
+		panel_construir.queue_free()
+	panel_construir = null
 
 
 func _seleccion_continente(cont: String, p: Vector2) -> void:
@@ -3045,6 +3128,7 @@ func _crear_hud() -> void:
 	hud.debug_pedido.connect(_alternar_debug)
 	hud.personalizar_pedido.connect(_abrir_personalizar)
 	hud.ranking_pedido.connect(_alternar_ranking)
+	hud.construir_pedido.connect(_abrir_construir)
 	_refrescar_texto_vista()
 	hud.set_fecha(reloj.texto())
 	hud.set_velocidad(reloj.velocidad)
@@ -3087,6 +3171,8 @@ func _aplicar_tema(id: int) -> void:
 		avisos.aplicar_tema()
 	if fichas != null:
 		fichas.aplicar_tema()
+	if panel_construir != null and is_instance_valid(panel_construir):
+		panel_construir.aplicar_tema()
 
 
 ## 0.1.8.32 · Gráficos del mapa y prioridad de la simulación (Opciones > Pantalla). Con los valores por defecto el juego queda como siempre.
@@ -6079,6 +6165,7 @@ func _volver_menu_principal() -> void:
 	if popup_guerra != null and popup_guerra.abierto:
 		popup_guerra.cerrar("menu")
 	_cerrar_ranking()
+	_cerrar_construir()
 	_cerrar_debug()
 	_cerrar_personalizar()
 	_cerrar_ordenes()

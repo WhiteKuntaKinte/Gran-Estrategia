@@ -35,6 +35,7 @@ const SECCIONES := [
 	["datos", "Datos", "i_info", "Los valores del territorio elegido y su historial."],
 	["historia", "Historia", "i_desc", "Viaja a una fecha: qué estados existían y quién gobernaba."],
 	["ejercito", "Ejército", "i_ejercito", "Reclutar, causar bajas, mover pelotones y devastar."],
+	["edif", "Edificios", "i_prov", "Da o quita edificios, termina obras y cambia los cores de lo elegido."],
 	["desc", "Descub.", "i_estrella", "Busca descubrimientos y concede o quita los de cada fecha."],
 	["rend", "Rend.", "i_dens", "Tu equipo, los FPS y qué capas apagar para ir más ligero."],
 ]
@@ -147,6 +148,17 @@ var lbl_desc_lista: Label
 var lbl_desc_ficha: Label
 var filtro_desc: LineEdit
 var lista_desc: ItemList
+# Edificios y cores (0.1.8.40)
+var lbl_edif_res: Label
+var filtro_edif: LineEdit
+var lista_edif: ItemList
+var ids_lista_edif: Array = []
+var edif_sel := -1
+var lbl_edif_ficha: Label
+var sel_core := {}
+var pais_core := ""
+var opt_cultura: OptionButton
+var ids_cultura: Array = []
 var ids_lista_desc: Array = []
 var desc_sel := -1
 
@@ -212,6 +224,7 @@ func construir(m: Node, f: Font) -> void:
 	_pagina_historia()
 	_pagina_ejercito()
 	_pagina_descubrimientos()
+	_pagina_edificios()
 	_pagina_rendimiento()
 	_ir_menu()
 	if main.mundo.jugador != "":
@@ -426,6 +439,8 @@ func _ir_a(clave: String) -> void:
 			_refrescar_ejercito_pagina()
 		"desc":
 			_refrescar_desc()
+		"edif":
+			_refrescar_edif()
 		"rend":
 			_refrescar_rend()
 
@@ -557,6 +572,8 @@ func seleccion_cambio(tipo: String) -> void:
 		_refrescar_historia_mapa()
 	elif pestana_actual == "ejercito":
 		_refrescar_ejercito_pagina()
+	elif pestana_actual == "edif":
+		_refrescar_edif()
 
 
 # ───────────── Pestaña Jugador ─────────────
@@ -1962,6 +1979,241 @@ func _prueba_zoom() -> void:
 	_prueba_en_curso = false
 	DisplayServer.clipboard_set(inf)
 	_decir("Prueba terminada. El informe ya está copiado: pégalo en el chat con Ctrl+V.")
+
+
+# ───────────── 0.1.8.40 · Edificios y cores ─────────────
+func _pagina_edificios() -> void:
+	var pg := _nueva_pagina("edif")
+	lbl_edif_res = _lbl("", 12, C_TEXTO)
+	lbl_edif_res.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_edif_res)
+	pg.add_child(HSeparator.new())
+	filtro_edif = LineEdit.new()
+	filtro_edif.placeholder_text = "Buscar edificio (muralla, hospital, puerto...)"
+	filtro_edif.clear_button_enabled = true
+	filtro_edif.text_changed.connect(func(_t: String): _refrescar_edif())
+	pg.add_child(filtro_edif)
+	lista_edif = ItemList.new()
+	lista_edif.custom_minimum_size = Vector2(0.0, 170.0)
+	lista_edif.item_selected.connect(func(i: int):
+		edif_sel = int(ids_lista_edif[i]) if i >= 0 and i < ids_lista_edif.size() else -1
+		_refrescar_ficha_edif())
+	pg.add_child(lista_edif)
+	lbl_edif_ficha = _lbl("", 12, C_TEXTO)
+	lbl_edif_ficha.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_edif_ficha)
+	var f1 := HBoxContainer.new()
+	f1.add_theme_constant_override("separation", 6)
+	pg.add_child(f1)
+	for par in [["DAR ×1 (GRATIS)", true], ["QUITAR ×1", false]]:
+		var da: bool = par[1]
+		var b := _boton(String(par[0]), func(): _edif_dar(da))
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		f1.add_child(b)
+	var f2 := HBoxContainer.new()
+	f2.add_theme_constant_override("separation", 6)
+	pg.add_child(f2)
+	var b3 := _boton("TERMINAR OBRAS", func(): _edif_obras(true))
+	b3.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	f2.add_child(b3)
+	var b4 := _boton("CANCELAR OBRAS", func(): _edif_obras(false))
+	b4.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	f2.add_child(b4)
+	var b5 := _boton("CONCEDER SU DESCUBRIMIENTO AL DUEÑO", func(): _edif_conceder())
+	pg.add_child(b5)
+	pg.add_child(HSeparator.new())
+	pg.add_child(_lbl("CORES de lo elegido", 13, C_ORO))
+	var nota := _lbl("El core nacional es el país al que la tierra pertenece por historia; el cultural, la cultura de su gente. Sin efectos de juego todavía.", 11, C_TENUE)
+	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(nota)
+	sel_core = _selector_pais("Core nacional →", 100.0, func(n: String): pais_core = n)
+	pg.add_child(sel_core["caja"])
+	var f3 := HBoxContainer.new()
+	f3.add_theme_constant_override("separation", 6)
+	pg.add_child(f3)
+	var b6 := _boton("FIJAR CORE NACIONAL", func(): _core_nacional(pais_core))
+	b6.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	f3.add_child(b6)
+	var b7 := _boton("QUITARLO", func(): _core_nacional(""))
+	b7.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	f3.add_child(b7)
+	var f4 := HBoxContainer.new()
+	f4.add_theme_constant_override("separation", 6)
+	pg.add_child(f4)
+	opt_cultura = OptionButton.new()
+	opt_cultura.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var cult: Dictionary = main.mundo.mandos.culturas if main.mundo.mandos != null else {}
+	var ks := cult.keys()
+	ks.sort_custom(func(a, b): return String(main.mundo.mandos.etiqueta_cultura(a)) < String(main.mundo.mandos.etiqueta_cultura(b)))
+	for k in ks:
+		opt_cultura.add_item(String(main.mundo.mandos.etiqueta_cultura(k)))
+		ids_cultura.append(String(k))
+	f4.add_child(opt_cultura)
+	var b8 := _boton("FIJAR CORE CULTURAL", func(): _core_cultural())
+	f4.add_child(b8)
+	var b9 := _boton("CORES = LOS DE ORIGEN", func(): _core_restaurar())
+	pg.add_child(b9)
+
+
+## Las provincias sobre las que actúan los botones: las elegidas en el mapa (provincia, país, estado o grupo) o, si no hay, la que se eligió en Provincia.
+func _edif_pis() -> Array:
+	var pis: Array = main._provincias_elegidas()
+	if pis.is_empty() and prov_sel >= 0:
+		pis = [prov_sel]
+	return pis
+
+
+func _refrescar_edif() -> void:
+	if lista_edif == null:
+		return
+	var m = main.mundo
+	var ed = m.edificios
+	if ed == null:
+		lbl_edif_res.text = "Falta datos/edificios.json (ejecuta herramientas/construir_edificios.py)."
+		lista_edif.clear()
+		return
+	var pis := _edif_pis()
+	var t := "Mundo: %s edificios construidos · %d provincias con obras · %s obras terminadas desde que empezó la partida" % [_miles(ed.total_mundo()), ed.provincias_en_obra(), _miles(ed.terminadas)]
+	if pis.is_empty():
+		t += "\nElige una provincia, un país o un grupo en el mapa (o una provincia en la sección Provincia)."
+	else:
+		var duenos := {}
+		for pi in pis:
+			duenos[String(m.provincias[int(pi)].pais)] = true
+		t += "\nElegido: %s provincias de %d %s · %s edificios · %d obras en curso" % [_miles(pis.size()), duenos.size(), "país" if duenos.size() == 1 else "países", _miles(ed.total_en(pis)), ed.obras_en(pis)]
+		if pis.size() == 1:
+			var pr = m.provincias[int(pis[0])]
+			t += "\n%s · core nacional: %s · core cultural: %s" % [pr.nombre, m.cores.nacional(int(pis[0])) if m.cores.nacional(int(pis[0])) != "" else "ninguno", m.cores.etiqueta_cultural(int(pis[0]))]
+	lbl_edif_res.text = t
+	var antes := edif_sel
+	lista_edif.clear()
+	ids_lista_edif.clear()
+	var q := _plano(filtro_edif.text.strip_edges())
+	var tot: Dictionary = ed.totales_de(pis)
+	for e in ed.n:
+		if q != "" and not _plano(String(ed.nombre[e])).contains(q) and not String(ed.slug[e]).contains(q):
+			continue
+		var n_e: int = int(tot.get(ed.slug[e], 0))
+		var item := lista_edif.add_item("%s %s · %s%s" % ["✓" if n_e > 0 else "·", ed.nombre[e], ed.nombre_clase(e), (" · ×%d" % n_e) if n_e > 0 else ""])
+		if n_e == 0:
+			lista_edif.set_item_custom_fg_color(item, C_TENUE)
+		ids_lista_edif.append(e)
+	edif_sel = -1
+	var pos := ids_lista_edif.find(antes)
+	if pos >= 0:
+		lista_edif.select(pos)
+		lista_edif.ensure_current_is_visible()
+		edif_sel = antes
+	_refrescar_ficha_edif()
+
+
+func _refrescar_ficha_edif() -> void:
+	var ed = main.mundo.edificios
+	if ed == null or edif_sel < 0:
+		lbl_edif_ficha.text = "Elige un edificio de la lista."
+		return
+	var e := edif_sel
+	lbl_edif_ficha.text = "%s\n%s\nClase %s · máximo %d por provincia · %d días de obra · aparece en el %s\n%s" % [String(ed.nombre[e]), String(ed.desc[e]), ed.nombre_clase(e), ed.tope[e], ed.dias_de(e),
+		("año %d" % ed.anio[e]) if ed.anio[e] >= 0 else ("%d a. C." % -ed.anio[e]), String(ed.seccion[e])]
+
+
+func _edif_dar(dar: bool) -> void:
+	var ed = main.mundo.edificios
+	var pis := _edif_pis()
+	if ed == null or edif_sel < 0 or pis.is_empty():
+		_decir("Elige un edificio de la lista y una provincia en el mapa.", false)
+		return
+	var hechos := 0
+	for pi in pis:
+		if dar:
+			ed.dar(int(pi), edif_sel, 1)
+			hechos += 1
+		elif ed.cantidad(int(pi), edif_sel) > 0:
+			ed.quitar(int(pi), edif_sel, 1)
+			hechos += 1
+	main.refrescar_todo(false)
+	_refrescar_edif()
+	_decir("%s «%s» en %d provincias." % ["Añadido" if dar else "Quitado", ed.nombre[edif_sel], hechos])
+
+
+func _edif_obras(terminar: bool) -> void:
+	var ed = main.mundo.edificios
+	var pis := _edif_pis()
+	if ed == null or pis.is_empty():
+		_decir("Elige una provincia en el mapa.", false)
+		return
+	var c := 0
+	for pi in pis:
+		if terminar:
+			c += ed.completar_obras(int(pi))
+		else:
+			while ed.obras_de(int(pi)).size() > 0:
+				ed.cancelar_sin_reembolso(int(pi), 0)
+				c += 1
+	main.refrescar_todo(false)
+	_refrescar_edif()
+	_decir("%s %d obras." % ["Terminadas" if terminar else "Canceladas (sin reembolso)", c])
+
+
+## Para que el dueño pueda construir lo que elegiste aunque su fecha aún no lo traiga.
+func _edif_conceder() -> void:
+	var m = main.mundo
+	var ed = m.edificios
+	var pis := _edif_pis()
+	if ed == null or edif_sel < 0 or pis.is_empty() or m.descubrimientos == null or ed.desc_idx[edif_sel] < 0:
+		_decir("Elige un edificio y una provincia.", false)
+		return
+	var hechos := {}
+	for pi in pis:
+		var pais := String(m.provincias[int(pi)].pais)
+		if m.paises.has(pais) and not hechos.has(pais):
+			m.descubrimientos.conceder(int(m.paises[pais].tid), ed.desc_idx[edif_sel])
+			hechos[pais] = true
+	main.refrescar_todo(false)
+	_decir("%d países conocen ahora «%s»." % [hechos.size(), ed.nombre[edif_sel]])
+
+
+func _core_nacional(pais: String) -> void:
+	var cs = main.mundo.cores
+	var pis := _edif_pis()
+	if cs == null or pis.is_empty():
+		_decir("Elige una provincia en el mapa.", false)
+		return
+	if pais != "" and not main.mundo.paises.has(pais):
+		_decir("Elige el país en la lista de arriba.", false)
+		return
+	for pi in pis:
+		cs.fijar_nacional(int(pi), pais)
+	main.refrescar_todo(false)
+	_refrescar_edif()
+	_decir("Core nacional de %d provincias: %s." % [pis.size(), pais if pais != "" else "ninguno"])
+
+
+func _core_cultural() -> void:
+	var cs = main.mundo.cores
+	var pis := _edif_pis()
+	if cs == null or pis.is_empty() or opt_cultura == null or opt_cultura.selected < 0:
+		_decir("Elige una provincia en el mapa y una cultura.", false)
+		return
+	var c := String(ids_cultura[opt_cultura.selected])
+	for pi in pis:
+		cs.fijar_cultural(int(pi), c)
+	main.refrescar_todo(false)
+	_refrescar_edif()
+	_decir("Core cultural de %d provincias: %s." % [pis.size(), main.mundo.mandos.etiqueta_cultura(c)])
+
+
+func _core_restaurar() -> void:
+	var cs = main.mundo.cores
+	var pis := _edif_pis()
+	if cs == null or pis.is_empty():
+		_decir("Elige una provincia en el mapa.", false)
+		return
+	for pi in pis:
+		cs.restaurar(int(pi))
+	main.refrescar_todo(false)
+	_refrescar_edif()
+	_decir("Cores de %d provincias vueltos a los de origen." % pis.size())
 
 
 # ───────────── 0.1.8.36 · Descubrimientos ─────────────
