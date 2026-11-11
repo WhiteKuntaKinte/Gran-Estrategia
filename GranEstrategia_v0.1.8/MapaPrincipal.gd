@@ -1183,7 +1183,7 @@ func _asegurar_fill() -> void:
 func icono(nombre: String) -> Texture2D:
 	if tex_cache.has(nombre):
 		return tex_cache[nombre]
-	var tex: Texture2D = _cargar_png("res://iconos/%s.png" % nombre)
+	var tex: Texture2D = _cargar_mip("res://iconos/%s.png" % nombre)
 	tex_cache[nombre] = tex
 	return tex
 
@@ -1194,15 +1194,15 @@ func bandera_tex(clave: String) -> Texture2D:
 	var k := "b_" + clave
 	if tex_cache.has(k):
 		return tex_cache[k]
-	var tex: Texture2D = _cargar_png("res://banderas/%s.png" % clave)
+	var tex: Texture2D = _cargar_mip("res://banderas/%s.png" % clave)
 	if tex == null:
-		tex = _cargar_png("res://banderas/x.png")
+		tex = _cargar_mip("res://banderas/x.png")
 	tex_cache[k] = tex
 	return tex
 
 
 ## Bandera en HD (256 px, `banderas_hd/`) con mipmaps, para el panel y el aviso de guerra, donde se ve grande. Si no hay HD, la de 96 px.
-## Quien la muestre debe poner `texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS` en su TextureRect (si no, los mipmaps no se usan).
+## Su TextureRect lleva `texture_filter = LINEAR_WITH_MIPMAPS` explícito (el filtro por defecto del proyecto ya es ese, pero así no depende de él).
 func bandera_hd(clave: String) -> Texture2D:
 	if clave == "" or clave == "-":
 		clave = "x"
@@ -1210,22 +1210,31 @@ func bandera_hd(clave: String) -> Texture2D:
 		tex_hd_orden.erase(clave)
 		tex_hd_orden.append(clave)
 		return tex_hd[clave]
-	var img: Image = null
-	var ruta := "res://banderas_hd/%s.png" % clave
-	if ResourceLoader.exists(ruta):
-		var t: Texture2D = load(ruta)
-		img = t.get_image() if t != null else null
-	if img == null and FileAccess.file_exists(ruta):
-		img = Image.load_from_file(ProjectSettings.globalize_path(ruta))
-	if img == null or img.is_empty():
+	var tex: Texture2D = _cargar_mip("res://banderas_hd/%s.png" % clave)
+	if tex == null:
 		return bandera_tex(clave)
-	img.generate_mipmaps()
-	var tex := ImageTexture.create_from_image(img)
 	tex_hd[clave] = tex
 	tex_hd_orden.append(clave)
 	while tex_hd_orden.size() > BANDERAS_HD_MAX:
 		tex_hd.erase(tex_hd_orden.pop_front())
 	return tex
+
+
+## Como `_cargar_png`, pero con mipmaps: para iconos y banderas, que se dibujan 4–8 veces más pequeños que su archivo (sin mipmaps se ven con dientes
+## y parpadean). Con el filtro por defecto «Linear Mipmap» de project.godot se usan solos. No usar con imágenes grandes (el relieve).
+func _cargar_mip(ruta: String) -> Texture2D:
+	var img: Image = null
+	if ResourceLoader.exists(ruta):
+		var t: Texture2D = load(ruta)
+		img = t.get_image() if t != null else null
+		if img == null or img.is_empty() or img.is_compressed():
+			return t
+	elif FileAccess.file_exists(ruta):
+		img = Image.load_from_file(ProjectSettings.globalize_path(ruta))
+	if img == null or img.is_empty():
+		return null
+	img.generate_mipmaps()
+	return ImageTexture.create_from_image(img)
 
 
 func _cargar_png(ruta: String) -> Texture2D:

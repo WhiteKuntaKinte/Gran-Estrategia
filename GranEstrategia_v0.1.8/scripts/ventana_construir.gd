@@ -9,7 +9,8 @@ signal cerrada
 const VentanaScript := preload("res://scripts/ventana_flotante.gd")
 const Tema := preload("res://scripts/tema_hud.gd")
 const REFRESCO := 1.0                       # segundos entre actualizaciones
-const MAX_OBRAS_VISIBLES := 40              # tope de filas en «Obras en curso» (con un país entero puede haber cientos)
+const ICONO_FILA := 40.0                     # lado del icono de cada edificio en la lista (los PNG son de 128 px con mipmaps)
+const MAX_OBRAS_VISIBLES := 40             # tope de filas en «Obras en curso» (con un país entero puede haber cientos)
 
 var main
 var fuente: Font
@@ -172,8 +173,10 @@ func _armar_filas() -> void:
 		card.add_child(hb)
 		var ic := TextureRect.new()
 		var cat_d: Dictionary = ed.categoria_de(e)
-		ic.texture = main.icono(String(cat_d.get("icono", "i_prov")))
-		ic.custom_minimum_size = Vector2(24.0, 24.0)
+		ic.texture = main.icono("edificios/" + String(ed.slug[e]))                       # el suyo (0.1.8.41); si faltara, el de su categoría
+		if ic.texture == null:
+			ic.texture = main.icono(String(cat_d.get("icono", "i_prov")))
+		ic.custom_minimum_size = Vector2(ICONO_FILA, ICONO_FILA)
 		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		ic.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
@@ -372,6 +375,16 @@ func _obras_en_curso() -> void:
 		var o: Dictionary = filas[k][1]
 		var hb := HBoxContainer.new()
 		hb.add_theme_constant_override("separation", 8)
+		var tex_ob: Texture2D = main.icono("edificios/" + String(ed.slug[int(o["e"])]))
+		if tex_ob != null:
+			var ic_ob := TextureRect.new()
+			ic_ob.texture = tex_ob
+			ic_ob.custom_minimum_size = Vector2(26.0, 26.0)
+			ic_ob.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			ic_ob.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			ic_ob.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			ic_ob.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			hb.add_child(ic_ob)
 		var lbl := vf.lbl_rol("%s%s" % [ed.nombre[int(o["e"])], (" · " + String(m.provincias[pi].nombre)) if validas.size() > 1 else ""], 12, "texto")
 		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl.clip_text = true

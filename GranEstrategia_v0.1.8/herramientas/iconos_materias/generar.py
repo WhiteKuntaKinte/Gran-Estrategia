@@ -8,6 +8,8 @@ Escribe (128 × 128 px, PNG con transparencia):
   iconos/materias/<clave>.png   cultivos, ganado, pesca, minerales, metales, piedras, gemas y energía
   iconos/sectores/<clave>.png   rubros de la economía (servicios, manufactura, finanzas...)
   iconos/divisas/d_<COD>.png    una moneda por divisa de datos/divisas.json
+  iconos/edificios/<slug>.png   un icono por cada edificio de datos/edificios.json (edificios.py)
+  iconos/i_<nombre>.png         los iconos de la interfaz (interfaz.py): pestañas, barra, migas, tarjetas; mismos nombres que antes, ahora en HD
   datos/materias_iconos.json    nombre del juego («Caña de azúcar») -> icono («materias/cana»), reglas por palabras para los rubros y lista de iconos que existen
 Todo se dibuja desde cero con pillow (ver lienzo.py): no hay imágenes ni iconos de terceros.
 Para AÑADIR un material: dibujar su función en cultivos.py / animales.py / minerales.py, añadirla a ICONOS, poner su nombre en ALIAS (abajo) y volver a generar.
@@ -21,6 +23,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import animales
 import cultivos
 import divisas
+import edificios
+import interfaz
 import minerales
 import sectores
 from lienzo import Lienzo
@@ -156,6 +160,15 @@ def tabla(mat):
     }
 
 
+def comprobar_edificios():
+    """Cada edificio de datos/edificios.json tiene su icono, y no sobra ninguno."""
+    ed = json.load(open(os.path.join(DATOS, 'edificios.json'), encoding='utf-8'))
+    slugs = {e['slug'] for e in ed['edificios']}
+    falta = sorted(slugs - set(edificios.ICONOS))
+    sobra = sorted(set(edificios.ICONOS) - slugs)
+    return falta, sobra
+
+
 def main():
     solo_tabla = '--solo-tabla' in sys.argv
     mat, sec, div = todos_los_iconos()
@@ -163,10 +176,16 @@ def main():
     if sin:
         print('SIN ICONO:', sin)
         raise SystemExit(1)
+    falta, sobra = comprobar_edificios()
+    if falta or sobra:
+        print('EDIFICIOS sin icono:', falta, '· iconos sin edificio:', sobra)
+        raise SystemExit(1)
     if not solo_tabla:
         escribir(os.path.join(SAL_ICONOS, 'materias'), mat)
         escribir(os.path.join(SAL_ICONOS, 'sectores'), sec)
         escribir(os.path.join(SAL_ICONOS, 'divisas'), div)
+        escribir(os.path.join(SAL_ICONOS, 'edificios'), edificios.ICONOS)
+        escribir(SAL_ICONOS, interfaz.ICONOS)
     t = tabla(mat)
     json.dump(t, open(os.path.join(DATOS, 'materias_iconos.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=False)
     print('materias %d · sectores %d · divisas %d · alias %d · reglas %d' % (len(mat), len(sec), len(div), len(t['alias']), len(t['reglas'])))

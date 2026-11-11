@@ -1057,6 +1057,12 @@ func mostrar(d: Dictionary) -> void:
 	_actualizar_atras()
 
 
+## Icono de cada nivel de las migas (cuando el sitio no tiene bandera propia).
+const ICONO_MIGA := {"continente": "i_cont", "pais": "i_pais", "estado": "i_estado", "provincia": "i_prov", "ciudad": "i_ciudad", "mar": "i_prof"}
+
+
+## 0.1.8.41 · Migas rediseñadas: cada una es una píldora con su bandera (o el icono de su nivel) y el nombre. La última (donde estás) va rellena y en
+## negrita; las demás, apagadas y con realce al pasar el ratón; clic = ir a ese nivel. Antes eran botones con la bandera como icono y no se veía.
 func _dibujar_migas() -> void:
 	_limpiar(caja_migas)
 	var migas: Array = datos.get("migas", [])
@@ -1064,28 +1070,58 @@ func _dibujar_migas() -> void:
 		var m: Dictionary = migas[i]
 		var nivel := String(m["nivel"])
 		var activo: bool = i == migas.size() - 1
-		var b := Button.new()
-		b.flat = false
-		b.text = String(m["nombre"])
-		b.tooltip_text = String(m["tipo"])
-		b.add_theme_font_size_override("font_size", 12)
 		var ac: Color = C_ACENTO.get(nivel, Tema.TENUE)
-		b.add_theme_color_override("font_color", Color(1, 1, 1) if activo else Tema.TITULO)
-		b.add_theme_stylebox_override("normal", _caja(ac.darkened(0.6) if activo else Tema.CABECERA_ABAJO, ac.darkened(0.15), 12, 3, 1))
-		b.add_theme_stylebox_override("hover", _caja(ac.darkened(0.35), Color(1, 1, 1, 0.9), 12, 3, 1))
-		b.add_theme_stylebox_override("pressed", _caja(ac.darkened(0.25), Color(1, 1, 1, 0.9), 12, 3, 1))
-		b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		var chip := PanelContainer.new()
+		chip.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		chip.tooltip_text = "%s\n%s" % [String(m["tipo"]), "Aquí estás." if activo else "Clic: ir a %s." % String(m["nombre"])]
+		var fondo := _chip_miga(ac, activo, false)
+		chip.add_theme_stylebox_override("panel", fondo)
+		var hb := HBoxContainer.new()
+		hb.add_theme_constant_override("separation", 5)
+		hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		chip.add_child(hb)
 		var bandera := String(m.get("bandera", ""))
-		if bandera != "":
-			b.icon = main.bandera_tex(bandera)
-			b.expand_icon = true
-			b.add_theme_constant_override("icon_max_width", 18)
+		var ico := TextureRect.new()
+		ico.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ico.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ico.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		ico.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		if bandera != "" and bandera != "x" and bandera != "-":
+			ico.texture = main.bandera_tex(bandera)
+			ico.custom_minimum_size = Vector2(21.0, 14.0)
+		else:
+			ico.texture = main.icono(String(ICONO_MIGA.get(nivel, "i_prov")))
+			ico.custom_minimum_size = Vector2(16.0, 16.0)
+		hb.add_child(ico)
+		var et := _lbl(String(m["nombre"]), 12, Color(1, 1, 1) if activo else Tema.TITULO, activo)
+		et.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		hb.add_child(et)
 		var nom := String(m["nombre"])
-		b.pressed.connect(func(): miga_pedida.emit(nivel, nom))
-		caja_migas.add_child(b)
+		chip.mouse_entered.connect(func(): chip.add_theme_stylebox_override("panel", _chip_miga(ac, activo, true)))
+		chip.mouse_exited.connect(func(): chip.add_theme_stylebox_override("panel", fondo))
+		chip.gui_input.connect(func(ev: InputEvent):
+			if ev is InputEventMouseButton and (ev as InputEventMouseButton).pressed and (ev as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+				miga_pedida.emit(nivel, nom))
+		caja_migas.add_child(chip)
 		if i < migas.size() - 1:
-			caja_migas.add_child(_lbl("›", 14, Tema.TENUE))
-	_sin_foco(caja_migas)
+			var sep := _lbl("›", 15, ac.lightened(0.15))
+			sep.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			caja_migas.add_child(sep)
+
+
+func _chip_miga(ac: Color, activo: bool, realce: bool) -> StyleBoxFlat:
+	var e: StyleBoxFlat
+	if realce:
+		e = _caja(ac.darkened(0.35), Color(1, 1, 1, 0.9), 12, 3, 1)
+	elif activo:
+		e = _caja(ac.darkened(0.55), ac.lightened(0.1), 12, 3, 2)
+	else:
+		e = _caja(Tema.CABECERA_ABAJO, ac.darkened(0.15), 12, 3, 1)
+	e.content_margin_left = 7
+	e.content_margin_right = 9
+	e.content_margin_top = 2
+	e.content_margin_bottom = 2
+	return e
 
 
 # ───────────── contenido por pestaña ─────────────
@@ -1557,9 +1593,17 @@ func _moneda(pais: String) -> Array:
 
 
 ## Una línea pequeña «texto · valor» (sin la tarjeta con icono de `_fila`): para listas largas de edificios u obras.
-func _linea(padre: Node, t: String, v: String, col_v: Color) -> void:
+func _linea(padre: Node, t: String, v: String, col_v: Color, icono := "") -> void:
 	var hb := HBoxContainer.new()
 	hb.add_theme_constant_override("separation", 8)
+	if icono != "":
+		var tr := TextureRect.new()
+		tr.texture = main.icono(icono)
+		tr.custom_minimum_size = Vector2(22.0, 22.0)
+		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		hb.add_child(tr)
 	var a := _lbl(t, 12, Tema.TEXTO)
 	a.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	a.clip_text = true
@@ -1685,7 +1729,7 @@ func _card_edificios(pis: Array, una: bool) -> void:
 		sec.add_child(caja)
 		for i in mini(claves.size(), 8):
 			var e: int = ed.indice(String(claves[i]))
-			_linea(caja, String(ed.nombre[e]), "×%d" % int(tot[claves[i]]), Tema.ORO)
+			_linea(caja, String(ed.nombre[e]), "×%d" % int(tot[claves[i]]), Tema.ORO, "edificios/" + String(ed.slug[e]))
 		if claves.size() > 8:
 			_nota(caja, "… y %d tipos más (ventana Construir)." % (claves.size() - 8))
 	else:
@@ -1702,7 +1746,7 @@ func _card_edificios(pis: Array, una: bool) -> void:
 		filas.sort_custom(func(a, b): return int(a["falta"]) < int(b["falta"]))
 		for i in mini(filas.size(), 6):
 			var o: Dictionary = filas[i]
-			_linea(ob_caja, String(ed.nombre[int(o["e"])]), "%d %% · faltan %d d" % [int(roundf(float(o["pct"]))), int(o["falta"])], Tema.TENUE)
+			_linea(ob_caja, String(ed.nombre[int(o["e"])]), "%d %% · faltan %d d" % [int(roundf(float(o["pct"]))), int(o["falta"])], Tema.TENUE, "edificios/" + String(ed.slug[int(o["e"])]))
 		if filas.size() > 6:
 			_nota(ob_caja, "… y %d obras más." % (filas.size() - 6))
 	var b := _boton(sec, "Construir…", func(): construir_pedido.emit(pis.duplicate()))
