@@ -1,0 +1,1290 @@
+{
+ "ayuda": "Búsqueda de pinturas de dominio público en Wikimedia Commons: cada entrada es una obra por (epoca, clave). La carpeta de destino es pinturas/<epoca>/<clave>.jpg. Las consultas se prueban en orden.",
+ "entradas": [
+  {
+   "epoca": "2026",
+   "clave": "francia",
+   "q": [
+    "Delacroix Liberty Leading the People",
+    "Delacroix La Liberté guidant le peuple"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "espana",
+   "q": [
+    "Goya The Third of May 1808",
+    "Goya El tres de mayo de 1808 Prado"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "italia",
+   "q": [
+    "Raphael School of Athens",
+    "Sanzio School of Athens Stanza della Segnatura"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "alemania",
+   "q": [
+    "Caspar David Friedrich Wanderer above the Sea of Fog",
+    "Friedrich Wanderer Nebelmeer"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "reino_unido",
+   "q": [
+    "Turner The Fighting Temeraire",
+    "Turner Fighting Temeraire National Gallery"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "paises_bajos",
+   "q": [
+    "Rembrandt The Night Watch",
+    "Rembrandt Night Watch Rijksmuseum"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "belgica",
+   "q": [
+    "Bruegel Hunters in the Snow",
+    "Pieter Bruegel Hunters in the Snow Kunsthistorisches"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "portugal",
+   "q": [
+    "Panéis de São Vicente de Fora Nuno Gonçalves",
+    "Nuno Gonçalves Painéis de São Vicente"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "rusia",
+   "q": [
+    "Repin Barge Haulers on the Volga",
+    "Ilya Repin Burlaki na Volge"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "ucrania",
+   "q": [
+    "Repin Reply of the Zaporozhian Cossacks",
+    "Repin Zaporozhian Cossacks Writing a Letter"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "polonia",
+   "q": [
+    "Matejko Battle of Grunwald",
+    "Jan Matejko Bitwa pod Grunwaldem"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "austria",
+   "q": [
+    "Klimt The Kiss",
+    "Gustav Klimt Der Kuss Belvedere"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "suiza",
+   "q": [
+    "Ferdinand Hodler Lake Thun",
+    "Hodler Thunersee Symmetrie"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "suecia",
+   "q": [
+    "Carl Larsson Midvinterblot",
+    "Carl Larsson Midvinterblot Nationalmuseum"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "noruega",
+   "q": [
+    "Tidemand Gude Bridal Procession on the Hardangerfjord",
+    "Hans Gude Brudeferd i Hardanger"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "dinamarca",
+   "q": [
+    "Krøyer Summer evening on Skagen Beach",
+    "P.S. Krøyer Sommeraften ved Skagen Sønderstrand"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "finlandia",
+   "q": [
+    "Gallen-Kallela Lemminkäinen's Mother",
+    "Akseli Gallen-Kallela Aino Myth"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "islandia",
+   "q": [
+    "Þórarinn B. Þorláksson Þingvellir",
+    "Thingvellir painting Thorlaksson 1900"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "irlanda",
+   "q": [
+    "Maclise Marriage of Strongbow and Aoife",
+    "Daniel Maclise Strongbow Aoife National Gallery of Ireland"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "grecia",
+   "q": [
+    "Vryzakis Exodus of Missolonghi",
+    "Theodoros Vryzakis Exodus of Messolonghi"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "turquia",
+   "q": [
+    "Osman Hamdi Bey The Tortoise Trainer",
+    "Osman Hamdi Bey Kaplumbağa Terbiyecisi"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "hungria",
+   "q": [
+    "Munkácsy Conquest Honfoglalás",
+    "Mihály Munkácsy Honfoglalás"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "chequia",
+   "q": [
+    "Mucha Slav Epic The Slavs in Their Original Homeland",
+    "Alfons Mucha Slovanská epopej"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "rumania",
+   "q": [
+    "Grigorescu Peasant girl",
+    "Nicolae Grigorescu painting Țărăncuță"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "serbia",
+   "q": [
+    "Paja Jovanović Migration of the Serbs",
+    "Paja Jovanović Seoba Srba"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "croacia",
+   "q": [
+    "Vlaho Bukovac Gundulić's Dream",
+    "Vlaho Bukovac Gundulićev san"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "eslovenia",
+   "q": [
+    "Ivana Kobilca Summer",
+    "Ivana Kobilca Poletje"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lituania",
+   "q": [
+    "Čiurlionis Rex",
+    "M. K. Čiurlionis Rex painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "mexico",
+   "q": [
+    "José María Velasco Valle de México desde el cerro de Santa Isabel",
+    "Velasco Valle de México"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estados_unidos",
+   "q": [
+    "Leutze Washington Crossing the Delaware",
+    "Emanuel Leutze Washington Crossing the Delaware Metropolitan"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "canada",
+   "q": [
+    "Tom Thomson The Jack Pine",
+    "Tom Thomson The West Wind"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "brasil",
+   "q": [
+    "Pedro Américo Independência ou Morte",
+    "Pedro Américo Independence or Death"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "argentina",
+   "q": [
+    "Prilidiano Pueyrredón Un alto en el campo",
+    "Pueyrredón Un alto en el campo"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "chile",
+   "q": [
+    "Rugendas Huaso y lavanderas",
+    "Johann Moritz Rugendas Chile huaso"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "colombia",
+   "q": [
+    "Francisco Antonio Cano Horizontes",
+    "Francisco A. Cano Horizontes Antioquia"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "peru",
+   "q": [
+    "Francisco Laso Los tres tipos de raza",
+    "Francisco Laso Indian Merchant"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "venezuela",
+   "q": [
+    "Arturo Michelena Miranda en La Carraca",
+    "Michelena Miranda en la Carraca"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "cuba",
+   "q": [
+    "Víctor Patricio Landaluze painting Cuba",
+    "Landaluze Cuba painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "japon",
+   "q": [
+    "Hokusai Great Wave off Kanagawa",
+    "Hokusai Kanagawa-oki nami-ura"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "china",
+   "q": [
+    "Zhang Zeduan Along the River During the Qingming Festival",
+    "Zhang Zeduan Qingming Shanghe Tu"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "corea_del_sur",
+   "q": [
+    "Shin Yun-bok Danopungjeong",
+    "Kim Hong-do Danwon genre painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "india",
+   "q": [
+    "Raja Ravi Varma Shakuntala",
+    "Ravi Varma Shakuntala looking back to glance at Dushyanta"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "iran",
+   "q": [
+    "Kamal-ol-Molk Hall of Mirrors",
+    "Kamal-ol-Molk painting Tehran"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "egipto",
+   "q": [
+    "David Roberts Great Temple of Abu Simbel",
+    "David Roberts Egypt Nubia lithograph painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "israel",
+   "q": [
+    "David Roberts Jerusalem from the Mount of Olives",
+    "David Roberts Jerusalem painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "marruecos",
+   "q": [
+    "Delacroix Jewish Wedding in Morocco",
+    "Delacroix Fantasia Morocco"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "argelia",
+   "q": [
+    "Delacroix Women of Algiers in their Apartment",
+    "Delacroix Femmes d'Alger dans leur appartement"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "australia",
+   "q": [
+    "Tom Roberts Shearing the Rams",
+    "Roberts Shearing the Rams National Gallery of Victoria"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "nueva_zelanda",
+   "q": [
+    "Gottfried Lindauer Maori chief portrait",
+    "Lindauer Māori portrait painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "indonesia",
+   "q": [
+    "Raden Saleh Arrest of Prince Diponegoro",
+    "Raden Saleh Penangkapan Pangeran Diponegoro"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "filipinas",
+   "q": [
+    "Juan Luna Spoliarium",
+    "Juan Luna Spoliarium"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "tailandia",
+   "q": [
+    "Thai mural painting Wat Phra Kaew Ramakien",
+    "Thai traditional painting Ayutthaya 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "vietnam",
+   "q": [
+    "Vietnamese Đông Hồ painting",
+    "Dong Ho painting folk Vietnam"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "pakistan",
+   "q": [
+    "Abdur Rahman Chughtai painting",
+    "Chughtai painting Mughal style"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "afganistan",
+   "q": [
+    "Afghanistan 19th century painting Kabul",
+    "James Rattray Kabul Afghanistan lithograph"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "mongolia",
+   "q": [
+    "Mongolian painting Genghis Khan portrait Yuan",
+    "Mongolia painting nomads 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "kazajistan",
+   "q": [
+    "Vasily Vereshchagin Central Asia",
+    "Vereshchagin Turkestan painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "uzbekistan",
+   "q": [
+    "Vereshchagin Samarkand Registan",
+    "Vereshchagin Apotheosis of War Turkestan series"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "etiopia",
+   "q": [
+    "Ethiopian icon painting Gondar",
+    "Ethiopian painting Gondar Church 18th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "sudafrica",
+   "q": [
+    "Thomas Baines Cape Colony painting",
+    "Thomas Baines African painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "armenia",
+   "q": [
+    "Aivazovsky Mount Ararat",
+    "Ayvazovsky Ararat Noah Armenian painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "georgia",
+   "q": [
+    "Niko Pirosmani Feast",
+    "Pirosmani painting Georgia"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "azerbaiyan",
+   "q": [
+    "Azerbaijan Baku 19th century painting",
+    "Vereshchagin Baku painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "siria",
+   "q": [
+    "David Roberts Damascus",
+    "Damascus painting 19th century Orientalist"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "irak",
+   "q": [
+    "Iraq Babylon painting Orientalist",
+    "Babylon painting 19th century Iraq"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "arabia_saudita",
+   "q": [
+    "Orientalist painting Mecca pilgrimage",
+    "Mecca painting 19th century caravan Hajj"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "tunez",
+   "q": [
+    "August Macke Tunisian Landscape",
+    "Klee Tunisia painting Kairouan"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "libia",
+   "q": [
+    "Libya Leptis Magna painting 19th century",
+    "Orientalist painting Tripoli Libya"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "nigeria",
+   "q": [
+    "Benin Bronzes painting Africa 19th century",
+    "Nigeria Yoruba painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "ghana",
+   "q": [
+    "Ashanti court painting 19th century",
+    "Thomas Bowdich Ashanti painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "kenia",
+   "q": [
+    "Kenya Maasai painting 19th century",
+    "Maasai painting Africa 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "tanzania",
+   "q": [
+    "Zanzibar painting 19th century",
+    "Zanzibar 19th century painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "republica_democratica_del_congo",
+   "q": [
+    "Congo River painting 19th century",
+    "Congo painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "senegal",
+   "q": [
+    "Senegal painting 19th century Saint-Louis",
+    "Dakar painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "madagascar",
+   "q": [
+    "Madagascar painting 19th century",
+    "Antananarivo painting 19th century"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_europa_occidental",
+   "q": [
+    "Constable The Hay Wain",
+    "Corot landscape France Italy",
+    "Vermeer View of Delft"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_europa_norte",
+   "q": [
+    "Caspar David Friedrich Monk by the Sea",
+    "Carl Larsson Scandinavia painting",
+    "Akseli Gallen-Kallela landscape"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_europa_este",
+   "q": [
+    "Ivan Shishkin Morning in a Pine Forest",
+    "Isaac Levitan Vladimirka",
+    "Vasnetsov Bogatyrs"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_mediterraneo",
+   "q": [
+    "Claude Lorrain Embarkation of the Queen of Sheba",
+    "Canaletto Venice painting",
+    "Botticelli Birth of Venus"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_oriente_medio",
+   "q": [
+    "Jean-Léon Gérôme Orientalist painting Cairo",
+    "David Roberts Petra",
+    "Delacroix Oriental scene"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_asia_central",
+   "q": [
+    "Vereshchagin Turkestan painting",
+    "Samarkand painting Vereshchagin",
+    "Kyrgyz nomads painting 19th century"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_asia_sur",
+   "q": [
+    "Raja Ravi Varma Mahabharata painting",
+    "Mughal miniature painting emperor",
+    "Company painting Indian 19th century"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_asia_este",
+   "q": [
+    "Katsushika Hokusai Fine Wind Clear Morning",
+    "Guo Xi Early Spring",
+    "Fan Kuan Travelers among Mountains and Streams"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_sudeste_asiatico",
+   "q": [
+    "Juan Luna painting Spoliarium",
+    "Raden Saleh painting Java",
+    "Southeast Asia traditional painting temple mural"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_oceania",
+   "q": [
+    "Eugene von Guerard Australian landscape",
+    "Tom Roberts Australian painting",
+    "Gottfried Lindauer Maori painting"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_norteamerica",
+   "q": [
+    "Albert Bierstadt The Rocky Mountains Lander's Peak",
+    "Frederic Edwin Church Niagara",
+    "Thomas Cole The Oxbow"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_mesoamerica_caribe",
+   "q": [
+    "José María Velasco Valle de México",
+    "Frederick Catherwood Mayan ruins painting",
+    "Church Heart of the Andes Caribbean"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_sudamerica_andes",
+   "q": [
+    "Frederic Church Heart of the Andes",
+    "Johann Moritz Rugendas Andes painting",
+    "Peruvian Cusco School painting"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_sudamerica_este",
+   "q": [
+    "Pedro Américo painting Brazil",
+    "Albert Eckhout Brazilian painting",
+    "Rugendas Brazil painting"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_africa_norte",
+   "q": [
+    "Delacroix Women of Algiers",
+    "David Roberts Egypt painting",
+    "Jean-Léon Gérôme Cairo"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "region_africa_subsahariana",
+   "q": [
+    "Thomas Baines African painting",
+    "Frederic Remington Africa painting",
+    "Ethiopian painting manuscript Gondar"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_europa",
+   "q": [
+    "Bruegel Tower of Babel",
+    "Rembrandt painting Amsterdam",
+    "Friedrich Wanderer above the Sea of Fog"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_asia",
+   "q": [
+    "Hokusai Great Wave off Kanagawa",
+    "Zhang Zeduan Along the River Qingming",
+    "Raja Ravi Varma painting"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_africa",
+   "q": [
+    "Delacroix Women of Algiers",
+    "David Roberts Temple Egypt",
+    "Thomas Baines African painting"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_america_del_norte",
+   "q": [
+    "Albert Bierstadt Rocky Mountains",
+    "Thomas Cole The Oxbow",
+    "Emanuel Leutze Washington Crossing the Delaware"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_america_del_sur",
+   "q": [
+    "Frederic Church Heart of the Andes",
+    "Rugendas painting South America",
+    "Pedro Américo Independence or Death"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_oceania",
+   "q": [
+    "Eugene von Guerard Australian landscape",
+    "Tom Roberts Shearing the Rams",
+    "Lindauer Māori portrait"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "continente_antartida",
+   "q": [
+    "Antarctica painting William Hodges",
+    "Edward Seago Antarctic painting",
+    "Ross expedition painting ice barrier"
+   ]
+  },
+  {
+   "epoca": "general",
+   "clave": "mundo",
+   "q": [
+    "Bruegel Tower of Babel",
+    "Earth sunrise painting Frederic Church",
+    "Turner Fighting Temeraire"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "imperio_romano",
+   "q": [
+    "Cesare Maccari Cicero Denounces Catiline",
+    "Gérôme Ave Caesar Morituri te salutant",
+    "Alma-Tadema The Roses of Heliogabalus",
+    "Jacques-Louis David The Intervention of the Sabine Women"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "dinastia_han",
+   "q": [
+    "Han dynasty painting Admonitions of the Instructress",
+    "Han dynasty tomb mural painting",
+    "Gu Kaizhi Admonitions Scroll"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "imperio_parto",
+   "q": [
+    "Parthian cavalry painting Carrhae",
+    "Death of Crassus Carrhae painting",
+    "Persian miniature Parthian"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "judea",
+   "q": [
+    "David Roberts The Destruction of Jerusalem",
+    "Francesco Hayez Destruction of the Temple of Jerusalem",
+    "Roberts Jerusalem Temple"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "ciudades_estado_griegas",
+   "q": [
+    "Jacques-Louis David Leonidas at Thermopylae",
+    "Raphael School of Athens",
+    "Delacroix Greece on the Ruins of Missolonghi"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_de_kush_meroe",
+   "q": [
+    "David Roberts Nubia Temple painting",
+    "Meroe pyramids painting 19th century",
+    "Frederic Cailliaud Meroe"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_de_aksum",
+   "q": [
+    "Axum obelisk painting 19th century",
+    "Ethiopian icon painting Aksum",
+    "Henry Salt Axum"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "dacios",
+   "q": [
+    "Dacian Wars painting Decebalus",
+    "Trajan's Column Dacians painting",
+    "Dacian warriors painting 19th century Romanian"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "caledonios",
+   "q": [
+    "Boudica painting John Opie Boadicea Haranguing the Britons",
+    "Pictish warriors painting",
+    "Highlanders 19th century painting Scotland ancient"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "brigantes",
+   "q": [
+    "John Opie Boadicea Haranguing the Britons",
+    "Boadicea and Her Daughters painting",
+    "Roman Britain painting Hadrian's Wall"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "catuvelaunos_y_britones_del_sureste",
+   "q": [
+    "Boudica painting Britons Roman",
+    "Druids painting Britons",
+    "Boudicca Revolt painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "hibernios_irlanda_gaelica",
+   "q": [
+    "Maclise Irish legend painting",
+    "Cú Chulainn painting Stephen Reid",
+    "Celtic Ireland painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "godos_gutones_del_vistula",
+   "q": [
+    "Goths painting 19th century",
+    "Alaric Goths painting Rome",
+    "Germanic warriors painting Gothic"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "marcomanos_y_cuados",
+   "q": [
+    "Marcomannic Wars painting Marcus Aurelius",
+    "Roman Germanic wars painting 19th century",
+    "Arminius Varus battle painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "queruscos_catos_y_bructeros",
+   "q": [
+    "Hermannschlacht painting Teutoburg Forest Friedrich Gunkel",
+    "Battle of the Teutoburg Forest painting",
+    "Arminius painting Varusschlacht"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "cimbrios_anglos_y_daneses",
+   "q": [
+    "Cimbri Teutones painting Marius",
+    "Cimbrian battle Aquae Sextiae painting",
+    "Germanic tribes painting Jutland"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "sarmatas_roxolanos_y_aorsos",
+   "q": [
+    "Sarmatian cavalry painting",
+    "Scythians painting Henryk Siemiradzki",
+    "Sarmatian warriors painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "confederacion_xiongnu",
+   "q": [
+    "Xiongnu painting steppe horsemen",
+    "Chinese painting Han Xiongnu Zhaojun",
+    "Wang Zhaojun painting Xiongnu"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_indoescita",
+   "q": [
+    "Kushan Gandhara painting",
+    "Gandhara Buddha mural painting",
+    "Indo-Scythian painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "dinastia_satavahana",
+   "q": [
+    "Ajanta Caves painting",
+    "Ajanta mural Bodhisattva Padmapani",
+    "Satavahana painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_nabateo",
+   "q": [
+    "David Roberts Petra The Treasury",
+    "David Roberts Petra painting",
+    "Edward Lear Petra painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_de_armenia",
+   "q": [
+    "Aivazovsky Armenian painting Ararat",
+    "Ayvazovsky Mount Ararat",
+    "Vardges Sureniants Armenian painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_del_ponto",
+   "q": [
+    "Mithridates VI painting Pontus",
+    "Painting Mithridates King of Pontus",
+    "Pontic Kingdom painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_del_bosforo",
+   "q": [
+    "Henryk Siemiradzki Scythian painting",
+    "Greek colony Crimea painting 19th century",
+    "Bosporan Kingdom painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_de_himyar",
+   "q": [
+    "Yemen painting 19th century Sanaa",
+    "Queen of Sheba painting",
+    "Himyarite painting Arabia Felix"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "tribus_arabes_de_neyed_y_hiyaz",
+   "q": [
+    "Arabian horsemen painting 19th century",
+    "Orientalist painting Bedouin Arabia",
+    "Bedouin caravan painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "teotihuacan_valle_de_mexico",
+   "q": [
+    "José María Velasco Teotihuacan",
+    "Velasco Pirámide del Sol",
+    "Teotihuacan mural painting Tepantitla"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "ciudades_estado_mayas",
+   "q": [
+    "Frederick Catherwood Mayan ruins painting",
+    "Catherwood Maya lithograph",
+    "Maya mural Bonampak"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "civilizacion_zapoteca",
+   "q": [
+    "Monte Albán painting 19th century",
+    "Zapotec painting",
+    "Oaxaca painting Velasco Monte Albán"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "paracas_y_nazca_costa_sur_del_peru",
+   "q": [
+    "Frederic Church Heart of the Andes",
+    "Nazca painting Peru 19th century",
+    "Paracas textile painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "muiscas_periodo_herrera_altiplano_cundiboyacense",
+   "q": [
+    "Muisca painting El Dorado Guatavita",
+    "Francisco Antonio Cano Colombia painting",
+    "Muisca painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "cultura_hopewell",
+   "q": [
+    "George Catlin Native American painting",
+    "Catlin Mandan painting",
+    "Moundbuilders painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_de_las_grandes_llanuras_cazadores_de_bisontes",
+   "q": [
+    "George Catlin Buffalo Hunt",
+    "Charles Marion Russell buffalo hunt painting",
+    "Karl Bodmer Plains Indians painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_de_la_costa_noroeste_tlingit_haida_y_salish",
+   "q": [
+    "Paul Kane Northwest Coast painting",
+    "Emily Carr totem painting",
+    "Kwakiutl painting Paul Kane"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_aborigenes_del_sur_de_australia_murray_y_nullarbor",
+   "q": [
+    "Eugene von Guérard Aborigines painting",
+    "Aboriginal Australians painting 19th century",
+    "Tom Roberts Aboriginal painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_de_fiyi_tonga_y_samoa_cultura_lapita",
+   "q": [
+    "John Webber Polynesia painting",
+    "William Hodges Tahiti painting",
+    "Polynesian voyage painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "melanesios_cultura_lapita_bismarck_salomon_y_vanuatu",
+   "q": [
+    "John Webber Pacific painting",
+    "William Hodges Pacific painting",
+    "Pacific island painting 18th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_de_java_bali_y_las_pequenas_sondas",
+   "q": [
+    "Raden Saleh Java painting",
+    "Java painting Borobudur 19th century",
+    "Bali painting traditional"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "goguryeo",
+   "q": [
+    "Goguryeo tomb mural painting Dancing figures",
+    "Goguryeo Muyongchong mural",
+    "Goguryeo painting Korean"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_yayoi_del_este_kanto_chubu_y_tohoku_sur",
+   "q": [
+    "Hokusai Fine Wind Clear Morning",
+    "Yayoi painting Japan",
+    "Japanese painting ancient"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "magadha_y_bengala",
+   "q": [
+    "Ajanta painting Bodhisattva",
+    "Magadha painting Buddha",
+    "Raja Ravi Varma Buddhist painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "reino_de_anuradhapura",
+   "q": [
+    "Sigiriya frescoes",
+    "Sri Lanka painting Sigiriya maidens",
+    "Anuradhapura painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_mon_y_de_suvarnabhumi",
+   "q": [
+    "Burmese mural painting Bagan",
+    "Mon painting Buddhist Thailand",
+    "Southeast Asian temple mural painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_de_la_costa_suahili",
+   "q": [
+    "Zanzibar painting 19th century",
+    "East African coast painting 19th century",
+    "Swahili coast painting dhow"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "cultura_nok_y_pueblos_del_niger_benue",
+   "q": [
+    "Nigeria painting 19th century",
+    "African landscape painting Frederic Church",
+    "West Africa painting 19th century"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "garamantes_fezzan",
+   "q": [
+    "Orientalist painting Sahara caravan",
+    "Jean-Léon Gérôme Sahara caravan",
+    "Libya Sahara painting"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "getulos_y_pueblos_bereberes_del_atlas_y_el_sahara_septentrional",
+   "q": [
+    "Delacroix Moroccan painting",
+    "Fromentin Sahara painting",
+    "Berber painting 19th century Atlas"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_khoisan_san_y_joikoi",
+   "q": [
+    "Thomas Baines Bushmen painting",
+    "San rock painting",
+    "Khoisan painting Thomas Baines"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "sami_y_pueblos_de_la_fenoscandia_septentrional",
+   "q": [
+    "Sami painting Johan Turi",
+    "Lapland painting 19th century",
+    "Sami people painting Norway"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "venedos_protoeslavos",
+   "q": [
+    "Alphonse Mucha Slav Epic The Slavs in Their Original Homeland",
+    "Mucha Slovanská epopej",
+    "Slavs painting Sviatoslav"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "pueblos_balticos_aestios_galindios_curonios",
+   "q": [
+    "Čiurlionis painting Baltic",
+    "Baltic mythology painting Lithuania",
+    "Čiurlionis Rex"
+   ]
+  },
+  {
+   "epoca": "1dc",
+   "clave": "tierras_sin_reclamar_de_europa",
+   "q": [
+    "Caspar David Friedrich Oak Tree in the Snow",
+    "Ivan Shishkin Forest painting",
+    "Constable landscape"
+   ]
+  }
+ ]
+}
