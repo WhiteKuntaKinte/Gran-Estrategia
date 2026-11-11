@@ -2801,22 +2801,6 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 		debug_menu.seleccion_cambio(sel_tipo)
 
 
-## 0.1.8.41 · Nombre (el de los datos, no el que personalizó el jugador) del país de lo elegido; "" si no hay nada elegido.
-func _pais_de_seleccion() -> String:
-	if mundo == null:
-		return ""
-	match sel_tipo:
-		"pais", "estado":
-			return String(sel_ref.get("pais", ""))
-		"provincia":
-			var pi := int(sel_ref.get("pi", -1))
-			return String(mundo.provincias[pi].pais) if pi >= 0 and pi < mundo.provincias.size() else ""
-		"ciudad":
-			var ci := int(sel_ref.get("id", -1))
-			return String(mundo.ciudades[ci].pais) if ci >= 0 and ci < mundo.ciudades.size() else ""
-	return ""
-
-
 ## 0.1.8.40 · Las provincias que cubre lo elegido (índices de Mundo.provincias): la provincia (o la de la ciudad), todas las del país o estado,
 ## o la unión de todo el grupo (Ctrl+clic). Las tierras sin reclamar no cuentan: no se construye en ellas.
 func _provincias_elegidas() -> Array:
@@ -4234,6 +4218,15 @@ func _mostrar_opciones_info() -> void:
 		cred.add_theme_font_size_override("font_size", 12)
 		TemaHud.rotular(cred, "nota")
 		menu_contenido.add_child(cred)
+	if pinturas != null and pinturas.listo:                           # 0.1.8.41: las pinturas de los paneles son de dominio público: se citan de dónde vienen
+		var cp := Label.new()
+		cp.text = pinturas.texto_creditos()
+		cp.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		cp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cp.add_theme_font_override("font", fuente_ui)
+		cp.add_theme_font_size_override("font_size", 12)
+		TemaHud.rotular(cp, "nota")
+		menu_contenido.add_child(cp)
 	var version := Label.new()
 	version.text = "Versión %s" % VERSION
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

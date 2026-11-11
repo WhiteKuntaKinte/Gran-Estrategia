@@ -2096,7 +2096,7 @@ func _refrescar_edif() -> void:
 		var n_e: int = int(tot.get(ed.slug[e], 0))
 		var item := lista_edif.add_item("%s %s · %s%s" % ["✓" if n_e > 0 else "·", ed.nombre[e], ed.nombre_clase(e), (" · ×%d" % n_e) if n_e > 0 else ""])
 		if n_e == 0:
-			lista_edif.set_item_custom_fg_color(item, C_TENUE)
+			lista_edif.set_item_custom_fg_color(item, Tema.TENUE)
 		ids_lista_edif.append(e)
 	edif_sel = -1
 	var pos := ids_lista_edif.find(antes)
@@ -2323,7 +2323,7 @@ func _refrescar_desc() -> void:
 		var sabe: bool = d.conoce(tid, i)
 		var idx_item: int = lista_desc.add_item("%s %s" % ["✓" if sabe else "·", d.etiqueta(i)])
 		if not sabe:
-			lista_desc.set_item_custom_fg_color(idx_item, C_TENUE)
+			lista_desc.set_item_custom_fg_color(idx_item, Tema.TENUE)
 		ids_lista_desc.append(i)
 	desc_sel = -1
 	_refrescar_ficha_desc()

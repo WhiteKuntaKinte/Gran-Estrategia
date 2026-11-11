@@ -1,7 +1,7 @@
 {
  "1dc/brigantes": {
-  "titulo": "Boadicea Haranguing the Britons (called Boudicca, or Boadicea) by John Opie",
-  "artista": "John Opie / William Sharp",
+  "titulo": "Boadicea arengando a los britanos",
+  "artista": "John Opie (grabado de William Sharp)",
   "fecha": "1793",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Boadicea_Haranguing_the_Britons_(called_Boudicca,_or_Boadicea)_by_John_Opie.jpg",
@@ -10,8 +10,8 @@
   "alto": 1100
  },
  "1dc/catuvelaunos_y_britones_del_sureste": {
-  "titulo": "Caractacus-Claudius-Birrell-Fuseli",
-  "artista": "Andrew Birrell",
+  "titulo": "Carataco ante el emperador Claudio",
+  "artista": "Andrew Birrell, según Henry Fuseli",
   "fecha": "1792",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Caractacus-Claudius-Birrell-Fuseli.jpeg",
@@ -20,7 +20,7 @@
   "alto": 731
  },
  "1dc/cimbrios_anglos_y_daneses": {
-  "titulo": "Mario vincitore dei Cimbri",
+  "titulo": "Mario vencedor de los cimbrios",
   "artista": "Francesco Saverio Altamura",
   "fecha": "",
   "licencia": "Public domain",
@@ -30,7 +30,7 @@
   "alto": 581
  },
  "1dc/ciudades_estado_griegas": {
-  "titulo": "Leonidas at Thermopylae",
+  "titulo": "Leónidas en las Termópilas",
   "artista": "Jacques-Louis David",
   "fecha": "1814",
   "licencia": "Public domain",
@@ -40,9 +40,9 @@
   "alto": 712
  },
  "1dc/ciudades_estado_mayas": {
-  "titulo": "Well and Building at Sabactsche Yucatan by F Catherwood B",
-  "artista": "Frederick Catherwood (d. 1854)",
-  "fecha": "1842",
+  "titulo": "Pozo y edificio en Sabacché, Yucatán",
+  "artista": "Frederick Catherwood",
+  "fecha": "1844",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Well_and_Building_at_Sabactsche_Yucatan_by_F_Catherwood_B.jpg",
   "archivo_commons": "File:Well and Building at Sabactsche Yucatan by F Catherwood B.jpg",
@@ -60,7 +60,7 @@
   "alto": 640
  },
  "1dc/cultura_hopewell": {
-  "titulo": "Rainmaking among the Mandan",
+  "titulo": "Danza de la lluvia entre los mandan",
   "artista": "George Catlin",
   "fecha": "1837",
   "licencia": "Public domain",
@@ -70,7 +70,7 @@
   "alto": 627
  },
  "1dc/dacios": {
-  "titulo": "Columna de Trajano: guerras dacias",
+  "titulo": "Columna de Trajano: las guerras dacias",
   "artista": "Relieve romano (foto: Gary Todd)",
   "fecha": "",
   "licencia": "Public domain",
@@ -100,7 +100,7 @@
   "alto": 1100
  },
  "1dc/garamantes_fezzan": {
-  "titulo": "The Caravan",
+  "titulo": "La caravana",
   "artista": "Gustavo Simoni",
   "fecha": "1883",
   "licencia": "Public domain",
@@ -110,7 +110,7 @@
   "alto": 674
  },
  "1dc/getulos_y_pueblos_bereberes_del_atlas_y_el_sahara_septentrional": {
-  "titulo": "Tentes de la smalah de Si-Hamed-Bel-Hadj, Sahara",
+  "titulo": "Tiendas de la smala de Si-Hamed-Bel-Hadj, Sáhara",
   "artista": "Eugène Fromentin",
   "fecha": "1850",
   "licencia": "Public domain",
@@ -120,7 +120,7 @@
   "alto": 487
  },
  "1dc/godos_gutones_del_vistula": {
-  "titulo": "Visigoths Attacking Clovis I as He Kills Alaric II",
+  "titulo": "Los visigodos atacan a Clodoveo, que mata a Alarico II",
   "artista": "Edme Bouchardon",
   "fecha": "1738",
   "licencia": "Public domain",
@@ -130,17 +130,17 @@
   "alto": 453
  },
  "1dc/goguryeo": {
-  "titulo": "Pintura de la Gran Tumba de Gangseo (réplica)",
-  "artista": "Anónimo, Goguryeo (foto: Gary Todd)",
-  "fecha": "",
-  "licencia": "CC0",
-  "url": "https://commons.wikimedia.org/wiki/File:Goguryeo_Kingdom_Gangseo_Great_Tomb_Painting_(Replica)_(17991882431).jpg",
-  "archivo_commons": "File:Goguryeo Kingdom Gangseo Great Tomb Painting (Replica) (17991882431).jpg",
+  "titulo": "Procesión de Dong Shou (mural de la tumba de Anak n.º 3)",
+  "artista": "Anónimo, Goguryeo",
+  "fecha": "357",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:Dongshouprocessionmural.jpg",
+  "archivo_commons": "File:Dongshouprocessionmural.jpg",
   "ancho": 960,
-  "alto": 640
+  "alto": 468
  },
  "1dc/hibernios_irlanda_gaelica": {
-  "titulo": "The Children of Lir",
+  "titulo": "Los hijos de Lir",
   "artista": "John Duncan",
   "fecha": "1924",
   "licencia": "Public domain",
@@ -150,7 +150,7 @@
   "alto": 970
  },
  "1dc/imperio_romano": {
-  "titulo": "Cicerone denuncia CatilinaCicero Denounces Catiline",
+  "titulo": "Cicerón denuncia a Catilina en el Senado",
   "artista": "Cesare Maccari",
   "fecha": "1889",
   "licencia": "Public domain",
@@ -160,7 +160,7 @@
   "alto": 625
  },
  "1dc/judea": {
-  "titulo": "The Siege and Destruction of Jerusalem by the Romans Under the Command of Titus, A.D. 70",
+  "titulo": "El asedio y la destrucción de Jerusalén por los romanos al mando de Tito",
   "artista": "David Roberts",
   "fecha": "1850",
   "licencia": "Public domain",
@@ -170,7 +170,7 @@
   "alto": 638
  },
  "1dc/magadha_y_bengala": {
-  "titulo": "The Banks of the Ganges",
+  "titulo": "Las orillas del Ganges",
   "artista": "William Daniell",
   "fecha": "1825",
   "licencia": "Public domain",
@@ -180,7 +180,7 @@
   "alto": 806
  },
  "1dc/marcomanos_y_cuados": {
-  "titulo": "Otto Albert Koch Varusschlacht 1909",
+  "titulo": "La batalla de Varo",
   "artista": "Otto Albert Koch",
   "fecha": "1909",
   "licencia": "Public domain",
@@ -190,7 +190,7 @@
   "alto": 1100
  },
  "1dc/melanesios_cultura_lapita_bismarck_salomon_y_vanuatu": {
-  "titulo": "The Landing at Erramanga painting",
+  "titulo": "El desembarco en Erromango",
   "artista": "William Hodges",
   "fecha": "1776",
   "licencia": "Public domain",
@@ -200,9 +200,9 @@
   "alto": 723
  },
  "1dc/pueblos_aborigenes_del_sur_de_australia_murray_y_nullarbor": {
-  "titulo": "ABORIGINAL ENCAMPMENT, 1847 oil on canvas 33",
+  "titulo": "Campamento aborigen",
   "artista": "Thomas Tyrwhitt Balcombe",
-  "fecha": "",
+  "fecha": "1847",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Tyrwhitt_Balcombe_-_5e54834be1.jpg",
   "archivo_commons": "File:Thomas Tyrwhitt Balcombe - 5e54834be1.jpg",
@@ -210,7 +210,7 @@
   "alto": 686
  },
  "1dc/pueblos_de_fiyi_tonga_y_samoa_cultura_lapita": {
-  "titulo": "'[A] view of Maitavie Bay, [in the island of] Otaheite [Tahiti]'",
+  "titulo": "Vista de la bahía de Matavai, Tahití",
   "artista": "William Hodges",
   "fecha": "1776",
   "licencia": "Public domain",
@@ -220,7 +220,7 @@
   "alto": 680
  },
  "1dc/pueblos_de_java_bali_y_las_pequenas_sondas": {
-  "titulo": "Indonesian: Reruntuhan candi Jawa Javanese Temple in Ruins",
+  "titulo": "Templo javanés en ruinas",
   "artista": "Raden Saleh",
   "fecha": "1860",
   "licencia": "Public domain",
@@ -230,7 +230,7 @@
   "alto": 536
  },
  "1dc/pueblos_de_la_costa_noroeste_tlingit_haida_y_salish": {
-  "titulo": "Totem Mother, Kitwancool",
+  "titulo": "Madre tótem, Kitwancool",
   "artista": "Emily Carr",
   "fecha": "1928",
   "licencia": "Public domain",
@@ -240,7 +240,7 @@
   "alto": 1100
  },
  "1dc/pueblos_de_las_grandes_llanuras_cazadores_de_bisontes": {
-  "titulo": "Buffalo Hunt: A Numerous Group",
+  "titulo": "Cacería de búfalos",
   "artista": "George Catlin",
   "fecha": "1844",
   "licencia": "Public domain",
@@ -260,7 +260,7 @@
   "alto": 720
  },
  "1dc/pueblos_mon_y_de_suvarnabhumi": {
-  "titulo": "Ein heiliger See in BirmaA holy lake in Burma",
+  "titulo": "Un lago sagrado en Birmania",
   "artista": "Eduard Hildebrandt",
   "fecha": "1867",
   "licencia": "Public domain",
@@ -270,8 +270,8 @@
   "alto": 614
  },
  "1dc/queruscos_catos_y_bructeros": {
-  "titulo": "Die Hermannsschlacht im Teutoburger Wald Battle of the Teutoburg Forest",
-  "artista": "Wilhelm Lindenschmit the Elder",
+  "titulo": "La batalla de Arminio en el bosque de Teutoburgo",
+  "artista": "Wilhelm Lindenschmit el Viejo",
   "fecha": "1840",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Wilhelm_Lindenschmit_d._%C3%84lt._-_Die_Hermannsschlacht_im_Teutoburger_Wald_(um_1840).jpg",
@@ -300,8 +300,8 @@
   "alto": 720
  },
  "1dc/reino_de_armenia": {
-  "titulo": "«Сошествие Ноя с Арарата»Descent of Noah from Ararat",
-  "artista": "Ivan Aivazovsky",
+  "titulo": "Descenso de Noé del Ararat",
+  "artista": "Iván Aivazovski",
   "fecha": "1889",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Aivazovsky_-_Descent_of_Noah_from_Ararat.jpg",
@@ -310,8 +310,8 @@
   "alto": 565
  },
  "1dc/reino_de_himyar": {
-  "titulo": "Bilqis, Queen of Sheba, painting, album, Safavid dynasty, Iran",
-  "artista": "Anónimo",
+  "titulo": "Bilqis, reina de Saba",
+  "artista": "Anónimo, álbum safávida",
   "fecha": "1590",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Bilqis,_Queen_of_Sheba,_painting,_album,_Safavid_dynasty,_Iran.jpg",
@@ -320,7 +320,7 @@
   "alto": 561
  },
  "1dc/reino_de_kush_meroe": {
-  "titulo": "The Temple at Dendur, Nubia",
+  "titulo": "El templo de Dendur, Nubia",
   "artista": "David Roberts",
   "fecha": "1848",
   "licencia": "CC0",
@@ -330,8 +330,8 @@
   "alto": 699
  },
  "1dc/reino_del_bosforo": {
-  "titulo": "View of Kerch",
-  "artista": "Ivan Aivazovsky",
+  "titulo": "Vista de Kerch",
+  "artista": "Iván Aivazovski",
   "fecha": "1839",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Kerch_aivazovsky.jpg",
@@ -340,7 +340,7 @@
   "alto": 704
  },
  "1dc/reino_del_ponto": {
-  "titulo": "Карло Боссоли. Могила Митридата",
+  "titulo": "La tumba de Mitrídates",
   "artista": "Carlo Bossoli",
   "fecha": "1856",
   "licencia": "Public domain",
@@ -360,7 +360,7 @@
   "alto": 1100
  },
  "1dc/reino_nabateo": {
-  "titulo": "El Deir Petra",
+  "titulo": "El Deir, Petra",
   "artista": "David Roberts",
   "fecha": "1839",
   "licencia": "CC0",
@@ -390,8 +390,8 @@
   "alto": 714
  },
  "1dc/teotihuacan_valle_de_mexico": {
-  "titulo": "La Pirámide del Sol en Teotihuacán - 1878 - José María Velasco - MUNAL",
-  "artista": "José María Velasco Gómez Obregón",
+  "titulo": "La Pirámide del Sol en Teotihuacán",
+  "artista": "José María Velasco",
   "fecha": "1878",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:La_Pir%C3%A1mide_del_Sol_en_Teotihuac%C3%A1n_-_1878_-_Jos%C3%A9_Mar%C3%ADa_Velasco_-_MUNAL.jpg",
@@ -400,7 +400,7 @@
   "alto": 651
  },
  "1dc/tierras_sin_reclamar_de_europa": {
-  "titulo": "Hünengrab im Schnee Cairn in Snow",
+  "titulo": "Tumba megalítica en la nieve",
   "artista": "Caspar David Friedrich",
   "fecha": "1807",
   "licencia": "Public domain",
@@ -410,7 +410,7 @@
   "alto": 728
  },
  "1dc/tribus_arabes_de_neyed_y_hiyaz": {
-  "titulo": "An Arabian in the desert",
+  "titulo": "Un árabe en el desierto",
   "artista": "Charles Tschaggeny",
   "fecha": "1858",
   "licencia": "Public domain",
@@ -420,7 +420,7 @@
   "alto": 721
  },
  "2026/afganistan": {
-  "titulo": "Logar Valley, Afghanistan. Looking towards Cabul, showing the pass. Camp Hisarak, May 1880",
+  "titulo": "Valle de Logar, mirando hacia Kabul",
   "artista": "John Frederick Irwin",
   "fecha": "1880",
   "licencia": "Public domain",
@@ -430,9 +430,9 @@
   "alto": 601
  },
  "2026/alemania": {
-  "titulo": "The hiker above the sea of fog",
+  "titulo": "El caminante sobre el mar de nubes",
   "artista": "Caspar David Friedrich",
-  "fecha": "1817",
+  "fecha": "1818",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg",
   "archivo_commons": "File:Caspar David Friedrich - Wanderer above the sea of fog.jpg",
@@ -440,7 +440,7 @@
   "alto": 1100
  },
  "2026/arabia_saudita": {
-  "titulo": "Caravane en route vers La Mecque",
+  "titulo": "Caravana camino de La Meca",
   "artista": "Félix Ziem",
   "fecha": "1880",
   "licencia": "Public domain",
@@ -450,9 +450,9 @@
   "alto": 596
  },
  "2026/argelia": {
-  "titulo": "Femmes d'Alger dans leur intérieurFemmes d'Alger dans leur intérieur",
+  "titulo": "Mujeres de Argel en su apartamento",
   "artista": "Eugène Delacroix",
-  "fecha": "1847",
+  "fecha": "1849",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Delacroix-femmes_d%27Alger.JPG",
   "archivo_commons": "File:Delacroix-femmes d'Alger.JPG",
@@ -470,7 +470,7 @@
   "alto": 428
  },
  "2026/armenia": {
-  "titulo": "Noah's ark on the Mount Ararat",
+  "titulo": "El arca de Noé sobre el monte Ararat",
   "artista": "Simon de Myle",
   "fecha": "1570",
   "licencia": "Public domain",
@@ -480,7 +480,7 @@
   "alto": 754
  },
  "2026/australia": {
-  "titulo": "Shearing the rams",
+  "titulo": "La esquila de los carneros",
   "artista": "Tom Roberts",
   "fecha": "1890",
   "licencia": "Public domain",
@@ -490,9 +490,9 @@
   "alto": 638
  },
  "2026/austria": {
-  "titulo": "The Kiss (Der Kuß)",
+  "titulo": "El beso",
   "artista": "Gustav Klimt",
-  "fecha": "1907",
+  "fecha": "1908",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg",
   "archivo_commons": "File:The Kiss - Gustav Klimt - Google Cultural Institute.jpg",
@@ -500,8 +500,8 @@
   "alto": 963
  },
  "2026/azerbaiyan": {
-  "titulo": "The Maiden's Tower (Qiz Qalasi) in Baku on the Caspian Sea",
-  "artista": "Paul Franken",
+  "titulo": "La Torre de la Doncella en Bakú, junto al Caspio",
+  "artista": "Paul von Franken",
   "fecha": "1880",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Paul_von_Franken_-_Der_Jungfrauenturm_(Qiz_Qalasi)_in_Baku_(1880).jpg",
@@ -510,8 +510,8 @@
   "alto": 617
  },
  "2026/belgica": {
-  "titulo": "Myśliwi na śniegu monthly cycle, scene: The Hunters in the Snow (winter)",
-  "artista": "Pieter Brueghel the Elder",
+  "titulo": "Cazadores en la nieve",
+  "artista": "Pieter Brueghel el Viejo",
   "fecha": "1565",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_Hunters_in_the_Snow_(Winter)_-_Google_Art_Project.jpg",
@@ -520,9 +520,9 @@
   "alto": 683
  },
  "2026/brasil": {
-  "titulo": "Independence or Death! (The Ipiranga Shout)",
+  "titulo": "Independencia o muerte (el grito de Ipiranga)",
   "artista": "Pedro Américo",
-  "fecha": "",
+  "fecha": "1888",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Pedro_Am%C3%A9rico_-_Independ%C3%AAncia_ou_Morte_-_cores_ajustadas.jpg",
   "archivo_commons": "File:Pedro Américo - Independência ou Morte - cores ajustadas.jpg",
@@ -530,7 +530,7 @@
   "alto": 519
  },
  "2026/canada": {
-  "titulo": "The Jack Pine",
+  "titulo": "El pino",
   "artista": "Tom Thomson",
   "fecha": "1916",
   "licencia": "Public domain",
@@ -540,8 +540,8 @@
   "alto": 878
  },
  "2026/chequia": {
-  "titulo": "Slavs in their Original Homeland: Between the Turanian Whip and the Sword of the Goths",
-  "artista": "Alphonse Mucha",
+  "titulo": "Los eslavos en su patria original",
+  "artista": "Alfons Mucha",
   "fecha": "1912",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Slovane_v_pravlasti_81x61m.jpg",
@@ -550,7 +550,7 @@
   "alto": 704
  },
  "2026/chile": {
-  "titulo": "Huasos maulinosHuasos from Maule Region",
+  "titulo": "Huasos maulinos",
   "artista": "Johann Moritz Rugendas",
   "fecha": "1836",
   "licencia": "Public domain",
@@ -570,7 +570,7 @@
   "alto": 602
  },
  "2026/colombia": {
-  "titulo": "Vendedoras de Papas by Ramón Torres Méndez",
+  "titulo": "Vendedoras de papas",
   "artista": "Ramón Torres Méndez",
   "fecha": "1860",
   "licencia": "Public domain",
@@ -580,8 +580,8 @@
   "alto": 755
  },
  "2026/corea_del_sur": {
-  "titulo": "Hyewon-Danopungjeong",
-  "artista": "Shin Yun-bok",
+  "titulo": "Danopungjeong (el festival de Dano)",
+  "artista": "Shin Yun-bok (Hyewon)",
   "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Hyewon-Danopungjeong.jpg",
@@ -590,7 +590,7 @@
   "alto": 764
  },
  "2026/croacia": {
-  "titulo": "Alter Palast in der Ombla bei Gravosa",
+  "titulo": "Antiguo palacio de Ombla, cerca de Gruž",
   "artista": "Anton Perko",
   "fecha": "1905",
   "licencia": "Public domain",
@@ -600,8 +600,8 @@
   "alto": 626
  },
  "2026/cuba": {
-  "titulo": "Ingenio Flor de Cuba 1857",
-  "artista": "Justo German Cantero",
+  "titulo": "Ingenio Flor de Cuba",
+  "artista": "Justo Germán Cantero",
   "fecha": "1857",
   "licencia": "CC0",
   "url": "https://commons.wikimedia.org/wiki/File:Ingenio_Flor_de_Cuba_1857.jpg",
@@ -610,8 +610,8 @@
   "alto": 554
  },
  "2026/dinamarca": {
-  "titulo": "Danish: Sommeraften på Skagen SønderstrandSummer Evening on the Southern Beach",
-  "artista": "Peder Severin Krøyer",
+  "titulo": "Tarde de verano en la playa sur de Skagen",
+  "artista": "P. S. Krøyer",
   "fecha": "1893",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:P.S._Kr%C3%B8yer_-_Summer_evening_on_Skagen%27s_Beach._Anna_Ancher_and_Marie_Kr%C3%B8yer_walking_together._-_Google_Art_Project.jpg",
@@ -620,7 +620,7 @@
   "alto": 625
  },
  "2026/egipto": {
-  "titulo": "The Hypostyle Hall of the Great Temple at Abu Simbel, Egypt",
+  "titulo": "La sala hipóstila del Gran Templo de Abu Simbel",
   "artista": "David Roberts",
   "fecha": "1849",
   "licencia": "Public domain",
@@ -630,7 +630,7 @@
   "alto": 683
  },
  "2026/eslovenia": {
-  "titulo": "Der Sommer Summer",
+  "titulo": "Verano",
   "artista": "Ivana Kobilca",
   "fecha": "1889",
   "licencia": "Public domain",
@@ -640,8 +640,8 @@
   "alto": 1100
  },
  "2026/espana": {
-  "titulo": "The 3rd of May 1808 in Madrid: the executions on Principe Pio hill",
-  "artista": "Francisco Goya",
+  "titulo": "El 3 de mayo de 1808 en Madrid",
+  "artista": "Francisco de Goya",
   "fecha": "1814",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:El_tres_de_mayo_de_1808_en_Madrid.jpg",
@@ -650,7 +650,7 @@
   "alto": 733
  },
  "2026/estados_unidos": {
-  "titulo": "Washington Crossing the Delaware.",
+  "titulo": "Washington cruzando el Delaware",
   "artista": "Emanuel Leutze",
   "fecha": "1851",
   "licencia": "Public domain",
@@ -660,7 +660,7 @@
   "alto": 615
  },
  "2026/etiopia": {
-  "titulo": "Peinture de l'église d'Abbas Antonios - Cavaliers et martyrs",
+  "titulo": "Jinetes y mártires (iglesia de Abbas Antonios)",
   "artista": "Anónimo",
   "fecha": "",
   "licencia": "Public domain",
@@ -680,7 +680,7 @@
   "alto": 518
  },
  "2026/finlandia": {
-  "titulo": "Aino Myth, Triptych",
+  "titulo": "Tríptico del mito de Aino",
   "artista": "Akseli Gallen-Kallela",
   "fecha": "1891",
   "licencia": "Public domain",
@@ -690,7 +690,7 @@
   "alto": 463
  },
  "2026/francia": {
-  "titulo": "Liberty Leading the People",
+  "titulo": "La libertad guiando al pueblo",
   "artista": "Eugène Delacroix",
   "fecha": "1830",
   "licencia": "Public domain",
@@ -700,8 +700,8 @@
   "alto": 760
  },
  "2026/georgia": {
-  "titulo": "Pirosmani - A feast on the bank",
-  "artista": "Gleb Simonov",
+  "titulo": "Banquete a la orilla",
+  "artista": "Niko Pirosmani",
   "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Pirosmani_-_A_feast_on_the_bank.jpg",
@@ -720,17 +720,17 @@
   "alto": 643
  },
  "2026/grecia": {
-  "titulo": "Theodoros Vryzakis - The sortie of Missolonghi",
-  "artista": "Tangopaso",
-  "fecha": "",
+  "titulo": "Grecia sobre las ruinas de Mesolongi",
+  "artista": "Eugène Delacroix",
+  "fecha": "1826",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Theodoros_Vryzakis_-_The_sortie_of_Missolonghi.jpg",
-  "archivo_commons": "File:Theodoros Vryzakis - The sortie of Missolonghi.jpg",
-  "ancho": 825,
+  "url": "https://commons.wikimedia.org/wiki/File:Eug%C3%A8ne_Delacroix_-_La_Gr%C3%A8ce_sur_les_ruines_de_Missolonghi,_1826.jpg",
+  "archivo_commons": "File:Eugène Delacroix - La Grèce sur les ruines de Missolonghi, 1826.jpg",
+  "ancho": 740,
   "alto": 1100
  },
  "2026/hungria": {
-  "titulo": "Conquest (Settlement of the Magyars in Hungary)",
+  "titulo": "La conquista (Honfoglalás)",
   "artista": "Mihály Munkácsy",
   "fecha": "1893",
   "licencia": "Public domain",
@@ -740,9 +740,9 @@
   "alto": 313
  },
  "2026/india": {
-  "titulo": "Shakuntala Patra Lekhan (Shakuntala writing a Letter) by Raja Ravi Varma",
+  "titulo": "Shakuntala escribiendo una carta",
   "artista": "Raja Ravi Varma",
-  "fecha": "1906",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Shakuntala_Patra_Lekhan_(Shakuntala_writing_a_Letter)_by_Raja_Ravi_Varma.jpg",
   "archivo_commons": "File:Shakuntala Patra Lekhan (Shakuntala writing a Letter) by Raja Ravi Varma.jpg",
@@ -750,7 +750,7 @@
   "alto": 701
  },
  "2026/indonesia": {
-  "titulo": "Indonesian: Penangkapan DiponegoroThe Arrest of Diponegoro",
+  "titulo": "El arresto de Diponegoro",
   "artista": "Raden Saleh",
   "fecha": "1857",
   "licencia": "Public domain",
@@ -760,7 +760,7 @@
   "alto": 605
  },
  "2026/irak": {
-  "titulo": "Harun al-Rashid receiving a delegation of Charlemagne in Baghdad",
+  "titulo": "Harún al-Rashid recibe a una embajada de Carlomagno en Bagdad",
   "artista": "Julius Köckert",
   "fecha": "1864",
   "licencia": "Public domain",
@@ -770,9 +770,9 @@
   "alto": 510
  },
  "2026/iran": {
-  "titulo": "Mirror Hall",
-  "artista": "Kamal-ol-molk",
-  "fecha": "1882",
+  "titulo": "La Sala de los Espejos",
+  "artista": "Kamal-ol-Molk",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Mirror_Hall.jpg",
   "archivo_commons": "File:Mirror Hall.jpg",
@@ -780,9 +780,9 @@
   "alto": 714
  },
  "2026/irlanda": {
-  "titulo": "Marriage of strongbow and aoife",
-  "artista": "User:Am1ki",
-  "fecha": "",
+  "titulo": "El matrimonio de Strongbow y Aoife",
+  "artista": "Daniel Maclise",
+  "fecha": "1854",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Marriage_of_strongbow_and_aoife.jpg",
   "archivo_commons": "File:Marriage of strongbow and aoife.jpg",
@@ -800,7 +800,7 @@
   "alto": 658
  },
  "2026/israel": {
-  "titulo": "Jerusalem from the Mount of Olives",
+  "titulo": "Jerusalén desde el monte de los Olivos",
   "artista": "David Roberts",
   "fecha": "1839",
   "licencia": "CC0",
@@ -810,8 +810,8 @@
   "alto": 641
  },
  "2026/italia": {
-  "titulo": "Raphael School of Athens",
-  "artista": "Raphael",
+  "titulo": "La escuela de Atenas",
+  "artista": "Rafael",
   "fecha": "1511",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Raphael_School_of_Athens.jpg",
@@ -820,9 +820,9 @@
   "alto": 627
  },
  "2026/japon": {
-  "titulo": "『神奈川沖浪裏 』The Great Wave off Kanagawa",
+  "titulo": "La gran ola de Kanagawa",
   "artista": "Katsushika Hokusai",
-  "fecha": "1830",
+  "fecha": "1831",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Tsunami_by_hokusai_19th_century.jpg",
   "archivo_commons": "File:Tsunami by hokusai 19th century.jpg",
@@ -830,17 +830,17 @@
   "alto": 645
  },
  "2026/kazajistan": {
-  "titulo": "Russians surrounded 1873",
-  "artista": "Anónimo",
-  "fecha": "1873",
+  "titulo": "Junto a la muralla de la fortaleza: «¡Que pasen!»",
+  "artista": "Vasili Vereshchagin",
+  "fecha": "1871",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Russians_surrounded_1873.jpg",
-  "archivo_commons": "File:Russians surrounded 1873.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:1871_Vereshchagin_In_der_Stadtmauer_anagoria.JPG",
+  "archivo_commons": "File:1871 Vereshchagin In der Stadtmauer anagoria.JPG",
   "ancho": 960,
-  "alto": 650
+  "alto": 565
  },
  "2026/kenia": {
-  "titulo": "Finnish: Mount Kenya Mount Kenya",
+  "titulo": "Monte Kenia",
   "artista": "Akseli Gallen-Kallela",
   "fecha": "1909",
   "licencia": "Public domain",
@@ -850,9 +850,9 @@
   "alto": 737
  },
  "2026/libia": {
-  "titulo": "Avanzi romani a Leptis Magna, Libya",
+  "titulo": "Ruinas romanas en Leptis Magna",
   "artista": "Plinio Nomellini",
-  "fecha": "1943",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Plinio_Nomellini_-_Avanzi_romani_a_Leptis_Magna,_Libya.jpg",
   "archivo_commons": "File:Plinio Nomellini - Avanzi romani a Leptis Magna, Libya.jpg",
@@ -860,18 +860,18 @@
   "alto": 652
  },
  "2026/lituania": {
-  "titulo": "Painting by Mikalojus Konstantinas Čiurlionis.",
-  "artista": "Mikalojus Konstantinas Čiurlionis",
-  "fecha": "",
+  "titulo": "Funeral del gran duque Gediminas",
+  "artista": "Kazimierz Alchimowicz",
+  "fecha": "1888",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:Mikalojus_Konstantinas_Ciurlionis_-_REX_-_1909.jpg",
-  "archivo_commons": "File:Mikalojus Konstantinas Ciurlionis - REX - 1909.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Funeral_of_Grand_Duke_of_Lithuania_Gediminas,_painting_by_K._Alchimowicz,_1888.jpg",
+  "archivo_commons": "File:Funeral of Grand Duke of Lithuania Gediminas, painting by K. Alchimowicz, 1888.jpg",
   "ancho": 960,
-  "alto": 1078
+  "alto": 602
  },
  "2026/marruecos": {
-  "titulo": "Catalan: Fantasia àrabArab Fantasia",
-  "artista": "Mariano Fortuny Marsal",
+  "titulo": "Fantasía árabe",
+  "artista": "Mariano Fortuny",
   "fecha": "1867",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Fortuny_Fantasia_%C3%A0rab.jpg",
@@ -880,7 +880,7 @@
   "alto": 717
  },
  "2026/mexico": {
-  "titulo": "Valle de México desde el cerro de Santa Isabel",
+  "titulo": "El valle de México desde el cerro de Santa Isabel",
   "artista": "José María Velasco",
   "fecha": "1875",
   "licencia": "Public domain",
@@ -890,9 +890,9 @@
   "alto": 659
  },
  "2026/mongolia": {
-  "titulo": "《元代帝半身像册-元太祖皇帝像》 Simplified Chinese: 《元代帝半身像册-元太祖皇帝像》",
-  "artista": "Anónimo",
-  "fecha": "1350",
+  "titulo": "Retrato de Gengis Kan",
+  "artista": "Anónimo, álbum de retratos de la dinastía Yuan",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:YuanEmperorAlbumGenghisPortrait.jpg",
   "archivo_commons": "File:YuanEmperorAlbumGenghisPortrait.jpg",
@@ -900,8 +900,8 @@
   "alto": 1100
  },
  "2026/noruega": {
-  "titulo": "Norwegian: Brudeferd i HardangerBridal procession on the Hardangerfjord / Bridal journey i",
-  "artista": "Adolph Tidemand / Hans Gude",
+  "titulo": "Boda en el fiordo de Hardanger",
+  "artista": "Adolph Tidemand y Hans Gude",
   "fecha": "1848",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Adolph_Tidemand_%26_Hans_Gude_-_Bridal_Procession_on_the_Hardangerfjord_-_Google_Art_Project.jpg",
@@ -920,7 +920,7 @@
   "alto": 1100
  },
  "2026/paises_bajos": {
-  "titulo": "Officieren en andere schutters van wijk II in Amsterdam, onder leiding van kapitein",
+  "titulo": "La ronda de noche",
   "artista": "Rembrandt",
   "fecha": "1642",
   "licencia": "Public domain",
@@ -930,8 +930,8 @@
   "alto": 781
  },
  "2026/pakistan": {
-  "titulo": "Painting of Sikhs before Lahore, circa 19th century",
-  "artista": "Anónimo",
+  "titulo": "Los sijs ante Lahore",
+  "artista": "Anónimo, siglo XIX",
   "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Painting_of_Sikhs_before_Lahore,_circa_19th_century.jpg",
@@ -940,9 +940,9 @@
   "alto": 538
  },
  "2026/peru": {
-  "titulo": "The Marriage of the Virgin",
-  "artista": "Anónimo",
-  "fecha": "1680",
+  "titulo": "Los desposorios de la Virgen",
+  "artista": "Escuela cuzqueña, anónimo",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Anonymous_Cusco_School_-_The_Marriage_of_the_Virgin_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Anonymous Cusco School - The Marriage of the Virgin - Google Art Project.jpg",
@@ -950,7 +950,7 @@
   "alto": 550
  },
  "2026/polonia": {
-  "titulo": "The Battle of Grunwald",
+  "titulo": "La batalla de Grunwald",
   "artista": "Jan Matejko",
   "fecha": "1878",
   "licencia": "Public domain",
@@ -960,7 +960,7 @@
   "alto": 415
  },
  "2026/portugal": {
-  "titulo": "Nuno Gonçalves. Paineis de São Vicente de Fora",
+  "titulo": "Paneles de San Vicente de Fora",
   "artista": "Nuno Gonçalves",
   "fecha": "",
   "licencia": "Public domain",
@@ -970,7 +970,7 @@
   "alto": 407
  },
  "2026/reino_unido": {
-  "titulo": "The Fighting Temeraire tugged to her last berth to be broken up, 1838",
+  "titulo": "El Temerario remolcado a su último fondeadero",
   "artista": "J. M. W. Turner",
   "fecha": "1839",
   "licencia": "Public domain",
@@ -980,7 +980,7 @@
   "alto": 713
  },
  "2026/republica_democratica_del_congo": {
-  "titulo": "Padrão Erguido pelos Portugueses na Foz do Zaire (Roque Gameiro, Quadros da História de Po",
+  "titulo": "Padrão erigido por los portugueses en la desembocadura del Zaire",
   "artista": "Roque Gameiro",
   "fecha": "1917",
   "licencia": "Public domain",
@@ -990,9 +990,9 @@
   "alto": 557
  },
  "2026/rumania": {
-  "titulo": "Nicolae Grigorescu - Portret de tarancuta (1)",
+  "titulo": "Retrato de campesina",
   "artista": "Nicolae Grigorescu",
-  "fecha": "1886",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Nicolae_Grigorescu_-_Portret_de_tarancuta_(1).jpg",
   "archivo_commons": "File:Nicolae Grigorescu - Portret de tarancuta (1).jpg",
@@ -1000,9 +1000,9 @@
   "alto": 1100
  },
  "2026/rusia": {
-  "titulo": "Burłacy na Wołdze Barge Haulers on the Volga",
-  "artista": "Ilya Repin",
-  "fecha": "1870",
+  "titulo": "Los sirgadores del Volga",
+  "artista": "Iliá Repin",
+  "fecha": "1873",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Ilia_Efimovich_Repin_(1844-1930)_-_Volga_Boatmen_(1870-1873).jpg",
   "archivo_commons": "File:Ilia Efimovich Repin (1844-1930) - Volga Boatmen (1870-1873).jpg",
@@ -1010,8 +1010,8 @@
   "alto": 444
  },
  "2026/senegal": {
-  "titulo": "Scenery from Dakar Habour with the island of Gorée in the background.",
-  "artista": "Benjamin Olsen",
+  "titulo": "El puerto de Dakar con la isla de Gorée al fondo",
+  "artista": "Christian Benjamin Olsen",
   "fecha": "1891",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Christian_Benjamin_Olsen_-_Parti_fra_fra_Dakar_Havn_med_%C3%B8en_Gor%C3%A9e_i_baggrunden.png",
@@ -1020,8 +1020,8 @@
   "alto": 593
  },
  "2026/serbia": {
-  "titulo": "Serbmigra",
-  "artista": "w:Paja Jovanović (1859–1957)",
+  "titulo": "La migración de los serbios",
+  "artista": "Paja Jovanović",
   "fecha": "1896",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Serbmigra.jpg",
@@ -1030,7 +1030,7 @@
   "alto": 621
  },
  "2026/siria": {
-  "titulo": "Gustav Bauernfeind - A Street Scene, Damascus (Sotheby's, ShafikGabrCollection) 001l2010",
+  "titulo": "Una calle de Damasco",
   "artista": "Gustav Bauernfeind",
   "fecha": "1890",
   "licencia": "Public domain",
@@ -1040,7 +1040,7 @@
   "alto": 725
  },
  "2026/sudafrica": {
-  "titulo": "Wagon Crossing a Drift - Natal",
+  "titulo": "Carreta cruzando un vado, Natal",
   "artista": "Thomas Baines",
   "fecha": "1874",
   "licencia": "Public domain",
@@ -1050,9 +1050,9 @@
   "alto": 740
  },
  "2026/suecia": {
-  "titulo": "Midvinterblot",
+  "titulo": "Midvinterblot (el sacrificio de pleno invierno)",
   "artista": "Carl Larsson",
-  "fecha": "",
+  "fecha": "1915",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Midvinterblot_(Carl_Larsson)_-_Nationalmuseum_-_edited.jpg",
   "archivo_commons": "File:Midvinterblot (Carl Larsson) - Nationalmuseum - edited.jpg",
@@ -1060,9 +1060,9 @@
   "alto": 452
  },
  "2026/suiza": {
-  "titulo": "Thunersee mit Blüemlisalp und Niesen",
+  "titulo": "El lago de Thun con Blüemlisalp y Niesen",
   "artista": "Ferdinand Hodler",
-  "fecha": "1882",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Ferdinand_Hodler_-_Thunersee_mit_Bl%C3%BCemlisalp_und_Niesen.jpg",
   "archivo_commons": "File:Ferdinand Hodler - Thunersee mit Blüemlisalp und Niesen.jpg",
@@ -1080,9 +1080,9 @@
   "alto": 598
  },
  "2026/tunez": {
-  "titulo": "Kairuan mit den Kamelen und dem Esel Kairuan mit den Kamelen und dem Esel",
+  "titulo": "Kairuán",
   "artista": "Paul Klee",
-  "fecha": "1916",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Paul_Klee_Kairuan_1916.jpg",
   "archivo_commons": "File:Paul Klee Kairuan 1916.jpg",
@@ -1090,7 +1090,7 @@
   "alto": 623
  },
  "2026/turquia": {
-  "titulo": "The Tortoise Trainer",
+  "titulo": "El domador de tortugas",
   "artista": "Osman Hamdi Bey",
   "fecha": "1906",
   "licencia": "Public domain",
@@ -1100,9 +1100,9 @@
   "alto": 1100
  },
  "2026/ucrania": {
-  "titulo": "«Запорожцы»The Zaporozhian Cossacks write a letter to the Sultan of Turkeytitle Q",
-  "artista": "Ilya Repin",
-  "fecha": "1880",
+  "titulo": "Los cosacos zaporogos escriben una carta al sultán de Turquía",
+  "artista": "Iliá Repin",
+  "fecha": "1891",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Repin_Cossacks.jpg",
   "archivo_commons": "File:Repin Cossacks.jpg",
@@ -1110,8 +1110,8 @@
   "alto": 567
  },
  "2026/uzbekistan": {
-  "titulo": "Медресе Шир-Дор на площади Регистан в Самарканде",
-  "artista": "Vasily Vereshchagin",
+  "titulo": "La madrasa Shir-Dor en la plaza Registán de Samarcanda",
+  "artista": "Vasili Vereshchagin",
   "fecha": "1869",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B5%D0%B4%D1%80%D0%B5%D1%81%D0%B5_%D0%A8%D0%B8%D1%80-%D0%94%D0%BE%D1%80_%D0%BD%D0%B0_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%B8_%D0%A0%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D0%B0%D0%BD_%D0%B2_%D0%A1%D0%B0%D0%BC%D0%B0%D1%80%D0%BA%D0%B0%D0%BD%D0%B4%D0%B5.jpg",
@@ -1120,7 +1120,7 @@
   "alto": 691
  },
  "2026/venezuela": {
-  "titulo": "Miranda en La Carraca Miranda in La Carraca",
+  "titulo": "Miranda en La Carraca",
   "artista": "Arturo Michelena",
   "fecha": "1896",
   "licencia": "Public domain",
@@ -1130,8 +1130,8 @@
   "alto": 735
  },
  "2026/vietnam": {
-  "titulo": "Tranh Đông Hồ vẽ Phù Đổng Thiên Vương",
-  "artista": "Vietnamese artist",
+  "titulo": "Phù Đổng Thiên Vương",
+  "artista": "Anónimo, grabado popular de Đông Hồ",
   "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Tranh_%C4%90%C3%B4ng_H%E1%BB%93_v%E1%BA%BD_Ph%C3%B9_%C4%90%E1%BB%95ng_Thi%C3%AAn_V%C6%B0%C6%A1ng.jpg",
@@ -1140,7 +1140,7 @@
   "alto": 725
  },
  "general/continente_africa": {
-  "titulo": "Temple Island Philae",
+  "titulo": "Isla del templo de Filé",
   "artista": "David Roberts",
   "fecha": "1838",
   "licencia": "Public domain",
@@ -1150,7 +1150,7 @@
   "alto": 695
  },
  "general/continente_america_del_norte": {
-  "titulo": "A Storm in the Rocky Mountains, Mt. Rosalie",
+  "titulo": "Tormenta en las Montañas Rocosas, monte Rosalie",
   "artista": "Albert Bierstadt",
   "fecha": "1866",
   "licencia": "Public domain",
@@ -1160,7 +1160,7 @@
   "alto": 556
  },
  "general/continente_america_del_sur": {
-  "titulo": "The Heart of the Andes",
+  "titulo": "El corazón de los Andes",
   "artista": "Frederic Edwin Church",
   "fecha": "1859",
   "licencia": "Public domain",
@@ -1170,7 +1170,7 @@
   "alto": 526
  },
  "general/continente_antartida": {
-  "titulo": "H.M. Ships Erebus and Terror in the Ross Sea",
+  "titulo": "Los buques Erebus y Terror en el mar de Ross",
   "artista": "John Edward Davis",
   "fecha": "1850",
   "licencia": "Public domain",
@@ -1190,7 +1190,7 @@
   "alto": 606
  },
  "general/continente_europa": {
-  "titulo": "The Syndics of the Amsterdam Drapers' Guild, known as the ‘Sampling Officials’",
+  "titulo": "Los síndicos del gremio de pañeros",
   "artista": "Rembrandt",
   "fecha": "1662",
   "licencia": "Public domain",
@@ -1201,7 +1201,7 @@
  },
  "general/continente_oceania": {
   "titulo": "Sydney Heads",
-  "artista": "Eugene von Guerard",
+  "artista": "Eugene von Guérard",
   "fecha": "1865",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Eugene_von_Gu%C3%A9rard_-_Sydney_Heads_-_Google_Art_Project.jpg",
@@ -1210,8 +1210,8 @@
   "alto": 570
  },
  "general/mundo": {
-  "titulo": "Turmbau zu Babel The Tower of Babel",
-  "artista": "Pieter Brueghel the Elder",
+  "titulo": "La torre de Babel",
+  "artista": "Pieter Brueghel el Viejo",
   "fecha": "1563",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_d._%C3%84.,_Kunsthistorisches_Museum_Wien,_Gem%C3%A4ldegalerie_-_Turmbau_zu_Babel_-_GG_1026_-_Kunsthistorisches_Museum.jpg",
@@ -1220,9 +1220,9 @@
   "alto": 707
  },
  "general/region_africa_norte": {
-  "titulo": "The Great Sphinx, Pyramids of Gizeh-1839) by David Roberts, RA",
+  "titulo": "La Gran Esfinge y las pirámides de Guiza",
   "artista": "David Roberts",
-  "fecha": "1838",
+  "fecha": "1839",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:The_Great_Sphinx,_Pyramids_of_Gizeh-1839)_by_David_Roberts,_RA.jpg",
   "archivo_commons": "File:The Great Sphinx, Pyramids of Gizeh-1839) by David Roberts, RA.jpg",
@@ -1230,7 +1230,7 @@
   "alto": 610
  },
  "general/region_africa_subsahariana": {
-  "titulo": "Baobab Tree, South Africa",
+  "titulo": "Baobab, Sudáfrica",
   "artista": "Thomas Baines",
   "fecha": "1861",
   "licencia": "Public domain",
@@ -1240,19 +1240,19 @@
   "alto": 678
  },
  "general/region_asia_central": {
-  "titulo": "«У крепостной стены. \"Пусть войдут\"»By the Fortress Wall. \"Let Them Enter\"title Q",
-  "artista": "Vasily Vereshchagin",
-  "fecha": "1871",
+  "titulo": "Triunfantes",
+  "artista": "Vasili Vereshchagin",
+  "fecha": "1872",
   "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:1871_Vereshchagin_In_der_Stadtmauer_anagoria.JPG",
-  "archivo_commons": "File:1871 Vereshchagin In der Stadtmauer anagoria.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:1872_Vereshchagin_Triumphierend_anagoria.JPG",
+  "archivo_commons": "File:1872 Vereshchagin Triumphierend anagoria.JPG",
   "ancho": 960,
-  "alto": 565
+  "alto": 716
  },
  "general/region_asia_este": {
-  "titulo": "『凱風快晴』 - Gaifū kaiseiSouth Wind, Clear Sky",
+  "titulo": "Viento sur, cielo claro (el Fuji rojo)",
   "artista": "Katsushika Hokusai",
-  "fecha": "",
+  "fecha": "1831",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Red_Fuji_southern_wind_clear_morning.jpg",
   "archivo_commons": "File:Red Fuji southern wind clear morning.jpg",
@@ -1260,8 +1260,8 @@
   "alto": 641
  },
  "general/region_asia_sur": {
-  "titulo": "Painting of villagers at Rania (located in modern-day Haryana), circa 1816. Painted by the",
-  "artista": "Possibly the atelier of Ghulam ‘Ali Khan and others",
+  "titulo": "Aldeanos en Rania (Haryana)",
+  "artista": "Atribuido al taller de Ghulam ʿAli Khan",
   "fecha": "1816",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Painting_of_villagers_at_Rania_(located_in_modern-day_Haryana),_circa_1816._Painted_by_the_company_artists_Ghulam_%E2%80%98Ali_Khan_and_others.jpg",
@@ -1270,8 +1270,8 @@
   "alto": 685
  },
  "general/region_europa_este": {
-  "titulo": "«Утро в сосновом лесу»A Morning in a Pine Forest",
-  "artista": "Ivan Shishkin / Konstantin Savitsky",
+  "titulo": "Mañana en un bosque de pinos",
+  "artista": "Iván Shishkin y Konstantín Savitski",
   "fecha": "1889",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Shishkin,_Ivan_-_Morning_in_a_Pine_Forest.jpg",
@@ -1280,9 +1280,9 @@
   "alto": 650
  },
  "general/region_europa_norte": {
-  "titulo": "Der Mönch am Meer The Monk by the Sea",
+  "titulo": "El monje junto al mar",
   "artista": "Caspar David Friedrich",
-  "fecha": "1808",
+  "fecha": "1810",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Friedrich,_Caspar_David_-_M%C3%B6nch_am_Meer_-_Alte_Nationalgalerie_in_Berlin.jpg",
   "archivo_commons": "File:Friedrich, Caspar David - Mönch am Meer - Alte Nationalgalerie in Berlin.jpg",
@@ -1290,7 +1290,7 @@
   "alto": 617
  },
  "general/region_europa_occidental": {
-  "titulo": "The Hay Wain",
+  "titulo": "El carro de heno",
   "artista": "John Constable",
   "fecha": "1821",
   "licencia": "Public domain",
@@ -1300,8 +1300,8 @@
   "alto": 662
  },
  "general/region_mediterraneo": {
-  "titulo": "Seaport with the Embarkation of the Queen of Sheba",
-  "artista": "Claude Lorrain",
+  "titulo": "Puerto con el embarque de la reina de Saba",
+  "artista": "Claudio de Lorena",
   "fecha": "1648",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Claude_Lorrain_-_Seaport_with_the_Embarkation_of_the_Queen_of_Sheba_-_WGA05002.jpg",
@@ -1310,7 +1310,7 @@
   "alto": 730
  },
  "general/region_mesoamerica_caribe": {
-  "titulo": "Valle de México desde el cerro del Tepeyac",
+  "titulo": "El valle de México desde el cerro del Tepeyac",
   "artista": "José María Velasco",
   "fecha": "1883",
   "licencia": "CC0",
@@ -1320,7 +1320,7 @@
   "alto": 641
  },
  "general/region_norteamerica": {
-  "titulo": "The Rocky Mountains, Lander's Peak",
+  "titulo": "Las Montañas Rocosas, pico de Lander",
   "artista": "Albert Bierstadt",
   "fecha": "1863",
   "licencia": "Public domain",
@@ -1330,8 +1330,8 @@
   "alto": 575
  },
  "general/region_oceania": {
-  "titulo": "Dandenong Ranges from \"Beleura\"",
-  "artista": "Eugene von Guerard",
+  "titulo": "Cordillera Dandenong desde «Beleura»",
+  "artista": "Eugene von Guérard",
   "fecha": "1870",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Eugene_VON_GU%C3%89Rard_-_Dandenong_Ranges_from_%3FBeleura%3F_-_Google_Art_Project.jpg",
@@ -1340,7 +1340,7 @@
   "alto": 619
  },
  "general/region_oriente_medio": {
-  "titulo": "Jean-Léon Gérôme - Evening Prayer, Cairo (1865)",
+  "titulo": "Oración de la tarde en El Cairo",
   "artista": "Jean-Léon Gérôme",
   "fecha": "1865",
   "licencia": "Public domain",
@@ -1350,9 +1350,9 @@
   "alto": 574
  },
  "general/region_sudamerica_este": {
-  "titulo": "Pineapple, watermelons and other fruits (Brazilian fruits)",
+  "titulo": "Piña, sandías y otras frutas de Brasil",
   "artista": "Albert Eckhout",
-  "fecha": "1650",
+  "fecha": "",
   "licencia": "Public domain",
   "url": "https://commons.wikimedia.org/wiki/File:Albert_Eckhout_1610-1666_Brazilian_fruits.jpg",
   "archivo_commons": "File:Albert Eckhout 1610-1666 Brazilian fruits.jpg",
@@ -1360,7 +1360,7 @@
   "alto": 971
  },
  "general/region_sudeste_asiatico": {
-  "titulo": "Deer Hunt",
+  "titulo": "Caza de ciervos",
   "artista": "Raden Saleh",
   "fecha": "1846",
   "licencia": "Public domain",

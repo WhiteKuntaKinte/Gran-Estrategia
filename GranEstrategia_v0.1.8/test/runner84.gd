@@ -279,3 +279,21 @@ func t_epoca_1() -> void:
 		if p.de_pais(String(nombre)).is_empty():
 			sin_nada += 1
 	ok(sin_nada == 0, "ningún pueblo ni país se queda sin pintura (la cadena siempre llega a alguna)")
+	# una zona sin reclamar del año 1: el panel lleva la pintura de su región o continente
+	var m = main.mundo
+	var libre := -1
+	for pr in m.provincias:
+		if m.es_inerte(pr.pais):
+			libre = pr.idx
+			break
+	ok(libre >= 0, "el año 1 tiene zonas sin reclamar")
+	if libre >= 0:
+		main._seleccion_provincia(libre, m.continente_de_provincia(libre), Vector2(1200.0, 300.0))
+		await fotogramas(3)
+		var f2: Dictionary = main.hud.datos.get("pintura", {})
+		ok(String(main.hud.datos.get("tipo", "")) == "libre" and not f2.is_empty(), "zona sin reclamar: el HUD es «libre» y recibe pintura (%s)" % String(f2.get("id", "")))
+		var hay := false
+		for i in textos_imagen(main.hud.cuerpo):
+			if (i as TextureRect).custom_minimum_size.y == main.hud.ALTO_PINTURA:
+				hay = true
+		ok(hay, "la tarjeta de pintura se ve también en una zona sin reclamar")
