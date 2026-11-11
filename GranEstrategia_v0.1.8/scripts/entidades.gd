@@ -16,6 +16,8 @@ const RedProvinciasScript := preload("res://scripts/red_provincias.gd")
 const IAScript := preload("res://scripts/ia.gd")
 const PerfilScript := preload("res://scripts/perfil.gd")
 const DescubrimientosScript := preload("res://scripts/descubrimientos.gd")
+const EdificiosScript := preload("res://scripts/edificios.gd")
+const CoresScript := preload("res://scripts/cores.gd")
 
 ## Cuánto puede bajar lo que produce una provincia con devastación 1,0 (arrasada): -85 %. PROVISIONAL.
 const DEVASTACION_EFECTO := 0.85
@@ -246,6 +248,8 @@ class Mundo extends RefCounted:
 	var mandos                          # Mandos: nombres de la cadena de mando por cultura
 	var ia                              # IA: decisiones de los países controlados por el ordenador (0.1.8.2; ninguno al arrancar)
 	var descubrimientos                 # Descubrimientos (0.1.8.36): catálogo con años + qué conoce cada país (null si falta datos/descubrimientos.json)
+	var edificios                       # Edificios (0.1.8.40): catálogo de 109 edificios, obras y construcción por provincia (null si falta datos/edificios.json)
+	var cores                           # Cores (0.1.8.40): core nacional y core cultural de cada provincia (null hasta que se llama iniciar_edificios)
 	var modo := "dev"                   # "dev" = mapa mundial, todo permitido · "campana" = solo Europa + Rusia + Turquía, conquista básica
 	var campana := {}                   # (campaña) nombre de país -> true: los países que juegan
 	var excluidas := {}                 # (campaña) índice de provincia -> true: las que NO existen en la campaña
@@ -700,6 +704,18 @@ class Mundo extends RefCounted:
 		ia.iniciar(self)
 		iniciar_tesorerias()
 
+	## 0.1.8.40: arma los edificios (catálogo, obras) y los cores de las provincias. Va DESPUÉS de `iniciar_ejercito` (que carga las culturas).
+	## Sin catálogo (js_edificios no es un diccionario) no hay edificios, pero los cores sí existen.
+	func iniciar_edificios(js_edificios) -> void:
+		cores = CoresScript.new()
+		cores.iniciar(self)
+		edificios = null
+		if js_edificios is Dictionary:
+			var ed = EdificiosScript.new()
+			if ed.cargar(js_edificios):
+				ed.iniciar(self)
+				edificios = ed
+
 	## Nombre real del jefe de Estado de un país en una fecha (de Historia), o "" si no se conoce.
 	func jefe_de_estado(pais: String, fecha: int) -> String:
 		if historia == null or not paises.has(pais):
@@ -957,6 +973,8 @@ class Mundo extends RefCounted:
 			r.append(Callable(ia, "fase_dia").bind(k))      # las IA que toca (las más atrasadas y las que están en guerra primero) deciden, por lotes
 		if ejercito != null:
 			r.append(Callable(ejercito, "avanzar_dia").bind(k))     # las columnas en marcha avanzan k días
+		if edificios != null:
+			r.append(Callable(edificios, "fase_dia").bind(k))       # 0.1.8.40: las obras avanzan k días (casi siempre solo una comparación)
 		if guerra != null:
 			r.append(Callable(guerra, "fase_llegadas"))             # llegadas
 			r.append(Callable(guerra, "fase_batallas").bind(k))     # batallas, por lotes
@@ -1024,6 +1042,8 @@ class Mundo extends RefCounted:
 		var m0: String = bd.motivo_ctx
 		bd.motivo_ctx = motivo
 		pr.registrar_propietario(destino, fecha, motivo)
+		if edificios != null:
+			edificios.cambio_de_dueno(idx, origen)                  # las obras en curso se pierden; lo ya construido se queda con la tierra
 		if pr.ocupante >= 0:
 			bd.poner_i("ocupante", pr.tid, -1, "Cambio de dueño")      # un dueño nuevo: la ocupación anterior ya no tiene sentido
 		pr.favorabilidad = 35.0          # una provincia recién cambiada de dueño empieza descontenta

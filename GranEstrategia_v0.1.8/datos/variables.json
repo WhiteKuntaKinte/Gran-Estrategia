@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8.2",
+  "version": "0.1.8.41",
   "ayuda": "Catálogo de VARIABLES de la base de datos. Cada variable guarda UN solo valor actual por ID de territorio; los valores anteriores van a las tablas de historial. Para añadir una variable nueva basta con agregar una entrada aquí (id_var nuevo, nunca reutilizar). tipo: numero | texto | id. aplica_a: mundo, continente, pais, estado, provincia, ciudad. historial: cambio (guarda el valor viejo cada vez que cambia) | mensual | anual (foto al cerrar el mes / año) | ninguno. agregacion: como se resume hacia arriba en la cadena (suma, media_ponderada:<variable>, ninguna). afecta_economia: si es true, cambiar esta variable invalida la caché de ingresos de los países.",
   "variables": [
     {
@@ -802,6 +802,76 @@
       "agregacion": "ninguna",
       "afecta_economia": true,
       "descripcion": "País que ocupa la provincia en una guerra (vacío = nadie). El dueño sigue siendo el de `propietario`, pero mientras esté ocupada no le rinde ingresos. La paz decide si se devuelve o cambia de dueño. Su historial es el registro de ocupaciones."
+    },
+    {
+      "id_var": 57,
+      "nombre": "edificios",
+      "etiqueta": "Edificios",
+      "categoria": "desarrollo",
+      "tipo": "texto",
+      "unidad": "slug:cantidad;…",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Edificios ya construidos en la provincia, como «slug:cantidad;slug:cantidad» (los slugs son los de datos/edificios.json). Su historial es el registro de obras terminadas. Sin efectos de juego todavía (0.1.8.40)."
+    },
+    {
+      "id_var": 58,
+      "nombre": "obras",
+      "etiqueta": "Obras en curso",
+      "categoria": "desarrollo",
+      "tipo": "texto",
+      "unidad": "slug@inicio@fin@pago;…",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Edificios que se están construyendo en la provincia: «slug@día de inicio@día de fin@pago en US$» (los días son del reloj de obras de Edificios, no fechas). Al llegar el día de fin pasan a `edificios`."
+    },
+    {
+      "id_var": 59,
+      "nombre": "num_edificios",
+      "etiqueta": "Cantidad de edificios",
+      "categoria": "desarrollo",
+      "tipo": "numero",
+      "unidad": "edificios",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "suma",
+      "descripcion": "Cuántos edificios hay construidos en la provincia (la suma de `edificios`). Se suma hacia el estado, el país y el continente."
+    },
+    {
+      "id_var": 60,
+      "nombre": "core_nacional",
+      "etiqueta": "Core nacional",
+      "categoria": "politica",
+      "tipo": "id",
+      "unidad": "ID de país",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "País para el que la provincia es «tierra propia» por historia (al empezar, el país original). No cambia al conquistarla: sirve para saber qué provincias perdidas reclama un país. Vacío = sin core nacional (tierras sin reclamar). Sin efectos de juego todavía (0.1.8.40)."
+    },
+    {
+      "id_var": 61,
+      "nombre": "core_cultural",
+      "etiqueta": "Core cultural",
+      "categoria": "identidad",
+      "tipo": "texto",
+      "unidad": "id de cultura",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Cultura a la que pertenece la provincia (id de datos/nombres_cultura.json, p. ej. «espanola»). Se fija al empezar según el país original y no cambia al conquistarla. Sin efectos de juego todavía (0.1.8.40)."
     }
   ]
 }

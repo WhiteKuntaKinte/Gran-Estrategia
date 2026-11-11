@@ -1145,6 +1145,7 @@ func _cargar_info() -> void:
 			mundo.cargar_economia(dv, info.get("prov", []), economia, HudScript.produccion_principal)
 		mundo.iniciar_ejercito(_leer_json_opcional("res://datos/ejercito.json"), _leer_json_opcional("res://datos/nombres_cultura.json"),
 			_leer_json_opcional("res://datos/vecinos_prov.json"))
+		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"))                  # 0.1.8.40: edificios y cores (van después de las culturas)
 		for pais in ent["paises"]:
 			var h: String = String(ent["paises"][pais].get("col", ""))
 			if h != "":
