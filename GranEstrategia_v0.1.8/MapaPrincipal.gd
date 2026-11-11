@@ -18,7 +18,9 @@ const TerritorioScript := preload("res://scripts/territorio.gd")
 const TemaHud := preload("res://scripts/tema_hud.gd")
 const RankingScript := preload("res://scripts/ranking.gd")
 const ConstruirScript := preload("res://scripts/ventana_construir.gd")
+const BANDERAS_HD_MAX := 12                     # banderas HD (256 px) en memoria a la vez: el panel y el aviso de guerra piden una cada vez
 const PinturasScript := preload("res://scripts/pinturas.gd")
+const MateriasScript := preload("res://scripts/materias.gd")
 const PopupGuerraScript := preload("res://scripts/popup_guerra.gd")
 const AjustesScript := preload("res://scripts/ajustes.gd")
 const MenuPantallaScript := preload("res://scripts/menu_pantalla.gd")
@@ -565,6 +567,8 @@ var sel_ref := {}
 var hud
 var zoom_aplicado := -1.0
 var tex_cache: Dictionary = {}
+var tex_hd: Dictionary = {}                     # 0.1.8.41: banderas HD ya cargadas (clave -> ImageTexture con mipmaps)
+var tex_hd_orden: Array = []                    # de la más vieja a la más nueva: al pasar de BANDERAS_HD_MAX se suelta la primera
 
 # Menú
 var en_menu := true
@@ -614,6 +618,7 @@ var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
 var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
 var pinturas                          # PinturasScript (0.1.8.41): la pintura clásica de cada país, arriba de su panel
+var materias                          # MateriasScript (0.1.8.41): iconos de materias primas, sectores y monedas
 var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
 var fichas                            # FichasScript (0.1.8.38): fichas al pasar el ratón (reemplazan al tooltip nativo)
 var grabador                          # GrabadorScript (0.1.8.39): graba el rendimiento fotograma a fotograma (F9; Debug > Rendimiento)
@@ -1152,6 +1157,8 @@ func _cargar_info() -> void:
 		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"))                  # 0.1.8.40: edificios y cores (van después de las culturas)
 		pinturas = PinturasScript.new()                                                             # 0.1.8.41: pinturas por país, región y continente (pinturas/creditos.json)
 		pinturas.iniciar(self)
+		materias = MateriasScript.new()                                                             # 0.1.8.41: iconos de recursos, rubros y monedas (datos/materias_iconos.json)
+		materias.iniciar(self)
 		for pais in ent["paises"]:
 			var h: String = String(ent["paises"][pais].get("col", ""))
 			if h != "":
@@ -1191,6 +1198,33 @@ func bandera_tex(clave: String) -> Texture2D:
 	if tex == null:
 		tex = _cargar_png("res://banderas/x.png")
 	tex_cache[k] = tex
+	return tex
+
+
+## Bandera en HD (256 px, `banderas_hd/`) con mipmaps, para el panel y el aviso de guerra, donde se ve grande. Si no hay HD, la de 96 px.
+## Quien la muestre debe poner `texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS` en su TextureRect (si no, los mipmaps no se usan).
+func bandera_hd(clave: String) -> Texture2D:
+	if clave == "" or clave == "-":
+		clave = "x"
+	if tex_hd.has(clave):
+		tex_hd_orden.erase(clave)
+		tex_hd_orden.append(clave)
+		return tex_hd[clave]
+	var img: Image = null
+	var ruta := "res://banderas_hd/%s.png" % clave
+	if ResourceLoader.exists(ruta):
+		var t: Texture2D = load(ruta)
+		img = t.get_image() if t != null else null
+	if img == null and FileAccess.file_exists(ruta):
+		img = Image.load_from_file(ProjectSettings.globalize_path(ruta))
+	if img == null or img.is_empty():
+		return bandera_tex(clave)
+	img.generate_mipmaps()
+	var tex := ImageTexture.create_from_image(img)
+	tex_hd[clave] = tex
+	tex_hd_orden.append(clave)
+	while tex_hd_orden.size() > BANDERAS_HD_MAX:
+		tex_hd.erase(tex_hd_orden.pop_front())
 	return tex
 
 
@@ -4422,19 +4456,20 @@ func _fin_pais(pais: String) -> Array:
 	var e = mundo.paises[pais]
 	var dv = mundo.divisa_de(pais)
 	var sim := _simbolo_de(pais)
+	var ico_m: String = materias.de_pais(pais) if materias != null else "i_moneda"          # la moneda propia del país
 	var diario: float = mundo.ingreso_diario_local(pais)
 	var prod: float = mundo.produccion_anual_usd(pais)
 	var con_caja: bool = e.tiene_tesoreria()                       # desde 0.1.8.1 todos los países tienen tesorería, no solo el jugador
 	if con_caja:
-		r.append(["Tesorería", fmt_dinero(e.tesoreria, sim) + ("  (EN ROJO)" if e.tesoreria < 0.0 else ""), "i_moneda", "fin_tes"])
-	r.append(["Ingresos del estado por día", fmt_dinero(diario, sim), "i_moneda", "fin_ing"])
-	r.append(["Ingresos del estado por mes", fmt_dinero(diario * DIAS_MES_MEDIO, sim), "i_moneda", "fin_ing"])
-	r.append(["Ingresos del estado por año", fmt_dinero(diario * 365.25, sim), "i_moneda", "fin_ing"])
+		r.append(["Tesorería", fmt_dinero(e.tesoreria, sim) + ("  (EN ROJO)" if e.tesoreria < 0.0 else ""), ico_m, "fin_tes"])
+	r.append(["Ingresos del estado por día", fmt_dinero(diario, sim), ico_m, "fin_ing"])
+	r.append(["Ingresos del estado por mes", fmt_dinero(diario * DIAS_MES_MEDIO, sim), ico_m, "fin_ing"])
+	r.append(["Ingresos del estado por año", fmt_dinero(diario * 365.25, sim), ico_m, "fin_ing"])
 	if con_caja:
 		var gasto: float = mundo.mantenimiento_diario_local(pais)
 		var bal: float = diario - gasto
-		r.append(["Gasto del ejército por día", fmt_dinero(gasto, sim), "i_moneda", "fin_tes"])
-		r.append(["Balance por día", ("+" if bal >= 0.0 else "−") + fmt_dinero(absf(bal), sim), "i_moneda", "fin_tes"])
+		r.append(["Gasto del ejército por día", fmt_dinero(gasto, sim), ico_m, "fin_tes"])
+		r.append(["Balance por día", ("+" if bal >= 0.0 else "−") + fmt_dinero(absf(bal), sim), ico_m, "fin_tes"])
 	r.append(["Impuestos", hud.pct(e.tasa_fiscal * 100.0) + " de la producción", "i_gob", "fin_imp"])
 	r.append(["Producción anual de sus provincias", fmt_dinero(prod, "US$"), "i_prov", "fin_prov"])
 	var tops := []
@@ -4448,8 +4483,8 @@ func _fin_pais(pais: String) -> Array:
 	r.append(["Velocidad de desarrollo", ("x%.2f" % e.velocidad_desarrollo).replace(".", ","), "i_eco", "fin_des"])
 	r.append(["Favorabilidad media de la población", "%d / 100" % int(roundf(mundo.favorabilidad_media(pais))), "i_pob", "fin_fav"])
 	if dv != null:
-		r.append(["Divisa", "%s (%s)" % [dv.nombre, dv.simbolo], "i_moneda", "fin_div"])
-		r.append(["Valor de la divisa", fmt_cambio(dv), "i_moneda", "fin_div"])
+		r.append(["Divisa", "%s (%s)" % [dv.nombre, dv.simbolo], ico_m, "fin_div"])
+		r.append(["Valor de la divisa", fmt_cambio(dv), ico_m, "fin_div"])
 	return r
 
 
@@ -4471,6 +4506,7 @@ func _fin_detalles(pais: String) -> Dictionary:
 		return det
 	var e = mundo.paises[pais]
 	var sim := _simbolo_de(pais)
+	var ico_m: String = materias.de_pais(pais) if materias != null else "i_moneda"
 	var dv = mundo.divisa_de(pais)
 	var por_usd: float = dv.por_usd if dv != null else 1.0
 	var diario: float = mundo.ingreso_diario_local(pais)
@@ -4505,7 +4541,7 @@ func _fin_detalles(pais: String) -> Dictionary:
 			previo = float(h["valor"])
 		texto += "\n" + _c("Foto de la tesorería (cierre de cada mes):") + "\n" + (lineas if lineas != "" else "Aún no hay cierres: el primero llega al terminar el mes.\n")
 		texto += _nota_pie("La barra «Hoy» es el saldo actual. Cada cierre mensual queda guardado en la base de datos (tabla de historial de «tesorería»). El estado paga cada día el mantenimiento de su ejército; si la tesorería queda en negativo, los soldados empiezan a desertar. Aún no hay otros gastos.")
-		det["fin_tes"] = {"icono": "i_moneda", "titulo": "Tesorería", "bb": texto, "barras": barras}
+		det["fin_tes"] = {"icono": ico_m, "titulo": "Tesorería", "bb": texto, "barras": barras}
 
 	# Ingresos
 	var en_usd := diario / maxf(por_usd, 1e-12)
@@ -4514,7 +4550,7 @@ func _fin_detalles(pais: String) -> Dictionary:
 	t_ing += "%s %s de la producción de sus provincias\n\n" % [_c("Cobra:"), hud.pct(tasa * 100.0)]
 	t_ing += _c("Fórmula:") + "\ningreso diario = producción anual × impuestos ÷ 365,25 × valor de la divisa"
 	t_ing += _nota_pie("La producción de cada provincia = habitantes × producción por habitante × multiplicador × (0,5 + favorabilidad ÷ 100).")
-	det["fin_ing"] = {"icono": "i_moneda", "titulo": "Ingresos del estado", "bb": t_ing, "barras": []}
+	det["fin_ing"] = {"icono": ico_m, "titulo": "Ingresos del estado", "bb": t_ing, "barras": []}
 
 	# Impuestos
 	var t_imp := "%s %s\n%s %s al año\n%s %s al año\n" % [_c("Tasa actual:"), hud.pct(tasa * 100.0), _c("Producción total:"), fmt_dinero(prod, "US$"), _c("Recaudación:"), fmt_dinero(prod * tasa, "US$")]
@@ -4572,7 +4608,7 @@ func _fin_detalles(pais: String) -> Dictionary:
 	if dv != null:
 		var t_div := "%s %s (%s) · código %s\n%s %s\n" % [_c("Moneda:"), dv.nombre, dv.simbolo, dv.codigo, _c("Valor:"), fmt_cambio(dv)]
 		t_div += _nota_pie("Todos los cálculos internos se hacen en dólares y se convierten a la moneda del país al mostrarlos. Puedes cambiar tu moneda con el lápiz junto al nombre de tu país.")
-		det["fin_div"] = {"icono": "i_moneda", "titulo": "Divisa", "bb": t_div, "barras": []}
+		det["fin_div"] = {"icono": ico_m, "titulo": "Divisa", "bb": t_div, "barras": []}
 	return det
 
 
@@ -4599,7 +4635,7 @@ func _fin_provincia(pi: int) -> Array:
 	var h: Dictionary = mundo.bd.heredado("produccion_principal", pr.tid)
 	if not h.is_empty():
 		var de: String = "propia" if int(h["de"]) == pr.tid else "de " + mundo.bd.nombre_de(int(h["de"]))
-		filas.append(["Producción principal (%s)" % de, String(h["valor"]), "i_cultivo"])
+		filas.append(["Producción principal (%s)" % de, String(h["valor"]), materias.o_defecto(String(h["valor"]), "", "i_cultivo") if materias != null else "i_cultivo"])
 	return filas
 
 

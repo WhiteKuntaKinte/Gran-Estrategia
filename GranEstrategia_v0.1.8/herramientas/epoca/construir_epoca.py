@@ -815,19 +815,29 @@ def plantilla_eco(e):
 
 
 # ───────────────────────── 6. Banderas (estandartes) ─────────────────────────
-def hacer_bandera(clave, hexcol, ruta):
+FORMAS_BANDERA = 6
+
+
+def forma_de(clave):
+    """Cuál de los 6 dibujos lleva la bandera de esta clave (sale del hash, así es siempre la misma)."""
+    return int(hashlib.md5(clave.encode()).hexdigest()[:8], 16) % FORMAS_BANDERA
+
+
+def hacer_bandera(clave, hexcol, ruta, ancho=96, forma=None):
+    """Estandarte de un pueblo del año 1. `ancho` en px (96 = el normal; 256 = el HD de banderas_hd/); `forma` fuerza uno de los 6 dibujos."""
     c1 = hexc(hexcol)
     c2 = tuple(int(v * 0.55) for v in c1)
     c3 = tuple(min(255, int(v * 0.4 + 255 * 0.6)) for v in c1)
-    h = int(hashlib.md5(clave.encode()).hexdigest()[:8], 16)
-    W, H = 96, 64
+    forma = forma_de(clave) if forma is None else forma
+    k = ancho / 96.0
+    W, H = int(round(96 * k)), int(round(64 * k))
+    borde = max(2, int(round(2 * k)))
     im = Image.new('RGB', (W, H), c1)
     d = ImageDraw.Draw(im)
-    forma = h % 6
     if forma == 0:                                  # banda central
         d.rectangle([0, H * 0.38, W, H * 0.62], fill=c3)
     elif forma == 1:                                # círculo
-        d.ellipse([W * 0.32, H * 0.2, W * 0.68, H * 0.8], fill=c3, outline=c2, width=2)
+        d.ellipse([W * 0.32, H * 0.2, W * 0.68, H * 0.8], fill=c3, outline=c2, width=borde)
     elif forma == 2:                                # cruz
         d.rectangle([W * 0.42, 0, W * 0.58, H], fill=c3)
         d.rectangle([0, H * 0.4, W, H * 0.6], fill=c3)
@@ -838,7 +848,7 @@ def hacer_bandera(clave, hexcol, ruta):
     else:                                           # dos franjas
         d.rectangle([0, 0, W, H * 0.22], fill=c2)
         d.rectangle([0, H * 0.78, W, H], fill=c2)
-    d.rectangle([0, 0, W - 1, H - 1], outline=c2, width=2)
+    d.rectangle([0, 0, W - 1, H - 1], outline=c2, width=borde)
     im.save(ruta)
 
 
@@ -1148,9 +1158,12 @@ def main():
     n_inst = instalar_geometria_comun(cdir, BASE)
     print('   %d archivos de geometría común instalados en datos/ · provincias sin celda: año 1 = %d, 2026 = %d' % (n_inst, vac1, vac26))
     bdir = os.path.join(RAIZ, 'banderas')
+    bdir_hd = os.path.join(RAIZ, 'banderas_hd')                  # 0.1.8.41: la misma bandera a 256 px para el panel grande (ver herramientas/preparar_banderas_hd.py)
+    os.makedirs(bdir_hd, exist_ok=True)
     n_b = 0
     for e in ents:
         hacer_bandera(e['clave'], color[e['clave']], os.path.join(bdir, paises[e['nombre']]['bandera'] + '.png'))
+        hacer_bandera(e['clave'], color[e['clave']], os.path.join(bdir_hd, paises[e['nombre']]['bandera'] + '.png'), ancho=256)
         n_b += 1
     pob_tot = sum(info_pais[n]['pob'] for n in info_pais)
     print('Listo: %d naciones, %d provincias, %d ciudades, población del mundo %.1f millones, %d banderas · %.0f s' % (

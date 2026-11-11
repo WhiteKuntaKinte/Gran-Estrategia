@@ -84,6 +84,8 @@ var barra: PanelContainer
 var tex_bandera_jug: TextureRect
 var lbl_jugador: Label
 var lbl_dinero: Label
+var tex_dinero: TextureRect       # moneda de la divisa del país que controlas (0.1.8.41)
+var _ico_din := ""
 var lbl_ingreso: Label
 var lbl_fecha: Label
 var botones_vel := []            # pausa, 1, 2, 3
@@ -174,7 +176,8 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	vb.add_child(cab_marco)
 	marco_bandera = PanelContainer.new()
 	tex_bandera = TextureRect.new()
-	tex_bandera.custom_minimum_size = Vector2(60.0, 40.0)
+	tex_bandera.custom_minimum_size = Vector2(72.0, 48.0)
+	tex_bandera.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS       # bandera HD (256 px) reducida: con mipmaps no se pixela
 	tex_bandera.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	tex_bandera.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	marco_bandera.add_child(tex_bandera)
@@ -548,7 +551,8 @@ func _construir_barra() -> void:
 	# dinero (clic: pestaña Economía del país que controlas)
 	var caja_d := HBoxContainer.new()
 	caja_d.add_theme_constant_override("separation", 5)
-	caja_d.add_child(_icono_rect("i_moneda", 22.0))
+	tex_dinero = _icono_rect("i_moneda", 22.0)
+	caja_d.add_child(tex_dinero)
 	var col_d := VBoxContainer.new()
 	col_d.add_theme_constant_override("separation", -2)
 	lbl_dinero = _lbl("—", 14, Tema.TEXTO, true)
@@ -753,6 +757,12 @@ func set_dinero(total: String, ingreso: String, perdida := false, en_deuda := fa
 	_din_deuda = en_deuda
 	lbl_ingreso.add_theme_color_override("font_color", Tema.MAL if perdida else Tema.OK)
 	lbl_dinero.add_theme_color_override("font_color", Tema.MAL if en_deuda else Tema.TEXTO)
+	var ico := "i_moneda"
+	if main != null and main.materias != null and main.mundo != null and main.mundo.jugador != "":
+		ico = main.materias.de_pais(main.mundo.jugador)                  # la moneda propia del país que controlas
+	if ico != _ico_din:
+		_ico_din = ico
+		tex_dinero.texture = main.icono(ico)
 
 
 # ───────────── utilidades de interfaz ─────────────
@@ -1035,7 +1045,7 @@ func mostrar(d: Dictionary) -> void:
 	var bandera: String = String(d.get("bandera", "-"))
 	tex_bandera.get_parent().visible = bandera != "-"
 	if bandera != "-":
-		tex_bandera.texture = main.bandera_tex(bandera)
+		tex_bandera.texture = main.bandera_hd(bandera)
 	lbl_coord.text = String(d.get("coord", ""))
 	_dibujar_migas()
 	if _hay_ctx():
@@ -1640,17 +1650,18 @@ func _card_ingreso(pi: int) -> void:
 	var sim: String = mon[0]
 	var por: float = mon[1]
 	var sec := _seccion("Ingreso")
+	var ico_m: String = main.materias.de_pais(pais) if main.materias != null else "i_moneda"        # la moneda del país dueño
 	var prod: float = pr.ingreso_anual_usd()
 	_fila(sec, "i_eco", "Producción anual", "%s%s" % [main.fmt_dinero(prod * por, sim), "" if sim == "US$" else "  (≈ %s)" % main.fmt_dinero(prod, "US$")])
 	var rend: float = pr.rendimiento_usd()
 	var f_rend: float = (0.5 + pr.favorabilidad / 100.0) * (1.0 - main.E.DEVASTACION_EFECTO * pr.devastacion)
-	_fila(sec, "i_moneda", "Rendimiento real", "%s al año · ×%s" % [main.fmt_dinero(rend * por, sim), ("%.2f" % f_rend).replace(".", ",")])
+	_fila(sec, ico_m, "Rendimiento real", "%s al año · ×%s" % [main.fmt_dinero(rend * por, sim), ("%.2f" % f_rend).replace(".", ",")])
 	var tasa: float = m.paises[pais].tasa_fiscal if m.paises.has(pais) else 0.25
 	var diario: float = pr.ingreso_efectivo_usd() * tasa / 365.25 * por
 	if pr.ocupante >= 0:
 		_fila(sec, "i_devast", "Aporta a la tesorería", "0 · ocupada por %s" % m.bd.nombre_de(pr.ocupante))
 	else:
-		_fila(sec, "i_moneda", "Aporta a la tesorería", "%s por día (impuesto %d %%)" % [main.fmt_dinero(diario, sim), int(roundf(tasa * 100.0))])
+		_fila(sec, ico_m, "Aporta a la tesorería", "%s por día (impuesto %d %%)" % [main.fmt_dinero(diario, sim), int(roundf(tasa * 100.0))])
 	var total: float = m.produccion_anual_usd(pais)
 	if total > 0.0 and pr.ocupante < 0:
 		_fila(sec, "i_pais", "Peso en los ingresos del país", pct(100.0 * rend / maxf(total, 1.0)))
@@ -1817,8 +1828,62 @@ func _tab_economia() -> void:
 	var valor := String(pp["nombre"])
 	if float(pp["pct"]) > 0.0:
 		valor += "  ·  %s de los ingresos" % pct(float(pp["pct"]))
-	_fila(s, String(pp["icono"]), "Lo que más ingresos genera", valor, "eco_prod")
+	_fila(s, _icono_producto(pp), "Lo que más ingresos genera", valor, "eco_prod")
 	_nota(s, String(e.get("nota", "")))
+	_card_materias(e)
+
+
+## Icono de la producción principal: el de su cultivo, mineral o rubro (materias/sectores); si no hay, el genérico que ya traía.
+func _icono_producto(pp: Dictionary) -> String:
+	var ico := String(pp.get("icono", "i_eco"))
+	if main.materias == null:
+		return ico
+	return main.materias.o_defecto(String(pp.get("nombre", "")), String(pp.get("rubro", "")), ico)
+
+
+## Tarjeta «Recursos de la zona»: cultivos, ganado y materias primas de la zona, cada uno con su icono.
+func _card_materias(e: Dictionary) -> void:
+	if main.materias == null or not main.materias.listo:
+		return
+	var grupos := [["Cultivos", "cult"], ["Ganadería", "carne"], ["Materias primas", "mat"]]
+	var sec: VBoxContainer = null
+	for g in grupos:
+		var lista = e.get(String(g[1]), [])
+		if not (lista is Array):
+			continue
+		var vistos := {}
+		var nombres := []
+		for n in lista:
+			var t := String(n).strip_edges()
+			if t == "" or t == "—" or vistos.has(t):
+				continue
+			vistos[t] = true
+			nombres.append(t)
+		if nombres.is_empty():
+			continue
+		if sec == null:
+			sec = _seccion("Recursos de la zona")
+		sec.add_child(_lbl(String(g[0]).to_upper(), 10, Tema.TENUE))
+		var flujo := HFlowContainer.new()
+		flujo.add_theme_constant_override("h_separation", 6)
+		flujo.add_theme_constant_override("v_separation", 4)
+		for t in nombres:
+			flujo.add_child(_chip_material(t))
+		sec.add_child(flujo)
+
+
+func _chip_material(nombre: String) -> Control:
+	var p := PanelContainer.new()
+	p.add_theme_stylebox_override("panel", Tema.tarjeta(false, 4.0))
+	var h := HBoxContainer.new()
+	h.add_theme_constant_override("separation", 5)
+	var ico: String = main.materias.de_nombre(nombre)
+	if ico != "":
+		h.add_child(_icono_rect(ico, 24.0))
+	h.add_child(_lbl(nombre, 12, Tema.TEXTO))
+	p.add_child(h)
+	_ignorar_raton(p)
+	return p
 
 
 func _efecto(rub: Array) -> String:
@@ -2250,7 +2315,7 @@ func _detalle(k: String, forzar := false) -> void:
 		"eco_prod":
 			var ee: Dictionary = datos.get("eco", {})
 			var pp2 := produccion_principal(ee)
-			_det_titulo(String(pp2.get("icono", "i_eco")), "Producción principal")
+			_det_titulo(_icono_producto(pp2), "Producción principal")
 			var tx := "[color=#9fb4d6]Principal:[/color] %s\n" % String(pp2.get("nombre", "—"))
 			if float(pp2.get("pct", 0.0)) > 0.0:
 				tx += "[color=#9fb4d6]Rubro:[/color] %s (%s de los ingresos)\n\n%s\n" % [String(pp2.get("rubro", "")), pct(float(pp2["pct"])), _efecto(ee.get("rub", []))]

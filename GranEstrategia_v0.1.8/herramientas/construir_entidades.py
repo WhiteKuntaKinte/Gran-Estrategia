@@ -14,7 +14,7 @@ import cv2
 from scipy import ndimage
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from tablas_estados import ESTADOS_US
+from tablas_estados import ESTADOS_US, CIUDADES_US_CON_LICENCIA
 import tablas_economia as TE
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -167,6 +167,13 @@ def main():
                     continue
                 for cand in (r[8], r[0]):
                     slug = re.sub(r'[^a-z_]', '', sin_acentos(cand).lower().replace('saint ', 'st ').replace(' ', '_'))
+                    if 'c_us_%s_%s' % (post, slug) in CIUDADES_US_CON_LICENCIA:
+                        if os.path.exists(os.path.join(svg_dir, 'us', post, slug + '.svg')):          # bandera con licencia CC: no se usa, la ciudad lleva la de su estado
+                            bandera_estado = banderas.get('estados', {}).get(provincias[r[6]]['e'])
+                            if bandera_estado:
+                                ciu_banderas['%s|%s' % (r[0], provincias[r[6]]['e'])] = bandera_estado
+                            break
+                        continue
                     f = os.path.join(svg_dir, 'us', post, slug + '.svg')
                     if os.path.exists(f):
                         destino = os.path.join(RAIZ, 'banderas', 'c_us_%s_%s.png' % (post, slug))

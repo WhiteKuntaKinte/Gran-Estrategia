@@ -21,3 +21,10 @@ ESTADOS_US = {
     54: ('wv', 'Virginia Occidental', 'West Virginia'), 55: ('wi', 'Wisconsin', 'Wisconsin'), 56: ('wy', 'Wyoming', 'Wyoming'),
     72: ('pr', 'Puerto Rico', 'Puerto Rico'), 78: ('vi', 'Islas Vírgenes de EE. UU.', 'U.S. Virgin Islands'),
 }
+
+# Banderas de ciudades de EE. UU. que NO son de dominio público (CC BY / CC BY-SA, SPECIAL_LICENSES.csv de oxguy3/flags): el juego no las usa,
+# esas ciudades llevan la bandera de su estado. Así el juego se puede vender sin obligaciones de atribución.
+CIUDADES_US_CON_LICENCIA = {
+    'c_us_ca_escondido', 'c_us_ca_san_diego', 'c_us_co_denver', 'c_us_ia_des_moines', 'c_us_ia_red_oak',
+    'c_us_mn_prior_lake', 'c_us_mn_rochester', 'c_us_oh_germantown', 'c_us_pr_san_juan',
+}

@@ -115,11 +115,12 @@ func _cabecera(pais: String, titulo: String, subtitulo: String, col: Color) -> v
 	var h := HBoxContainer.new()
 	h.add_theme_constant_override("separation", 14)
 	cuerpo.add_child(h)
-	var tex = main.bandera_tex(main._bandera_pais(pais))
+	var tex = main.bandera_hd(main._bandera_pais(pais))
 	if tex != null:
 		var b := TextureRect.new()
 		b.texture = tex
-		b.custom_minimum_size = Vector2(78.0, 52.0)
+		b.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		b.custom_minimum_size = Vector2(96.0, 64.0)
 		b.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		b.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		h.add_child(b)
