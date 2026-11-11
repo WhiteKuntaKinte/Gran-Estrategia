@@ -18,6 +18,7 @@ const TerritorioScript := preload("res://scripts/territorio.gd")
 const TemaHud := preload("res://scripts/tema_hud.gd")
 const RankingScript := preload("res://scripts/ranking.gd")
 const ConstruirScript := preload("res://scripts/ventana_construir.gd")
+const PinturasScript := preload("res://scripts/pinturas.gd")
 const PopupGuerraScript := preload("res://scripts/popup_guerra.gd")
 const AjustesScript := preload("res://scripts/ajustes.gd")
 const MenuPantallaScript := preload("res://scripts/menu_pantalla.gd")
@@ -612,6 +613,7 @@ var campana_rect := Rect2()           # territorio de la campaña en coordenadas
 var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
 var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
+var pinturas                          # PinturasScript (0.1.8.41): la pintura clásica de cada país, arriba de su panel
 var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
 var fichas                            # FichasScript (0.1.8.38): fichas al pasar el ratón (reemplazan al tooltip nativo)
 var grabador                          # GrabadorScript (0.1.8.39): graba el rendimiento fotograma a fotograma (F9; Debug > Rendimiento)
@@ -1148,6 +1150,8 @@ func _cargar_info() -> void:
 		mundo.iniciar_ejercito(_leer_json_opcional("res://datos/ejercito.json"), _leer_json_opcional("res://datos/nombres_cultura.json"),
 			_leer_json_opcional("res://datos/vecinos_prov.json"))
 		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"))                  # 0.1.8.40: edificios y cores (van después de las culturas)
+		pinturas = PinturasScript.new()                                                             # 0.1.8.41: pinturas por país, región y continente (pinturas/creditos.json)
+		pinturas.iniciar(self)
 		for pais in ent["paises"]:
 			var h: String = String(ent["paises"][pais].get("col", ""))
 			if h != "":
@@ -2774,6 +2778,13 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 		d["ctx"] = ctx
 	if multi_sel.size() > 1:
 		d["multi"] = multi_sel.size()                              # 0.1.8.37: el panel avisa de que hay varias unidades elegidas
+	if pinturas != null and pinturas.listo:
+		if String(d.get("tipo", "")) == "continente":
+			d["pintura"] = pinturas.de_continente(String(sel_ref.get("cont", "")))   # 0.1.8.41: la pintura del continente (o la del mundo)
+		elif String(d.get("tipo", "")) in ["provincia", "ciudad", "pais", "estado", "libre"]:
+			var pn := _pais_de_seleccion()                         # la pintura del país (o de su región, continente o el mundo si no tiene propia)
+			if pn != "":
+				d["pintura"] = pinturas.de_pais(pn)
 	if mundo != null and mundo.edificios != null and String(d.get("tipo", "")) in ["provincia", "ciudad", "pais", "estado"]:
 		var pis := _provincias_elegidas()                          # 0.1.8.40: las tarjetas Edificios / Cores / Ingreso y la ventana Construir trabajan sobre estas provincias
 		if not pis.is_empty():
@@ -2788,6 +2799,22 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 	_actualizar_hint()
 	if debug_menu != null and is_instance_valid(debug_menu):
 		debug_menu.seleccion_cambio(sel_tipo)
+
+
+## 0.1.8.41 · Nombre (el de los datos, no el que personalizó el jugador) del país de lo elegido; "" si no hay nada elegido.
+func _pais_de_seleccion() -> String:
+	if mundo == null:
+		return ""
+	match sel_tipo:
+		"pais", "estado":
+			return String(sel_ref.get("pais", ""))
+		"provincia":
+			var pi := int(sel_ref.get("pi", -1))
+			return String(mundo.provincias[pi].pais) if pi >= 0 and pi < mundo.provincias.size() else ""
+		"ciudad":
+			var ci := int(sel_ref.get("id", -1))
+			return String(mundo.ciudades[ci].pais) if ci >= 0 and ci < mundo.ciudades.size() else ""
+	return ""
 
 
 ## 0.1.8.40 · Las provincias que cubre lo elegido (índices de Mundo.provincias): la provincia (o la de la ciudad), todas las del país o estado,

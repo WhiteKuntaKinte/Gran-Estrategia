@@ -18,6 +18,10 @@ on:
         description: 'lista de búsqueda (modo buscar)'
         required: false
         default: 'lista_busqueda.json'
+      elegidas:
+        description: 'lista de obras elegidas (modo bajar)'
+        required: false
+        default: 'elegidas.json'
       etiqueta:
         description: 'etiqueta del Release de candidatos (modo buscar)'
         required: false
@@ -58,7 +62,7 @@ jobs:
         if: ${{ github.event.inputs.modo == 'bajar' }}
         working-directory: GranEstrategia_v0.1.8/herramientas/pinturas
         run: |
-          python3 commons_pinturas.py bajar elegidas.json /tmp/pinturas
+          python3 commons_pinturas.py bajar ${{ github.event.inputs.elegidas || 'elegidas.json' }} /tmp/pinturas
           (cd /tmp/pinturas && zip -qr /tmp/pinturas.zip . && du -sh /tmp/pinturas.zip)
       - name: Publicar las pinturas
         if: ${{ github.event.inputs.modo == 'bajar' }}

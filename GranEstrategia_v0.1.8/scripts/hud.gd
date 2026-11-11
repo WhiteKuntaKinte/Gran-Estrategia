@@ -26,6 +26,7 @@ const TAB_RATIO_ACTIVA := 2.4               # la pestaña abierta ocupa 2,4 × e
 const ANCHO_PANEL_MIN := 372.0              # 0.1.8.3: HUD menos invasivo
 const ANCHO_PANEL_MAX := 420.0
 const ALTO_BARRA := 44.0                    # 0.1.8.37: la barra superior ocupa todo el ancho, pegada al borde de arriba
+const ALTO_PINTURA := 120.0                # 0.1.8.41: alto de la pintura que encabeza la pestaña General (el ancho es el de la tarjeta; se recorta al centro)
 const PANEL_Y := ALTO_BARRA + 8.0           # donde empiezan el panel de país y el de detalle (justo debajo de la barra)
 ## Entradas del menú VISTA: [clave, texto, disponible]. Las no disponibles salen apagadas con «próximamente».
 const VISTAS := [["tradicional", "Tradicional", true], ["relieve", "Relieve", true],
@@ -1478,6 +1479,7 @@ func _d() -> Dictionary:
 ## GENERAL: naturaleza, descripción, población, etnias y ciudades (lo que antes estaba repartido entre General y Demografía).
 func _tab_general() -> void:
 	var d := _d()
+	_card_pintura()
 	_card_grupo()
 	var biomas: Dictionary = main.info.get("biomas", {})
 	var bio: Array = d.get("bio", [])
@@ -1558,6 +1560,39 @@ func _linea(padre: Node, t: String, v: String, col_v: Color) -> void:
 
 
 ## GRUPO (Ctrl+clic): cuántas unidades hay elegidas y lo que suman. Va arriba de todo.
+## 0.1.8.41 · La pintura clásica del país (o de su región, continente o el mundo) como cabecera de la pestaña General. Sin pintura instalada no aparece.
+func _card_pintura() -> void:
+	var f: Dictionary = datos.get("pintura", {})
+	if f.is_empty() or main.pinturas == null:
+		return
+	var tex: Texture2D = main.pinturas.textura(String(f["ruta"]))
+	if tex == null:
+		return
+	var card := PanelContainer.new()
+	card.add_theme_stylebox_override("panel", Tema.caja(Tema.BLOQUE_SUAVE, Tema.ACERO_OSCURO, 5, 3, 1))
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 3)
+	card.add_child(vb)
+	var img := TextureRect.new()
+	img.texture = tex
+	img.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	img.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	img.custom_minimum_size = Vector2(0.0, ALTO_PINTURA)
+	img.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	img.mouse_filter = Control.MOUSE_FILTER_PASS
+	var donde := {"pais": "", "region": "una pintura de su región", "continente": "una pintura de su continente", "mundo": "una pintura del mundo"}
+	img.tooltip_text = "%s\n%s\n%s%s" % [String(f["titulo"]), String(f["texto"]), String(f["licencia"]) + " · Wikimedia Commons",
+		("" if String(donde.get(String(f["nivel"]), "")) == "" else "\nEste lugar no tiene pintura propia: se muestra " + String(donde[String(f["nivel"])]) + ".")]
+	vb.add_child(img)
+	var cap := _lbl(String(f["texto"]), 10, Tema.NOTA)
+	cap.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	cap.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vb.add_child(cap)
+	_items_cuerpo.append(card)
+	_poner_tarjeta(card)
+
+
 func _card_grupo() -> void:
 	var n_sel := int(datos.get("multi", 0))
 	var pis := _pis_ed()
