@@ -1,0 +1,1481 @@
+{
+ "ayuda": "0.1.8.43: pinturas por lugar (provincia o estado de EE. UU.). La genera construir_lista_lugares.py.",
+ "entradas": [
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__toledo",
+   "q": [
+    "El Greco View of Toledo",
+    "El Greco Vista de Toledo",
+    "El Greco Toledo landscape"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__sevilla",
+   "q": [
+    "Murillo Sevilla painting",
+    "Sorolla Sevilla Jardines del Alcazar",
+    "View of Seville 17th century painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__valencia",
+   "q": [
+    "Sorolla Paseo a orillas del mar",
+    "Sorolla Valencia playa",
+    "Sorolla Valencian fisherwomen"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__barcelona",
+   "q": [
+    "Ramon Casas painting Barcelona",
+    "Santiago Rusinol painting",
+    "Ramon Casas Plaza de toros"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__madrid",
+   "q": [
+    "Velazquez Las Meninas",
+    "Goya Madrid painting San Isidro",
+    "Goya La pradera de San Isidro"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__granada",
+   "q": [
+    "Alhambra painting David Roberts",
+    "Alhambra Court of the Lions painting",
+    "Granada Alhambra 19th century painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__asturias",
+   "q": [
+    "Madrazo Batalla de Covadonga",
+    "Covadonga painting Pelayo",
+    "Asturias painting 19th century landscape"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_espana__segovia",
+   "q": [
+    "Zuloaga Segovia",
+    "Ignacio Zuloaga Segovia painting",
+    "Segovia aqueduct painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_francia__paris",
+   "q": [
+    "Caillebotte Paris Street Rainy Day",
+    "Caillebotte Pont de l'Europe",
+    "Pissarro Boulevard Montmartre"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_francia__sena_maritimo",
+   "q": [
+    "Monet Rouen Cathedral",
+    "Monet Impression Sunrise Le Havre",
+    "Monet Cathedrale de Rouen facade"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_francia__bocas_del_rodano",
+   "q": [
+    "Van Gogh Starry Night Over the Rhone",
+    "Van Gogh Cafe Terrace at Night",
+    "Van Gogh Arles painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_francia__yvelines",
+   "q": [
+    "Versailles painting Pierre-Denis Martin",
+    "Château de Versailles 17th century painting",
+    "Monet Argenteuil"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_francia__sena_y_marne",
+   "q": [
+    "Millet Angelus",
+    "Millet The Gleaners",
+    "Barbizon school painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_francia__vaucluse",
+   "q": [
+    "Avignon painting Pont d'Avignon",
+    "Palais des Papes Avignon painting",
+    "Hubert Robert Avignon"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__venecia",
+   "q": [
+    "Canaletto Grand Canal Venice",
+    "Canaletto Il Canal Grande",
+    "Guardi Venice painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__roma",
+   "q": [
+    "Giovanni Paolo Panini Rome",
+    "Panini Ancient Rome",
+    "Piranesi Rome painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__florencia",
+   "q": [
+    "Botticelli Birth of Venus",
+    "Botticelli Primavera",
+    "Florence Duomo painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__napoles",
+   "q": [
+    "Joseph Wright of Derby Vesuvius",
+    "Pompeii fresco",
+    "Naples bay painting Gaspar van Wittel"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__milan",
+   "q": [
+    "Leonardo Last Supper",
+    "Leonardo da Vinci Ultima Cena",
+    "Milan Duomo painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__siena",
+   "q": [
+    "Lorenzetti Allegory of Good Government",
+    "Ambrogio Lorenzetti Siena fresco",
+    "Duccio Maesta"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__padua",
+   "q": [
+    "Giotto Scrovegni Chapel",
+    "Giotto Lamentation Padua",
+    "Mantegna Padua Eremitani"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__perugia",
+   "q": [
+    "Giotto Assisi Saint Francis fresco",
+    "Giotto Legend of Saint Francis Assisi",
+    "Perugino Perugia"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_italia__palermo",
+   "q": [
+    "Cappella Palatina Palermo mosaic",
+    "Triumph of Death Palermo fresco",
+    "Palermo painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_paises_bajos__holanda_meridional",
+   "q": [
+    "Vermeer View of Delft",
+    "Vermeer Het Straatje",
+    "Vermeer Delft painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_paises_bajos__holanda_septentrional",
+   "q": [
+    "Berckheyde Amsterdam Dam Square",
+    "Jan van der Heyden Amsterdam",
+    "Amsterdam canal painting 17th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_paises_bajos__frisia",
+   "q": [
+    "Hendrick Avercamp winter landscape skaters",
+    "Avercamp Winter Landscape with Skaters",
+    "Avercamp Ice Scene"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_paises_bajos__brabante_septentrional",
+   "q": [
+    "Van Gogh The Potato Eaters",
+    "Van Gogh Nuenen",
+    "Van Gogh Weaver Nuenen"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_paises_bajos__zelanda",
+   "q": [
+    "Mondrian Domburg church tower",
+    "Mondrian Dune landscape Domburg",
+    "Mondrian Westkapelle"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__londres",
+   "q": [
+    "Monet Houses of Parliament",
+    "Monet Waterloo Bridge",
+    "Canaletto London Thames"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__edimburgo",
+   "q": [
+    "Nasmyth Edinburgh from Calton Hill",
+    "Edinburgh painting Alexander Nasmyth",
+    "Edinburgh castle painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__argyll_and_bute",
+   "q": [
+    "Turner Fingal's Cave Staffa",
+    "Turner Staffa Fingal's Cave",
+    "Mendelssohn Fingal's Cave painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__cornualles",
+   "q": [
+    "Stanhope Forbes A Fish Sale on a Cornish Beach",
+    "Newlyn school painting",
+    "Cornwall painting Stanhope Forbes"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__cumbria",
+   "q": [
+    "Turner Buttermere",
+    "Lake District painting 19th century",
+    "Thomas Gainsborough Lake District painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__suffolk",
+   "q": [
+    "Constable The Hay Wain",
+    "Constable Flatford Mill",
+    "Constable Dedham Vale"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__wiltshire",
+   "q": [
+    "Constable Salisbury Cathedral from the Meadows",
+    "Constable Salisbury Cathedral",
+    "Turner Stonehenge"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__dorset",
+   "q": [
+    "Constable Weymouth Bay",
+    "Weymouth Bay painting",
+    "Dorset coast painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_reino_unido__birmingham",
+   "q": [
+    "Burne-Jones Star of Bethlehem",
+    "Burne-Jones Adoration of the Magi",
+    "Pre-Raphaelite Birmingham"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__sajonia",
+   "q": [
+    "Bellotto Dresden from the right bank of the Elbe",
+    "Canaletto Dresden Zwinger",
+    "Caspar David Friedrich Dresden"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__berlin",
+   "q": [
+    "Adolph Menzel Berlin-Potsdam railway",
+    "Menzel Flötenkonzert",
+    "Berlin painting 19th century Menzel"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__baviera",
+   "q": [
+    "Spitzweg Der arme Poet",
+    "Spitzweg The Poor Poet",
+    "Munich painting Spitzweg"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__mecklemburgo_pomerania_occidental",
+   "q": [
+    "Caspar David Friedrich Chalk Cliffs on Rügen",
+    "Friedrich Kreidefelsen auf Rügen",
+    "Friedrich Greifswald"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__renania_del_norte_westfalia",
+   "q": [
+    "Stefan Lochner Adoration of the Magi Cologne",
+    "Lochner Cologne Cathedral altarpiece",
+    "Cologne cathedral painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__baden_wurtemberg",
+   "q": [
+    "Hans Thoma Black Forest painting",
+    "Hans Thoma Schwarzwald",
+    "Black Forest painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_alemania__sajonia_anhalt",
+   "q": [
+    "Cranach Martin Luther Wittenberg",
+    "Cranach Lutherbildnis",
+    "Wittenberg painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_austria__viena",
+   "q": [
+    "Klimt The Kiss",
+    "Klimt Der Kuss",
+    "Klimt Vienna Burgtheater"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_austria__salzburgo",
+   "q": [
+    "Salzburg painting 19th century",
+    "Salzburg Friedrich Loos",
+    "Hohensalzburg painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_austria__tirol",
+   "q": [
+    "Egger-Lienz Totentanz",
+    "Albin Egger-Lienz painting",
+    "Tyrol painting Egger-Lienz Das Kreuz"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_suiza__berna",
+   "q": [
+    "Hodler Lake Thun",
+    "Hodler Thunersee und Stockhornkette",
+    "Hodler Eiger Monch Jungfrau"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_suiza__ginebra",
+   "q": [
+    "Hodler Lake Geneva Mont Blanc",
+    "Hodler Le Léman",
+    "Liotard Geneva"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_suiza__lucerna",
+   "q": [
+    "Turner Lake Lucerne",
+    "Turner Lucerne painting",
+    "Lake Lucerne painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_suiza__los_grisones",
+   "q": [
+    "Segantini Alpine Pastures",
+    "Segantini Alpine landscape",
+    "Giovanni Segantini painting Engadin"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_polonia__voivodato_de_pequena_polonia",
+   "q": [
+    "Matejko Stanczyk",
+    "Wyspianski Krakow painting",
+    "Krakow Wawel painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_polonia__voivodato_de_mazovia",
+   "q": [
+    "Bellotto Warsaw view",
+    "Canaletto Warsaw Krakowskie Przedmiescie",
+    "Bellotto Warszawa painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_chequia__praga",
+   "q": [
+    "Mucha Slav Epic",
+    "Mucha The Slav Epic Slavs in their original homeland",
+    "Prague painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_hungria__budapest",
+   "q": [
+    "Munkacsy Honfoglalas",
+    "Budapest Danube painting 19th century",
+    "Feszty Arpad Magyar landing painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_noruega__oslo",
+   "q": [
+    "Munch The Scream",
+    "Edvard Munch Skrik",
+    "Munch Oslo fjord painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_noruega__hordaland",
+   "q": [
+    "Dahl View from Stalheim",
+    "Johan Christian Dahl Bergen painting",
+    "Tidemand Gude Bridal Procession Hardangerfjord"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_suecia__estocolmo",
+   "q": [
+    "Carl Larsson painting",
+    "Stockholm painting 19th century",
+    "Richard Bergh Stockholm"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_suecia__dalarna",
+   "q": [
+    "Anders Zorn Midsummer Dance",
+    "Zorn Midsommardans",
+    "Anders Zorn Mora painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_finlandia__uusimaa",
+   "q": [
+    "Edelfelt Helsinki painting",
+    "Albert Edelfelt Kaivopuisto",
+    "Helsinki painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_finlandia__carelia_del_norte",
+   "q": [
+    "Gallen-Kallela Aino Myth",
+    "Gallen-Kallela Kullervo Cursing",
+    "Gallen-Kallela Lemminkainen's Mother"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_dinamarca__capital",
+   "q": [
+    "Hammershoi Copenhagen painting",
+    "Eckersberg Marble Quay Copenhagen",
+    "Copenhagen Eckersberg painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_dinamarca__jutlandia_septentrional",
+   "q": [
+    "Krøyer Summer Evening on Skagen Beach",
+    "Krøyer Skagen painting",
+    "Skagen painters Hip Hip Hurra"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_islandia__su_urland",
+   "q": [
+    "Thorlaksson Thingvellir painting",
+    "Þórarinn B. Þorláksson Þingvellir",
+    "Iceland landscape painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rusia__moscu",
+   "q": [
+    "Polenov Moscow Courtyard",
+    "Apollinary Vasnetsov Moscow Kremlin",
+    "Vasnetsov Moscow painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rusia__san_petersburgo",
+   "q": [
+    "Bronze Horseman painting Saint Petersburg",
+    "Kustodiev Saint Petersburg painting",
+    "Saint Petersburg Neva painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rusia__republica_autonoma_de_crimea",
+   "q": [
+    "Aivazovsky Crimea painting",
+    "Aivazovsky Feodosia",
+    "Aivazovsky Black Sea Crimea"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rusia__briansk",
+   "q": [
+    "Shishkin Morning in a Pine Forest",
+    "Shishkin Pine forest",
+    "Shishkin Rye"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rusia__ivanovo",
+   "q": [
+    "Levitan After the rain Plyos",
+    "Levitan Volga painting",
+    "Levitan Plyos"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rusia__pskov",
+   "q": [
+    "Roerich Pskov",
+    "Roerich Pskovo-Pechersky Monastery",
+    "Pskov Kremlin painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_ucrania__kiev",
+   "q": [
+    "Kuindzhi Moonlit Night on the Dnieper",
+    "Kuindzhi Dnieper in the morning",
+    "Kyiv painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_ucrania__odesa",
+   "q": [
+    "Aivazovsky Odessa Moonlit Night",
+    "Aivazovsky Odessa",
+    "Odessa painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_turquia__estambul",
+   "q": [
+    "Aivazovsky Constantinople Golden Horn",
+    "Gerome Istanbul painting",
+    "Istanbul Bosphorus painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_grecia__atica",
+   "q": [
+    "Klenze Acropolis Athens ideal view",
+    "Acropolis painting 19th century",
+    "Athens Acropolis painting Edward Dodwell"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_grecia__creta",
+   "q": [
+    "El Greco View of Mount Sinai",
+    "Cretan icon painting",
+    "Crete painting Candia"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_grecia__monte_athos",
+   "q": [
+    "Mount Athos monastery painting",
+    "Athos fresco",
+    "Mount Athos icon"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_egipto__guiza",
+   "q": [
+    "David Roberts Pyramids of Giza",
+    "David Roberts Great Sphinx",
+    "Giza pyramids painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_egipto__luxor",
+   "q": [
+    "David Roberts Karnak",
+    "David Roberts Temple of Luxor",
+    "Luxor painting Karnak 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_egipto__asuan",
+   "q": [
+    "David Roberts Philae",
+    "Philae temple painting",
+    "Aswan painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_egipto__fayun",
+   "q": [
+    "Fayum mummy portrait",
+    "Fayum portrait of a young man",
+    "Fayum portrait of a woman"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_egipto__el_cairo",
+   "q": [
+    "David Roberts Cairo gate",
+    "Gerome Cairo painting",
+    "Cairo painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_iran__isfahan",
+   "q": [
+    "Chehel Sotoun mural Isfahan",
+    "Isfahan painting Safavid",
+    "Chehel Sotoun painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_iran__teheran",
+   "q": [
+    "Kamal-ol-Molk Hall of Mirrors",
+    "Kamal-ol-Molk painting Golestan",
+    "Golestan Palace painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_iran__fars",
+   "q": [
+    "Persepolis painting Flandin",
+    "Flandin Coste Persepolis",
+    "Persepolis 19th century painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_india__kerala",
+   "q": [
+    "Raja Ravi Varma painting",
+    "Raja Ravi Varma Shakuntala",
+    "Ravi Varma Kerala"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_india__uttar_pradesh",
+   "q": [
+    "Taj Mahal painting 19th century",
+    "Mughal painting Agra Taj Mahal",
+    "Akbar Fatehpur Sikri painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_india__rajastan",
+   "q": [
+    "Bani Thani Kishangarh",
+    "Rajput painting Rajasthan",
+    "Kishangarh painting Nihal Chand"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_india__maharashtra",
+   "q": [
+    "Ajanta cave painting",
+    "Ajanta fresco Bodhisattva Padmapani",
+    "Ajanta caves mural"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_india__delhi",
+   "q": [
+    "Delhi Durbar 1903 painting",
+    "Delhi Red Fort painting 19th century",
+    "Mughal Delhi painting Shah Jahan"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_india__panyab",
+   "q": [
+    "Golden Temple Amritsar painting",
+    "Amritsar painting 19th century",
+    "Maharaja Ranjit Singh painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__henan",
+   "q": [
+    "Zhang Zeduan Along the River During Qingming Festival",
+    "Qingming Shanghe Tu",
+    "Guo Xi Early Spring"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__zhejiang",
+   "q": [
+    "Huang Gongwang Dwelling in the Fuchun Mountains",
+    "Fuchun Mountains scroll",
+    "Hangzhou West Lake painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__pekin",
+   "q": [
+    "Castiglione Qianlong painting",
+    "Forbidden City painting Qing",
+    "Beijing painting Qing dynasty"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__shaanxi",
+   "q": [
+    "Tang dynasty tomb mural Xi'an",
+    "Xi'an Tang tomb mural",
+    "Shaanxi tomb mural"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__jiangsu",
+   "q": [
+    "Wen Zhengming Suzhou garden",
+    "Wen Zhengming painting Humble Administrator's Garden",
+    "Suzhou painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__guangdong",
+   "q": [
+    "Canton factories painting Chinese export",
+    "Guangzhou Canton painting 19th century",
+    "Pearl River Canton painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_china__tibet",
+   "q": [
+    "Tibetan thangka",
+    "Potala Palace painting",
+    "Thangka Buddha Tibet"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_japon__kanagawa",
+   "q": [
+    "Hokusai Great Wave off Kanagawa",
+    "Hokusai Kanagawa-oki nami ura",
+    "Hokusai Under the Wave off Kanagawa"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_japon__tokio",
+   "q": [
+    "Hiroshige Sudden Shower over Shin-Ohashi Bridge",
+    "Hiroshige One Hundred Famous Views of Edo",
+    "Hiroshige Plum Garden Kameido"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_japon__kioto",
+   "q": [
+    "Rakuchu rakugai zu Kyoto screen",
+    "Maruyama Okyo Kyoto",
+    "Kyoto folding screen Edo period"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_japon__yamanashi",
+   "q": [
+    "Hokusai Fuji Kai Province Kajikazawa",
+    "Hokusai Fine Wind Clear Morning",
+    "Hokusai Thirty-six Views of Mount Fuji"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_japon__nagasaki",
+   "q": [
+    "Kawahara Keiga Dejima painting",
+    "Dejima Nagasaki painting",
+    "Nagasaki Dejima Dutch trading post painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_japon__shizuoka",
+   "q": [
+    "Hiroshige Tokaido Fifty-three Stations Yui",
+    "Hiroshige Tokaido Hara Fuji",
+    "Hiroshige Tokaido Shizuoka"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_corea_del_sur__seul",
+   "q": [
+    "Jeong Seon Inwangjesaek",
+    "Jeong Seon Seoul painting",
+    "Joseon painting Hanyang"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_colombia__bogota",
+   "q": [
+    "Edward Mark Plaza de Bolivar Bogota",
+    "Bogotá painting 19th century",
+    "Ramón Torres Méndez Bogotá"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_colombia__antioquia",
+   "q": [
+    "Francisco Antonio Cano Horizontes",
+    "Francisco Antonio Cano painting",
+    "Medellín painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_colombia__cundinamarca",
+   "q": [
+    "Salto del Tequendama painting",
+    "Tequendama 19th century painting",
+    "Tequendama waterfall painting Colombia"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_colombia__bolivar",
+   "q": [
+    "Cartagena de Indias painting",
+    "Cartagena de Indias 18th century painting",
+    "Cartagena bay painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_colombia__boyaca",
+   "q": [
+    "Batalla de Boyacá painting",
+    "Puente de Boyacá painting Martín Tovar",
+    "Boyacá Colombia painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_peru__lima",
+   "q": [
+    "Pancho Fierro Lima painting",
+    "Pancho Fierro acuarelas",
+    "Lima painting 19th century Plaza de Armas"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_peru__cusco",
+   "q": [
+    "Escuela Cusqueña painting",
+    "Cusco School Corpus Christi procession",
+    "Cuzco school Virgin painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_argentina__buenos_aires",
+   "q": [
+    "Pueyrredón Un alto en el campo",
+    "Prilidiano Pueyrredón painting",
+    "Buenos Aires painting 19th century Cándido López"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_chile__valparaiso",
+   "q": [
+    "Somerscales Valparaiso",
+    "Thomas Somerscales painting",
+    "Valparaíso bay painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_chile__santiago",
+   "q": [
+    "Rugendas Santiago de Chile",
+    "Santiago de Chile painting 19th century",
+    "Pedro Subercaseaux painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_venezuela__carabobo",
+   "q": [
+    "Tovar y Tovar Batalla de Carabobo",
+    "Martín Tovar y Tovar Carabobo",
+    "Battle of Carabobo painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_venezuela__capital",
+   "q": [
+    "Arturo Michelena Miranda en La Carraca",
+    "Michelena painting Caracas",
+    "Caracas painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_brasil__estado_de_rio_de_janeiro",
+   "q": [
+    "Rugendas Rio de Janeiro painting",
+    "Debret Rio de Janeiro",
+    "Guanabara Bay painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_brasil__bahia",
+   "q": [
+    "Salvador Bahia painting 19th century",
+    "Rugendas Bahia",
+    "Salvador da Bahia 19th century painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_brasil__pernambuco",
+   "q": [
+    "Frans Post Brazilian landscape",
+    "Frans Post Olinda",
+    "Frans Post Dutch Brazil"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_brasil__estado_de_sao_paulo",
+   "q": [
+    "Pedro Américo Independência ou Morte",
+    "Independence or Death painting",
+    "Almeida Júnior Caipira"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_brasil__minas_gerais",
+   "q": [
+    "Ataíde painting Ouro Preto",
+    "Ouro Preto painting",
+    "Manuel da Costa Ataíde ceiling"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_mexico__mexico",
+   "q": [
+    "José María Velasco Valle de México",
+    "Velasco Valley of Mexico",
+    "Velasco Mexico City painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_mexico__oaxaca",
+   "q": [
+    "Velasco Valle de Oaxaca",
+    "Monte Alban painting",
+    "Oaxaca painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_mexico__yucatan",
+   "q": [
+    "Catherwood Uxmal",
+    "Catherwood Chichen Itza",
+    "Catherwood Yucatan lithograph"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_mexico__chiapas",
+   "q": [
+    "Catherwood Palenque",
+    "Palenque painting 19th century",
+    "Palenque Waldeck"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_mexico__guanajuato",
+   "q": [
+    "Hermenegildo Bustos painting",
+    "Guanajuato painting 19th century",
+    "Guanajuato city painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_canada__quebec",
+   "q": [
+    "Krieghoff Quebec painting",
+    "Cornelius Krieghoff Habitants",
+    "Quebec City painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_canada__ontario",
+   "q": [
+    "Tom Thomson The Jack Pine",
+    "Tom Thomson Northern River",
+    "Tom Thomson West Wind"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_canada__columbia_britanica",
+   "q": [
+    "Emily Carr painting",
+    "Emily Carr Big Raven",
+    "Paul Kane British Columbia painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_canada__alberta",
+   "q": [
+    "Paul Kane Rocky Mountains painting",
+    "Paul Kane Alberta",
+    "Canadian Rockies painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_australia__victoria",
+   "q": [
+    "Tom Roberts Shearing the Rams",
+    "Frederick McCubbin Lost",
+    "Arthur Streeton Golden Summer Eaglemont"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_australia__nueva_gales_del_sur",
+   "q": [
+    "Arthur Streeton The Fire's On",
+    "Tom Roberts Bailed Up",
+    "Sydney Harbour painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_australia__tasmania",
+   "q": [
+    "John Glover My Harvest Home",
+    "John Glover Tasmania painting",
+    "Tasmania landscape painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_australia__australia_occidental",
+   "q": [
+    "Swan River colony painting",
+    "Perth painting 19th century",
+    "Western Australia painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_nueva_zelanda__auckland",
+   "q": [
+    "Goldie Maori portrait",
+    "Charles Goldie painting",
+    "Auckland painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_nueva_zelanda__west_coast",
+   "q": [
+    "Petrus van der Velden Otira Gorge",
+    "Van der Velden Otira",
+    "West Coast New Zealand painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_uzbekistan__samarcanda",
+   "q": [
+    "Vereshchagin Doors of Tamerlane",
+    "Vereshchagin Samarkand",
+    "Registan painting Vereshchagin"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_israel__jerusalen",
+   "q": [
+    "David Roberts Jerusalem from the Mount of Olives",
+    "David Roberts Jerusalem",
+    "Jerusalem painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_argelia__argel",
+   "q": [
+    "Delacroix Women of Algiers",
+    "Delacroix Femmes d'Alger dans leur appartement",
+    "Algiers painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_sudafrica__occidental_del_cabo",
+   "q": [
+    "Thomas Baines Cape Town painting",
+    "Cape Town painting 19th century",
+    "Table Mountain painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_indonesia__java_central",
+   "q": [
+    "Raden Saleh Arrest of Diponegoro",
+    "Raden Saleh painting",
+    "Borobudur painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_filipinas__quezon",
+   "q": [
+    "Juan Luna Spoliarium",
+    "Juan Luna painting",
+    "Hidalgo painting Philippines"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "lugar_rumania__bucarest",
+   "q": [
+    "Grigorescu painting",
+    "Nicolae Grigorescu Bucharest",
+    "Bucharest painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__california",
+   "q": [
+    "Bierstadt Yosemite Valley",
+    "Bierstadt Valley of the Yosemite",
+    "Bierstadt California painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__nueva_york",
+   "q": [
+    "Frederic Church Niagara",
+    "Thomas Cole Hudson River School",
+    "Hudson River painting Kensett"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__arizona",
+   "q": [
+    "Thomas Moran Grand Canyon",
+    "Moran Chasm of the Colorado",
+    "Grand Canyon painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__wyoming",
+   "q": [
+    "Bierstadt Lander's Peak",
+    "Thomas Moran Yellowstone",
+    "Bierstadt Grand Tetons"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__massachusetts",
+   "q": [
+    "Thomas Cole The Oxbow",
+    "Cole View from Mount Holyoke",
+    "Massachusetts painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__pensilvania",
+   "q": [
+    "Washington Crossing the Delaware Leutze",
+    "Edward Hicks Peaceable Kingdom",
+    "Philadelphia painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__luisiana",
+   "q": [
+    "Degas A Cotton Office in New Orleans",
+    "Degas New Orleans",
+    "New Orleans painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__texas",
+   "q": [
+    "Frederic Remington Texas painting",
+    "Remington A Dash for the Timber",
+    "Texas painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__oregon",
+   "q": [
+    "Bierstadt Mount Hood",
+    "Mount Hood painting 19th century",
+    "Oregon Trail painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__washington",
+   "q": [
+    "Mount Rainier painting 19th century",
+    "Paul Kane Mount St Helens",
+    "Washington state painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__florida",
+   "q": [
+    "Winslow Homer Florida",
+    "Winslow Homer The Gulf Stream",
+    "Martin Johnson Heade Florida"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__montana",
+   "q": [
+    "Charles Russell Lewis and Clark meeting Indians at Ross' Hole",
+    "Charles M. Russell painting",
+    "Karl Bodmer Missouri River painting"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__alaska",
+   "q": [
+    "Sydney Laurence Mount McKinley",
+    "Sydney Laurence painting",
+    "Alaska painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__hawai",
+   "q": [
+    "Jules Tavernier Kilauea",
+    "Kilauea painting 19th century",
+    "Hawaii painting 19th century volcano"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__colorado",
+   "q": [
+    "Bierstadt Rocky Mountains",
+    "Albert Bierstadt Estes Park",
+    "Colorado painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__utah",
+   "q": [
+    "Thomas Moran Zion",
+    "Zion Canyon painting 19th century",
+    "Utah painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__virginia",
+   "q": [
+    "Jamestown painting",
+    "Virginia painting 19th century",
+    "Mount Vernon painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__misisipi",
+   "q": [
+    "Mississippi River painting George Caleb Bingham",
+    "Bingham Fur Traders Descending the Missouri",
+    "Mississippi painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__nueva_jersey",
+   "q": [
+    "Washington Crossing the Delaware",
+    "New Jersey painting 19th century",
+    "Princeton painting battle"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__illinois",
+   "q": [
+    "Chicago painting 19th century",
+    "Lincoln painting",
+    "Illinois painting 19th century"
+   ]
+  },
+  {
+   "epoca": "2026",
+   "clave": "estado_estados_unidos__michigan",
+   "q": [
+    "Great Lakes painting 19th century",
+    "Michigan painting 19th century",
+    "Mackinac painting"
+   ]
+  }
+ ]
+}
