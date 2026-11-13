@@ -2223,6 +2223,8 @@ func _pagina_descubrimientos() -> void:
 	lbl_desc_res = _lbl("", 12, C_TEXTO)
 	lbl_desc_res.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(lbl_desc_res)
+	var b_ven := _boton("ABRIR LA VENTANA DE DESCUBRIMIENTOS (T)", func(): main._abrir_descubrimientos())
+	pg.add_child(b_ven)
 	pg.add_child(HSeparator.new())
 	filtro_desc = LineEdit.new()
 	filtro_desc.placeholder_text = "Buscar descubrimiento (bronce, pólvora, internet...)"
@@ -2273,7 +2275,7 @@ func _desc_tid() -> int:
 	return -1
 
 
-func _refrescar_desc() -> void:
+func _refrescar_desc(mantener := -1) -> void:
 	if lista_desc == null:
 		return
 	var d = main.mundo.descubrimientos
@@ -2306,27 +2308,39 @@ func _refrescar_desc() -> void:
 	lbl_desc_res.text = t
 	lista_desc.clear()
 	ids_lista_desc.clear()
-	var q := _plano(filtro_desc.text.strip_edges())
-	var cand: Array = []
+	# 0.1.8.42 · la lista es COMPLETA (los 1.730, de cualquier época, ordenados por año); una fila divisoria marca hasta dónde llega la historia en la fecha del reloj
+	var q := filtro_desc.text.strip_edges()
+	var cand := PackedInt32Array()
 	if q == "":
-		for k in range(maxi(d.cuenta_f - 30, 0), mini(d.cuenta_f + 30, d.n)):
-			cand.append(d.orden[k])
-		lbl_desc_lista.text = "Alrededor de esta fecha (30 antes y 30 después). Escribe para buscar entre los %s." % _miles(d.n)
+		cand = d.orden
+		lbl_desc_lista.text = "Los %s descubrimientos, por año. ✓ = lo conoce el país mostrado. La línea «── HISTORIA ──» marca hasta dónde llega la historia en la fecha del reloj. Escribe para buscar." % _miles(d.n)
 	else:
-		for k in d.n:
-			var i: int = d.orden[k]
-			if _plano(String(d.nombre[i])).contains(q) or String(d.slug[i]).contains(q):
-				cand.append(i)
-				if cand.size() >= 300:
-					break
-		lbl_desc_lista.text = "%d resultados%s." % [cand.size(), " (mostrando los primeros 300)" if cand.size() >= 300 else ""]
-	for i in cand:
+		cand = d.buscar(q)
+		lbl_desc_lista.text = "%d resultados." % cand.size()
+	var fila_frontera := -1
+	for k in cand.size():
+		var i: int = cand[k]
+		if q == "" and k == d.cuenta_f:
+			fila_frontera = lista_desc.add_item("──────── HISTORIA hasta %s (abajo: lo que aún no llega) ────────" % d.anio_texto(d.anio_actual))
+			lista_desc.set_item_selectable(fila_frontera, false)
+			lista_desc.set_item_custom_fg_color(fila_frontera, Tema.ORO)
+			ids_lista_desc.append(-1)
 		var sabe: bool = d.conoce(tid, i)
 		var idx_item: int = lista_desc.add_item("%s %s" % ["✓" if sabe else "·", d.etiqueta(i)])
 		if not sabe:
 			lista_desc.set_item_custom_fg_color(idx_item, Tema.TENUE)
 		ids_lista_desc.append(i)
 	desc_sel = -1
+	var fila_ver := fila_frontera                       # sin búsqueda se abre mirando la frontera; si se pidió mantener un descubrimiento, ese
+	if mantener >= 0:
+		var pos := ids_lista_desc.find(mantener)
+		if pos >= 0:
+			fila_ver = pos
+			desc_sel = mantener
+	if fila_ver >= 0:
+		lista_desc.select(fila_ver)
+		lista_desc.ensure_current_is_visible()
+		lista_desc.call_deferred("ensure_current_is_visible")
 	_refrescar_ficha_desc()
 
 
@@ -2386,7 +2400,4 @@ func _desc_cambiar(conceder: bool) -> void:
 		_decir("%s %s «%s»." % [m.jugador, "ahora conoce" if conceder else "ya no conoce", String(d.nombre[desc_sel])])
 	else:
 		_decir("%s %s «%s»." % [m.jugador, "ya conocía" if conceder else "no conocía", String(d.nombre[desc_sel])], false)
-	var guardado := desc_sel
-	_refrescar_desc()
-	desc_sel = guardado
-	_refrescar_ficha_desc()
+	_refrescar_desc(desc_sel)

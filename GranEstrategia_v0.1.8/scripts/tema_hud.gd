@@ -194,6 +194,10 @@ static func color_rol(rol: String) -> Color:
 			return MAL
 		"naranja":
 			return NARANJA
+		"azul":                                                  # 0.1.8.42 · «disponible» en el árbol de descubrimientos (el acento del tema no sirve: en el Cartográfico es rojo)
+			return Color("2B6CB0") if ID == 0 else Color("6CB6FF")
+		"violeta":                                               # 0.1.8.42 · «lo que abre» al resaltar una cadena en el árbol de descubrimientos
+			return Color("7B3FA0") if ID == 0 else Color("C79BFF")
 		"titulo":
 			return TITULO
 		"titulo_tenue":
@@ -228,36 +232,95 @@ class EstiloMetal extends StyleBox:
 	var acento_arriba := Color(0.0, 0.0, 0.0, 0.0)   # línea gruesa en el borde de arriba
 	var filete := Color(0.0, 0.0, 0.0, 0.0)      # segundo borde fino, 3 px por dentro del primero (alfa 0 = sin filete)
 
+	## 0.1.8.42 · TODO el estilo (relleno con degradado, borde, filete, filo y acentos) va en UNA sola orden de dibujo (una malla de triángulos con color por vértice).
+	## Antes eran 3–6 órdenes por caja (polígono + polilíneas + líneas) y cada una era una llamada de dibujo aparte: el HUD llegaba a ~200 por fotograma con la pantalla
+	## quieta y varios cientos con un panel abierto (en equipos con ANGLE/Intel cada llamada cuesta). El aspecto es el mismo.
 	func _draw(ci: RID, rect: Rect2) -> void:
+		var m := armar(rect)
+		RenderingServer.canvas_item_add_triangle_array(ci, m[2], m[0], m[1])
+
+	## La malla de la caja: [posiciones, colores por vértice, índices de triángulos] (la usa `_draw` y la prueba de geometría).
+	func armar(rect: Rect2) -> Array:
 		var r := rect.grow(-0.5)
 		var c := minf(corte, minf(r.size.x, r.size.y) * 0.5)
 		var x0 := r.position.x
 		var y0 := r.position.y
 		var x1 := r.end.x
 		var y1 := r.end.y
-		var pts := PackedVector2Array([Vector2(x0 + c, y0), Vector2(x1 - c, y0), Vector2(x1, y0 + c), Vector2(x1, y1 - c),
-			Vector2(x1 - c, y1), Vector2(x0 + c, y1), Vector2(x0, y1 - c), Vector2(x0, y0 + c)])
+		var pts := _contorno(x0, y0, x1, y1, c)
 		var alto := maxf(r.size.y, 1.0)
-		var cols := PackedColorArray()
-		for p in pts:
-			cols.append(arriba.lerp(abajo, clampf((p.y - y0) / alto, 0.0, 1.0)))
-		RenderingServer.canvas_item_add_polygon(ci, pts, cols)
-		var cerrado := pts.duplicate()
-		cerrado.append(pts[0])
-		RenderingServer.canvas_item_add_polyline(ci, cerrado, PackedColorArray([borde]), grosor, true)
+		var pos := PackedVector2Array()
+		var col := PackedColorArray()
+		var ind := PackedInt32Array()
+		for p in pts:                                                  # relleno: abanico de triángulos con el degradado vertical
+			pos.append(p)
+			col.append(arriba.lerp(abajo, clampf((p.y - y0) / alto, 0.0, 1.0)))
+		for k in range(1, pts.size() - 1):
+			ind.append(0)
+			ind.append(k)
+			ind.append(k + 1)
+		var h := grosor * 0.5 + 0.35                                   # el borde antiguo (polilínea suavizada) se veía ~1,7 px: núcleo un poco más ancho
+		_cinta(pts, h, -h, borde, borde, pos, col, ind)
+		_cinta(pts, h, h + 1.0, Color(borde.r, borde.g, borde.b, borde.a * 0.35), Color(borde.r, borde.g, borde.b, 0.0), pos, col, ind)   # suavizado exterior
 		if filete.a > 0.0 and r.size.x > 14.0 and r.size.y > 14.0:
 			var i := r.grow(-3.5)
-			var ci2 := maxf(c - 2.0, 0.0)
-			var pi := PackedVector2Array([Vector2(i.position.x + ci2, i.position.y), Vector2(i.end.x - ci2, i.position.y), Vector2(i.end.x, i.position.y + ci2),
-				Vector2(i.end.x, i.end.y - ci2), Vector2(i.end.x - ci2, i.end.y), Vector2(i.position.x + ci2, i.end.y), Vector2(i.position.x, i.end.y - ci2),
-				Vector2(i.position.x, i.position.y + ci2), Vector2(i.position.x + ci2, i.position.y)])
-			RenderingServer.canvas_item_add_polyline(ci, pi, PackedColorArray([filete]), 1.0, true)
+			_cinta(_contorno(i.position.x, i.position.y, i.end.x, i.end.y, maxf(c - 2.0, 0.0)), 0.5, -0.5, filete, filete, pos, col, ind)
 		if filo.a > 0.0 and r.size.x > 2.0 * c + 4.0:
-			RenderingServer.canvas_item_add_line(ci, Vector2(x0 + c + 1.0, y0 + 1.5), Vector2(x1 - c - 1.0, y0 + 1.5), filo, 1.0, true)
+			_franja(x0 + c + 1.0, x1 - c - 1.0, y0 + 1.5, 1.0, filo, pos, col, ind)
 		if acento.a > 0.0 and r.size.x > 2.0 * c + 4.0:
-			RenderingServer.canvas_item_add_line(ci, Vector2(x0 + c, y1 - 1.0), Vector2(x1 - c, y1 - 1.0), acento, 2.0, true)
+			_franja(x0 + c, x1 - c, y1 - 1.0, 2.0, acento, pos, col, ind)
 		if acento_arriba.a > 0.0 and r.size.x > 2.0 * c + 4.0:
-			RenderingServer.canvas_item_add_line(ci, Vector2(x0 + c, y0 + 1.0), Vector2(x1 - c, y0 + 1.0), acento_arriba, 2.0, true)
+			_franja(x0 + c, x1 - c, y0 + 1.0, 2.0, acento_arriba, pos, col, ind)
+		return [pos, col, ind]
+
+	## El contorno de la caja: rectángulo con las 4 esquinas cortadas `c` px (si `c` es casi 0, un rectángulo de 4 puntos). En el sentido de las agujas del reloj.
+	static func _contorno(x0: float, y0: float, x1: float, y1: float, c: float) -> PackedVector2Array:
+		if c < 0.75:
+			return PackedVector2Array([Vector2(x0, y0), Vector2(x1, y0), Vector2(x1, y1), Vector2(x0, y1)])
+		return PackedVector2Array([Vector2(x0 + c, y0), Vector2(x1 - c, y0), Vector2(x1, y0 + c), Vector2(x1, y1 - c),
+			Vector2(x1 - c, y1), Vector2(x0 + c, y1), Vector2(x0, y1 - c), Vector2(x0, y0 + c)])
+
+	## Anillo entre dos desplazamientos del contorno (`d0` y `d1`, positivo = hacia fuera; los vértices se mueven por la esquina exacta), con un color en cada borde del anillo.
+	static func _cinta(pts: PackedVector2Array, d0: float, d1: float, c0: Color, c1: Color, pos: PackedVector2Array, col: PackedColorArray, ind: PackedInt32Array) -> void:
+		var n := pts.size()
+		var base := pos.size()
+		for k in n:
+			var a := pts[(k + n - 1) % n]
+			var b := pts[k]
+			var c := pts[(k + 1) % n]
+			var n1 := Vector2((b.y - a.y), -(b.x - a.x)).normalized()
+			var n2 := Vector2((c.y - b.y), -(c.x - b.x)).normalized()
+			var m := (n1 + n2) / maxf(1.0 + n1.dot(n2), 0.2)
+			pos.append(b + m * d0)
+			col.append(c0)
+			pos.append(b + m * d1)
+			col.append(c1)
+		for k in n:
+			var i0 := base + k * 2
+			var i1 := base + ((k + 1) % n) * 2
+			ind.append(i0)
+			ind.append(i0 + 1)
+			ind.append(i1)
+			ind.append(i1)
+			ind.append(i0 + 1)
+			ind.append(i1 + 1)
+
+	## Una franja horizontal de `grosor` px centrada en `y`.
+	static func _franja(xa: float, xb: float, y: float, grosor: float, color: Color, pos: PackedVector2Array, col: PackedColorArray, ind: PackedInt32Array) -> void:
+		var base := pos.size()
+		var h := grosor * 0.5
+		pos.append(Vector2(xa, y - h))
+		pos.append(Vector2(xb, y - h))
+		pos.append(Vector2(xb, y + h))
+		pos.append(Vector2(xa, y + h))
+		for k in 4:
+			col.append(color)
+		ind.append(base)
+		ind.append(base + 1)
+		ind.append(base + 2)
+		ind.append(base)
+		ind.append(base + 2)
+		ind.append(base + 3)
 
 	func _get_draw_rect(rect: Rect2) -> Rect2:
 		return rect

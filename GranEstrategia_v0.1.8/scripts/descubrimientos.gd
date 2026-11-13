@@ -35,6 +35,8 @@ var origen := PackedStringArray()             # h = histórico a mano · a = aju
 var req: Array = []                           # índice -> PackedInt32Array (hacen falta TODOS)
 var req_o: Array = []                         # índice -> Array de PackedInt32Array (de cada grupo basta UNO)
 var idx_de_slug := {}
+var nombre_plano := PackedStringArray()       # el nombre sin tildes y en minúsculas (para buscar)
+var dependientes: Array = []                  # índice -> PackedInt32Array de los que lo piden como prerrequisito (de `req` o de cualquier alternativa de `req_o`)
 var eras: Array = []                          # [{nombre, desde, hasta}]
 var ramas: Array = []                         # [{cod, nombre}]
 var secciones: Array = []                     # [{rama, cod, nombre, desc}]
@@ -66,6 +68,7 @@ func cargar(d: Dictionary) -> bool:
 	var m := filas.size()
 	slug.resize(m)
 	nombre.resize(m)
+	nombre_plano.resize(m)
 	era.resize(m)
 	tipo.resize(m)
 	seccion.resize(m)
@@ -80,6 +83,7 @@ func cargar(d: Dictionary) -> bool:
 		var f: Array = filas[i]
 		slug[i] = String(f[0])
 		nombre[i] = String(f[1])
+		nombre_plano[i] = plano(nombre[i])
 		era[i] = int(f[2])
 		tipo[i] = String(f[3])
 		seccion[i] = int(f[4])
@@ -100,6 +104,7 @@ func cargar(d: Dictionary) -> bool:
 		req_o[i] = os
 		idx_de_slug[slug[i]] = i
 	n = m
+	_armar_dependientes()
 	eras = d.get("eras", [])
 	ramas = d.get("ramas", [])
 	secciones = d.get("secciones", [])
@@ -124,6 +129,47 @@ func cargar(d: Dictionary) -> bool:
 	anio_actual = NINGUNO
 	cuenta_f = 0
 	return true
+
+
+## Minúsculas y sin tildes: así «polvora» encuentra «Pólvora».
+static func plano(t: String) -> String:
+	var r := t.to_lower()
+	for par in [["á", "a"], ["é", "e"], ["í", "i"], ["ó", "o"], ["ú", "u"], ["ü", "u"], ["ñ", "n"], ["ç", "c"]]:
+		r = r.replace(par[0], par[1])
+	return r
+
+
+## Busca por nombre o por slug (sin tildes ni mayúsculas). Devuelve los índices en orden de año; `maximo` <= 0 = sin tope.
+func buscar(texto: String, maximo := 0) -> PackedInt32Array:
+	var q := plano(texto.strip_edges())
+	var r := PackedInt32Array()
+	if q == "":
+		return r
+	for k in n:
+		var i: int = orden[k]
+		if nombre_plano[i].contains(q) or String(slug[i]).contains(q):
+			r.append(i)
+			if maximo > 0 and r.size() >= maximo:
+				break
+	return r
+
+
+## Índice inverso de los prerrequisitos (0.1.8.42): qué descubrimientos abre cada uno. Lo usa la ventana de Descubrimientos para mostrar «Desbloquea».
+func _armar_dependientes() -> void:
+	var tmp: Array = []
+	tmp.resize(n)
+	for i in n:
+		tmp[i] = PackedInt32Array()
+	for i in n:
+		var pedidos := PackedInt32Array(req[i])
+		for g in req_o[i]:
+			pedidos.append_array(g)
+		for r in pedidos:
+			var lista: PackedInt32Array = tmp[r]
+			if not lista.has(i):
+				lista.append(i)
+				tmp[r] = lista
+	dependientes = tmp
 
 
 # ─────────────────────────────────────────────────────────────

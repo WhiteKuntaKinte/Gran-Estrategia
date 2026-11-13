@@ -18,6 +18,7 @@ const TerritorioScript := preload("res://scripts/territorio.gd")
 const TemaHud := preload("res://scripts/tema_hud.gd")
 const RankingScript := preload("res://scripts/ranking.gd")
 const ConstruirScript := preload("res://scripts/ventana_construir.gd")
+const DescubrimientosVentana := preload("res://scripts/ventana_descubrimientos.gd")
 const BANDERAS_HD_MAX := 12                     # banderas HD (256 px) en memoria a la vez: el panel y el aviso de guerra piden una cada vez
 const PinturasScript := preload("res://scripts/pinturas.gd")
 const MateriasScript := preload("res://scripts/materias.gd")
@@ -519,6 +520,8 @@ var capas_costa: Array = []           # [detalle completo, intermedio, lejano]: 
 var costa_nivel := -1                 # nivel de detalle de la costa que se está mostrando
 const COSTA_ZOOM_NIVEL1 := 2.4        # por debajo de este zoom REAL (px por unidad) basta el nivel intermedio (error <= ~1 px)
 const COSTA_ZOOM_NIVEL2 := 1.0        # por debajo de este, el lejano
+const COSTA_FACTOR := [1.0, 1.15, 1.3]   # 0.1.8.42: Opciones > Costas (Detallada / media / baja) alarga los umbrales de zoom de arriba, en vez de fijar el nivel lejano SIEMPRE: la costa simplificada
+										# de cerca se separaba del relleno (que va a toda resolución) y el contorno exterior se veía roto
 var capa_frontera: Node2D
 var capa_cont: Array = []
 var capa_ea: Array = []                          # línea Europa–Asia (solo al acercar)
@@ -617,6 +620,7 @@ var campana_rect := Rect2()           # territorio de la campaña en coordenadas
 var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
 var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
+var panel_descubrimientos             # DescubrimientosVentana (0.1.8.42): la ventana de Descubrimientos (tecla T), mientras está abierta
 var pinturas                          # PinturasScript (0.1.8.41): la pintura clásica de cada país, arriba de su panel
 var materias                          # MateriasScript (0.1.8.41): iconos de materias primas, sectores y monedas
 var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
@@ -1671,11 +1675,11 @@ func _fijar_grosor(mat: ShaderMaterial, clave: String, z: float, alfa: float) ->
 ## Elige qué nivel de detalle de la costa se ve según el zoom real: al alejar, cientos de miles de triángulos que no se distinguen.
 func _elegir_detalle_costa(z: float) -> void:
 	var nivel := 0
-	if z < COSTA_ZOOM_NIVEL2 and capas_costa.size() > 2 and capas_costa[2] != null:
+	var f: float = COSTA_FACTOR[clampi(costa_nivel_min, 0, 2)]                # 0.1.8.42: calidad baja = umbrales más generosos (error <= 1,3 px), no el nivel lejano a todo zoom
+	if z < COSTA_ZOOM_NIVEL2 * f and capas_costa.size() > 2 and capas_costa[2] != null:
 		nivel = 2
-	elif z < COSTA_ZOOM_NIVEL1 and capas_costa.size() > 1 and capas_costa[1] != null:
+	elif z < COSTA_ZOOM_NIVEL1 * f and capas_costa.size() > 1 and capas_costa[1] != null:
 		nivel = 1
-	nivel = maxi(nivel, costa_nivel_min)                                      # 0.1.8.32: Opciones > Pantalla > Costas puede fijar un detalle más bajo
 	while nivel > 0 and (capas_costa.size() <= nivel or capas_costa[nivel] == null):
 		nivel -= 1                                                            # (si ese nivel no existe, el más bajo que haya)
 	if nivel == costa_nivel:
@@ -1878,6 +1882,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if event.keycode == KEY_B and not en_menu and not en_pausa:
 			_alternar_construir()
+			return
+		if event.keycode == KEY_T and not en_menu and not en_pausa:
+			_alternar_descubrimientos()
 			return
 		if not en_menu and not en_pausa:
 			match event.keycode:
@@ -2916,6 +2923,31 @@ func _cerrar_construir() -> void:
 	panel_construir = null
 
 
+## 0.1.8.42 · Ventana de Descubrimientos (tecla T o el botón de la barra): el catálogo completo, en cualquier época.
+func _abrir_descubrimientos() -> void:
+	if mundo == null or mundo.descubrimientos == null or en_menu:
+		return
+	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
+		return
+	panel_descubrimientos = DescubrimientosVentana.new()
+	add_child(panel_descubrimientos)
+	panel_descubrimientos.construir(self, fuente_ui)
+	panel_descubrimientos.cerrada.connect(_cerrar_descubrimientos)
+
+
+func _alternar_descubrimientos() -> void:
+	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
+		_cerrar_descubrimientos()
+	else:
+		_abrir_descubrimientos()
+
+
+func _cerrar_descubrimientos() -> void:
+	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
+		panel_descubrimientos.queue_free()
+	panel_descubrimientos = null
+
+
 func _seleccion_continente(cont: String, p: Vector2) -> void:
 	var lista := []
 	for i in anillos.size():
@@ -3169,9 +3201,7 @@ func _crear_hud() -> void:
 	fichas = FichasScript.new()
 	add_child(fichas)
 	fichas.construir(self, fuente_ui)
-	grabador = GrabadorScript.new()
-	add_child(grabador)
-	grabador.construir(self)
+	grabador = GrabadorScript.obtener(self)                      # 0.1.8.42: global (vive en la raíz): sobrevive al menú y a «Nueva partida»
 	hud.cerrar_pedido.connect(cerrar_seleccion)
 	hud.miga_pedida.connect(_on_miga)
 	hud.vista_elegida.connect(_elegir_vista)
@@ -3184,6 +3214,7 @@ func _crear_hud() -> void:
 	hud.personalizar_pedido.connect(_abrir_personalizar)
 	hud.ranking_pedido.connect(_alternar_ranking)
 	hud.construir_pedido.connect(_abrir_construir)
+	hud.descubrimientos_pedido.connect(_alternar_descubrimientos)
 	_refrescar_texto_vista()
 	hud.set_fecha(reloj.texto())
 	hud.set_velocidad(reloj.velocidad)
@@ -3228,6 +3259,8 @@ func _aplicar_tema(id: int) -> void:
 		fichas.aplicar_tema()
 	if panel_construir != null and is_instance_valid(panel_construir):
 		panel_construir.aplicar_tema()
+	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
+		panel_descubrimientos.aplicar_tema()
 
 
 ## 0.1.8.32 · Gráficos del mapa y prioridad de la simulación (Opciones > Pantalla). Con los valores por defecto el juego queda como siempre.
@@ -3237,11 +3270,12 @@ var q_bordes := 2                                      # 0.1.8.37: calidad de lo
 var q_lineas_prov := true                            # la capa de líneas de provincia de la campaña puede verse
 var q_ciudades := true                               # las ciudades pueden verse
 var q_lagos := true                                  # los lagos se dibujan
-var costa_nivel_min := 0                             # la costa nunca usa un detalle mejor que este nivel (0 = el de siempre, 2 = el más bajo)
+var costa_nivel_min := 0                             # Opciones > Costas: 0 = el de siempre, 1 = media, 2 = baja (alarga los umbrales de zoom de cada nivel de costa: ver COSTA_FACTOR)
 
 
 func _aplicar_calidad(a: Dictionary) -> void:
 	var c := AjustesScript.sanear(a)
+	_marca_rend("calidad: %s" % String(AjustesScript.PRESETS_NOMBRES[int(AjustesScript.preset_de(c))]))
 	if capa_mar != null:
 		if int(c["mar"]) == 1:
 			capa_mar.material = null                       # sin shader: un rectángulo de color liso
@@ -3267,6 +3301,12 @@ func _aplicar_calidad(a: Dictionary) -> void:
 	if camara != null and capa_frontera != null:
 		_actualizar_zoom()
 		_actualizar_ciudades()
+
+
+## 0.1.8.42 · Marca automática en la grabación de rendimiento (no hace nada si no se está grabando).
+func _marca_rend(texto: String) -> void:
+	if grabador != null and is_instance_valid(grabador):
+		grabador.marcar(texto)
 
 
 ## 0.1.8.39 · Enciende o apaga el grabador de rendimiento (F9 o Debug > Rendimiento). Al apagarlo guarda el CSV y el resumen y copia el resumen.
@@ -3314,6 +3354,7 @@ func _refrescar_texto_vista() -> void:
 
 ## 0.1.8.37 · Enciende o apaga la vista de relieve (ver «VISTA “RELIEVE”»). Si no encuentra ninguna imagen avisa y se queda en la vista de antes.
 func _poner_modo_relieve(v: bool) -> void:
+	_marca_rend("vista: %s" % ("relieve" if v else "tradicional"))
 	if v and not _preparar_relieve_vista():
 		hud_aviso("Falta la imagen del relieve (datos/texturas/relieve_vista_*.jpg)")
 		v = false
@@ -3787,6 +3828,7 @@ func _comenzar_campana_menu() -> void:
 
 ## Empieza una partida nueva. Si ya había una en curso, se recarga el mundo entero (si no, la campaña heredaría ejércitos y guerras de la anterior).
 func _nueva_partida(p: Dictionary) -> void:
+	_marca_rend("nueva partida: %s" % String(p.get("modo", "")))
 	if _requiere_recarga(p):
 		Engine.set_meta("inicio_pendiente", p)
 		get_tree().paused = false
@@ -4282,6 +4324,7 @@ func _mostrar_opciones_info() -> void:
 
 
 func _on_jugar() -> void:
+	_marca_rend("entra a la partida")
 	if partida_activa == "":
 		partida_activa = "dev"
 	en_menu = false
@@ -6228,10 +6271,12 @@ func _cancelar_drag_tropas() -> void:
 
 
 func _volver_menu_principal() -> void:
+	_marca_rend("vuelta al menú principal")
 	if popup_guerra != null and popup_guerra.abierto:
 		popup_guerra.cerrar("menu")
 	_cerrar_ranking()
 	_cerrar_construir()
+	_cerrar_descubrimientos()
 	_cerrar_debug()
 	_cerrar_personalizar()
 	_cerrar_ordenes()

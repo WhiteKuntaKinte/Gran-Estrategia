@@ -17,6 +17,7 @@ signal dinero_pedido             # clic en el dinero de la barra superior: abre 
 signal debug_pedido              # botón del bicho (o F1)
 signal personalizar_pedido       # lápiz junto al nombre de tu país
 signal ranking_pedido            # botón «Ranking» (solo en la campaña)
+signal descubrimientos_pedido      # 0.1.8.42 · botón «Descubrimientos» de la barra de arriba (o la tecla T)
 signal construir_pedido(pis: Array)   # 0.1.8.40 · botón «Construir…» de las tarjetas Edificios (provincias elegidas, índices de Mundo.provincias)
 
 const Tema := preload("res://scripts/tema_hud.gd")
@@ -93,6 +94,7 @@ var botones_vel_extra := []      # 4, 5, 6 (ventanita que sale al pulsar la fech
 var popup_vel: PanelContainer
 var btn_debug: Button
 var btn_ranking: Button
+var btn_descubrimientos: Button
 var btn_editar: Button
 var scroll_cuerpo: ScrollContainer
 var _t_dip := 0.0
@@ -507,6 +509,19 @@ func _construir_barra() -> void:
 	btn_ranking.pressed.connect(func(): ranking_pedido.emit())
 	btn_ranking.visible = false
 	izq.add_child(btn_ranking)
+	btn_descubrimientos = Button.new()
+	btn_descubrimientos.text = "Descubrimientos"
+	btn_descubrimientos.icon = main.icono("i_estrella")
+	btn_descubrimientos.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	btn_descubrimientos.add_theme_constant_override("icon_max_width", 18)       # sin expand_icon: el botón es de ancho automático
+	btn_descubrimientos.custom_minimum_size = Vector2(0.0, 32.0)
+	btn_descubrimientos.focus_mode = Control.FOCUS_NONE
+	btn_descubrimientos.add_theme_font_size_override("font_size", 13)
+	btn_descubrimientos.tooltip_text = "Descubrimientos\nTodo el catálogo (1.730): lo que conoces, lo que puedes investigar y lo que viene, con sus requisitos.\nAtajo: T"
+	_estilo_boton(btn_descubrimientos, 3.0)
+	btn_descubrimientos.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	btn_descubrimientos.pressed.connect(func(): descubrimientos_pedido.emit())
+	izq.add_child(btn_descubrimientos)
 	lbl_fps = _lbl("", 12, Tema.TENUE)
 	lbl_fps.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	izq.add_child(lbl_fps)
