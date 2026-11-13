@@ -162,8 +162,7 @@ LUGARES = [
     ("Argelia", "Argel", ["Delacroix Women of Algiers", "Delacroix Femmes d'Alger dans leur appartement", "Algiers painting 19th century"]),
     ("Sudáfrica", "Occidental del Cabo", ["Thomas Baines Cape Town painting", "Cape Town painting 19th century", "Table Mountain painting 19th century"]),
     ("Indonesia", "Java Central", ["Raden Saleh Arrest of Diponegoro", "Raden Saleh painting", "Borobudur painting 19th century"]),
-    ("Filipinas", "Quezon", ["Juan Luna Spoliarium", "Juan Luna painting", "Hidalgo painting Philippines"]),
-    ("Rumanía", "Bucarest", ["Grigorescu painting", "Nicolae Grigorescu Bucharest", "Bucharest painting 19th century"]),
+    ("Filipinas", "Gran Manila", ["Juan Luna Spoliarium", "Juan Luna painting", "Hidalgo painting Philippines"]),
 ]
 
 ESTADOS_EEUU = [
