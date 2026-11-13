@@ -1,0 +1,53 @@
+name: Traer geoBoundaries ADM2 (limites de subprovincias)
+
+# Descarga los limites administrativos de nivel 2 (municipios, distritos, condados) de todo el mundo desde geoBoundaries
+# (William & Mary geoLab, compuesto CGAZ, licencia CC BY 4.0) hacia los servidores de GitHub y los publica como Release
+# "datos-geoboundaries" para que el generador de subprovincias los pueda leer (el entorno de trabajo no alcanza geoboundaries.org).
+# No toca el juego. Se ejecuta solo cuando se sube este mismo archivo a la rama v0.1.8-development.
+# Atribucion obligatoria en el juego: «geoBoundaries (William & Mary geoLab), CC BY 4.0».
+on:
+  push:
+    branches: [v0.1.8-development]
+    paths: ['.github/workflows/traer-geoboundaries.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  traer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Descargar el compuesto ADM2 y la tabla de licencias
+        run: |
+          mkdir -p datos
+          B="wmgeolab/geoBoundaries/main/releaseData"
+          bajar() {  # bajar <ruta dentro de releaseData> <destino>
+            for url in "https://media.githubusercontent.com/media/$B/$1" "https://github.com/wmgeolab/geoBoundaries/raw/main/releaseData/$1" "https://raw.githubusercontent.com/$B/$1"; do
+              echo "Probando $url"
+              if curl -fL --retry 4 --retry-delay 10 --retry-all-errors -o "$2" "$url"; then
+                # un puntero de Git LFS pesa ~130 bytes y empieza por «version https://git-lfs»: no sirve
+                if ! head -c 40 "$2" | grep -q "git-lfs"; then return 0; fi
+              fi
+            done
+            return 1
+          }
+          bajar "CGAZ/geoBoundariesCGAZ_ADM2.geojson" datos/geoBoundariesCGAZ_ADM2.geojson
+          bajar "geoBoundariesOpen-meta.csv" datos/geoBoundariesOpen-meta.csv || echo "sin tabla de licencias (no es grave)"
+          ls -l datos
+          test "$(stat -c%s datos/geoBoundariesCGAZ_ADM2.geojson)" -gt 20000000
+          head -c 300 datos/geoBoundariesCGAZ_ADM2.geojson; echo
+          gzip -9 datos/geoBoundariesCGAZ_ADM2.geojson
+          (cd datos && sha256sum * | tee sha256.txt)
+          ls -l datos
+
+      - name: Publicar como Release datos-geoboundaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete datos-geoboundaries --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create datos-geoboundaries datos/* \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Datos geoBoundaries ADM2 (CGAZ)" \
+            --notes "geoBoundaries Comprehensive Global Administrative Zones (CGAZ), nivel ADM2, William & Mary geoLab, CC BY 4.0. Fuente: https://github.com/wmgeolab/geoBoundaries . Insumo del generador de subprovincias; no es parte del juego."
