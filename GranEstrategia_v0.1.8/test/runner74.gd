@@ -752,7 +752,16 @@ func t_calidad_mapa() -> void:
 	main.camara.zoom = Vector2(4.0, 4.0)
 	main._actualizar_zoom()
 	main._actualizar_ciudades()
-	ok(main.costa_nivel >= mini(2, main.capas_costa.size() - 1), "Baja: aun con mucho zoom la costa no vuelve al detalle alto (nivel %d)" % main.costa_nivel)
+	ok(main.costa_nivel == 0, "Baja: con mucho zoom la costa vuelve al detalle alto, no se queda borrosa (nivel %d)" % main.costa_nivel)
+	if main.capas_costa.size() > 1 and main.capas_costa[1] != null:
+		var z_borde: float = main.COSTA_ZOOM_NIVEL1 * 1.1                # justo por encima del umbral normal: Detallada ya usa el detalle alto; Baja aún espera (umbral ×1,3)
+		main.costa_nivel_min = 0
+		main._elegir_detalle_costa(z_borde)
+		var n_det: int = main.costa_nivel
+		main.costa_nivel_min = 2
+		main._elegir_detalle_costa(z_borde)
+		ok(n_det == 0 and main.costa_nivel >= 1, "Baja: la costa simplificada dura algo más de zoom que en Detallada (niveles %d y %d)" % [n_det, main.costa_nivel])
+		main._elegir_detalle_costa(4.0)
 	ok(not main.capa_prov_todas.visible, "Baja: la capa de líneas de provincia está apagada aunque el zoom la pediría")
 	var sin_ciu := AjustesScript.por_defecto()
 	sin_ciu["ciudades"] = false

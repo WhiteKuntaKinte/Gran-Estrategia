@@ -2,7 +2,8 @@ extends RefCounted
 ## PINTURAS (0.1.8.41): cada país (y cada pueblo del año 1) tiene una pintura clásica de dominio público que se ve arriba de su panel.
 ##
 ## DÓNDE ESTÁN: `pinturas/<carpeta>/<clave>.jpg`, con `pinturas/creditos.json` como índice y registro de autor, título, licencia y URL de cada obra.
-##   · `<carpeta>` = la época del escenario: «2026» o «1dc» (año 1 d. C.); más «general» para las que valen en cualquier época.
+##   · `<carpeta>` = la época del escenario: «2026», «1dc» (año 1 d. C.), «1096» o «1500»; más «general» para las que valen en cualquier época.
+##     (1096 y 1500 todavía no traen pinturas propias de cada nación: usan la de su región, su continente o el mundo.)
 ##   · `<clave>` = el nombre del país sin tildes, en minúsculas y con «_» (España → espana, Reino Unido → reino_unido).
 ## CÓMO SE ELIGE (de lo más cercano a lo más lejano; la primera que exista gana):
 ##   1. la del propio país en la época activa          pinturas/2026/francia.jpg
@@ -13,7 +14,7 @@ extends RefCounted
 ## La región sale del centro del bloque principal del país (`foco`) y su continente; así sirve igual para países modernos y pueblos antiguos.
 
 const RAIZ := "res://pinturas/"
-const CARPETA_EPOCA := {2026: "2026", 1: "1dc"}
+const CARPETA_EPOCA := {2026: "2026", 1: "1dc", 1096: "1096", 1500: "1500"}
 const MAX_CACHE := 14                              # texturas en memoria a la vez (una de 1280 px pesa ~4 MB)
 const ANCHO_MAPA := 2400.0
 const ALTO_MAPA := 1200.0

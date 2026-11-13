@@ -1,4 +1,4 @@
-# Checklist de testing — Gran Estrategia 0.1.8.41 (incluye la 0.1.8.40)
+# Checklist de testing — Gran Estrategia 0.1.8.42
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
@@ -27,6 +27,17 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 - ✅ `runner29` — capturas del menú principal, Debug, «Mi país», pausa y Política (sin comprobaciones: se revisan a ojo).
 - ✅ `runner25` — portado al HUD nuevo: Militar dentro del país, Diplomacia con «Firmar la paz», 0 fallos.
 - ✅ `runner9` y `runner17` — ajustados a los nombres nuevos (pestaña «militar»; un clic en un cuadro de pila = `abrir_ordenes` con ese regimiento). Una vez `runner17` falló mientras otra prueba corría a la vez en el servidor y las dos repeticiones siguientes pasaron limpias: es una prueba sensible al tiempo (arrastres simulados), no un fallo reproducible.
+
+### Descubrimientos visibles, 4 escenarios, edificios de partida, grabador global y costa Baja (0.1.8.42)
+- ✅ `runner91` (nuevo) — **76**: el árbol de las 40 secciones (todo el catálogo se ve, en cualquier época), estados en 1 d. C. y en 2026, ficha (requiere / abre), buscador, filtros, tecla T y botón de la barra, y la lista completa del Debug (los 1.730 más la fila de la frontera).
+- ✅ `runner92` (nuevo) — **32**: el grabador vive en la raíz, sigue grabando en el menú y al recargar la escena, marcas solas, «● REC», guarda el resumen al cerrar el juego.
+- ✅ `runner93` (nuevo) — **27**: `EstiloMetal.armar` y los `_g_*` del árbol dan mallas válidas; cada calidad de costa elige el nivel correcto por zoom.
+- ✅ `runner94` (nuevo) — **92**: los escenarios 1096 y 1500 (datos, ids, banderas, población, economía, ciudades, ejércitos, nombres), selector de 4 en MODO DEV y Debug > Tiempo, edificios de partida (reglas por clase, sin anacronismos, nada en tierras sin reclamar, totales crecientes).
+- ✅ Ajustadas: `runner74` (la costa Baja ya no se queda en el nivel lejano; +2 comprobaciones: **220**), `runner75` (selector de 4), `runner77` (lista de Descubrimientos completa), `runner81` (el grabador anota marcas solas: la tuya tiene que estar entre ellas), `runner83` (**138**) y `runner88` (las provincias ya traen edificios: se vacía la de prueba o se busca un edificio al que le quepa otro), `runner89` (4 escenarios).
+- ✅ **Regresión final de la 0.1.8.42** (Godot 4.3 sin ventana; `runner74` con Xvfb + GL por software): `runner71` 180 · `72` 120 · `73` 83 · `74` 220 · `75` 147 · `76` 97 · `77` 88 · `78` 74 · `79` 120 · `80` 129 · `81` 64 · `82` 50 · `83` 138 · `84` 62 · `85` 43 · `86` 31 · `87` 36 · `88` 20 · `91` 76 · `92` 32 · `93` 27 · `94` 92 comprobaciones OK, **0 fallos y 0 errores de script** en todas.
+- ✅ **Revisión de variables**: 0 funciones repetidas, 0 variables repetidas, ninguna constante / variable / función nueva sin uso (revisión a mano: el auditor no lista lo que no se usa); `datos/variables.json` sin cambios.
+- ✅ **Revisión de rendimiento** (render por software, 2 pasadas alternadas, 0.1.8.41 contra 0.1.8.42, mismos datos; solo sirve para comparar): fotogramas (mundo 59,6 / 57,1 contra 51,9 / 53,5 ms en 2026), zoom + arrastre (58,1 / 55,2 contra 58,3 / 60,3) y simular 1 día con todas las IA (5,5 / 5,1 contra 5,1 / 5,5) **sin cambio**; llamadas de dibujo 356 / 376 / 335 contra **327 / 347 / 306** (2026) y 426 / 466 / 310 contra **397 / 437 / 281** (año 1). Costo: arranque de 2026 **+0,65 s** (2,6 → 3,25 s) y **+42 MB** (313 → 355 MB) por los edificios de partida (en el año 1 +0,1–0,2 s y +7 MB). Los escenarios 1096 y 1500 cuestan lo mismo que el año 1 (carga 2,0–2,1 s, 205–213 MB, 54 / 50 / 70 ms por fotograma). `runner90` no se corrió: no se tocó `_actualizar_zoom`.
+- ⬜ NO probado: **tu PC real** (Intel HD 520): el árbol de descubrimientos con muchos nodos, la carga de los escenarios nuevos, el arranque de 2026 con +0,65 s, y un F9 con la 0.1.8.42. Tampoco he revisado a ojo todas las fronteras de 1096 y 1500 en todo el mundo (muestras sí).
 
 ### Edificios, cores, ventana Construir e imágenes (0.1.8.40 y 0.1.8.41)
 - ✅ `runner83` (nuevo) — **137 comprobaciones**, 0 fallos: catálogo de 109 edificios y sus variables; construir (costo, días, cancelar con reembolso del 50 %, sin dinero no se construye, provincia ajena); Debug dar / quitar; órdenes de grupo; cores nacional y cultural (propias, ajenas, libres, reclamos, historial); conquista (las obras se pierden, lo construido y los cores se quedan); tarjetas Población / Ingreso / Edificios / Cores del HUD; ventana Construir (categorías, «mostrar lo que no conoces», estados, tesorería); el escenario del año 1; y que `total_en`, `totales_de`, `total_pais` y `Cores.contar` (que leen las columnas directo) dan lo mismo que sumar provincia por provincia.
@@ -218,6 +229,14 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 
 ## B. Lo que tienes que probar tú en tu PC (⬜)
 Marca cada casilla cuando lo hayas probado y dime qué pasó.
+
+### 0.1.8.42 (para probar en tu PC)
+- ⬜ **Descubrimientos**: en una partida pulsa **T** (o el botón «Descubrimientos» de la barra). ¿Se abre la ventana? Elige una rama y una sección: ¿ves el árbol, puedes moverte arrastrando y acercar con la rueda? Pasa el ratón por un descubrimiento: ¿se resalta lo que hace falta (dorado) y lo que abre (naranja)? Busca «pólvora»: ¿lo encuentra y la ficha dice qué requiere y qué abre? ¿Se ve lo que la historia aún no inventa en 2026 (gris apagado)? ¿Se siente fluido con tu equipo?
+- ⬜ **Escenarios nuevos**: MODO DEV > escoge **1096** y luego **1500** (y también Debug > Tiempo > Escenario con la partida abierta). ¿Los países, las banderas y las ciudades tienen sentido (el Imperio bizantino, el Sacro Imperio Romano Germánico, el Gran Imperio selyúcida y el Califato fatimí en 1096; la Corona de Castilla y la de Aragón, el Imperio otomano, la Triple Alianza azteca y el Imperio inca en 1500)? Dime qué frontera o qué nación ves mal. ¿Cuánto tarda en cargar cada uno?
+- ⬜ **Edificios de partida**: elige una provincia grande de Francia en 1500 y la misma en 2026 (tecla B o la tarjeta Edificios): ¿tiene más edificios en 2026? ¿Los de 1096 se sienten de esa época (sin nada moderno)? ¿Ya no puedes construir de más en lo que ya está al máximo?
+- ⬜ **Grabador**: pulsa F9 en el MENÚ PRINCIPAL (¿sale «● REC»?), empieza una partida, haz zoom por donde se te trababa y pulsa F9. Pega el resumen aquí. Con este resumen comparo contra el de la 0.1.8.39a (mismo recorrido).
+- ⬜ **Costa Baja**: Opciones > Pantalla > Costas > Baja: ¿el contorno de los países coincide con el relleno al acercar y alejar? ¿Se ve igual de bien que en Detallada pero más liviano?
+- ⬜ **Arranque**: ¿notas más lento el arranque de 2026 (+0,65 s medido en el servidor)? Si sí, dime cuánto tarda en tu PC.
 
 ### 0.1.8.39 (para probar en tu PC)
 - ⬜ **Grabador**: pulsa F9 (¿la esquina dice «● REC»?), haz zoom in y zoom out por donde se te trababa, pulsa F8 en el peor momento y F9 otra vez. Pega aquí el resumen (ya queda en el portapapeles; si no, Debug > Rend. > «Copiar el último resumen»). Si puedes, manda también el CSV (botón «Abrir la carpeta de grabaciones»).

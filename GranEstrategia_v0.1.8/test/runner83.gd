@@ -59,6 +59,14 @@ func run() -> void:
 	get_tree().quit(1 if fallos > 0 else 0)
 
 
+## Las provincias empiezan con los edificios de partida de su época: estas pruebas parten de una provincia sin edificios ni obras.
+func vaciar(pi: int) -> void:
+	var ed = main.mundo.edificios
+	while not ed.obras_de(pi).is_empty():
+		ed.cancelar_sin_reembolso(pi, 0)
+	ed._guardar(pi, {}, "Prueba: provincia vacía")
+
+
 ## Una provincia de `pais` con producción alta, para que el costo no sea ridículo.
 func prov_de(pais: String) -> int:
 	var m = main.mundo
@@ -110,6 +118,8 @@ func t_modulo() -> void:
 		pais = String(m.paises.keys()[0])
 	var pi := prov_de(pais)
 	ok(pi >= 0, "provincia de %s: %d" % [pais, pi])
+	ok(ed.num_edificios(pi) > 0, "las provincias de 2026 empiezan con edificios de partida (%d en la de prueba)" % ed.num_edificios(pi))
+	vaciar(pi)
 	var e_sl: String = "muralla" if ed.indice("muralla") >= 0 else ed.slug[0]
 	var e: int = ed.indice(e_sl)
 	ok(e >= 0, "edificio de prueba «%s»" % e_sl)
@@ -274,6 +284,7 @@ func t_conquista() -> void:
 	var pais: String = "España" if m.paises.has("España") else String(m.paises.keys()[0])
 	var otro: String = "Francia" if pais != "Francia" else "Alemania"
 	var pi := prov_de(pais)
+	vaciar(pi)
 	var e: int = ed.indice("muralla") if ed.indice("muralla") >= 0 else 0
 	m.descubrimientos.conceder(int(m.paises[pais].tid), ed.desc_idx[e])
 	m.paises[pais].tesoreria = 1.0e15
@@ -342,6 +353,7 @@ func t_hud() -> void:
 	var pais := "España"
 	var pi := prov_en(-3.7, 40.4)
 	ok(pi >= 0 and String(m.provincias[pi].pais) == pais, "Madrid es una provincia de España (%d)" % pi)
+	vaciar(pi)
 	await elegir_provincia(pi)
 	var hud = main.hud
 	ok(hud.datos.get("ed_pis", []) == [pi], "el mapa manda al HUD las provincias de la selección")

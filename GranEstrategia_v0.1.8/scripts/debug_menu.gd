@@ -1191,6 +1191,17 @@ func _pagina_tiempo() -> void:
 			_decir("Avanzaron %d días: hoy es %s." % [n, main.reloj.texto()]))
 		b2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		fila2.add_child(b2)
+	pg.add_child(_lbl("Escenario (reinicia el mundo con los datos de esa época)", 12, C_TENUE))
+	var fila_ep := HBoxContainer.new()
+	fila_ep.add_theme_constant_override("separation", 6)
+	pg.add_child(fila_ep)
+	for anio in main.EPOCAS_ORDEN:
+		var a: int = anio
+		var be := _boton("AÑO 1" if a == 1 else str(a), func(): main._nueva_partida({"modo": "dev", "epoca": a}))
+		be.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		be.disabled = not main._escenario_disponible(a) or a == main.epoca
+		be.tooltip_text = "Empieza una partida de MODO DEV en el escenario de %s (el mundo actual se descarta)." % ("el año 1 d. C." if a == 1 else str(a))
+		fila_ep.add_child(be)
 	var nota := _lbl("Solo el país que controlas cobra ingresos al pasar los días (por ahora). Cada mes la producción por habitante crece según la velocidad de desarrollo.", 11, C_TENUE)
 	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(nota)

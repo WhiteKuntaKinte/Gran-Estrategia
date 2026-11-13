@@ -407,7 +407,8 @@ func t_juego() -> void:
 	ok(dm != null, "el menú Debug se puede abrir")
 	if dm != null:
 		dm._ir_a("desc")
-		ok(dm.lista_desc.item_count == 60, "pestaña Descub.: sin filtro muestra 30 antes + 30 después de la fecha (%d)" % dm.lista_desc.item_count)
+		var n_desc: int = main.mundo.descubrimientos.n
+		ok(dm.lista_desc.item_count == n_desc + 1, "pestaña Descub.: sin filtro muestra la lista completa (%d) más la fila de la frontera (%d)" % [n_desc, dm.lista_desc.item_count])
 		dm.filtro_desc.text = "pólvora"
 		dm._refrescar_desc()
 		ok(dm.lista_desc.item_count >= 3, "buscar «pólvora» encuentra varios (%d)" % dm.lista_desc.item_count)

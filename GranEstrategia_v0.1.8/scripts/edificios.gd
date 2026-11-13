@@ -85,6 +85,87 @@ func iniciar(m) -> void:
 	_recalcular_prox()
 
 
+# ───────────── edificios de partida (0.1.8.42) ─────────────
+## Cada escenario empieza con los edificios que ya habría en esa época, NO con las provincias vacías. Es una regla (sin sorteo: sale siempre lo mismo):
+##   · desarrollo de la provincia (0–1) = 60 % su población + 40 % su producción por habitante frente a la de referencia de la época;
+##   · difusión del edificio (0–1) = 1 − e^(−años desde su descubrimiento / tiempo de la clase): lo antiguo ya está en todas partes y lo recién descubierto casi no;
+##   · umbral de la clase: lo grande (D–F) solo en provincias muy desarrolladas, lo básico (A) en todas;
+##   · cantidad = máximo del edificio × difusión × suavizado((desarrollo − umbral) / 0,2); la parte decimal se redondea con un hash fijo de (provincia, edificio).
+## Las tierras sin reclamar no tienen edificios. Los edificios que da esto no cuestan nada ni se registran como historia: es el punto de partida.
+const TIEMPO_CLASE := {"A": 250.0, "B": 300.0, "C": 400.0, "D": 600.0, "E": 900.0, "F": 1500.0}   # años que tarda en difundirse una clase de obra
+const UMBRAL_CLASE := {"A": 0.0, "B": 0.12, "C": 0.28, "D": 0.45, "E": 0.62, "F": 0.80}           # desarrollo mínimo para empezar a tenerlos
+const POB_REF := 400000.0                                                                          # población que da desarrollo máximo por habitantes
+const PIB_REF_ANTIGUO := 1500.0                                                                    # US$ por habitante de referencia antes de 1900
+const PIB_REF_MODERNO := 25000.0                                                                   # ... y desde 1900
+
+
+## Cuántos edificios de cada tipo tiene de partida una provincia con ese desarrollo (0–1); `difusion[e]` y `umbral[e]` ya calculados. Pura: sirve para probar.
+func cantidad_inicial(e: int, pi: int, desarrollo: float, difusion: float) -> int:
+	if difusion <= 0.004:
+		return 0
+	var u: float = float(UMBRAL_CLASE.get(clase[e], 0.5))
+	var t: float = clampf((desarrollo - u) / 0.2, 0.0, 1.0)
+	var esperado: float = float(tope[e]) * difusion * t * t * (3.0 - 2.0 * t)
+	var c := int(floor(esperado))
+	var frac := esperado - float(c)
+	if frac > 0.0:
+		var h: float = float(((pi + 1) * 2654435761 + (e + 1) * 40503) % 65536) / 65536.0
+		if frac > h:
+			c += 1
+	return mini(c, int(tope[e]))
+
+
+## Reparte los edificios de partida del escenario del año `anio`. Se llama una vez, al empezar (Mundo.iniciar_edificios).
+func sembrar_iniciales(anio_epoca: int) -> int:
+	if not listo or mundo == null:
+		return 0
+	var difusion := PackedFloat32Array()
+	difusion.resize(n)
+	var activos: Array = []
+	for e in n:
+		var edad := float(anio_epoca - anio[e])
+		var tc: float = float(TIEMPO_CLASE.get(clase[e], 400.0))
+		difusion[e] = 1.0 - exp(-edad / tc) if edad > 0.0 else 0.0
+		if difusion[e] > 0.004:
+			activos.append(e)
+	var pib_ref: float = PIB_REF_MODERNO if anio_epoca >= 1900 else PIB_REF_ANTIGUO
+	var lg_pob := log(1.0 + POB_REF / 3000.0)
+	var lg_pib := log(pib_ref / 200.0)
+	var umbral := PackedFloat32Array()                              # por edificio, para saltarse sin llamar a nadie lo que esa provincia aún no puede tener
+	umbral.resize(n)
+	var prefijo := PackedStringArray()
+	prefijo.resize(n)
+	for e in n:
+		umbral[e] = float(UMBRAL_CLASE.get(clase[e], 0.5))
+		prefijo[e] = slug[e] + ":"
+	var total := 0
+	for pr in mundo.provincias:
+		var pais = mundo.paises.get(pr.pais)
+		if pais == null or pais.inerte:
+			continue
+		var pob: float = pr.poblacion
+		if pob <= 0.0:
+			continue
+		var pop_f := clampf(log(1.0 + pob / 3000.0) / lg_pob, 0.0, 1.0)
+		var pib_f := clampf(log(maxf(pr.pib_pc, 200.0) / 200.0) / lg_pib, 0.0, 1.0)
+		var desarrollo := 0.6 * pop_f + 0.4 * pib_f
+		var partes := PackedStringArray()                           # `activos` va en orden de índice: el texto sale ya en el orden canónico de `_guardar`
+		var suma := 0
+		for e in activos:
+			if desarrollo <= umbral[e]:
+				continue
+			var c := cantidad_inicial(e, pr.idx, desarrollo, difusion[e])
+			if c > 0:
+				partes.append(prefijo[e] + str(c))
+				suma += c
+		if suma > 0:
+			bd.inicial_s("edificios", pr.tid, ";".join(partes))     # valores de partida: sin historial ni avisos de cambio
+			bd.inicial_f("num_edificios", pr.tid, float(suma))
+			total += suma
+	version += 1
+	return total
+
+
 func indice(sl: String) -> int:
 	return int(idx_de_slug.get(sl, -1))
 

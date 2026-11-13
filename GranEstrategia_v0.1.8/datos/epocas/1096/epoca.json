@@ -1,0 +1,18 @@
+{
+ "anio": 1096,
+ "nombre": "Primera Cruzada (1096)",
+ "esquema_colores": "propio",
+ "reloj": [
+  1096,
+  1,
+  1
+ ],
+ "descripcion": "El mundo en 1096: la Primera Cruzada parte hacia Jerusalén. Imperio bizantino, selyúcidas, la China de los Song, los reinos cristianos de Europa y el mundo almorávide.",
+ "creditos": [
+  "Fronteras de los estados: Cliopatria v0.2.1, Seshat Global History Databank (CC BY 4.0), https://github.com/Seshat-Global-History-Databank/cliopatria — adaptadas a las celdas del juego.",
+  "Pueblos y culturas sin estado, poblaciones, ciudades y economía: estimaciones propias de este proyecto."
+ ],
+ "naciones": 221,
+ "provincias": 3033,
+ "pob_mundo": 367414633
+}

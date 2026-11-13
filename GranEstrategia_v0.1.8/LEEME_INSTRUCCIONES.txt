@@ -1,12 +1,14 @@
-GRAN ESTRATEGIA — 0.1.8.41 (DESARROLLO)
+GRAN ESTRATEGIA — 0.1.8.42 (DESARROLLO)
 
-1. Abre la carpeta del proyecto (donde está project.godot) con Godot 4. (La 0.1.8.41 se sube a GitHub, rama v0.1.8-development; no hay ZIP.)
+1. Descomprime el ZIP de la 0.1.8.42 y abre la carpeta del proyecto (donde está project.godot) con Godot 4. (Desde esta versión cada entrega va con ZIP; el código también queda en GitHub, rama v0.1.8-development.)
    Primera vez en una carpeta limpia (o tras bajar esta versión): deja que Godot IMPORTE las imágenes nuevas (iconos, banderas HD, pinturas); tarda un momento.
    NUEVO 0.1.8.37: el botón de lentes de la barra (VISTA) cambia entre Tradicional y Relieve (la vista Internacional se quitó en la 0.1.8.39); Ctrl+clic elige varias provincias o países; en Opciones > Pantalla
    eliges el TEMA (INTERFAZ) y los Bordes del mapa (Baja / Media / Alta). Ver LEEME.txt.
    NUEVO 0.1.8.38: el panel del país se MUEVE (arrastra su cabecera; doble clic = vuelve a su sitio) y se REDIMENSIONA (bordes izquierdo, derecho y de abajo; ancho y se reparte en 2 o 3 columnas de tarjetas);
    el Debug (F1) abre en una CUADRÍCULA de secciones con migas «Menú Debug › Sección»; Debug, Mi país y Ranking se agrandan desde cualquier borde y recuerdan dónde los dejaste;
    los avisos salen apilados arriba a la derecha y los tooltips son fichas (título, detalle y atajo). HUD de provincia, Construir y los totales de grupo: 0.1.8.38b.
+   NUEVO 0.1.8.42: tecla T = ventana DESCUBRIMIENTOS (los 1.730, con árbol por sección, buscador y ficha); 4 escenarios en MODO DEV (2026, 1500, 1096 y 1 d. C.; también en Debug > Tiempo > Escenario);
+   cada escenario empieza con edificios de partida; el grabador F9 funciona también en el menú y entre partidas; la costa en calidad Baja ya no rompe los contornos. Ver LEEME.txt.
    NUEVO 0.1.8.41 (incluye la 0.1.8.40): tecla B = ventana CONSTRUIR (109 edificios con su icono, costo en dinero y días de obra; con Ctrl+clic ordena en varias provincias a la vez); el HUD de provincia tiene
    las tarjetas Población, Ingreso, Edificios y Cores (los edificios y los cores todavía no tienen efectos); pintura clásica arriba de la pestaña General; banderas HD en el panel; iconos propios para
    materias primas, sectores y monedas; interfaz con iconos nuevos y migas en píldoras. Debug > Edificios para dar o quitar edificios. Ver LEEME.txt.

@@ -215,16 +215,16 @@ func t_grabador() -> void:
 	ok(bien, "todas las filas tienen las %d columnas" % ncol)
 	var dts: Array = []
 	var vistas := {}
-	var marca := ""
+	var marcas: Array = []                                                 # además de la tuya, el grabador anota solo los cambios de vista y de calidad
 	for i in range(1, lineas.size()):
 		var c := lineas[i].split(",")
 		dts.append(float(c[1]))
 		vistas[c[13]] = true
 		if c[20] != "":
-			marca = c[20]
+			marcas.append(c[20])
 	ok(float(dts.max()) > 0.0 and float(dts.min()) >= 0.0, "las duraciones de fotograma son números válidos")
 	ok(vistas.has("tradicional") and vistas.has("relieve"), "anota la vista de cada fotograma (tradicional y relieve)")
-	ok(marca == "zoom 2", "la marca queda en su fila")
+	ok(marcas.has("zoom 2"), "la marca queda en su fila (marcas: %s)" % str(marcas))
 	var res: String = g.ultimo_resumen
 	ok(res.find("RESUMEN DE RENDIMIENTO") >= 0 and res.find("GPU:") >= 0 and res.find("FPS medios") >= 0, "el resumen trae el equipo y los FPS medios")
 	ok(res.find("peores fotogramas") >= 0 and res.find("Por vista y nivel de zoom") >= 0 and res.find("Marcas") >= 0, "el resumen trae los peores fotogramas, la tabla por vista/zoom y las marcas")

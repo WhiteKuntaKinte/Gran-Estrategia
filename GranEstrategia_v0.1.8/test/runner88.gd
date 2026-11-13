@@ -125,6 +125,15 @@ func t_archivos() -> void:
 	ok(Time.get_ticks_usec() - t0 < 5000, "pedir los 109 ya cargados cuesta %.2f ms (caché)" % (float(Time.get_ticks_usec() - t0) / 1000.0))
 
 
+## Un edificio conocido por `pais` que todavía se puede construir en `pi` (no está en `excluir`).
+func con_cupo(pais: String, pi: int, excluir: Array) -> int:
+	var ed = main.mundo.edificios
+	for e in ed.conocidos(pais):
+		if excluir.find(int(e)) < 0 and bool(ed.puede(pais, pi, int(e))["ok"]):
+			return int(e)
+	return -1
+
+
 func t_construir() -> void:
 	print("[T] ── Ventana Construir con iconos")
 	var m = main.mundo
@@ -163,7 +172,7 @@ func t_construir() -> void:
 			chips_mal.append(String(k))
 	ok(w._btns_cat.size() == 9 and chips_mal.is_empty(), "los 8 chips de categoría llevan icono que suma al ancho del botón (mal: %s)" % str(chips_mal))
 	# una obra en curso muestra el mismo icono
-	var e_obra: int = ed.conocidos(pais)[0]
+	var e_obra: int = con_cupo(pais, pi, [])                          # las provincias traen edificios de partida: se busca uno al que aún le quepa otro
 	w._construir(e_obra)
 	await fotogramas(2)
 	w._obras_en_curso()
@@ -179,9 +188,12 @@ func t_hud() -> void:
 	var m = main.mundo
 	var ed = m.edificios
 	var pi := prov_en(-3.7, 40.4)
-	var conocidos: Array = ed.conocidos("España")
-	var e1: int = conocidos[1]                                       # el [0] ya tiene una obra de la prueba anterior
-	var e2: int = conocidos[2]
+	var sin_obra: Array = []                                         # el edificio de la obra de la prueba anterior no entra (saldría dos veces)
+	for e in ed.conocidos("España"):
+		if ed.en_obra(pi, int(e)) == 0:
+			sin_obra.append(int(e))
+	var e1: int = sin_obra[0]
+	var e2: int = sin_obra[1]
 	ed.dar(pi, e1, 3)
 	ed.dar(pi, e2, 1)
 	await elegir_provincia(pi)
@@ -202,10 +214,10 @@ func t_hud() -> void:
 			lado = (tr as TextureRect).custom_minimum_size.x
 	ok(lado == 22.0, "el icono mide 22 px en la lista (%.0f)" % lado)
 	m.paises["España"].tesoreria = 1.0e15
-	var r: Dictionary = ed.construir("España", pi, ed.conocidos("España")[3])
+	var e3: int = con_cupo("España", pi, [e1, e2])
+	var r: Dictionary = ed.construir("España", pi, e3)
 	ok(bool(r["ok"]), "se empieza una obra para ver el icono en «En obra»")
 	await elegir_provincia(pi)
-	var e3: int = ed.conocidos("España")[3]
 	var t3: Texture2D = main.icono("edificios/" + String(ed.slug[e3]))
 	var n3 := 0
 	for tr in texturas(main.hud.cuerpo):

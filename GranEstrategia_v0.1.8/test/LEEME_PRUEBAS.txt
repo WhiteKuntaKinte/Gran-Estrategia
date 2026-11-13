@@ -1,8 +1,8 @@
-PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.41
+PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.42
 ============================================
 
-Qué son: escenas de Godot (runner71 a runner88) que ejecutan el código del juego y comprueban sus resultados
-(sin tocar el juego ni tus partidas). Cubren las funciones añadidas o cambiadas desde la 0.1.8.2a y el menú de Opciones (0.1.8.31 a 0.1.8.33) y los escenarios (2026 y año 1 d. C.).
+Qué son: escenas de Godot (runner71 a runner94) que ejecutan el código del juego y comprueban sus resultados
+(sin tocar el juego ni tus partidas). Cubren las funciones añadidas o cambiadas desde la 0.1.8.2a y el menú de Opciones (0.1.8.31 a 0.1.8.33) y los escenarios (2026, 1500, 1096 y año 1 d. C.).
 
   runner71  lógica: Perfil, Reloj, Mundo, IA, Guerra, reglas del mapa, etiquetas, órdenes de marcha, cierre del periodo por trozos (181 comprobaciones)
   runner72  interfaz y reloj de pasos: HUD, ventana flotante, Debug, capa de tropas, velocidades, eventos, ejército (121)
@@ -22,12 +22,16 @@ Qué son: escenas de Godot (runner71 a runner88) que ejecutan el código del jue
   runner86  BANDERAS HD (0.1.8.41): una bandera de 256 px por cada una de 96 px, `bandera_hd()` (mipmaps, caché de 12, respaldo), ninguna bandera con licencia CC, y la cabecera del panel y el aviso de guerra que las usan (31 comprobaciones)
   runner87  ICONOS DE LA INTERFAZ Y MIGAS (0.1.8.41): los 39 `i_*.png` en HD (128 px, con mipmaps, ninguno vacío), el filtro de texturas (Linear en el proyecto, mipmaps solo en los iconos) y las migas del HUD (píldoras con bandera o icono, la última resaltada, clic, realce, modo compacto) (36 comprobaciones)
   runner88  ICONOS DE EDIFICIOS (0.1.8.41): los 109 PNG (128 px, mipmaps, todos distintos, ninguno vacío, uno por edificio), las 109 filas de Construir, las obras en curso y la tarjeta Edificios del HUD con su icono (20 comprobaciones)
+  runner91  VENTANA DESCUBRIMIENTOS (0.1.8.42): el árbol de cada una de las 40 secciones (todo el catálogo se ve, en cualquier época), estados en 1 d. C. y en 2026, ficha (requiere / abre), buscador, filtros, tecla T y botón de la barra, y la lista completa del Debug (los 1.730 y la fila de la frontera) (76 comprobaciones)
+  runner92  GRABADOR GLOBAL (0.1.8.42): vive en la raíz (no en la partida), sigue grabando en el menú y al recargar la escena («Nueva partida»), marcas solas, «● REC», y guarda el resumen si el juego se cierra grabando (32 comprobaciones)
+  runner93  DIBUJO POR LOTES Y COSTA BAJA (0.1.8.42): `EstiloMetal.armar` y los ayudantes `_g_*` del árbol producen mallas válidas, y `_elegir_detalle_costa` con cada calidad elige el nivel correcto por zoom (27 comprobaciones)
+  runner94  ESCENARIOS 1096 Y 1500 + EDIFICIOS DE PARTIDA (0.1.8.42): cada escenario carga, ids y banderas, población y economía coherentes, ciudades, ejércitos, nombres de mandos, selector de 4 en MODO DEV y Debug > Tiempo, y la regla de edificios de partida (cada clase, sin anacronismos, nada en tierras sin reclamar, totales crecientes) (92 comprobaciones)
   runner90  (no es una prueba: es el BANCO DE ZOOM; simula la rueda paso a paso con el mundo vacío y con el país más grande enfocado y elegido (y con Relieve) e imprime líneas «[Z]» con el coste de cada paso. Con --headless solo cuentan los scripts; con xvfb incluye el dibujo por software. Desde la 0.1.8.39 incluye también la campaña de Europa con el tiempo corriendo, sin y con Relieve, y el coste de redibujar ciudades y tropas por paso.)
-  runner89  (no es una prueba: es el BANCO DE RENDIMIENTO de los escenarios; imprime líneas «[B]» con ms por fotograma, llamadas de dibujo y memoria de 2026 y del año 1. Úsalo para comparar versiones.)
+  runner89  (no es una prueba: es el BANCO DE RENDIMIENTO de los escenarios; imprime líneas «[B]» con ms por fotograma, llamadas de dibujo y memoria de los cuatro escenarios (2026, año 1, 1096 y 1500). `-- --epoca=1096` mide solo uno, cada uno en su proceso para no arrastrar memoria. Úsalo para comparar versiones.)
 
 Cómo correrlas:
   1. Abre el proyecto en Godot.
-  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72 a 88, salvo 89 y 90, que son bancos de medición).
+  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72 a 88 y 91 a 94, salvo 89 y 90, que son bancos de medición).
   3. Pulsa F6 (ejecutar escena actual).
   4. Mira el panel «Salida»: cada comprobación imprime «OK» o «FALLO»; al final dice
      «N comprobaciones OK · FALLOS: 0». Si sale algún FALLO, copia esa línea y mándamela.

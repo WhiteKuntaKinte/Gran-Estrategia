@@ -705,8 +705,8 @@ class Mundo extends RefCounted:
 		iniciar_tesorerias()
 
 	## 0.1.8.40: arma los edificios (catálogo, obras) y los cores de las provincias. Va DESPUÉS de `iniciar_ejercito` (que carga las culturas).
-	## Sin catálogo (js_edificios no es un diccionario) no hay edificios, pero los cores sí existen.
-	func iniciar_edificios(js_edificios) -> void:
+	## Sin catálogo (js_edificios no es un diccionario) no hay edificios, pero los cores sí existen. `anio_epoca` != 0: se reparten los edificios de partida de esa época.
+	func iniciar_edificios(js_edificios, anio_epoca := 0) -> void:
 		cores = CoresScript.new()
 		cores.iniciar(self)
 		edificios = null
@@ -715,6 +715,8 @@ class Mundo extends RefCounted:
 			if ed.cargar(js_edificios):
 				ed.iniciar(self)
 				edificios = ed
+				if anio_epoca != 0:
+					ed.sembrar_iniciales(anio_epoca)                          # 0.1.8.42: cada época empieza con los edificios que ya habría
 
 	## Nombre real del jefe de Estado de un país en una fecha (de Historia), o "" si no se conoce.
 	func jefe_de_estado(pais: String, fecha: int) -> String:

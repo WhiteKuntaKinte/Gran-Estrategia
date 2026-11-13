@@ -1,0 +1,18 @@
+{
+ "anio": 1500,
+ "nombre": "Renacimiento (1500)",
+ "esquema_colores": "propio",
+ "reloj": [
+  1500,
+  1,
+  1
+ ],
+ "descripcion": "El mundo en 1500: el Renacimiento, los imperios otomano, safávida y ming, los reinos ibéricos que cruzan el Atlántico, los aztecas y los incas.",
+ "creditos": [
+  "Fronteras de los estados: Cliopatria v0.2.1, Seshat Global History Databank (CC BY 4.0), https://github.com/Seshat-Global-History-Databank/cliopatria — adaptadas a las celdas del juego.",
+  "Pueblos y culturas sin estado, poblaciones, ciudades y economía: estimaciones propias de este proyecto."
+ ],
+ "naciones": 202,
+ "provincias": 3049,
+ "pob_mundo": 468189314
+}

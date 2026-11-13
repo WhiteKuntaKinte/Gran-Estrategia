@@ -150,7 +150,7 @@ func t_menu() -> void:
 	boton(main.menu_contenido, "JUGAR").pressed.emit()
 	ok(textos_botones(main.menu_contenido) == ["MODO DEV", "CAMPAÑA", "VOLVER"], "JUGAR: MODO DEV, CAMPAÑA, VOLVER")
 	boton(main.menu_contenido, "MODO DEV").pressed.emit()
-	ok(textos_botones(main.menu_contenido) == ["2026", "AÑO 1 d. C.", "VOLVER"], "MODO DEV pide el escenario: 2026, AÑO 1 d. C., VOLVER (%s)" % str(textos_botones(main.menu_contenido)))
+	ok(textos_botones(main.menu_contenido) == ["AÑO 1 d. C.", "1096", "1500", "2026", "VOLVER"], "MODO DEV pide el escenario: AÑO 1 d. C., 1096, 1500, 2026, VOLVER (%s)" % str(textos_botones(main.menu_contenido)))
 	var t: Array = []
 	etiquetas(main.menu_contenido, t)
 	ok(t.has("MODO DEV · ESCENARIO"), "título «MODO DEV · ESCENARIO»")

@@ -1,5 +1,5 @@
 extends Node
-## BANCO DE RENDIMIENTO de los escenarios (0.1.8.34): arranque, memoria y coste por fotograma del mundo de 2026 frente al del año 1 d. C. (el mismo
+## BANCO DE RENDIMIENTO de los escenarios (0.1.8.34): arranque, memoria y coste por fotograma del mundo de 2026 frente a los de 1500, 1096 y el año 1 d. C. (el mismo
 ## juego con otros datos), en tres encuadres (mundo, Europa, Roma de cerca), más el coste de simular días con todas las IA. No comprueba nada:
 ## imprime líneas «[B]» para comparar entre versiones.
 ## Con pantalla virtual (xvfb) incluye el dibujo por software (muy lento: solo vale para comparar) y con --headless solo el coste de los scripts.
@@ -85,7 +85,7 @@ func run() -> void:
 	await get_tree().create_timer(1.0).timeout
 	get_window().size = Vector2i(1280, 720)
 	var args := OS.get_cmdline_user_args()               # «-- --epoca=1»: solo esa época (cada una en su propio proceso, para comparar memoria sin arrastre)
-	var epocas := [2026, 1]
+	var epocas := [2026, 1, 1096, 1500]
 	for a in args:
 		if String(a).begins_with("--epoca="):
 			epocas = [int(String(a).substr(8))]

@@ -1,8 +1,32 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.41 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.42 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
-B = ventana Construir · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+B = ventana Construir · T = ventana Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.42 — DESCUBRIMIENTOS A LA VISTA, 4 ESCENARIOS, EDIFICIOS DE PARTIDA, GRABADOR GLOBAL Y MENOS TIRONES
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.42.md. Es la primera de dos versiones para tus notas del 12 de noviembre; la segunda, 0.1.8.43, trae subprovincias, provincias que cambian de forma y pinturas por provincia.
+Desde esta versión cada entrega va con un ZIP del proyecto.)
+- VENTANA DESCUBRIMIENTOS: tecla T o el botón «Descubrimientos» de la barra de arriba. Ves el catálogo COMPLETO (1.730) en tres ramas (Militar, Científica, Sociedad) y 40 secciones, con cuántos conoces de cada una;
+  el ÁRBOL de la sección elegida (quién necesita a quién; arrastra para moverte y rueda para el zoom; al pasar el ratón se resalta la cadena entera), buscador por nombre, filtros por estado y una ficha con año, era,
+  lo que REQUIERE y lo que ABRE (cada uno se pulsa para ir a él). Se ve también lo que la historia todavía no ha inventado en esa fecha (gris apagado). No pausa el juego y recuerda dónde la dejas.
+- DEBUG > DESCUBRIMIENTOS: la lista ahora trae los 1.730 (antes solo 30 antes y 30 después de la fecha), ordenados por año, con una línea dorada «HISTORIA hasta …» que marca hasta dónde llega la historia.
+- DOS ESCENARIOS NUEVOS: 1096 (PRIMERA CRUZADA, 221 naciones, 3.033 provincias, ~367 M de habitantes) y 1500 (RENACIMIENTO, 202 naciones, 3.049 provincias, ~468 M). Se eligen en MODO DEV (ahora hay 4 botones:
+  2026, 1500, 1096 y 1 d. C.) o en Debug > Tiempo > «Escenario» (reinicia el mundo con los datos de esa época). Juegan igual que 2026: economía, ejércitos, IA, descubrimientos y edificios.
+  Las fronteras salen de Cliopatria (Seshat Global History Databank, CC BY 4.0; el crédito está en Opciones > Información). Las poblaciones son estimaciones de orden de magnitud, no censos.
+- EDIFICIOS DE PARTIDA: cada escenario empieza con los edificios que ya habría (antes todas las provincias empezaban vacías): más en las provincias grandes y ricas, solo lo que ya estaba descubierto, y cada vez más
+  difundido cuanto más viejo el descubrimiento. En promedio por provincia: 41 en el año 1, 59 en 1096, 71 en 1500 y 90 en 2026. Siguen SIN efectos de juego. Las tierras sin reclamar no tienen.
+  OJO: como las provincias ya traen edificios, a algunos tipos ya no les cabe otro (cada edificio tiene un máximo por provincia): la ventana Construir te lo dice.
+- GRABADOR DE RENDIMIENTO GLOBAL: F9 graba también en el menú principal, en la pausa y al cargar una «Nueva partida» (antes solo entre partidas); aparece un «● REC» rojo arriba a la derecha; las marcas se ponen solas
+  al cambiar de calidad, de vista o de menú a partida (F8 sigue poniendo la tuya).
+- COSTA EN CALIDAD «BAJA»: ya no se rompe el contorno de los países. La costa simplificada dura un poco más de zoom, pero al acercar vuelve sola al detalle alto.
+- MENOS TIRONES: las cajas del HUD y el árbol de descubrimientos se dibujan en lotes (mundo 327 llamadas de dibujo contra 363 antes; panel de país con tarjetas 213 / 295 / 628 contra 308 / 477 / 897) y los edificios de partida
+  se reparten en 0,5 s en 2026 (0,1 s en las demás épocas).
+- PRUEBAS: runner91 (descubrimientos 76), runner92 (grabador 32), runner93 (dibujo por lotes y costa 27) y runner94 (escenarios 1096 y 1500 y edificios de partida 92) nuevas; runner74, 75, 77, 81, 83, 88 y 89 ajustadas.
+- LO QUE TODAVÍA NO: subprovincias (como estado → condado), provincias que cambian de forma con el tiempo y pinturas por provincia (0.1.8.43; la opción de las subprovincias la decides tú: ver docs/SUBPROVINCIAS_FUENTES.md);
+  la vista de Relieve de altísima calidad (teselas), cuando me digas.
+NO SE PROBÓ: tu PC real (Intel HD 520): cómo se siente el árbol de descubrimientos con 100 nodos, la carga de los escenarios nuevos y el F9 con la 0.1.8.42; a ojo, el reparto de fronteras de 1096 y 1500 en todo el mundo
+  (revisé muestras; las fronteras de Cliopatria son gruesas y se ajustan a celdas de ~10.000 km², puede haber una frontera a una celda de distancia).
 
 NUEVO EN 0.1.8.41 — EDIFICIOS Y CONSTRUIR (la 0.1.8.40) + TODAS LAS IMÁGENES: PINTURAS, BANDERAS HD, ICONOS DE MATERIAS, MONEDAS, INTERFAZ Y EDIFICIOS
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.40.md y NOTAS_TECNICAS_0.1.8.41.md. Me pediste saltar directo a la última versión programada y meter todo, así que esta entrega trae las dos: 0.1.8.40 y 0.1.8.41.)

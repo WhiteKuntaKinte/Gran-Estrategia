@@ -30,7 +30,7 @@ const AvisosScript := preload("res://scripts/avisos.gd")
 const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 
-const VERSION := "0.1.8.41"
+const VERSION := "0.1.8.42"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -606,7 +606,8 @@ var menu: CanvasLayer
 ## provincias, naciones, población, economía, ejércitos, ciudades y banderas. Un escenario es una carpeta con los mismos archivos que datos/;
 ## lo que no trae (el mar, la profundidad, los lagos, el catálogo de variables) se lee de datos/. Las mecánicas (HUD, economía, guerra, IA) son las mismas.
 const EPOCA_ACTUAL := 2026
-const EPOCAS_DIR := {1: "res://datos/epocas/1dc/"}   # año del escenario -> carpeta (2026 usa datos/ directamente)
+const EPOCAS_DIR := {1: "res://datos/epocas/1dc/", 1096: "res://datos/epocas/1096/", 1500: "res://datos/epocas/1500/"}   # año del escenario -> carpeta (2026 usa datos/ directamente)
+const EPOCAS_ORDEN := [1, 1096, 1500, 2026]         # los 4 escenarios, del más antiguo al de hoy (menú MODO DEV y Debug > Tiempo)
 var epoca := EPOCA_ACTUAL                           # año del escenario cargado (el reloj empieza el 1 de enero de ese año)
 var epoca_dir := ""                                 # "" = datos/ · si no, la carpeta del escenario (termina en «/»)
 var epoca_meta: Dictionary = {}                     # epoca.json del escenario: nombre, descripción y créditos de sus fuentes
@@ -1158,7 +1159,7 @@ func _cargar_info() -> void:
 			mundo.cargar_economia(dv, info.get("prov", []), economia, HudScript.produccion_principal)
 		mundo.iniciar_ejercito(_leer_json_opcional("res://datos/ejercito.json"), _leer_json_opcional("res://datos/nombres_cultura.json"),
 			_leer_json_opcional("res://datos/vecinos_prov.json"))
-		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"))                  # 0.1.8.40: edificios y cores (van después de las culturas)
+		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"), epoca)            # 0.1.8.40: edificios y cores (van después de las culturas); 0.1.8.42: con los edificios de partida de la época
 		pinturas = PinturasScript.new()                                                             # 0.1.8.41: pinturas por país, región y continente (pinturas/creditos.json)
 		pinturas.iniciar(self)
 		materias = MateriasScript.new()                                                             # 0.1.8.41: iconos de recursos, rubros y monedas (datos/materias_iconos.json)
@@ -3706,26 +3707,36 @@ func _mostrar_modos() -> void:
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	menu_contenido.add_child(fila)
-	_columna_modo(fila, "MODO DEV", "El mapa del mundo entero. Todo está permitido; la IA solo existe si la activas en Debug > IA. Después eliges la época: 2026 o el año 1 d. C.", _mostrar_epocas)
+	_columna_modo(fila, "MODO DEV", "El mapa del mundo entero. Todo está permitido; la IA solo existe si la activas en Debug > IA. Después eliges la época: el año 1 d. C., 1096, 1500 o 2026.", _mostrar_epocas)
 	_columna_modo(fila, "CAMPAÑA", "Solo Europa (con Rusia y Turquía enteras). Compites con la IA por provincias, tropas e ingresos.", _mostrar_campana)
 	_boton_menu("VOLVER", _mostrar_menu_principal)
 
 
 ## Tercera capa del MODO DEV: elegir el escenario de partida. Todos son el mismo juego (mismas mecánicas); cambian los datos de inicio.
+const EPOCAS_TEXTO := {
+	1: ["AÑO 1 d. C.", "El mundo antiguo: Roma, el Imperio parto, la China Han y cientos de pueblos, con grandes zonas sin reclamar."],
+	1096: ["1096", "Primera Cruzada: el Imperio bizantino, los selyúcidas, la China de los Song, los reinos cristianos y el mundo almorávide."],
+	1500: ["1500", "Renacimiento: otomanos, safávidas y Ming, los reinos ibéricos al otro lado del Atlántico, aztecas e incas."],
+	2026: ["2026", "El mundo de hoy: países, economías, ejércitos y guerras."]}
+
+
 func _mostrar_epocas() -> void:
 	_limpiar_menu()
-	panel_menu_nodo.custom_minimum_size = Vector2(760.0, 470.0)
+	panel_menu_nodo.custom_minimum_size = Vector2(1130.0, 470.0)
 	_titulo_menu("MODO DEV · ESCENARIO")
 	var fila := HBoxContainer.new()
-	fila.add_theme_constant_override("separation", 26)
+	fila.add_theme_constant_override("separation", 22)
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
 	fila.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	menu_contenido.add_child(fila)
-	_columna_modo(fila, "2026", "El mundo de hoy: países, economías, ejércitos y guerras.", func(): _nueva_partida({"modo": "dev", "epoca": EPOCA_ACTUAL}))
-	var b := _columna_modo(fila, "AÑO 1 d. C.", "El mundo antiguo: Roma, el Imperio parto, la China Han y cientos de pueblos, con grandes zonas sin reclamar. Es el mismo juego que 2026: mismas mecánicas, otros datos de partida.", func(): _nueva_partida({"modo": "dev", "epoca": 1}))
-	if not _escenario_disponible(1):
-		b.disabled = true
-		b.tooltip_text = "Faltan los datos de este escenario (datos/epocas/1dc/)."
+	for anio in EPOCAS_ORDEN:
+		var a: int = anio
+		var t: Array = EPOCAS_TEXTO[a]
+		var b := _columna_modo(fila, String(t[0]), String(t[1]) + " Mismas mecánicas que 2026, otros datos de partida." if a != EPOCA_ACTUAL else String(t[1]),
+			func(): _nueva_partida({"modo": "dev", "epoca": a}), 250.0, 30)
+		if not _escenario_disponible(a):
+			b.disabled = true
+			b.tooltip_text = "Faltan los datos de este escenario (%s)." % String(EPOCAS_DIR.get(a, "datos/"))
 	_boton_menu("VOLVER", _mostrar_modos)
 
 
@@ -3736,16 +3747,16 @@ func _escenario_disponible(anio: int) -> bool:
 	return EPOCAS_DIR.has(anio) and FileAccess.file_exists(String(EPOCAS_DIR[anio]) + "epoca.json")
 
 
-func _columna_modo(fila: HBoxContainer, titulo: String, descripcion: String, accion: Callable) -> Button:
+func _columna_modo(fila: HBoxContainer, titulo: String, descripcion: String, accion: Callable, ancho := 330.0, tam_fuente := 38) -> Button:
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 10)
-	col.custom_minimum_size = Vector2(330.0, 0.0)
+	col.custom_minimum_size = Vector2(ancho, 0.0)
 	fila.add_child(col)
 	var b := Button.new()
 	b.text = titulo
-	b.custom_minimum_size = Vector2(330.0, 250.0)
+	b.custom_minimum_size = Vector2(ancho, 250.0)
 	b.add_theme_font_override("font", fuente_ui_neg)
-	b.add_theme_font_size_override("font_size", 38)
+	b.add_theme_font_size_override("font_size", tam_fuente)
 	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	b.pressed.connect(accion)
 	col.add_child(b)
