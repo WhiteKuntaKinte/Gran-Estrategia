@@ -542,6 +542,7 @@ func t_grupo() -> void:
 	var fl := fila_de(e_ok)
 	ok(String((fl["btn"] as Button).text) == "Construir ×3", "botón «%s»" % (fl["btn"] as Button).text)
 	ok(String((fl["lbl_costo"] as Label).text).find("en total") >= 0, "el costo muestra el total del grupo: «%s»" % (fl["lbl_costo"] as Label).text)
+	main._poner_velocidad(0)                              # con el reloj andando entra el ingreso de un día mientras se cuentan los fotogramas
 	var tes0: float = m.paises[pais].tesoreria
 	(fl["btn"] as Button).pressed.emit()
 	await fotogramas(2)

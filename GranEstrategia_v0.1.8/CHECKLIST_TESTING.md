@@ -1,4 +1,4 @@
-# Checklist de testing — Gran Estrategia 0.1.8.42
+# Checklist de testing — Gran Estrategia 0.1.8.43
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
@@ -27,6 +27,19 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 - ✅ `runner29` — capturas del menú principal, Debug, «Mi país», pausa y Política (sin comprobaciones: se revisan a ojo).
 - ✅ `runner25` — portado al HUD nuevo: Militar dentro del país, Diplomacia con «Firmar la paz», 0 fallos.
 - ✅ `runner9` y `runner17` — ajustados a los nombres nuevos (pestaña «militar»; un clic en un cuadro de pila = `abrir_ordenes` con ese regimiento). Una vez `runner17` falló mientras otra prueba corría a la vez en el servidor y las dos repeticiones siguientes pasaron limpias: es una prueba sensible al tiempo (arrastres simulados), no un fallo reproducible.
+
+### Descubrimientos a pantalla completa, IA con consecuencias, subprovincias, formas que cambian y pinturas por lugar (0.1.8.43)
+- ✅ `runner91` (reescrito) — **170 comprobaciones**: la pantalla de Descubrimientos (hub por ramas, árbol en abanico circular de las 40 secciones (anillos, sin cuadrícula, círculos grandes con aire, vista de entrada centrada en lo disponible, sin texto «ETC»), colores negro / gris / verde / dorado, trazos hacia otras secciones y «T», globo con descripción, ficha, buscador, filtros, tecla T, Esc, botón de la barra) y la lista completa de Debug.
+- ✅ `runner95` (nuevo) — **129 comprobaciones**: opinión, alianzas, llamadas, rival, infamia y coaliciones; decisiones de la IA (no ataca aliados, se frena con infamia o inestabilidad, digiere conquistas, busca amigos); estabilidad por provincia (meta, ciclo en lotes: una revisión por provincia cada 30 días y ≤ 5 puntos por ciclo, revueltas, independencia, pagar / reprimir / conceder); avisos con pop-up (alianza, llamado, coalición, revuelta), pestaña Diplomacia y ficha de provincia.
+- ✅ `runner96` (nuevo) — **51 comprobaciones**: datos de geoBoundaries (índice, nombres, crédito CC BY 4.0), subprovincias de una provincia (recorte, superficie, población repartida, caché, carga perezosa), la capa del mapa (doble clic, botón, hover limitado a 25 por segundo, elegir) y la tarjeta de subdivisiones.
+- ✅ `runner97` (nuevo) — **34 comprobaciones**: cesión parcial (celdas, población y producción, ciudades, historial, subprovincias que se descartan), `Guerra.fraccion_conquista` y la paz con posesión sobre una provincia grande (la provincia ocupada se parte).
+- ✅ `runner98` (nuevo) — **34 comprobaciones**: cada pintura de lugar instalada corresponde a una provincia o estado real, la cadena provincia → estado → país → región según dónde cae → continente → mundo, el HUD (provincia, ciudad, estado), créditos y peso.
+- ✅ Ajustadas: `runner71`, `72` (el día tiene **9 fases**; el mes del ejército se reparte en partes), `83` (reloj en pausa al medir la tesorería), `84` (las claves `lugar_` / `estado_` no son países), `93`.
+- ✅ **Regresión final de la 0.1.8.43** (Godot 4.3 sin ventana; `runner74` con Xvfb + GL por software): **25 pruebas = 2.059 comprobaciones, 0 fallos**, más `runner74` (220, 0 fallos).
+- ✅ **Revisión de variables**: `auditar_codigo.py`: 1.500 funciones, 0 funciones y 0 variables repetidas; `datos/variables.json` sin cambios; los símbolos nuevos revisados a mano (se borraron `_elegir_seccion`, `credito()` y las constantes del árbol viejo por no usarse).
+- ✅ **Revisión de rendimiento** (render por software, 0.1.8.42 contra 0.1.8.43, mismos datos, cada escenario en su proceso; solo sirve para comparar): llamadas de dibujo del mundo en 2026 327 → 109, fotogramas y zoom iguales o mejores; con todas las IA a x6 la pantalla va más fluida (año 1: 194 → 153 ms por fotograma) pero el calendario avanza ~2× más despacio (910 → 423 días en 12 s) porque simular un día cuesta más (las fases nuevas de diplomacia y estabilidad; Opciones > prioridad de simulación lo compensa). Detalle en NOTAS_TECNICAS_0.1.8.43.md.
+- ✅ **Capturas revisadas a ojo** (servidor, dibujo por software): la pantalla de Descubrimientos (hub y el árbol en abanico: entrada, «Ver todo», globo con descripción), el mapa con las subdivisiones abiertas y la tarjeta de la provincia con su pintura de lugar.
+- ⬜ NO probado: **tu PC real** (Intel HD 520): la pantalla de Descubrimientos con muchos nodos, abrir subdivisiones en provincias enormes, y una partida larga con todas las IA a x6 en el año 1 (lo que tu F9 de la 0.1.8.42 mostró lento). El equilibrio de la IA a muy largo plazo lo probé en simulaciones, no jugando.
 
 ### Descubrimientos visibles, 4 escenarios, edificios de partida, grabador global y costa Baja (0.1.8.42)
 - ✅ `runner91` (nuevo) — **76**: el árbol de las 40 secciones (todo el catálogo se ve, en cualquier época), estados en 1 d. C. y en 2026, ficha (requiere / abre), buscador, filtros, tecla T y botón de la barra, y la lista completa del Debug (los 1.730 más la fila de la frontera).
@@ -229,6 +242,15 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 
 ## B. Lo que tienes que probar tú en tu PC (⬜)
 Marca cada casilla cuando lo hayas probado y dime qué pasó.
+
+### 0.1.8.43 (para probar en tu PC)
+- ⬜ **F9 con todas las IA** (lo más importante): escenario 1 d. C., todas las IA activas, velocidad x6, F9, haz zoom in / out, deja correr un par de minutos y F9 otra vez; pega el resumen. Lo comparo contra el de la 0.1.8.42 (18 FPS de media, 181 fotogramas lentos). Y otro F9 en 2026 normal.
+- ⬜ **Roma**: en el año 1 con todas las IA a x6, ¿el Imperio romano ya no se come todo? Mira Diplomacia > «Relaciones internacionales» de un país que conquista mucho: ¿sube su infamia y se forman coaliciones? ¿Se amotinan provincias conquistadas?
+- ⬜ **Descubrimientos (tecla T)**: ¿se abre rápido y se siente bien arrastrar y hacer zoom en el árbol? ¿El abanico circular se ve mejor que la cuadrícula y se entiende que sube desde la raíz? ¿Aprovecha el espacio (círculos grandes, zoom con la rueda, «Mi frontera» y «Ver todo»)? ¿Los trazos naranja hacia otras secciones y la «T» son lo que querías, o prefieres otra cosa para «el resto del contenido»? ¿Los colores (negro / gris / verde / dorado) están bien? ¿Cada rama se siente con su propio ambiente?
+- ⬜ **Subdivisiones**: enfoca un país (doble clic) y haz doble clic en una provincia grande (Texas, Ontario, Siberia…): ¿salen sus subdivisiones con nombre al pasar el ratón? ¿Tarda al abrir? ¿Se ve el crédito de geoBoundaries en Opciones > Información?
+- ⬜ **Provincias que cambian de forma**: declara una guerra, ocupa una provincia grande y firma la paz «quedándote con lo ocupado» con un puntaje flojo: ¿la provincia se parte y el mapa se redibuja bien?
+- ⬜ **Pinturas por lugar**: elige Toledo, Kanagawa, Venecia, un condado de California, una provincia sin pintura propia: ¿cada una muestra su obra (o la del país)? ¿El tooltip lo dice?
+- ⬜ **Estabilidad**: elige una provincia conquistada hace poco: ¿la ficha explica por qué está agitada? Para provocar un motín baja la «Favorabilidad» de una provincia tuya a 0 (Debug > Provincia) y deja correr unos 2 meses: ¿el aviso pausa? Prueba pagar / reprimir / conceder.
 
 ### 0.1.8.42 (para probar en tu PC)
 - ⬜ **Descubrimientos**: en una partida pulsa **T** (o el botón «Descubrimientos» de la barra). ¿Se abre la ventana? Elige una rama y una sección: ¿ves el árbol, puedes moverte arrastrando y acercar con la rueda? Pasa el ratón por un descubrimiento: ¿se resalta lo que hace falta (dorado) y lo que abre (naranja)? Busca «pólvora»: ¿lo encuentra y la ficha dice qué requiere y qué abre? ¿Se ve lo que la historia aún no inventa en 2026 (gris apagado)? ¿Se siente fluido con tu equipo?

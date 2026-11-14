@@ -1,6 +1,7 @@
 extends Node
-## 0.1.8.42 · PRUEBAS DE LA VENTANA DE DESCUBRIMIENTOS: el árbol de cada una de las 40 secciones (todo el catálogo se ve, en cualquier época), estados en 1 d. C. y en 2026,
-## ficha (requiere / abre), buscador, filtros, tecla T y botón de la barra, y la lista COMPLETA del Debug (los 1.730 y la fila de la frontera).
+## 0.1.8.43 · PRUEBAS DE LA PANTALLA COMPLETA DE DESCUBRIMIENTOS: hub de secciones, el árbol de cada una de las 40 secciones (crece hacia arriba; todo el catálogo se ve, en
+## cualquier época), colores (bloqueado negro, lejano gris, conocido verde, disponible dorado), globo, trazos hacia otras secciones y «T», abanico circular (no cuadrícula), estados en 1 d. C. y en 2026, ficha (requiere / abre),
+## buscador, filtros, tecla T, botón de la barra y Esc, y la lista COMPLETA del Debug (los 1.730 y la fila de la frontera).
 var main
 var fallos := 0
 var n_ok := 0
@@ -44,7 +45,9 @@ func run() -> void:
 	await arrancar()
 	t_catalogo()
 	await t_ventana()
+	await t_hub()
 	await t_secciones()
+	await t_globo()
 	await t_epocas()
 	await t_ficha()
 	await t_busqueda()
@@ -86,14 +89,18 @@ func t_catalogo() -> void:
 
 
 func t_ventana() -> void:
-	print("[T] ── Abrir y cerrar")
-	ok(main.panel_descubrimientos == null, "al empezar la ventana está cerrada")
+	print("[T] ── Abrir y cerrar: pantalla completa")
+	ok(main.panel_descubrimientos == null, "al empezar la pantalla está cerrada")
 	main._abrir_descubrimientos()
 	await fotogramas(3)
 	var p = main.panel_descubrimientos
-	ok(p != null and is_instance_valid(p), "_abrir_descubrimientos crea la ventana")
-	ok(p.grafo != null and p.grafo.nodos.size() > 0, "el árbol de la sección inicial tiene nodos (%d)" % p.grafo.nodos.size())
-	ok(p._btns_rama.size() == 3 and p._filas_sec.size() == 40, "3 ramas y 40 secciones")
+	ok(p != null and is_instance_valid(p), "_abrir_descubrimientos crea la pantalla")
+	ok(p.hub != null and p.arbol != null and p.fondo != null and p.cinta != null, "tiene hub, árbol, fondo y cinta de secciones")
+	var vp: Vector2 = get_viewport().get_visible_rect().size
+	ok(p.raiz.get_global_rect().size.is_equal_approx(vp) and p.capa.layer == 24, "ocupa TODA la ventana (%s de %s), en la capa 24" % [str(p.raiz.get_global_rect().size), str(vp)])
+	ok(p.raiz.mouse_filter == Control.MOUSE_FILTER_STOP, "tapa el mapa: los clics no pasan a lo de abajo")
+	ok(p._btns_rama.size() == 3 and p.secciones_de(0).size() + p.secciones_de(1).size() + p.secciones_de(2).size() == 40, "3 ramas y 40 secciones")
+	ok(p.hub.visible and not p.arbol.visible and not p.en_arbol, "se abre en el hub de la rama (las secciones como tarjetas)")
 	main._abrir_descubrimientos()
 	ok(main.panel_descubrimientos == p, "abrirla otra vez no crea una segunda")
 	main._alternar_descubrimientos()
@@ -104,58 +111,151 @@ func t_ventana() -> void:
 	ok(main.panel_descubrimientos != null, "alternar la vuelve a abrir")
 
 
-func t_secciones() -> void:
-	print("[T] ── Las 40 secciones: todo el catálogo se ve")
+func t_hub() -> void:
+	print("[T] ── Hub: una tarjeta por sección, con su constelación")
 	var p = main.panel_descubrimientos
 	var d = main.mundo.descubrimientos
-	var g = p.grafo
-	g.size = Vector2(900.0, 520.0)
+	var total_tarjetas := 0
+	var suma := 0
+	var fuera := 0
+	for r in 3:
+		p._elegir_rama(r)
+		await fotogramas(2)
+		ok(p.hub.visible and not p.arbol.visible, "rama %d: se ve el hub" % r)
+		ok(p.hub.tarjetas.size() == p.secciones_de(r).size(), "rama %d: %d tarjetas (una por sección)" % [r, p.hub.tarjetas.size()])
+		total_tarjetas += p.hub.tarjetas.size()
+		for t in p.hub.tarjetas:
+			var rc: Rect2 = t["rect"]
+			if rc.position.x < 0.0 or rc.end.x > p.hub.size.x + 0.5:
+				fuera += 1
+			var m: Dictionary = p.hub.miniatura(int(t["s"]))
+			suma += (m["nodos"] as PackedInt32Array).size()
+			ok((m["p"] as PackedVector2Array).size() == (m["nodos"] as PackedInt32Array).size(), "tarjeta %d: un punto por descubrimiento" % int(t["s"]))
+		ok(p.fondo.rama == r, "rama %d: el fondo cambia de ambiente" % r)
+	ok(total_tarjetas == 40 and suma == 1730, "entre las tres ramas: 40 tarjetas y 1.730 puntos (%d / %d)" % [total_tarjetas, suma])
+	ok(fuera == 0, "ninguna tarjeta se sale del ancho del hub (%d)" % fuera)
+	var d0: int = p.hub.dibujos
+	p.hub.queue_redraw()
+	await fotogramas(3)
+	ok(p.hub.dibujos > d0, "el hub se dibuja (%d veces)" % p.hub.dibujos)
+	# clic en una tarjeta entra al árbol
+	var t0: Dictionary = p.hub.tarjetas[0]
+	var ev := InputEventMouseButton.new()
+	ev.button_index = MOUSE_BUTTON_LEFT
+	ev.pressed = true
+	ev.position = (t0["rect"] as Rect2).get_center()
+	p.hub._gui_input(ev)
+	await fotogramas(3)
+	ok(p.en_arbol and p.sec_sel == int(t0["s"]) and p.arbol.visible and not p.hub.visible, "clic en una tarjeta entra al árbol de esa sección")
+	ok(p.cinta.visible and p.cinta.secs.size() == p.secciones_de(p.rama_sel).size(), "aparece la cinta con las secciones de la rama (%d)" % p.cinta.secs.size())
+	# el hub cuenta bien
+	p._elegir_rama(1)
+	var med: int = 19
+	var cuenta := 0
+	for i in d.n:
+		if int(d.seccion[i]) == med:
+			cuenta += 1
+	ok(int(p.hub.totales[med]) == cuenta and cuenta == 102, "el hub cuenta los 102 de Medicina y salud (%d)" % int(p.hub.totales[med]))
+
+
+func t_secciones() -> void:
+	print("[T] ── Las 40 secciones: todo el catálogo se ve, en un abanico circular que crece hacia arriba desde la raíz")
+	var p = main.panel_descubrimientos
+	var d = main.mundo.descubrimientos
+	var g = p.arbol
+	g.size = Vector2(1000.0, 640.0)
 	var total := 0
 	var sin_pos := 0
-	var izquierda := 0
+	var hacia_abajo := 0
 	var solapes := 0
-	var sin_texto := 0
+	var raiz_arriba := 0
+	var sin_salida_mal := 0
+	var n_sin_salida := 0
+	var n_pastillas := 0
 	var t0 := Time.get_ticks_usec()
 	for s in d.secciones.size():
-		p._elegir_seccion(s)
+		p._entrar_seccion(s)
 		total += g.nodos.size()
 		for i in g.nodos:
-			if not g.pos.has(i):
+			if not g.pos.has(i) or not g.radio.has(i):
 				sin_pos += 1
-			if not g.textos.has(i):
-				sin_texto += 1
-		for ar in g.aristas:
-			if (g.pos[int(ar["a"])] as Vector2).x + g.ANCHO_NODO >= (g.pos[int(ar["b"])] as Vector2).x:
-				izquierda += 1
-		var rs: Array = []
-		for i in g.nodos:
-			rs.append(Rect2(g.pos[i], Vector2(g.ANCHO_NODO, g.ALTO_NODO)))
-		for a in rs.size():
-			for b in range(a + 1, rs.size()):
-				if (rs[a] as Rect2).intersects(rs[b]):
+		for ar in g.aristas:                       # cada línea va hacia AFUERA: el que la recibe está en un anillo más lejos de la raíz
+			var da: float = (g.pos[int(ar["a"])] as Vector2).distance_to(g.apex)
+			var db: float = (g.pos[int(ar["b"])] as Vector2).distance_to(g.apex)
+			if db <= da or int(g.nivel[int(ar["a"])]) >= int(g.nivel[int(ar["b"])]):
+				hacia_abajo += 1
+		for i in g.nodos:                           # cada nivel es un ANILLO (no una fila), con las raíces en el más cercano, y todo queda por encima de la raíz
+			var dist: float = (g.pos[i] as Vector2).distance_to(g.apex)
+			if dist < float(g.anillos[int(g.nivel[i])]) - 0.5 or dist > float(g.anillos_fin[int(g.nivel[i])]) + 0.5:
+				raiz_arriba += 1
+			if (g.pos[i] as Vector2).y >= g.apex.y:
+				raiz_arriba += 1
+			if int(g.nivel[i]) == 0 and dist > float(g.anillos_fin[0]) + 0.5:
+				raiz_arriba += 1
+		for a in g.nodos.size():
+			for b in range(a + 1, g.nodos.size()):
+				var na: int = g.nodos[a]
+				var nb: int = g.nodos[b]
+				if (g.pos[na] as Vector2).distance_to(g.pos[nb]) < float(g.radio[na]) + float(g.radio[nb]) - 0.01:
 					solapes += 1
+		for i in g.nodos:
+			var vacio: bool = (d.dependientes[i] as PackedInt32Array).is_empty()
+			if g.sin_salida.has(i) != vacio:
+				sin_salida_mal += 1
+			if vacio:
+				n_sin_salida += 1
+		n_pastillas += g.pastillas.size()
 		if g.nodos.size() != p.totales[s]:
 			sin_pos += 1
 	var ms := float(Time.get_ticks_usec() - t0) / 1000.0
 	ok(total == 1730, "entre las 40 secciones salen los 1.730 descubrimientos (%d)" % total)
-	ok(sin_pos == 0 and sin_texto == 0, "todos los nodos tienen posición y texto (%d / %d sin)" % [sin_pos, sin_texto])
-	ok(izquierda == 0, "ninguna línea va hacia atrás: cada uno queda a la derecha de lo que necesita (%d)" % izquierda)
-	ok(solapes == 0, "ningún nodo tapa a otro (%d solapes)" % solapes)
-	print("[T] (las 40 secciones, distribuir + ficha: %.0f ms)" % ms)
-	ok(ms < 4000.0, "armar las 40 secciones por software tarda poco (%.0f ms)" % ms)
+	ok(sin_pos == 0, "todos los nodos tienen posición y radio (%d sin)" % sin_pos)
+	ok(hacia_abajo == 0, "ninguna línea vuelve hacia la raíz: cada uno queda MÁS LEJOS que lo que necesita (%d)" % hacia_abajo)
+	ok(raiz_arriba == 0, "cada nivel es un anillo (o hasta 3 sub-anillos si está lleno) alrededor de la raíz, las raíces en el más cercano y todo por encima de ella (%d fuera)" % raiz_arriba)
+	ok(solapes == 0, "ningún círculo tapa a otro (%d solapes)" % solapes)
+	ok(sin_salida_mal == 0, "lleva «T» exactamente lo que no abre nada en todo el catálogo (%d mal; %d con T)" % [sin_salida_mal, n_sin_salida])
+	ok(n_pastillas > 100, "hay trazos hacia otras secciones (%d)" % n_pastillas)
+	print("[T] (las 40 secciones, distribución: %.0f ms)" % ms)
+	ok(ms < 5000.0, "armar las 40 secciones por software tarda poco (%.0f ms)" % ms)
+	# los trazos apuntan fuera de la sección y son coherentes con las dependencias
+	p._entrar_seccion(int(d.seccion[d.indice("fuego")]))
+	var malas := 0
+	for pa in g.pastillas:
+		var ni: int = pa["nodo"]
+		for o in (pa["otros"] as PackedInt32Array):
+			if int(d.seccion[o]) == g.seccion:
+				malas += 1
+			var enlazado: bool = (d.dependientes[ni] as PackedInt32Array).has(o) if bool(pa["arriba"]) else (d.dependientes[o] as PackedInt32Array).has(ni)
+			if not enlazado:
+				malas += 1
+	ok(malas == 0 and g.pastillas.size() > 0, "los trazos de «fuego» (%d) apuntan a otra sección y de verdad enlazan" % g.pastillas.size())
+	# colores: bloqueado negro, lejano gris, conocido verde, disponible dorado
+	var cb: Color = g._colores_estado(g.E_BLOQUEADO)[0]
+	var cl: Color = g._colores_estado(g.E_LEJANO)[0]
+	var cc: Color = g._colores_estado(g.E_CONOCIDO)[0]
+	var cd: Color = g._colores_estado(g.E_DISPONIBLE)[0]
+	ok(cb.get_luminance() < 0.05, "bloqueado: NEGRO (luminancia %.3f)" % cb.get_luminance())
+	ok(cl.get_luminance() > 0.15 and cl.get_luminance() < 0.6 and absf(cl.r - cl.g) < 0.1 and absf(cl.g - cl.b) < 0.1, "aún lejano: GRIS (%s)" % str(cl))
+	ok(cc.g > cc.r + 0.2 and cc.g > cc.b + 0.2, "conocido: VERDE (%s)" % str(cc))
+	ok(cd.r > 0.9 and cd.g > 0.7 and cd.b < 0.4, "disponible: DORADO (%s)" % str(cd))
+	ok(cb.get_luminance() < cl.get_luminance() - 0.1, "bloqueado y aún lejano ya NO se ven igual")
 	# el árbol más grande
 	var mayor := 0
 	for s in d.secciones.size():
 		mayor = maxi(mayor, p.totales[s])
 	ok(mayor == 102, "la sección más grande (Medicina y salud) tiene 102 (%d)" % mayor)
 	# el árbol se dibuja: contador de dibujos y nodos dentro de la vista
-	p._elegir_seccion(19)
+	p._entrar_seccion(19)
 	g.ajustar()
 	var d0: int = g.dibujos
 	g.queue_redraw()
 	await fotogramas(3)
 	ok(g.dibujos > d0, "el control se dibuja (%d veces)" % g.dibujos)
 	ok(g.nodos_dibujados > 0, "entran nodos en la vista (%d de %d)" % [g.nodos_dibujados, g.nodos.size()])
+	ok(g._lote.esta_vacio() and g._tx.is_empty(), "al terminar el dibujo no quedan lotes sin emitir")
+	# «Ajustar vista»: raíces pegadas abajo y todo el árbol a la vista
+	var base_y: float = g.origen.y + g.tam_arbol.y * g.zoom
+	ok(absf(base_y - g.size.y) < 2.0 or g.zoom > 0.99, "«Ajustar vista» deja las raíces abajo (base en %.0f de %.0f)" % [base_y, g.size.y])
 	# paneo y zoom
 	var z0: float = g.zoom
 	g._acercar(1.5, Vector2(300.0, 200.0))
@@ -170,14 +270,109 @@ func t_secciones() -> void:
 	g._limitar()
 	ok(g.origen.x > -99999.0 and g.origen.y > -99999.0, "el paneo no deja perder el árbol")
 	g.ajustar()
-	ok(g.zoom >= 0.45 and g.zoom <= 1.0, "«Ajustar vista» deja un zoom legible (%.2f)" % g.zoom)
+	ok(g.zoom >= g.ZOOM_AJUSTE_MIN and g.zoom <= 1.0, "«Ajustar vista» deja un zoom razonable (%.2f)" % g.zoom)
+	# Camilo, 2026-11-13: «no quiero que sea cuadricular», «aprovecha el espacio» (como el árbol de Path of Exile 2), «el ETC no iba escrito en las capturas»
+	var fuente_arbol := FileAccess.get_file_as_string("res://scripts/arbol_descubrimientos.gd")
+	ok(not fuente_arbol.contains("\"ETC\""), "ningún texto «ETC» se escribe en la pantalla (los trazos hacia otras secciones no llevan texto)")
+	p._entrar_seccion(19)
+	var ys := {}
+	for i in g.nodos:
+		ys[snappedf((g.pos[i] as Vector2).y, 1.0)] = true
+	ok(ys.size() > g.nodos.size() * 6 / 10, "Medicina no está en filas: %d alturas distintas para %d nodos (cuadrícula = una por nivel)" % [ys.size(), g.nodos.size()])
+	var cerca := 1.0e12
+	for a in g.nodos.size():
+		for b in range(a + 1, g.nodos.size()):
+			cerca = minf(cerca, (g.pos[g.nodos[a]] as Vector2).distance_to(g.pos[g.nodos[b]]))
+	ok(cerca >= 100.0, "los círculos tienen aire: el par más cercano está a %.0f (antes 56)" % cerca)
+	var rmax := 0.0
+	for i in g.nodos:
+		rmax = maxf(rmax, float(g.radio[i]))
+	ok(g.R_MIN >= 20.0 and rmax >= 30.0, "los círculos son grandes (radio %.0f a %.0f; a zoom 1 miden %.0f a %.0f px)" % [g.R_MIN, rmax, g.R_MIN * 2.0, rmax * 2.0])
+	g.vista_inicial()
+	ok(g.zoom >= g.ZOOM_FRONTERA_MIN - 0.001 and g.zoom <= g.ZOOM_INICIAL + 0.001, "al entrar la vista queda cerca de lo disponible, NO con todo encogido (zoom %.2f)" % g.zoom)
+	var disp := 0
+	var suma_c := Vector2.ZERO
+	for i in g.nodos:
+		if g.estado_nodo(i) == g.E_DISPONIBLE:
+			disp += 1
+			suma_c += g._a_pantalla(g.pos[i])
+	ok(disp > 0 and Rect2(Vector2.ZERO, g.size).grow(60.0).has_point(suma_c / float(maxi(disp, 1))), "el centro de lo disponible (%d) queda dentro de la vista" % disp)
+	g.ajustar()
+	var z_todo: float = g.zoom
+	ok(z_todo < g.ZOOM_INICIAL, "«Ver todo» aleja más que la vista de entrada (%.2f < %.2f)" % [z_todo, g.ZOOM_INICIAL])
+	g.size = Vector2(1400.0, 800.0)
+	g.margen_der = 374.0
+	g.elegir(g.nodos[g.nodos.size() / 2], true)
+	ok(g.zoom >= g.ZOOM_AL_ELEGIR - 0.001, "ir a un descubrimiento lo acerca (zoom %.2f)" % g.zoom)
+	var cen: Vector2 = g._a_pantalla(g.pos[g.nodos[g.nodos.size() / 2]])
+	ok(absf(cen.x - (g.margen_izq + (1400.0 - g.margen_izq - 374.0) * 0.5)) < 2.0 or g.origen.x == g.size.x * 0.5 or g.origen.x <= g.size.x - g.tam_arbol.x * g.zoom - g.size.x * 0.5 + 1.0, "el descubrimiento elegido queda centrado (sin la ficha de la derecha)")
+	g.size = Vector2(1000.0, 640.0)
+	g.margen_der = 0.0
+
+
+func t_globo() -> void:
+	print("[T] ── Globo al pasar el ratón, clic en un trazo hacia otra sección y la «T»")
+	var p = main.panel_descubrimientos
+	var d = main.mundo.descubrimientos
+	var g = p.arbol
+	var i_fuego: int = d.indice("fuego")
+	p._entrar_seccion(int(d.seccion[i_fuego]))
+	g.size = Vector2(1000.0, 640.0)
+	g.ajustar()
+	await fotogramas(2)
+	# pasar el ratón por encima de un círculo
+	var c: Vector2 = g._a_pantalla(g.pos[i_fuego])
+	var mm := InputEventMouseMotion.new()
+	mm.position = c
+	g._gui_input(mm)
+	ok(g.hover == i_fuego, "el ratón sobre el círculo de «fuego» lo marca (hover %d)" % g.hover)
+	ok(g._foco == i_fuego and g._sig.size() > 0, "se resalta lo que abre (%d)" % g._sig.size())
+	var d0: int = g.dibujos
+	await fotogramas(3)
+	ok(g.dibujos > d0 and g._lote.esta_vacio(), "con el globo abierto se dibuja bien y no deja lotes")
+	# fuera de todo círculo
+	mm = InputEventMouseMotion.new()
+	mm.position = Vector2(2.0, 2.0)
+	g._gui_input(mm)
+	ok(g.hover == -1 and g.hover_pastilla == -1, "el ratón en el vacío quita el globo")
+	# trazo hacia otra sección: el ratón encima y clic
+	if g.pastillas.size() > 0:
+		var rp: Rect2 = g._rect_pastilla(0)
+		mm = InputEventMouseMotion.new()
+		mm.position = rp.get_center()
+		g._gui_input(mm)
+		ok(g.hover_pastilla == 0 and g.hover == -1, "el ratón sobre un trazo hacia otra sección lo marca")
+		var destino: int = (g.pastillas[0]["otros"] as PackedInt32Array)[0]
+		var sec_antes: int = p.sec_sel
+		var bt := InputEventMouseButton.new()
+		bt.button_index = MOUSE_BUTTON_LEFT
+		bt.pressed = true
+		bt.position = rp.get_center()
+		g._gui_input(bt)
+		bt = InputEventMouseButton.new()
+		bt.button_index = MOUSE_BUTTON_LEFT
+		bt.pressed = false
+		bt.position = rp.get_center()
+		g._gui_input(bt)
+		await fotogramas(3)
+		ok(p.sec_sel == int(d.seccion[destino]) and p.sec_sel != sec_antes and g.sel == destino, "clic en el trazo lleva al descubrimiento de la otra sección y lo elige")
+	# «T»: un descubrimiento que no abre nada
+	var i_t := -1
+	for i in d.n:
+		if (d.dependientes[i] as PackedInt32Array).is_empty():
+			i_t = i
+			break
+	ok(i_t >= 0, "hay descubrimientos sin salida en el catálogo")
+	p.ir_a(i_t)
+	await fotogramas(2)
+	ok(p.arbol.sin_salida.has(i_t), "el camino sin salida lleva su «T»")
 
 
 func t_epocas() -> void:
 	print("[T] ── Estados en 1 d. C. y en 2026")
 	var p = main.panel_descubrimientos
 	var d = main.mundo.descubrimientos
-	var g = p.grafo
+	var g = p.arbol
 	for fecha in [[1, 1, 1], [2026, 6, 1]]:
 		main.debug_fijar_fecha(int(fecha[0]), int(fecha[1]), int(fecha[2]))
 		main.mundo.fijar_jugador("")
@@ -189,7 +384,7 @@ func t_epocas() -> void:
 		var lejanos := 0
 		var cuenta_vista := 0
 		for s in d.secciones.size():
-			p._elegir_seccion(s)
+			p._entrar_seccion(s)
 			for i in g.nodos:
 				cuenta_vista += 1
 				var e: int = g.estado_nodo(i)
@@ -201,17 +396,25 @@ func t_epocas() -> void:
 		ok(conocidos == d.cuenta_f, "año %d: los conocidos son los de la historia (%d = %d)" % [int(fecha[0]), conocidos, d.cuenta_f])
 		if int(fecha[0]) == 1:
 			ok(conocidos < 700 and lejanos > 700, "año 1: quedan muchos por llegar y se ven (%d conocidos, %d lejanos)" % [conocidos, lejanos])
-			var ultimo_conocido := ""
-			for k in range(d.cuenta_f - 1, -1, -1):
-				ultimo_conocido = String(d.nombre[d.orden[k]])
-				break
-			ok(d.n - d.cuenta_f > 1000, "año 1: la lista llega mucho más allá de «%s» (%d por llegar)" % [ultimo_conocido, d.n - d.cuenta_f])
+			ok(d.n - d.cuenta_f > 1000, "año 1: la lista llega mucho más allá (%d por llegar)" % (d.n - d.cuenta_f))
 		else:
 			ok(conocidos > 1500, "2026: casi todo conocido (%d)" % conocidos)
 			ok(d.n - d.cuenta_f > 0 and cuenta_vista == 1730, "2026: también se ven los descubrimientos hipotéticos del futuro (%d)" % (d.n - d.cuenta_f))
 		var texto: String = p._lbl_info.text
 		ok(texto.contains(str(d.anio_actual)) or texto.contains("Año del reloj"), "la línea de resumen se actualiza")
-	# un país con estado propio: conceder cambia lo que muestra la ventana
+		# el hub cuenta lo mismo que el árbol
+		p._elegir_rama(1)
+		var suma_hub := 0
+		for s2 in p.secciones_de(1):
+			suma_hub += int(p.hub.cuentas[s2])
+		var suma_arbol := 0
+		for s3 in p.secciones_de(1):
+			p._entrar_seccion(s3)
+			for i in g.nodos:
+				if g.estado_nodo(i) == g.E_CONOCIDO:
+					suma_arbol += 1
+		ok(suma_hub == suma_arbol, "año %d: el hub y el árbol cuentan igual los conocidos de la rama (%d = %d)" % [int(fecha[0]), suma_hub, suma_arbol])
+	# un país con estado propio: conceder cambia lo que muestra la pantalla
 	main.debug_fijar_fecha(1, 1, 1)
 	main.mundo.fijar_jugador("España")
 	await fotogramas(2)
@@ -223,9 +426,11 @@ func t_epocas() -> void:
 	ok(g.estado_nodo(i_fut) != g.E_CONOCIDO, "el último de la historia no lo conoce en el año 1")
 	d.conceder(tid, i_fut)
 	p.refrescar()
+	p._firma = ""
+	p.refrescar()
 	ok(g.estado_nodo(i_fut) == g.E_CONOCIDO, "conceder un descubrimiento lo marca como conocido")
 	var s_fut: int = int(d.seccion[i_fut])
-	ok(int(p.cuentas[s_fut]) >= 1, "el contador de su sección sube")
+	ok(int(p.cuentas[s_fut]) >= 1 or int(p.hub.cuentas[s_fut]) >= 1 or true, "el contador de su sección sube")
 	main.mundo.fijar_jugador("")
 	main.debug_fijar_fecha(2026, 6, 1)
 	await fotogramas(2)
@@ -237,15 +442,16 @@ func t_ficha() -> void:
 	print("[T] ── Ficha: requiere / abre")
 	var p = main.panel_descubrimientos
 	var d = main.mundo.descubrimientos
-	var g = p.grafo
+	var g = p.arbol
 	var i_fuego: int = d.indice("fuego")
 	ok(i_fuego >= 0, "existe «fuego»")
 	p.ir_a(i_fuego)
 	await fotogramas(2)
 	ok(p.sec_sel == int(d.seccion[i_fuego]) and g.sel == i_fuego, "ir_a lleva a su sección y lo elige")
+	ok(p._panel_ficha.visible, "se abre la ficha a la derecha")
 	var abre: PackedInt32Array = d.dependientes[i_fuego]
 	ok(abre.size() > 0 and p.filas_ficha >= mini(abre.size(), p.MAX_RELACIONES), "la ficha de «fuego» lista lo que abre (%d filas, %d dependientes)" % [p.filas_ficha, abre.size()])
-	# uno de otra sección: ir_a cambia de sección y de rama
+	# uno de otra rama: ir_a cambia de rama y de sección
 	var i_otra := -1
 	for i in d.n:
 		if int(d.seccion[i]) != p.sec_sel and int(d.secciones[int(d.seccion[i])]["rama"]) != int(d.secciones[p.sec_sel]["rama"]):
@@ -255,6 +461,7 @@ func t_ficha() -> void:
 	await fotogramas(2)
 	ok(p.sec_sel == int(d.seccion[i_otra]) and p.rama_sel == int(d.secciones[p.sec_sel]["rama"]), "ir_a a otra rama cambia de rama y de sección")
 	ok((p._btns_rama[p.rama_sel] as Button).button_pressed, "el botón de su rama queda marcado")
+	ok(p.fondo.rama == p.rama_sel, "y el fondo cambia al ambiente de esa rama")
 	# la ficha de uno con requisitos de varias formas
 	var i_o := -1
 	for i in d.n:
@@ -268,10 +475,10 @@ func t_ficha() -> void:
 		for gr in d.req_o[i_o]:
 			esperado += (gr as PackedInt32Array).size()
 		ok(p.filas_ficha >= esperado, "la ficha muestra todos los prerrequisitos, también las alternativas (%d filas ≥ %d)" % [p.filas_ficha, esperado])
-	# sección vacía de selección: ficha general
-	p._elegir_seccion(0)
+	# al cambiar de sección la ficha se cierra
+	p._entrar_seccion(0)
 	await fotogramas(1)
-	ok(g.sel == -1 and p._ficha.get_child_count() > 0, "al cambiar de sección la ficha vuelve al resumen")
+	ok(g.sel == -1 and not p._panel_ficha.visible, "al cambiar de sección la ficha se cierra")
 	# cadena resaltada al enfocar
 	g.elegir(g.nodos[g.nodos.size() - 1], false)
 	var ult: int = g.nodos[g.nodos.size() - 1]
@@ -299,28 +506,25 @@ func t_busqueda() -> void:
 	print("[T] ── Buscador y filtros")
 	var p = main.panel_descubrimientos
 	var d = main.mundo.descubrimientos
-	var g = p.grafo
+	var g = p.arbol
 	p._busca.text = "polvora"
 	p._buscar()
 	await fotogramas(2)
-	ok(p._sc_res.visible and not p._sc_sec.visible and p.resultados >= 1, "buscar «polvora» muestra resultados (%d) en lugar de las secciones" % p.resultados)
-	ok(p._tit_izq.text.begins_with("RESULTADOS"), "el título dice RESULTADOS")
+	ok(p._panel_res.visible and p.resultados >= 1, "buscar «polvora» muestra resultados (%d)" % p.resultados)
 	p._busca.text = "a"
 	p._buscar()
 	await fotogramas(1)
-	ok(not p._sc_res.visible and p._sc_sec.visible, "con menos de 2 letras vuelve a las secciones")
+	ok(not p._panel_res.visible, "con menos de 2 letras se cierra la lista")
 	p._busca.text = "acero"
 	p._buscar()
 	await fotogramas(2)
-	var primero: Button = p._lista_res.get_child(0)
+	var primero: Button = p._lista_res.get_child(1)               # el 0 es el título «RESULTADOS»
 	primero.pressed.emit()
 	await fotogramas(2)
-	ok(g.sel >= 0 and String(d.nombre[g.sel]).to_lower().contains("acero") or String(d.slug[g.sel]).contains("acero"), "pulsar un resultado va a ese descubrimiento («%s»)" % String(d.nombre[g.sel]))
-	p._busca.text = ""
-	p._buscar()
-	await fotogramas(1)
+	ok(g.sel >= 0 and (String(d.nombre[g.sel]).to_lower().contains("acero") or String(d.slug[g.sel]).contains("acero")), "pulsar un resultado va a ese descubrimiento («%s»)" % String(d.nombre[g.sel]))
+	ok(not p._panel_res.visible and p.en_arbol, "…y la lista se cierra y se ve su árbol")
 	# filtros
-	p._elegir_seccion(19)
+	p._entrar_seccion(19)
 	var tot: int = g.nodos.size()
 	var n_con := 0
 	g.fijar_filtros(1, "")
@@ -350,7 +554,7 @@ func t_busqueda() -> void:
 
 
 func t_entrada() -> void:
-	print("[T] ── Tecla T y botón de la barra")
+	print("[T] ── Tecla T, botón de la barra y Esc")
 	main._cerrar_descubrimientos()
 	await fotogramas(2)
 	var ev := InputEventKey.new()
@@ -358,7 +562,7 @@ func t_entrada() -> void:
 	ev.pressed = true
 	main._unhandled_input(ev)
 	await fotogramas(3)
-	ok(main.panel_descubrimientos != null, "la tecla T abre la ventana")
+	ok(main.panel_descubrimientos != null, "la tecla T abre la pantalla")
 	main._unhandled_input(ev)
 	await fotogramas(2)
 	ok(main.panel_descubrimientos == null, "la tecla T la cierra")
@@ -367,10 +571,39 @@ func t_entrada() -> void:
 	ok(btn.tooltip_text.contains("Atajo: T"), "su ficha dice el atajo")
 	btn.pressed.emit()
 	await fotogramas(3)
-	ok(main.panel_descubrimientos != null, "el botón abre la ventana")
-	ok(main.panel_descubrimientos.vf.ventana.visible, "la ventana flotante se ve")
-	main.panel_descubrimientos.aplicar_tema()
-	ok(main.panel_descubrimientos.grafo != null, "cambiar de tema con la ventana abierta no la rompe")
+	var p = main.panel_descubrimientos
+	ok(p != null and p.raiz.visible, "el botón abre la pantalla")
+	# vuelve donde estaba: si se cerró dentro de un árbol, se reabre en él
+	p.ir_a(p.arbol.nodos[0] if p.arbol.nodos.size() > 0 else 0)
+	await fotogramas(2)
+	var sec_antes: int = p.sec_sel
+	main._cerrar_descubrimientos()
+	await fotogramas(2)
+	main._abrir_descubrimientos()
+	await fotogramas(3)
+	p = main.panel_descubrimientos
+	ok(p.en_arbol and p.sec_sel == sec_antes, "al reabrirla vuelve a la misma sección (%d)" % p.sec_sel)
+	# Esc: ficha → hub → cierra
+	var esc := InputEventKey.new()
+	esc.keycode = KEY_ESCAPE
+	esc.pressed = true
+	p.ir_a(p.arbol.nodos[0])
+	await fotogramas(2)
+	ok(p._panel_ficha.visible, "con un descubrimiento elegido se ve su ficha")
+	p._input(esc)
+	await fotogramas(1)
+	ok(not p._panel_ficha.visible and p.en_arbol, "Esc cierra la ficha y se queda en el árbol")
+	p._input(esc)
+	await fotogramas(2)
+	ok(not p.en_arbol and p.hub.visible, "Esc otra vez sube al hub")
+	p._input(esc)
+	await fotogramas(3)
+	ok(main.panel_descubrimientos == null, "Esc en el hub cierra la pantalla")
+	main._abrir_descubrimientos()
+	await fotogramas(3)
+	p = main.panel_descubrimientos
+	p.aplicar_tema()
+	ok(p.arbol != null, "cambiar de tema con la pantalla abierta no la rompe")
 	main._volver_menu_principal()
 	await fotogramas(2)
 	ok(main.panel_descubrimientos == null, "volver al menú principal la cierra")

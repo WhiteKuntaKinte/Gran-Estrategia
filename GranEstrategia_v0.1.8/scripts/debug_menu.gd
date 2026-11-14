@@ -1810,7 +1810,7 @@ func _refrescar_ejercito_pagina() -> void:
 	if int(c["pi"]) >= 0:
 		var pr = m.provincias[int(c["pi"])]
 		var rp: Dictionary = ej.resumen(ej.en_provincia(int(c["prov_tid"])))
-		t += "Provincia: %s (de %s): %s soldados en %d pelotones.\nDevastación %d %% · riesgo de motín %d %%." % [pr.nombre, pr.pais, main.fmt_n(float(rp["soldados"])), int(rp["pelotones"]), int(roundf(pr.devastacion * 100.0)), int(roundf(m.riesgo_motin(int(c["pi"])) * 100.0))]
+		t += "Provincia: %s (de %s): %s soldados en %d pelotones.\nDevastación %d %% · estabilidad %d." % [pr.nombre, pr.pais, main.fmt_n(float(rp["soldados"])), int(rp["pelotones"]), int(roundf(pr.devastacion * 100.0)), int(roundf(pr.favorabilidad))]
 		sl_ej_dev.value = pr.devastacion
 		lbl_ej_dev.text = "%d %%" % int(roundf(pr.devastacion * 100.0))
 	else:

@@ -683,5 +683,795 @@
   "titulo": "Un árabe en el desierto",
   "artista": "Charles Tschaggeny",
   "fecha": "1858"
+ },
+ "2026/lugar_espana__toledo": {
+  "titulo": "Vista de Toledo",
+  "artista": "El Greco",
+  "fecha": "1599"
+ },
+ "2026/lugar_espana__sevilla": {
+  "titulo": "Visión de San Agustín",
+  "artista": "Bartolomé Esteban Murillo",
+  "fecha": "1664"
+ },
+ "2026/lugar_espana__valencia": {
+  "titulo": "Paseo a orillas del mar",
+  "artista": "Joaquín Sorolla",
+  "fecha": "1909"
+ },
+ "2026/lugar_espana__barcelona": {
+  "titulo": "Corpus. Salida de la procesión de Santa María del Mar",
+  "artista": "Ramon Casas",
+  "fecha": "1898"
+ },
+ "2026/lugar_espana__madrid": {
+  "titulo": "Las Meninas",
+  "artista": "Diego Velázquez",
+  "fecha": "1656"
+ },
+ "2026/lugar_espana__granada": {
+  "titulo": "La Alhambra y el Albaicín",
+  "artista": "David Roberts",
+  "fecha": ""
+ },
+ "2026/lugar_espana__asturias": {
+  "titulo": "El rey Don Pelayo en Covadonga",
+  "artista": "Luis de Madrazo",
+  "fecha": "1855"
+ },
+ "2026/lugar_espana__segovia": {
+  "titulo": "Tipo de Segovia",
+  "artista": "Ignacio Zuloaga",
+  "fecha": "1906"
+ },
+ "2026/lugar_francia__paris": {
+  "titulo": "Calle de París, día de lluvia",
+  "artista": "Gustave Caillebotte",
+  "fecha": "1877"
+ },
+ "2026/lugar_francia__sena_maritimo": {
+  "titulo": "Catedral de Ruan, fachada (puesta de sol)",
+  "artista": "Claude Monet",
+  "fecha": "1892"
+ },
+ "2026/lugar_francia__bocas_del_rodano": {
+  "titulo": "Noche estrellada sobre el Ródano",
+  "artista": "Vincent van Gogh",
+  "fecha": "1888"
+ },
+ "2026/lugar_francia__yvelines": {
+  "titulo": "Vista de Versalles",
+  "artista": "Pierre-Denis Martin",
+  "fecha": "1722"
+ },
+ "2026/lugar_francia__sena_y_marne": {
+  "titulo": "El Ángelus",
+  "artista": "Jean-François Millet",
+  "fecha": "1859"
+ },
+ "2026/lugar_francia__vaucluse": {
+  "titulo": "Vista de Aviñón y del puente de Saint-Bénézet",
+  "artista": "Isidore Dagnan",
+  "fecha": "1833"
+ },
+ "2026/lugar_italia__venecia": {
+  "titulo": "Venecia: el Gran Canal mirando a Santa Croce",
+  "artista": "Seguidor de Canaletto",
+  "fecha": "1738"
+ },
+ "2026/lugar_italia__roma": {
+  "titulo": "Galería imaginaria de arte romano antiguo",
+  "artista": "Giovanni Paolo Panini",
+  "fecha": "1757"
+ },
+ "2026/lugar_italia__florencia": {
+  "titulo": "El nacimiento de Venus",
+  "artista": "Sandro Botticelli",
+  "fecha": "1485"
+ },
+ "2026/lugar_italia__napoles": {
+  "titulo": "El Vesubio visto desde Posillipo, Nápoles",
+  "artista": "Joseph Wright of Derby",
+  "fecha": "1789"
+ },
+ "2026/lugar_italia__milan": {
+  "titulo": "La Última Cena",
+  "artista": "Leonardo da Vinci",
+  "fecha": "1498"
+ },
+ "2026/lugar_italia__siena": {
+  "titulo": "Alegoría del Buen Gobierno",
+  "artista": "Ambrogio Lorenzetti",
+  "fecha": "1339"
+ },
+ "2026/lugar_italia__padua": {
+  "titulo": "Lamentación sobre Cristo muerto",
+  "artista": "Giotto",
+  "fecha": "1305"
+ },
+ "2026/lugar_italia__perugia": {
+  "titulo": "Leyenda de San Francisco: la estigmatización",
+  "artista": "Antes atribuido a Giotto",
+  "fecha": "1297"
+ },
+ "2026/lugar_italia__palermo": {
+  "titulo": "El triunfo de la muerte (detalle)",
+  "artista": "Anónimo",
+  "fecha": "1446"
+ },
+ "2026/lugar_paises_bajos__holanda_meridional": {
+  "titulo": "Vista de Delft",
+  "artista": "Johannes Vermeer",
+  "fecha": "1660"
+ },
+ "2026/lugar_paises_bajos__holanda_septentrional": {
+  "titulo": "El ayuntamiento en la plaza Dam, Ámsterdam",
+  "artista": "Gerrit Berckheyde",
+  "fecha": "1672"
+ },
+ "2026/lugar_paises_bajos__frisia": {
+  "titulo": "Paisaje invernal con patinadores (detalle)",
+  "artista": "Hendrick Avercamp",
+  "fecha": "1608"
+ },
+ "2026/lugar_paises_bajos__brabante_septentrional": {
+  "titulo": "Los comedores de patatas",
+  "artista": "Vincent van Gogh",
+  "fecha": "1885"
+ },
+ "2026/lugar_paises_bajos__zelanda": {
+  "titulo": "Torre de iglesia de Zelanda",
+  "artista": "Piet Mondrian",
+  "fecha": "1911"
+ },
+ "2026/lugar_reino_unido__londres": {
+  "titulo": "El Parlamento de Londres",
+  "artista": "Claude Monet",
+  "fecha": "1900"
+ },
+ "2026/lugar_reino_unido__edimburgo": {
+  "titulo": "Vista del castillo de Edimburgo",
+  "artista": "Alexander Nasmyth",
+  "fecha": ""
+ },
+ "2026/lugar_reino_unido__argyll_and_bute": {
+  "titulo": "Staffa, la gruta de Fingal",
+  "artista": "J. M. W. Turner",
+  "fecha": "1832"
+ },
+ "2026/lugar_reino_unido__cornualles": {
+  "titulo": "Venta de pescado en una playa de Cornualles",
+  "artista": "Stanhope Forbes",
+  "fecha": "1885"
+ },
+ "2026/lugar_reino_unido__cumbria": {
+  "titulo": "Lago Buttermere, con parte de Cromackwater",
+  "artista": "J. M. W. Turner",
+  "fecha": "1798"
+ },
+ "2026/lugar_reino_unido__suffolk": {
+  "titulo": "El carro de heno",
+  "artista": "John Constable",
+  "fecha": "1821"
+ },
+ "2026/lugar_reino_unido__wiltshire": {
+  "titulo": "La catedral de Salisbury vista desde los prados",
+  "artista": "John Constable",
+  "fecha": "1831"
+ },
+ "2026/lugar_reino_unido__dorset": {
+  "titulo": "Bahía de Weymouth",
+  "artista": "John Constable",
+  "fecha": "1816"
+ },
+ "2026/lugar_reino_unido__birmingham": {
+  "titulo": "La estrella de Belén",
+  "artista": "Edward Burne-Jones",
+  "fecha": "1890"
+ },
+ "2026/lugar_alemania__sajonia": {
+  "titulo": "Dresde desde la orilla derecha del Elba",
+  "artista": "Bernardo Bellotto",
+  "fecha": "1747"
+ },
+ "2026/lugar_alemania__berlin": {
+  "titulo": "El ferrocarril Berlín-Potsdam",
+  "artista": "Adolph von Menzel",
+  "fecha": "1847"
+ },
+ "2026/lugar_alemania__baviera": {
+  "titulo": "El pobre poeta",
+  "artista": "Carl Spitzweg",
+  "fecha": "1839"
+ },
+ "2026/lugar_alemania__mecklemburgo_pomerania_occidental": {
+  "titulo": "Acantilados de tiza en Rügen",
+  "artista": "Caspar David Friedrich",
+  "fecha": "1818"
+ },
+ "2026/lugar_alemania__renania_del_norte_westfalia": {
+  "titulo": "Altar de los Reyes Magos: Adoración de los Reyes",
+  "artista": "Stefan Lochner",
+  "fecha": "1440"
+ },
+ "2026/lugar_alemania__baden_wurtemberg": {
+  "titulo": "Paisaje de la Selva Negra",
+  "artista": "Hans Thoma",
+  "fecha": "1867"
+ },
+ "2026/lugar_alemania__sajonia_anhalt": {
+  "titulo": "Lutero y los reformadores de Wittenberg",
+  "artista": "Lucas Cranach el Joven",
+  "fecha": "1543"
+ },
+ "2026/lugar_austria__viena": {
+  "titulo": "El beso",
+  "artista": "Gustav Klimt",
+  "fecha": "1908"
+ },
+ "2026/lugar_austria__salzburgo": {
+  "titulo": "Paisaje cerca de Salzburgo",
+  "artista": "Florian Joseph Altmann",
+  "fecha": "1850"
+ },
+ "2026/lugar_austria__tirol": {
+  "titulo": "La danza de la muerte de 1809",
+  "artista": "Albin Egger-Lienz",
+  "fecha": "1908"
+ },
+ "2026/lugar_suiza__berna": {
+  "titulo": "El lago Thun y los montes Stockhorn",
+  "artista": "Ferdinand Hodler",
+  "fecha": "1913"
+ },
+ "2026/lugar_suiza__ginebra": {
+  "titulo": "El lago Lemán y el Mont Blanc al amanecer",
+  "artista": "Ferdinand Hodler",
+  "fecha": "1918"
+ },
+ "2026/lugar_suiza__lucerna": {
+  "titulo": "Lago de Lucerna: la bahía de Uri desde arriba de Brunnen",
+  "artista": "J. M. W. Turner",
+  "fecha": "1810"
+ },
+ "2026/lugar_suiza__los_grisones": {
+  "titulo": "Paisaje alpino al atardecer",
+  "artista": "Giovanni Segantini",
+  "fecha": "1897"
+ },
+ "2026/lugar_polonia__voivodato_de_pequena_polonia": {
+  "titulo": "Stańczyk",
+  "artista": "Jan Matejko",
+  "fecha": "1862"
+ },
+ "2026/lugar_polonia__voivodato_de_mazovia": {
+  "titulo": "Vista de Varsovia desde la terraza del Castillo Real",
+  "artista": "Bernardo Bellotto",
+  "fecha": "1773"
+ },
+ "2026/lugar_chequia__praga": {
+  "titulo": "Apoteosis de los eslavos",
+  "artista": "Alfons Mucha",
+  "fecha": "1926"
+ },
+ "2026/lugar_hungria__budapest": {
+  "titulo": "Vista de Buda y Pest desde el monte Gellért",
+  "artista": "János Szentgyörgyi",
+  "fecha": "1835"
+ },
+ "2026/lugar_noruega__oslo": {
+  "titulo": "El grito",
+  "artista": "Edvard Munch",
+  "fecha": "1910"
+ },
+ "2026/lugar_noruega__hordaland": {
+  "titulo": "Vista desde Stalheim",
+  "artista": "Johan Christian Dahl",
+  "fecha": "1842"
+ },
+ "2026/lugar_suecia__estocolmo": {
+  "titulo": "Sacrificio de pleno invierno",
+  "artista": "Carl Larsson",
+  "fecha": "1915"
+ },
+ "2026/lugar_suecia__dalarna": {
+  "titulo": "Baile de San Juan",
+  "artista": "Anders Zorn",
+  "fecha": "1897"
+ },
+ "2026/lugar_finlandia__uusimaa": {
+  "titulo": "El puerto del Club Náutico Nyländska en Helsinki",
+  "artista": "Albert Edelfelt",
+  "fecha": "1899"
+ },
+ "2026/lugar_finlandia__carelia_del_norte": {
+  "titulo": "Tríptico de Aino",
+  "artista": "Akseli Gallen-Kallela",
+  "fecha": "1891"
+ },
+ "2026/lugar_dinamarca__capital": {
+  "titulo": "El terrible bombardeo de Copenhague",
+  "artista": "C. W. Eckersberg",
+  "fecha": "1807"
+ },
+ "2026/lugar_dinamarca__jutlandia_septentrional": {
+  "titulo": "Tarde de verano en la playa de Skagen",
+  "artista": "P. S. Krøyer",
+  "fecha": "1884"
+ },
+ "2026/lugar_islandia__su_urland": {
+  "titulo": "Þingvellir",
+  "artista": "Þórarinn B. Þorláksson",
+  "fecha": "1900"
+ },
+ "2026/lugar_rusia__moscu": {
+  "titulo": "Patio moscovita",
+  "artista": "Vasili Polenov",
+  "fecha": "1878"
+ },
+ "2026/lugar_rusia__san_petersburgo": {
+  "titulo": "La estatua ecuestre de Pedro I y la plaza del Senado",
+  "artista": "Según Benjamin Paterssen",
+  "fecha": "1799"
+ },
+ "2026/lugar_rusia__republica_autonoma_de_crimea": {
+  "titulo": "Vista de Crimea al atardecer",
+  "artista": "Iván Aivazovski",
+  "fecha": "1862"
+ },
+ "2026/lugar_rusia__briansk": {
+  "titulo": "Mañana en un bosque de pinos",
+  "artista": "Iván Shishkin y Konstantín Savitski",
+  "fecha": "1889"
+ },
+ "2026/lugar_rusia__ivanovo": {
+  "titulo": "Después de la lluvia. Plyos",
+  "artista": "Isaac Levitán",
+  "fecha": "1889"
+ },
+ "2026/lugar_rusia__pskov": {
+  "titulo": "Antiguo Pskov",
+  "artista": "Nicolás Roerich",
+  "fecha": ""
+ },
+ "2026/lugar_ucrania__kiev": {
+  "titulo": "Noche de luna en el Dniéper",
+  "artista": "Arjip Kuindzhi",
+  "fecha": "1880"
+ },
+ "2026/lugar_ucrania__odesa": {
+  "titulo": "Vista de Odesa en una noche de luna",
+  "artista": "Iván Aivazovski",
+  "fecha": "1855"
+ },
+ "2026/lugar_turquia__estambul": {
+  "titulo": "Atardecer en el Cuerno de Oro",
+  "artista": "Iván Aivazovski",
+  "fecha": "1845"
+ },
+ "2026/lugar_grecia__atica": {
+  "titulo": "Pintura de la Acrópolis (siglo XIX)",
+  "artista": "Anónimo",
+  "fecha": "siglo XIX"
+ },
+ "2026/lugar_grecia__creta": {
+  "titulo": "Icono de la Virgen con el Niño (Eleousa)",
+  "artista": "Escuela cretense",
+  "fecha": "1600"
+ },
+ "2026/lugar_grecia__monte_athos": {
+  "titulo": "Refectorio de un monasterio griego (Monte Athos)",
+  "artista": "Théodore Ralli",
+  "fecha": "1885"
+ },
+ "2026/lugar_egipto__guiza": {
+  "titulo": "La Gran Esfinge y las pirámides de Guiza",
+  "artista": "David Roberts",
+  "fecha": "1838"
+ },
+ "2026/lugar_egipto__luxor": {
+  "titulo": "El gran templo de Amón en Karnak, la sala hipóstila",
+  "artista": "David Roberts",
+  "fecha": "1838"
+ },
+ "2026/lugar_egipto__asuan": {
+  "titulo": "El templo de la isla de Filae",
+  "artista": "David Roberts",
+  "fecha": "1838"
+ },
+ "2026/lugar_egipto__fayun": {
+  "titulo": "Retrato de joven del tipo del Fayum",
+  "artista": "Anónimo",
+  "fecha": "época romana"
+ },
+ "2026/lugar_egipto__el_cairo": {
+  "titulo": "Puerta de los Metwaleys, El Cairo",
+  "artista": "Louis Haghe",
+  "fecha": "1848"
+ },
+ "2026/lugar_iran__isfahan": {
+  "titulo": "Batalla de Merv (1510), palacio Chehel Sotoun",
+  "artista": "Anónimo",
+  "fecha": "1647"
+ },
+ "2026/lugar_iran__teheran": {
+  "titulo": "La fuente de Shahrestanak",
+  "artista": "Kamal-ol-Molk",
+  "fecha": "1912"
+ },
+ "2026/lugar_iran__fars": {
+  "titulo": "Tais pide a Alejandro Magno que incendie el palacio de Persépolis",
+  "artista": "Gustavo Simoni",
+  "fecha": ""
+ },
+ "2026/lugar_india__kerala": {
+  "titulo": "Vasantika",
+  "artista": "Raja Ravi Varma",
+  "fecha": "1910"
+ },
+ "2026/lugar_india__uttar_pradesh": {
+  "titulo": "El Taj Mahal a la luz de la luna",
+  "artista": "Marius Bauer",
+  "fecha": "1900"
+ },
+ "2026/lugar_india__rajastan": {
+  "titulo": "Radha (Bani Thani), Kishangarh",
+  "artista": "Atribuido a Nihal Chand",
+  "fecha": "1750"
+ },
+ "2026/lugar_india__maharashtra": {
+  "titulo": "Bodhisattva Padmapani, cueva 1 de Ajanta",
+  "artista": "Anónimo",
+  "fecha": "siglo V"
+ },
+ "2026/lugar_india__delhi": {
+  "titulo": "La entrada oficial en Delhi",
+  "artista": "Roderick MacKenzie",
+  "fecha": "1907"
+ },
+ "2026/lugar_india__panyab": {
+  "titulo": "El Templo Dorado, Amritsar",
+  "artista": "William Carpenter",
+  "fecha": "1854"
+ },
+ "2026/lugar_china__henan": {
+  "titulo": "A lo largo del río durante el Festival Qingming (detalle)",
+  "artista": "Zhang Zeduan",
+  "fecha": "siglo XII"
+ },
+ "2026/lugar_china__zhejiang": {
+  "titulo": "Habitando las montañas de Fuchun",
+  "artista": "Huang Gongwang",
+  "fecha": "1350"
+ },
+ "2026/lugar_china__pekin": {
+  "titulo": "El emperador Qianlong con armadura ceremonial a caballo",
+  "artista": "Giuseppe Castiglione",
+  "fecha": "1739"
+ },
+ "2026/lugar_china__shaanxi": {
+  "titulo": "Mural de una tumba Tang",
+  "artista": "Anónimo",
+  "fecha": "dinastía Tang"
+ },
+ "2026/lugar_china__jiangsu": {
+  "titulo": "El jardín del Administrador Humilde",
+  "artista": "Wen Zhengming",
+  "fecha": "1551"
+ },
+ "2026/lugar_china__guangdong": {
+  "titulo": "Barcos en el río de las Perlas frente a la isla Honam, Cantón",
+  "artista": "Anónimo",
+  "fecha": "siglo XIX"
+ },
+ "2026/lugar_china__tibet": {
+  "titulo": "Thangka tibetano",
+  "artista": "Anónimo",
+  "fecha": ""
+ },
+ "2026/lugar_japon__kanagawa": {
+  "titulo": "La gran ola de Kanagawa",
+  "artista": "Katsushika Hokusai",
+  "fecha": "1831"
+ },
+ "2026/lugar_japon__tokio": {
+  "titulo": "Aguacero repentino sobre el puente Shin-Ōhashi y Atake",
+  "artista": "Utagawa Hiroshige",
+  "fecha": "1857"
+ },
+ "2026/lugar_japon__kioto": {
+  "titulo": "Vistas dentro y fuera de Kioto (Rakuchū rakugai-zu)",
+  "artista": "Anónimo",
+  "fecha": "siglo XVII"
+ },
+ "2026/lugar_japon__yamanashi": {
+  "titulo": "Kajikazawa, en la provincia de Kai",
+  "artista": "Katsushika Hokusai",
+  "fecha": "1830"
+ },
+ "2026/lugar_japon__nagasaki": {
+  "titulo": "Casas holandesas en Dejima, Nagasaki",
+  "artista": "Anónimo",
+  "fecha": "siglo XVIII"
+ },
+ "2026/lugar_japon__shizuoka": {
+  "titulo": "Yui, la cima del monte Satta",
+  "artista": "Utagawa Hiroshige",
+  "fecha": "1834"
+ },
+ "2026/lugar_corea_del_sur__seul": {
+  "titulo": "Después de la lluvia en el monte Inwang",
+  "artista": "Jeong Seon",
+  "fecha": "1751"
+ },
+ "2026/lugar_colombia__bogota": {
+  "titulo": "Plaza Mayor de Bogotá",
+  "artista": "Edward Mark Walhouse",
+  "fecha": "1846"
+ },
+ "2026/lugar_colombia__antioquia": {
+  "titulo": "Paso de Vencedores",
+  "artista": "Francisco Antonio Cano",
+  "fecha": ""
+ },
+ "2026/lugar_colombia__bolivar": {
+  "titulo": "Criollo de Cartagena de Indias",
+  "artista": "Antonio Rodríguez",
+  "fecha": "1796"
+ },
+ "2026/lugar_colombia__boyaca": {
+  "titulo": "Batalla de Boyacá",
+  "artista": "Martín Tovar y Tovar",
+  "fecha": "1890"
+ },
+ "2026/lugar_peru__lima": {
+  "titulo": "Samba limeña a caballo",
+  "artista": "Pancho Fierro",
+  "fecha": "1850"
+ },
+ "2026/lugar_peru__cusco": {
+  "titulo": "Virgen de Belén",
+  "artista": "Escuela cuzqueña",
+  "fecha": "1750"
+ },
+ "2026/lugar_argentina__buenos_aires": {
+  "titulo": "Un alto en el campo",
+  "artista": "Prilidiano Pueyrredón",
+  "fecha": "1861"
+ },
+ "2026/lugar_chile__valparaiso": {
+  "titulo": "Valparaíso, Chile",
+  "artista": "Seguidor de Thomas Somerscales",
+  "fecha": "1898"
+ },
+ "2026/lugar_chile__santiago": {
+  "titulo": "Vista de Santiago desde Peñalolén",
+  "artista": "Alejandro Cicarelli",
+  "fecha": "1850"
+ },
+ "2026/lugar_venezuela__carabobo": {
+  "titulo": "Boceto para la Batalla de Carabobo",
+  "artista": "Martín Tovar y Tovar",
+  "fecha": ""
+ },
+ "2026/lugar_venezuela__capital": {
+  "titulo": "Miranda en La Carraca",
+  "artista": "Arturo Michelena",
+  "fecha": "1896"
+ },
+ "2026/lugar_brasil__estado_de_rio_de_janeiro": {
+  "titulo": "Una familia brasileña en Río de Janeiro",
+  "artista": "Jean-Baptiste Debret",
+  "fecha": "1830"
+ },
+ "2026/lugar_brasil__bahia": {
+  "titulo": "Iglesia del Hospicio de Nossa Senhora da Piedade, Bahía",
+  "artista": "Johann Moritz Rugendas",
+  "fecha": "1850"
+ },
+ "2026/lugar_brasil__pernambuco": {
+  "titulo": "Vista de Olinda, Brasil",
+  "artista": "Frans Post",
+  "fecha": "1662"
+ },
+ "2026/lugar_brasil__estado_de_sao_paulo": {
+  "titulo": "Independencia o muerte (el grito de Ipiranga)",
+  "artista": "Pedro Américo",
+  "fecha": "1888"
+ },
+ "2026/lugar_brasil__minas_gerais": {
+  "titulo": "Pico de Itacolomi, Ouro Preto",
+  "artista": "Aurélio de Figueiredo",
+  "fecha": "1894"
+ },
+ "2026/lugar_mexico__mexico": {
+  "titulo": "Valle de México",
+  "artista": "José María Velasco",
+  "fecha": "1877"
+ },
+ "2026/lugar_mexico__yucatan": {
+  "titulo": "Portada del Gran Teocalli, Uxmal",
+  "artista": "Frederick Catherwood",
+  "fecha": ""
+ },
+ "2026/lugar_mexico__chiapas": {
+  "titulo": "El artista llevado en silla por Chiapas",
+  "artista": "Jean-Frédéric Waldeck",
+  "fecha": "1833"
+ },
+ "2026/lugar_mexico__guanajuato": {
+  "titulo": "Bodegón con frutas (con alacrán y rana)",
+  "artista": "Hermenegildo Bustos",
+  "fecha": "1874"
+ },
+ "2026/lugar_canada__quebec": {
+  "titulo": "Cala de Sillery, Quebec",
+  "artista": "Cornelius Krieghoff",
+  "fecha": "1864"
+ },
+ "2026/lugar_canada__ontario": {
+  "titulo": "El pino",
+  "artista": "Tom Thomson",
+  "fecha": "1917"
+ },
+ "2026/lugar_canada__columbia_britanica": {
+  "titulo": "Cosas varias",
+  "artista": "Emily Carr",
+  "fecha": "1939"
+ },
+ "2026/lugar_canada__alberta": {
+  "titulo": "Montañas Rocosas canadienses (lago Louise)",
+  "artista": "Albert Bierstadt",
+  "fecha": "1889"
+ },
+ "2026/lugar_australia__victoria": {
+  "titulo": "Esquilando los carneros",
+  "artista": "Tom Roberts",
+  "fecha": "1890"
+ },
+ "2026/lugar_australia__nueva_gales_del_sur": {
+  "titulo": "¡Fuego!",
+  "artista": "Arthur Streeton",
+  "fecha": "1891"
+ },
+ "2026/lugar_australia__tasmania": {
+  "titulo": "Monte Wellington y Hobart Town desde Kangaroo Point",
+  "artista": "John Glover",
+  "fecha": "1834"
+ },
+ "2026/lugar_nueva_zelanda__auckland": {
+  "titulo": "Ensueño (Hinemoa, Te Arawa)",
+  "artista": "Charles Frederick Goldie",
+  "fecha": "1932"
+ },
+ "2026/lugar_nueva_zelanda__west_coast": {
+  "titulo": "Arroyo de montaña, garganta de Otira",
+  "artista": "Petrus van der Velden",
+  "fecha": "1893"
+ },
+ "2026/lugar_uzbekistan__samarcanda": {
+  "titulo": "Mausoleo de Gur-Emir, Samarcanda",
+  "artista": "Vasili Vereshchagin",
+  "fecha": "1870"
+ },
+ "2026/lugar_israel__jerusalen": {
+  "titulo": "Jerusalén desde el monte de los Olivos",
+  "artista": "David Roberts",
+  "fecha": "1839"
+ },
+ "2026/lugar_argelia__argel": {
+  "titulo": "Mujeres de Argel en su apartamento",
+  "artista": "Eugène Delacroix",
+  "fecha": "1834"
+ },
+ "2026/lugar_sudafrica__occidental_del_cabo": {
+  "titulo": "Ciudad del Cabo desde la playa de Woodstock",
+  "artista": "Thomas Baines",
+  "fecha": "1847"
+ },
+ "2026/lugar_indonesia__java_central": {
+  "titulo": "La captura de Diponegoro",
+  "artista": "Raden Saleh",
+  "fecha": "1857"
+ },
+ "2026/lugar_filipinas__gran_manila": {
+  "titulo": "Spoliarium",
+  "artista": "Juan Luna",
+  "fecha": "1884"
+ },
+ "2026/estado_estados_unidos__california": {
+  "titulo": "Mirando hacia el valle de Yosemite",
+  "artista": "Albert Bierstadt",
+  "fecha": "1865"
+ },
+ "2026/estado_estados_unidos__nueva_york": {
+  "titulo": "Cataratas del Niágara, desde el lado estadounidense",
+  "artista": "Frederic Edwin Church",
+  "fecha": "1867"
+ },
+ "2026/estado_estados_unidos__arizona": {
+  "titulo": "Gran Cañón del río Colorado",
+  "artista": "Thomas Moran",
+  "fecha": "1908"
+ },
+ "2026/estado_estados_unidos__wyoming": {
+  "titulo": "Las Montañas Rocosas, el pico Lander",
+  "artista": "Albert Bierstadt",
+  "fecha": "1863"
+ },
+ "2026/estado_estados_unidos__massachusetts": {
+  "titulo": "Vista desde el monte Holyoke (El meandro)",
+  "artista": "Thomas Cole",
+  "fecha": "1836"
+ },
+ "2026/estado_estados_unidos__pensilvania": {
+  "titulo": "Washington cruzando el Delaware",
+  "artista": "Emanuel Leutze",
+  "fecha": "1851"
+ },
+ "2026/estado_estados_unidos__luisiana": {
+  "titulo": "Una oficina de algodón en Nueva Orleans",
+  "artista": "Edgar Degas",
+  "fecha": "1873"
+ },
+ "2026/estado_estados_unidos__texas": {
+  "titulo": "Un pony tejano",
+  "artista": "Frederic Remington",
+  "fecha": "1889"
+ },
+ "2026/estado_estados_unidos__oregon": {
+  "titulo": "Monte Hood",
+  "artista": "Albert Bierstadt",
+  "fecha": "1869"
+ },
+ "2026/estado_estados_unidos__washington": {
+  "titulo": "Monte Rainier",
+  "artista": "Cleveland S. Rockwell",
+  "fecha": "1891"
+ },
+ "2026/estado_estados_unidos__florida": {
+  "titulo": "Camisa roja, Homosassa, Florida",
+  "artista": "Winslow Homer",
+  "fecha": "1904"
+ },
+ "2026/estado_estados_unidos__montana": {
+  "titulo": "Humo de un .45",
+  "artista": "Charles Marion Russell",
+  "fecha": "1908"
+ },
+ "2026/estado_estados_unidos__alaska": {
+  "titulo": "Monte McKinley",
+  "artista": "Sydney Laurence",
+  "fecha": "1929"
+ },
+ "2026/estado_estados_unidos__hawai": {
+  "titulo": "Caldera del Kilauea",
+  "artista": "Jules Tavernier",
+  "fecha": "1885"
+ },
+ "2026/estado_estados_unidos__colorado": {
+  "titulo": "Tormenta en las Montañas Rocosas, monte Rosalie",
+  "artista": "Albert Bierstadt",
+  "fecha": "1866"
+ },
+ "2026/estado_estados_unidos__utah": {
+  "titulo": "Shin-Au-Av-Tu-Weap, cañón de Zion",
+  "artista": "Thomas Moran",
+  "fecha": ""
+ },
+ "2026/estado_estados_unidos__misisipi": {
+  "titulo": "En un aprieto, o balseros del Misisipi jugando a las cartas",
+  "artista": "George Caleb Bingham",
+  "fecha": "1851"
+ },
+ "2026/estado_estados_unidos__illinois": {
+  "titulo": "La pradera en llamas",
+  "artista": "Alvan Fisher",
+  "fecha": "1827"
+ },
+ "2026/estado_estados_unidos__michigan": {
+  "titulo": "Primera elección estatal en Detroit, Míchigan, 1837",
+  "artista": "Thomas Mickell Burnham",
+  "fecha": "1837"
  }
 }

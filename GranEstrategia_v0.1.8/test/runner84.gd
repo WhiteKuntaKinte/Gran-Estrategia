@@ -87,6 +87,8 @@ func t_claves() -> void:
 	ok(Pint.region_en("Asia", 78.0, 22.0) == "region_asia_sur", "India: Asia meridional")
 	ok(Pint.region_en("Asia", 54.0, 32.0) == "region_oriente_medio", "Irán: Oriente Medio")
 	ok(Pint.region_en("Asia", 67.0, 48.0) == "region_asia_central", "Kazajistán: Asia central")
+	ok(Pint.region_en("Asia", 37.6, 55.8) == "region_europa_este", "Moscú (Rusia cuenta como Asia): Europa del este")
+	ok(Pint.region_en("Asia", 34.0, 68.0) == "region_europa_norte", "Múrmansk: Europa del norte")
 	ok(Pint.region_en("África", 30.0, 26.0) == "region_africa_norte", "Egipto: norte de África")
 	ok(Pint.region_en("África", 38.0, 0.0) == "region_africa_subsahariana", "Kenia: África subsahariana")
 	ok(Pint.region_en("América del Norte", -102.0, 23.0) == "region_mesoamerica_caribe", "México: Mesoamérica y Caribe")
@@ -121,7 +123,7 @@ func t_2026() -> void:
 	var libres := true
 	for id in p.creditos:
 		var lic := String(p.creditos[id].get("licencia", "")).to_lower()
-		if not (lic.contains("public domain") or lic.contains("cc0") or lic.contains("no restrictions")):
+		if not (lic.contains("public domain") or lic.contains("cc0") or lic.contains("no restrictions") or lic.contains("pdm")):
 			libres = false
 	ok(libres, "todas las licencias son dominio público / CC0")
 	# nombres de las pinturas del 2026 = países reales
@@ -130,7 +132,8 @@ func t_2026() -> void:
 		claves_paises[Pint.clave(String(nombre))] = String(nombre)
 	var huerfanas := []
 	for id in p.creditos:
-		if String(id).begins_with("2026/") and not claves_paises.has(String(id).substr(5)):
+		var nom := String(id).substr(5)
+		if String(id).begins_with("2026/") and not claves_paises.has(nom) and not nom.begins_with("lugar_") and not nom.begins_with("estado_"):   # las de lugar las prueba runner98
 			huerfanas.append(id)
 	ok(huerfanas.is_empty(), "cada pintura de 2026 corresponde a un país real (sin país: %s)" % str(huerfanas))
 	# regiones: todos los países con foco reciben una (salvo la Antártida)
@@ -191,7 +194,12 @@ func t_hud() -> void:
 	print("[T] ── Tarjeta de pintura en el panel")
 	var m = main.mundo
 	var hud = main.hud
-	var pi: int = int(m.paises["España"].provincias[0])
+	var pi := -1
+	for q in m.paises["España"].provincias:                      # una provincia de España sin pintura propia de lugar (0.1.8.43): lleva la del país
+		var pq = m.provincias[int(q)]
+		if not main.pinturas.creditos.has("2026/lugar_%s__%s" % [Pint.clave(String(pq.pais_original)), Pint.clave(String(pq.nombre))]):
+			pi = int(q)
+			break
 	main._seleccion_provincia(pi, m.continente_de_provincia(pi), Vector2(1200.0, 300.0))
 	await fotogramas(3)
 	var f: Dictionary = hud.datos.get("pintura", {})

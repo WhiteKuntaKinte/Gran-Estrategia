@@ -73,6 +73,13 @@ func celdas_frontera(origen: int, destino: int) -> PackedInt32Array:
 	return r
 
 
+## Prepara lo que la primera cesión necesita (la geometría del relleno: ~30 ms). `MapaPrincipal` la llama al empezar la partida, para que ese coste no caiga en
+## medio de una paz.
+func calentar() -> void:
+	if listo():
+		_asegurar_areas()
+
+
 func _asegurar_areas() -> void:
 	if _area_c.size() == fusion.n_celdas:
 		return

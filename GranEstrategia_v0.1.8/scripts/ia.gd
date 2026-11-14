@@ -57,6 +57,13 @@ const PAZ_LARGA_DIAS := 120           # guerra con ventaja pequeña: se queda co
 const GRACIA_INICIAL := 120           # 0.1.8.2a: ninguna IA declara guerras en sus primeros 120 días (da tiempo a orientarse)
 const GRACIA_JUGADOR := 240           # ... y al jugador no lo ataca ninguna IA en los primeros 240 días
 const AVISO_PAZ_DIAS := 45            # una IA que quiere la paz con el jugador se lo propone (pop-up) como mucho cada 45 días
+const DIAS_DIPLOMACIA := 60           # 0.1.8.43: cada tantos días (más un desfase por país) una IA revisa sus relaciones: rival, amigos y alianzas
+const BUENA_VECINDAD := 4.0           # ... y cada vecino pacífico y no temido le suma tanto de opinión (la opinión se olvida a 1 punto cada 25 días)
+const MIN_ESTABILIDAD_GUERRA := 40.0  # 0.1.8.43: con la estabilidad media por debajo de esto, o con más de un 15 % de provincias agitadas, no agrede (solo se defiende o va contra su rival o su coalición)
+const FRAC_AGITADAS_GUERRA := 0.15
+const CONSOLIDA_DIAS_PROV := 45       # 0.1.8.43: tras quedarse con provincias en una paz, descansa 45 días por cada una (hasta 3 años) para digerirlas
+const CONSOLIDA_MAX := 1095
+const AVISO_ALIANZA_DIAS := 180       # una IA le propone la alianza al jugador (pop-up) como mucho cada 180 días
 const LOTE_IA := 1                    # IA que deciden por llamada de `fase_dia` (cada decisión cuesta 0,3-3 ms, a veces 20): una por llamada para que el presupuesto del fotograma corte justo
 
 var mundo
@@ -121,6 +128,9 @@ func _estado_nuevo(tid: int) -> Dictionary:
 		"foto_dia": -1000,                          # día en que se tomó la última foto de la economía
 		"foto": {},
 		"cap": -2,                                  # provincia (ID) de la capital (-2 = sin calcular, -1 = no tiene)
+		"prox_dip": dia_n + 20 + (tid % DIAS_DIPLOMACIA),   # 0.1.8.43: día en que revisa sus relaciones
+		"sociable": r.randf() < 0.75,               # 0.1.8.43: ¿busca amigos y alianzas? (el resto va solo)
+		"aviso_alianza": {},                        # ID jugador -> día hasta el que no vuelve a proponerle una alianza
 	}
 
 
@@ -332,6 +342,10 @@ func _decidir(nombre: String, st: Dictionary) -> void:
 	_paz(nombre, st, tid, rivales)
 	rivales = g.rivales_de(tid)
 	_p("paz", t0)
+	if dia_n >= int(st["prox_dip"]):
+		t0 = Time.get_ticks_usec()
+		_diplomacia(nombre, st, tid, rivales)
+		_p("diplomacia", t0)
 	if rivales.size() < MAX_GUERRAS:
 		t0 = Time.get_ticks_usec()
 		_buscar_guerra(nombre, st, e, tid, eco, rivales, dias_desde)
@@ -590,6 +604,15 @@ func _buscar_guerra(nombre: String, st: Dictionary, e, tid: int, eco: Dictionary
 	var vec: Dictionary = _vecinos_dueno.get(tid, {})
 	if vec.is_empty():
 		return
+	# 0.1.8.43 · CONSECUENCIAS: lo que ha hecho y cómo está su casa limitan lo que se atreve a hacer
+	var dip = mundo.diplomacia
+	var obj_coal: int = dip.objetivo_coalicion_de(tid)                # contra quién conspira con otros
+	var rival: int = dip.rival_de(tid)
+	var res_est: Array = mundo.estabilidad.resumen(tid)
+	var inestable: bool = float(res_est[0]) < MIN_ESTABILIDAD_GUERRA or (int(res_est[2]) >= 8 and float(res_est[1]) / float(res_est[2]) > FRAC_AGITADAS_GUERRA)
+	var infame: bool = dip.infamia(tid) >= dip.INFAMIA_PRUDENTE
+	if (inestable or infame) and obj_coal < 0 and rival < 0:
+		return                                                       # un país que se desangra por dentro o que ya inquieta a sus vecinos no sigue conquistando
 	var mejor := -1
 	var mejor_score := 0.0
 	for tv in vec:
@@ -601,28 +624,124 @@ func _buscar_guerra(nombre: String, st: Dictionary, e, tid: int, eco: Dictionary
 			continue
 		if nom_v == mundo.jugador and dia_n < GRACIA_JUGADOR:
 			continue                                             # al jugador no se le ataca en los primeros días de la partida
-		if not mundo.puede_atacar(tid, tid_v):
+		if not mundo.puede_atacar(tid, tid_v) or dip.son_aliados(tid, tid_v):
 			continue
+		var especial: bool = tid_v == obj_coal or tid_v == rival
+		if (inestable or infame) and not especial:
+			continue
+		if not especial and dip.opinion_total(tid, tid_v) >= dip.OP_AMIGOS:
+			continue                                             # entre amigos no se atacan
+		var apoyo := 0.0                                         # los aliados del otro cuentan (no del todo) a su favor
+		for al in dip.aliados_de(tid_v):
+			if int(al) != tid and not g.en_guerra(int(al), tid_v):
+				apoyo += 0.6 * float(_soldados(int(al)))
 		var sold_v: int = _soldados(tid_v)
-		var ratio: float = float(sold) / maxf(float(sold_v), 1500.0)
-		if ratio < RATIO_GUERRA * float(st["cautela"]):
+		var mi_fuerza := float(sold)
+		var umbral: float = RATIO_GUERRA * float(st["cautela"])
+		if tid_v == obj_coal:
+			mi_fuerza += 0.8 * float(dip.fuerza_coalicion(tid_v, tid))        # la coalición ataca junta
+			umbral = 1.0
+		elif tid_v == rival:
+			umbral *= 0.8
+		var ratio: float = mi_fuerza / maxf(float(sold_v) + apoyo, 1500.0)
+		if ratio < umbral:
 			continue
-		var score: float = (mundo.ingreso_diario_usd(nom_v) + 1.0) * minf(ratio, 3.0) * (1.0 + 0.15 * float(vec[tv]))
+		var score: float = (mundo.ingreso_diario_usd(nom_v) + 1.0) * minf(ratio, 3.0) * (1.0 + 0.15 * float(vec[tv])) * (1.6 if especial else 1.0)
 		if score > mejor_score:
 			mejor_score = score
 			mejor = tid_v
 	if mejor < 0:
 		return
 	var r: RandomNumberGenerator = st["rng"]
-	if r.randf() > minf(float(dias_desde) / ESPERA_GUERRA_DIAS, 1.0):   # 0.1.8.3: no ataca en cuanto puede: tarda de media ESPERA_GUERRA_DIAS en «animarse»
+	var espera: float = 60.0 if mejor == obj_coal else ESPERA_GUERRA_DIAS    # una coalición no se hace esperar
+	if r.randf() > minf(float(dias_desde) / espera, 1.0):   # 0.1.8.3: no ataca en cuanto puede: tarda de media `espera` días en «animarse»
 		return
 	var nom_m: String = mundo.bd.nombre_de(mejor)
-	var gid: int = g.declarar(tid, mejor, "Conquista (IA)")
+	var causa := "Conquista (IA)"
+	if mejor == obj_coal:
+		causa = "Coalición contra %s (IA)" % nom_m
+	elif mejor == rival:
+		causa = "Rivalidad (IA)"
+	var gid: int = g.declarar(tid, mejor, causa)
 	if gid >= 0:
 		guerras_declaradas += 1
 		st["ini"][mejor] = dia_n
 		st["ultimo"] = "Declaró la guerra a %s." % nom_m
-		mundo.evento(tid, "%s declara la guerra a %s." % [nombre, nom_m], mejor)
+		mundo.evento(tid, "%s declara la guerra a %s%s." % [nombre, nom_m, " (coalición)" if mejor == obj_coal else (" (su rival)" if mejor == rival else "")], mejor)
+
+
+# ─────────────────────────────────────────────────────────────
+# 2b. Relaciones (0.1.8.43)
+# ─────────────────────────────────────────────────────────────
+## Una IA revisa sus relaciones cada DIAS_DIPLOMACIA días: elige rival, se acerca a los vecinos pacíficos, hace causa común contra el enemigo de su amigo y busca alianzas.
+func _diplomacia(nombre: String, st: Dictionary, tid: int, rivales: Array) -> void:
+	var r: RandomNumberGenerator = st["rng"]
+	st["prox_dip"] = dia_n + DIAS_DIPLOMACIA + int(r.randi() % 30)
+	var dip = mundo.diplomacia
+	var vec: Dictionary = _vecinos_dueno.get(tid, {})
+	if vec.is_empty():
+		return
+	var sold: int = _soldados(tid)
+	# 1. rival: el vecino más temible (infame, mucho más fuerte, o que ya le cae mal)
+	if dip.rival_de(tid) < 0:
+		var peor := -1
+		var peor_p := 0.0
+		for tv in vec:
+			var v: int = int(tv)
+			var nom_v: String = mundo.bd.nombre_de(v)
+			if not mundo.paises.has(nom_v) or (mundo.paises[nom_v].provincias as Array).is_empty() or dip.son_aliados(tid, v) or nom_v == mundo.jugador:
+				continue
+			var p: float = 2.0 * dip.infamia(v) + float(_soldados(v)) / maxf(float(sold), 1000.0) - dip.opinion_total(tid, v) / 25.0
+			if p > peor_p and p >= 3.5:
+				peor_p = p
+				peor = v
+		if peor >= 0:
+			dip.declarar_rival(tid, peor)
+	# 2. buena vecindad y causa común
+	var rival: int = dip.rival_de(tid)
+	if bool(st["sociable"]):
+		for tv2 in vec:
+			var v2: int = int(tv2)
+			if v2 == rival or g.en_guerra(tid, v2) or dip.es_rival(tid, v2) or dip.infamia(v2) >= 5.0:
+				continue
+			if dip.opinion_de(tid, v2) < 30.0:
+				dip.cambiar_opinion(tid, v2, BUENA_VECINDAD)
+	for rv in rivales:                                                # los que pelean contra mi enemigo se vuelven mis amigos
+		for tv3 in vec:
+			if int(tv3) != int(rv) and g.en_guerra(int(tv3), int(rv)):
+				dip.cambiar_opinion(tid, int(tv3), 6.0, "Enemigo común")
+	# 3. alianza: el vecino (o el vecino de mi rival) en quien más confío
+	if not bool(st["sociable"]) or dip.aliados_de(tid).size() >= dip.MAX_ALIADOS or rivales.size() >= MAX_GUERRAS:
+		return
+	var cand := -1
+	var cand_o := 0.0
+	var pool := {}
+	for tv4 in vec:
+		pool[int(tv4)] = true
+	var obj: int = dip.objetivo_coalicion_de(tid)
+	if rival >= 0:
+		for tv5 in _vecinos_dueno.get(rival, {}):
+			pool[int(tv5)] = true
+	for c in pool:
+		var ct: int = int(c)
+		if ct == tid or dip.motivo_sin_alianza(tid, ct) != "":
+			continue
+		var o: float = dip.opinion_total(tid, ct)
+		var o_rev: float = o + (10.0 if (rival >= 0 and (ct == rival or dip.rival_de(ct) == rival)) else 0.0)
+		if o_rev > cand_o and o >= dip.OP_ALIANZA_MIN:
+			cand_o = o_rev
+			cand = ct
+	if cand < 0:
+		return
+	var nom_c: String = mundo.bd.nombre_de(cand)
+	if nom_c == mundo.jugador:
+		if dia_n >= int(st["aviso_alianza"].get(cand, -1)) and dip.infamia(tid) < dip.INFAMIA_PRUDENTE:
+			st["aviso_alianza"][cand] = dia_n + AVISO_ALIANZA_DIAS            # al jugador la alianza no se le impone: se le propone (pop-up)
+			mundo.avisos.append({"tipo": "alianza", "ia": tid, "jugador": cand})
+		return
+	if bool((dip.evaluar_alianza(tid, cand))["acepta"]) and activas.has(nom_c):
+		if dip.formar_alianza(tid, cand, "Alianza contra el peligro" if (obj >= 0 or rival >= 0) else "Alianza entre vecinos"):
+			st["ultimo"] = "Firmó una alianza con %s." % nom_c
 
 
 # ─────────────────────────────────────────────────────────────
@@ -779,7 +898,7 @@ func _paz(nombre: String, st: Dictionary, tid: int, rivales: Array) -> void:
 		var res: Dictionary = g.proponer_paz(tid, rid, t)
 		if bool(res.get("ok", false)):
 			st["ultimo"] = "Firmó la paz con %s." % nom_r
-			st["no_guerra_hasta"] = dia_n + 30
+			st["no_guerra_hasta"] = dia_n + 30 + mini(CONSOLIDA_MAX, CONSOLIDA_DIAS_PROV * int(res.get("ganadas", 0)))     # 0.1.8.43: digiere lo conquistado antes de buscar otra guerra
 
 
 func _aviso_paz_pendiente(tid: int, rid: int) -> bool:
@@ -801,4 +920,11 @@ func texto_estado(pais: String) -> String:
 	for r in g.rivales_de(tid):
 		rivales.append(mundo.bd.nombre_de(int(r)))
 	var t := "IA activa · " + ("en guerra con " + ", ".join(rivales) if not rivales.is_empty() else "en paz")
+	var dip = mundo.diplomacia
+	if dip != null:
+		var al := []
+		for a in dip.aliados_de(tid):
+			al.append(mundo.bd.nombre_de(int(a)))
+		var rv: int = dip.rival_de(tid)
+		t += "\nAliados: %s · rival: %s · infamia: %.1f" % [", ".join(al) if not al.is_empty() else "ninguno", mundo.bd.nombre_de(rv) if rv >= 0 else "ninguno", dip.infamia(tid)]
 	return t + "\n" + String(st["ultimo"])

@@ -10,7 +10,12 @@ extends RefCounted
 ##   2. la de su región del mundo                      pinturas/general/region_europa_occidental.jpg
 ##   3. la de su continente                            pinturas/general/continente_europa.jpg
 ##   4. la del mundo                                   pinturas/general/mundo.jpg
-## Para PONER O CAMBIAR una pintura basta con copiar el .jpg con el nombre correcto y añadir su línea a creditos.json (herramientas/pinturas/ explica cómo se bajan).
+## 0.1.8.43 · POR LUGAR: antes que la del país, una PROVINCIA puede tener su propia pintura y, en EE. UU., también su ESTADO (los condados son las provincias):
+##   0. la de la provincia                             pinturas/2026/lugar_espana__toledo.jpg           (<país>__<provincia>, con el país de origen de la provincia)
+##   0b. la de su estado (solo EE. UU.)                pinturas/2026/estado_estados_unidos__california.jpg
+## y si el país no tiene pintura propia, la región se saca de DÓNDE ESTÁ LA PROVINCIA (el Sáhara de Argelia ya no cae en la región del Mediterráneo).
+## Para PONER O CAMBIAR una pintura basta con copiar el .jpg con el nombre correcto y añadir su línea a creditos.json (herramientas/pinturas/ explica cómo se bajan;
+## `construir_lista_lugares.py` es la lista de lugares).
 ## La región sale del centro del bloque principal del país (`foco`) y su continente; así sirve igual para países modernos y pueblos antiguos.
 
 const RAIZ := "res://pinturas/"
@@ -101,6 +106,8 @@ static func region_en(continente: String, lon: float, lat: float) -> String:
 				return "region_asia_sur"
 			if lon >= 52.0 and lat >= 36.0:
 				return "region_asia_central"
+			if lon >= 19.0 and lat >= 44.5:                                   # la Rusia europea (Rusia cuenta como Asia)
+				return "region_europa_norte" if (lat >= 62.0 or (lat >= 55.5 and lon <= 33.0)) else "region_europa_este"
 			if lon < 62.0:
 				return "region_oriente_medio"
 			return "region_asia_este"
@@ -117,8 +124,8 @@ static func region_en(continente: String, lon: float, lat: float) -> String:
 
 # ───────────────────────── búsqueda ─────────────────────────
 ## La pintura de un país: {"id", "ruta", "nivel" ("pais"/"region"/"continente"/"mundo"), "titulo", "artista", "fecha", "licencia", "url", "texto"}.
-## Vacío si no hay ninguna pintura instalada.
-func de_pais(pais: String) -> Dictionary:
+## Vacío si no hay ninguna pintura instalada. `region_prov` (opcional) = la región donde cae la provincia que se mira: manda sobre la del centro del país.
+func de_pais(pais: String, region_prov := "") -> Dictionary:
 	if not listo:
 		return {}
 	var cont := ""
@@ -126,7 +133,7 @@ func de_pais(pais: String) -> Dictionary:
 		cont = String(main.mundo.paises[pais].continente)
 	var intentos := [
 		[carpeta_epoca() + "/" + clave(pais), "pais"],
-		["general/" + region_de(pais), "region"],
+		["general/" + (region_prov if region_prov != "" else region_de(pais)), "region"],
 		["general/continente_" + clave(cont), "continente"],
 		["general/mundo", "mundo"],
 	]
@@ -135,6 +142,45 @@ func de_pais(pais: String) -> Dictionary:
 		if creditos.has(id):
 			return _ficha(id, String(it[1]))
 	return {}
+
+
+## 0.1.8.43 · La pintura de una PROVINCIA (índice de Mundo.provincias): la suya, la de su estado (EE. UU.) o la del país que la tiene (con la región según dónde cae).
+## La clave usa el país de ORIGEN de la provincia (Toledo sigue siendo «de España» aunque la conquiste otro), la pintura de respaldo es la del dueño actual.
+## Ficha con `nivel` «lugar», «estado», «pais», «region», «continente» o «mundo».
+func de_provincia(pi: int) -> Dictionary:
+	if not listo or main == null or main.mundo == null or pi < 0 or pi >= main.mundo.provincias.size():
+		return {}
+	var pr = main.mundo.provincias[pi]
+	var origen := String(pr.pais_original) if String(pr.pais_original) != "" else String(pr.pais)
+	var ep := carpeta_epoca() + "/"
+	var id := ep + "lugar_" + clave(origen) + "__" + clave(String(pr.nombre))
+	if creditos.has(id):
+		return _ficha(id, "lugar")
+	if String(pr.estado) != "":
+		id = ep + "estado_" + clave(origen) + "__" + clave(String(pr.estado))
+		if creditos.has(id):
+			return _ficha(id, "estado")
+	return de_pais(String(pr.pais), _region_de_provincia(pr))
+
+
+## La pintura de un ESTADO de EE. UU. (la suya o, si no tiene, la del país).
+func de_estado(pais: String, estado: String) -> Dictionary:
+	if not listo:
+		return {}
+	var id := carpeta_epoca() + "/estado_" + clave(pais) + "__" + clave(estado)
+	if creditos.has(id):
+		return _ficha(id, "estado")
+	return de_pais(pais)
+
+
+## Región del mundo según dónde cae la provincia (centro de su caja), con el continente del país dueño. "" si no se puede calcular.
+func _region_de_provincia(pr) -> String:
+	if main == null or main.mundo == null or not main.mundo.paises.has(String(pr.pais)) or (pr.anillos as Array).is_empty():
+		return ""
+	var b: Rect2 = main._bbox_anillos(pr.anillos)
+	var lon: float = (b.position.x + b.size.x * 0.5) / ANCHO_MAPA * 360.0 - 180.0
+	var lat: float = 90.0 - (b.position.y + b.size.y * 0.5) / ALTO_MAPA * 180.0
+	return region_en(String(main.mundo.paises[String(pr.pais)].continente), lon, lat)
 
 
 ## La pintura de un continente («Europa», «América del Sur»…): la suya o, si no hay, la del mundo.
@@ -177,12 +223,15 @@ func textura(ruta: String) -> Texture2D:
 	return t
 
 
-## Cuántas pinturas hay instaladas por carpeta: {"2026": n, "1dc": n, "general": n}.
+## Cuántas pinturas hay instaladas por carpeta: {"2026": n, "1dc": n, "general": n}. Las de lugar y estado (0.1.8.43) cuentan además en «lugares».
 func contar() -> Dictionary:
 	var r := {}
 	for id in creditos:
 		var c := String(id).get_slice("/", 0)
 		r[c] = int(r.get(c, 0)) + 1
+		var nombre := String(id).get_slice("/", 1)
+		if nombre.begins_with("lugar_") or nombre.begins_with("estado_"):
+			r["lugares"] = int(r.get("lugares", 0)) + 1
 	return r
 
 
@@ -191,5 +240,5 @@ func texto_creditos() -> String:
 	if not listo:
 		return ""
 	var cont := contar()
-	return "Pinturas: %d obras de dominio público (Wikimedia Commons): %d de 2026, %d del año 1 y %d generales. Cada panel muestra el título y el autor de la suya; la lista completa, con licencia y enlace, está en pinturas/creditos.json." % [
-		creditos.size(), int(cont.get("2026", 0)), int(cont.get("1dc", 0)), int(cont.get("general", 0))]
+	return "Pinturas: %d obras de dominio público (Wikimedia Commons): %d de 2026 (%d de provincias o estados concretos), %d del año 1 y %d generales. Cada panel muestra el título y el autor de la suya; la lista completa, con licencia y enlace, está en pinturas/creditos.json." % [
+		creditos.size(), int(cont.get("2026", 0)), int(cont.get("lugares", 0)), int(cont.get("1dc", 0)), int(cont.get("general", 0))]

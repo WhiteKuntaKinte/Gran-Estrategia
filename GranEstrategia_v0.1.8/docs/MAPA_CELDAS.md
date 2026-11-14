@@ -64,8 +64,13 @@ En Debug > Provincia hay una sección «Forma del territorio» con estas operaci
 
 ### Qué hace y qué NO hace un cambio de forma
 Hace: repinta el relleno con el color del dueño de cada celda, rehace las fronteras entre países, actualiza el clic, las cajas, el centro de las tropas y los nombres de país.
-No hace (todavía; a propósito, para decidir la regla de juego después): mover población, edificios o tropas con las celdas; crear provincias que no existen en la época;
+No hace (a propósito): mover edificios o tropas con las celdas; crear provincias que no existen en la época;
 recalcular los kilómetros de los tramos del buscador de caminos (los vecinos de la época siguen valiendo); mover los nombres de provincia horneados ni la línea de los estados.
+
+**Desde la 0.1.8.43** la regla de juego existe: `MapaPrincipal.ceder_parcial(origen, destino, fracción, motivo, diferir)` mueve las celdas y con ellas la población, la producción (por habitante) y las
+ciudades por superficie, deja historial en los dos países y descarta las subprovincias guardadas; la paz con posesión la usa para partir una provincia grande (`Guerra.fraccion_conquista`).
+**Desde la simulación se llama con `diferir = true`** (`Mundo.ceder_parcial_a`): los datos cambian al momento pero el repintado (relleno, fronteras, nombres, país enfocado: 15–25 ms por provincia) se hace
+en los fotogramas siguientes, por etapas y agrupando varias cesiones (`_forma_pend` / `_repintar_forma_pendiente`). Repintar dentro de la paz daba picos de 300 ms con todas las IA a x6.
 
 ## 5. Cómo agregar variables al mapa
 

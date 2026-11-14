@@ -18,6 +18,8 @@ const PerfilScript := preload("res://scripts/perfil.gd")
 const DescubrimientosScript := preload("res://scripts/descubrimientos.gd")
 const EdificiosScript := preload("res://scripts/edificios.gd")
 const CoresScript := preload("res://scripts/cores.gd")
+const DiplomaciaScript := preload("res://scripts/diplomacia.gd")
+const EstabilidadScript := preload("res://scripts/estabilidad.gd")
 
 ## Cuánto puede bajar lo que produce una provincia con devastación 1,0 (arrasada): -85 %. PROVISIONAL.
 const DEVASTACION_EFECTO := 0.85
@@ -250,6 +252,8 @@ class Mundo extends RefCounted:
 	var descubrimientos                 # Descubrimientos (0.1.8.36): catálogo con años + qué conoce cada país (null si falta datos/descubrimientos.json)
 	var edificios                       # Edificios (0.1.8.40): catálogo de 109 edificios, obras y construcción por provincia (null si falta datos/edificios.json)
 	var cores                           # Cores (0.1.8.40): core nacional y core cultural de cada provincia (null hasta que se llama iniciar_edificios)
+	var diplomacia                      # Diplomacia (0.1.8.43): opinión, alianzas, rivales, infamia y coaliciones (null hasta que se llama iniciar_ejercito)
+	var estabilidad                     # Estabilidad (0.1.8.43): estabilidad social por provincia, revueltas e independencias
 	var modo := "dev"                   # "dev" = mapa mundial, todo permitido · "campana" = solo Europa + Rusia + Turquía, conquista básica
 	var campana := {}                   # (campaña) nombre de país -> true: los países que juegan
 	var excluidas := {}                 # (campaña) índice de provincia -> true: las que NO existen en la campaña
@@ -287,10 +291,16 @@ class Mundo extends RefCounted:
 					r.append(v)
 		return r
 
-	## GANCHO PARA EL FUTURO: vasallos y aliados de un país. Todavía no existen esas relaciones, así que no devuelve a nadie;
-	## cuando existan basta con rellenar esta función y sus tropas aparecerán en el mapa.
-	func relacionados_de(_pais: String) -> Array:
-		return []
+	## 0.1.8.43 · Aliados de un país (por ahora no hay vasallos): sus tropas se ven en el mapa y pueden entrar en sus provincias sin declarar la guerra.
+	func relacionados_de(pais: String) -> Array:
+		var r := []
+		if diplomacia == null or not paises.has(pais):
+			return r
+		for t in diplomacia.aliados_de(int(paises[pais].tid)):
+			var n: String = bd.nombre_de(int(t))
+			if paises.has(n):
+				r.append(n)
+		return r
 
 	## `hist_json` (opcional): {"entidades", "nombres", "banderas", "personas", "cargos"} leídos de datos/historico/ (null si falta).
 	func cargar(prov_json: Array, ent: Dictionary, ciu: Dictionary, est_json: Dictionary, banderas: Dictionary,
@@ -702,6 +712,10 @@ class Mundo extends RefCounted:
 		guerra.iniciar(self)
 		ia = IAScript.new()
 		ia.iniciar(self)
+		diplomacia = DiplomaciaScript.new()
+		diplomacia.iniciar(self)
+		estabilidad = EstabilidadScript.new()
+		estabilidad.iniciar(self)
 		iniciar_tesorerias()
 
 	## 0.1.8.40: arma los edificios (catálogo, obras) y los cores de las provincias. Va DESPUÉS de `iniciar_ejercito` (que carga las culturas).
@@ -729,17 +743,6 @@ class Mundo extends RefCounted:
 				desde_mejor = int(g["desde"])
 				mejor = String(g.get("nombre", ""))
 		return mejor
-
-	## Riesgo mensual de motín en una provincia (0-1). PROVISIONAL: sube con la devastación, con el descontento de la
-	## población y con la poca familiaridad de las tropas que hay allí.
-	func riesgo_motin(idx: int) -> float:
-		var pr: Provincia = provincias[idx]
-		var r := 0.03 + 0.40 * pr.devastacion + 0.25 * maxf(0.0, (50.0 - pr.favorabilidad) / 50.0)
-		if ejercito != null:
-			var res: Dictionary = ejercito.resumen(ejercito.en_provincia(pr.tid))
-			if int(res["soldados"]) > 0:
-				r += 0.20 * (1.0 - float(res["fam"]) / 100.0)
-		return clampf(r, 0.0, 0.95)
 
 	func fijar_jugador(pais: String) -> void:
 		if es_inerte(pais):
@@ -787,30 +790,75 @@ class Mundo extends RefCounted:
 	var _bal_ver_eco := -1
 	var _bal_ver_prop := -1
 	var _bal_mes := -100                # valor de `_mes_n` (meses simulados) cuando se armaron los balances
+	var _bal_pos := {}                  # 0.1.8.43: ID de país -> posición de su fila en `_bal`
+	var _bal_sucios := {}               # ... países cuyas provincias cambiaron (conquista, cesión) desde que se armaron los balances
+	var _bal_transf := 0                # ... y cuántas transferencias de provincia hubo (cada una sube `version_propietario` una vez)
+
+	## Marca un país cuyo ingreso cambió (conquista, cesión, ocupación o liberación de una provincia suya): su fila se rehace en el próximo día.
+	func marcar_balance(pais_tid: int) -> void:
+		_bal_sucios[pais_tid] = true
+
+	## Fila de balance de un país: [ID, fila en la base, nombre, ingreso diario local, mantenimiento diario local POR SOLDADO]; vacía si no existe.
+	func _fila_balance(nombre: String) -> Array:
+		var e: Pais = paises[nombre]
+		if e.provincias.is_empty():
+			return []
+		var ix: int = bd.idx(e.tid)
+		if ix < 0:
+			return []
+		var por_sold := 0.0
+		if ejercito != null:
+			por_sold = ejercito.mantenimiento_diario_usd(e.tid, 1) * _por_usd(nombre)
+		return [e.tid, ix, nombre, ingreso_diario_local(nombre), por_sold]
 
 	func _armar_balances() -> void:
 		_bal = []
+		_bal_pos = {}
 		for nombre in paises:
-			var e: Pais = paises[nombre]
-			if e.provincias.is_empty():
-				continue
-			var ix: int = bd.idx(e.tid)
-			if ix < 0:
-				continue
-			var por_sold := 0.0
-			if ejercito != null:
-				por_sold = ejercito.mantenimiento_diario_usd(e.tid, 1) * _por_usd(nombre)
-			_bal.append([e.tid, ix, nombre, ingreso_diario_local(nombre), por_sold])
+			var fila := _fila_balance(nombre)
+			if not fila.is_empty():
+				_bal_pos[int(fila[0])] = _bal.size()
+				_bal.append(fila)
 		_bal_ver_eco = bd.version_eco
 		_bal_ver_prop = bd.version_propietario
 		_bal_mes = _mes_n
+		_bal_sucios.clear()
+		_bal_transf = 0
+
+	## 0.1.8.43 · Solo cambiaron de dueño provincias sueltas (todas por `transferir_provincia`): se rehacen únicamente las filas de los países que ganaron o
+	## perdieron alguna, en vez de los ~250 (9 ms → ~0,1 ms). En guerra a x4-x6 los dueños cambian casi todos los días.
+	func _actualizar_balances_sucios() -> void:
+		for tid in _bal_sucios:
+			var nombre: String = bd.nombre_de(int(tid))
+			var fila: Array = _fila_balance(nombre) if paises.has(nombre) else []
+			var pos: int = int(_bal_pos.get(int(tid), -1))
+			if fila.is_empty():
+				if pos >= 0:                                              # el país se quedó sin provincias: se quita su fila (la última ocupa su lugar)
+					var ult: int = _bal.size() - 1
+					if pos != ult:
+						_bal[pos] = _bal[ult]
+						_bal_pos[int(_bal[pos][0])] = pos
+					_bal.pop_back()
+					_bal_pos.erase(int(tid))
+			elif pos >= 0:
+				_bal[pos] = fila
+			else:
+				_bal_pos[int(tid)] = _bal.size()
+				_bal.append(fila)
+		_bal_ver_prop = bd.version_propietario
+		_bal_sucios.clear()
+		_bal_transf = 0
 
 	func _economia_dia(k := 1) -> void:
 		var v = bd.vars.get("tesoreria")
 		if v == null:
 			return
-		if _bal_ver_prop != bd.version_propietario or (_bal_ver_eco != bd.version_eco and (not ahorro or _mes_n - _bal_mes >= maxi(grupos_mes, 3))):
+		var eco_vieja: bool = _bal_ver_eco != bd.version_eco and (not ahorro or _mes_n - _bal_mes >= maxi(grupos_mes, 3))
+		var dueno_sin_marca: bool = bd.version_propietario - _bal_ver_prop != _bal_transf     # algún dueño cambió sin pasar por `transferir_provincia` (Debug, escenario)
+		if eco_vieja or dueno_sin_marca:
 			_armar_balances()
+		elif not _bal_sucios.is_empty():
+			_actualizar_balances_sucios()
 		var col: PackedFloat64Array = v.col_f
 		var sold: Dictionary = ejercito.soldados_por_pais() if ejercito != null else {}
 		var rojos := {}
@@ -969,10 +1017,20 @@ class Mundo extends RefCounted:
 	## 0.1.8.2a: el mismo paso partido en fases (en este orden). El juego en marcha las reparte entre fotogramas (cada fase es corta) para que los
 	## FPS no caigan cuando hay cientos de columnas y decenas de batallas; las pruebas y el Debug las corren de golpe con `avanzar_dias`.
 	## 0.1.8.3: cada fase sabe simular `k` días de una sola vez (economía × k, marchas de k días, batallas en sub-rondas, ocupaciones, IA con presupuesto).
+	## 0.1.8.43: cede la fracción `fraccion` de la provincia `pi` (las celdas más cercanas) a una vecina de `pais`. {"ok": false} si no hay Territorio o vecina.
+	func ceder_parcial_a(pi: int, pais: String, fraccion: float, motivo: String) -> Dictionary:
+		if not cesion_parcial_cb.is_valid():
+			return {"ok": false, "msg": "Sin territorio."}
+		return cesion_parcial_cb.call(pi, pais, fraccion, motivo, true)       # desde la simulación: el repintado del mapa se reparte entre fotogramas
+
 	func fases_dias(k: int) -> Array:
 		var r := [Callable(self, "_economia_dia").bind(k)]
 		if ia != null:
 			r.append(Callable(ia, "fase_dia").bind(k))      # las IA que toca (las más atrasadas y las que están en guerra primero) deciden, por lotes
+		if diplomacia != null:
+			r.append(Callable(diplomacia, "fase_dia").bind(k))   # 0.1.8.43: llamadas de alianza, coaliciones y alianzas que se enfrían
+		if estabilidad != null:
+			r.append(Callable(estabilidad, "fase_dia").bind(k))  # 0.1.8.43: estabilidad social: 1/30 de las provincias por día, por lotes
 		if ejercito != null:
 			r.append(Callable(ejercito, "avanzar_dia").bind(k))     # las columnas en marcha avanzan k días
 		if edificios != null:
@@ -988,37 +1046,54 @@ class Mundo extends RefCounted:
 	## 0.1.8.32: en modo ahorro (x4-x6) cada mes solo se desarrolla 1/`grupos_mes` de las provincias, y esas con el crecimiento de `grupos_mes` meses
 	## de golpe (crecer 12 meses de una vez da lo mismo que crecer 1 mes doce veces): a x6 son 12 meses por segundo y recorrer las 7.653 provincias
 	## cada vez costaba más de 3 ms por mes.
-	func avanzar_mes() -> void:
-		var raiz: int = bd.id_de("mundo", "mundo")
-		var base: float = bd.num("crecimiento_base_anual", raiz, 0.02)
-		var vel_pais := {}
-		for nombre in paises:
-			vel_pais[paises[nombre].tid] = paises[nombre].velocidad_desarrollo
-		var pc: PackedFloat64Array = bd.vars["pib_pc_usd"].col_f
-		var vp: PackedFloat64Array = bd.vars["velocidad_desarrollo"].col_f
-		var dueno: PackedInt32Array = bd.vars["propietario"].col_i
-		var dv: PackedFloat64Array = bd.vars["devastacion"].col_f
-		_mes_n += 1
-		var g: int = maxi(grupos_mes, 1) if ahorro else 1
-		var fg := float(g)
-		var exp_g := 1.0 / 12.0 if g == 1 else fg / 12.0
-		var rec_rel := 1.0 - DEVASTACION_RECUPERA_REL                  # la devastación se recupera: dv' = dv·rel − abs (g veces: forma cerrada)
-		var rec_abs := DEVASTACION_RECUPERA_ABS
-		if g > 1:
-			rec_rel = pow(1.0 - DEVASTACION_RECUPERA_REL, fg)
-			rec_abs = DEVASTACION_RECUPERA_ABS * (1.0 - rec_rel) / DEVASTACION_RECUPERA_REL
-		for i in range(_mes_n % g, provincias.size(), g):
-			var k: int = provincias[i].ix
-			var v: float = vp[k] * float(vel_pais.get(dueno[k], 1.0))
-			pc[k] *= pow(1.0 + base * v, exp_g)
-			if dv[k] > 0.0:                      # recuperación natural de la devastación (no deja fila de historial)
-				dv[k] = maxf(0.0, dv[k] * rec_rel - rec_abs)
+	const MES_EJ_LOTE := 9000           # pelotones del mes que se procesan por llamada cuando se reparte entre fotogramas (~2 ms)
+	var cesion_parcial_cb := Callable()  # 0.1.8.43: lo pone MapaPrincipal (tiene el Territorio): (provincia, país, fracción, motivo) -> {"ok", "celdas", "area", "pob", "msg"}
+	var cesiones_parciales := 0         # cuántas veces ha cambiado la forma de una provincia por una cesión parcial (paz o Debug)
+	var _mes_en_curso := false          # 0.1.8.43: el desarrollo del mes quedó a medias (el ejército se reparte entre fotogramas)
+	var _mes_grupo := 0
+	var _mes_g := 1
+
+	## `parcial`: el juego en marcha reparte el mes entre fotogramas (devuelve true mientras quede trabajo del ejército y hay que volver a llamarla);
+	## sin él (pruebas, Debug) el mes se hace entero y devuelve false.
+	func avanzar_mes(parcial := false) -> bool:
+		if not _mes_en_curso:
+			var raiz: int = bd.id_de("mundo", "mundo")
+			var base: float = bd.num("crecimiento_base_anual", raiz, 0.02)
+			var vel_pais := {}
+			for nombre in paises:
+				vel_pais[paises[nombre].tid] = paises[nombre].velocidad_desarrollo
+			var pc: PackedFloat64Array = bd.vars["pib_pc_usd"].col_f
+			var vp: PackedFloat64Array = bd.vars["velocidad_desarrollo"].col_f
+			var dueno: PackedInt32Array = bd.vars["propietario"].col_i
+			var dv: PackedFloat64Array = bd.vars["devastacion"].col_f
+			_mes_n += 1
+			var g: int = maxi(grupos_mes, 1) if ahorro else 1
+			var fg := float(g)
+			var exp_g := 1.0 / 12.0 if g == 1 else fg / 12.0
+			var rec_rel := 1.0 - DEVASTACION_RECUPERA_REL                  # la devastación se recupera: dv' = dv·rel − abs (g veces: forma cerrada)
+			var rec_abs := DEVASTACION_RECUPERA_ABS
+			if g > 1:
+				rec_rel = pow(1.0 - DEVASTACION_RECUPERA_REL, fg)
+				rec_abs = DEVASTACION_RECUPERA_ABS * (1.0 - rec_rel) / DEVASTACION_RECUPERA_REL
+			for i in range(_mes_n % g, provincias.size(), g):
+				var k: int = provincias[i].ix
+				var v: float = vp[k] * float(vel_pais.get(dueno[k], 1.0))
+				pc[k] *= pow(1.0 + base * v, exp_g)
+				if dv[k] > 0.0:                      # recuperación natural de la devastación (no deja fila de historial)
+					dv[k] = maxf(0.0, dv[k] * rec_rel - rec_abs)
+			_mes_grupo = _mes_n % g
+			_mes_g = g
+			_mes_en_curso = true
 		if ejercito != null:
-			ejercito.avanzar_mes(_mes_n % g, g) if ahorro else ejercito.avanzar_mes()
+			var mas: bool = ejercito.avanzar_mes(_mes_grupo, _mes_g, MES_EJ_LOTE if parcial else 1 << 30)
+			if mas:
+				return true
+		_mes_en_curso = false
 		if descubrimientos != null:                                  # 0.1.8.36: cada año nuevo del reloj trae sus descubrimientos (11 de cada 12 meses no hace nada)
 			descubrimientos.avanzar_a(BaseDatosScript.anio_de_fecha(bd.fecha))
 		bd.version += 1
 		bd.version_eco += 1
+		return false
 
 	## ¿El país `pais` (nombre) conoce el descubrimiento `sl` (slug)? Falso si no hay catálogo o el país/descubrimiento no existen.
 	func conoce_descubrimiento(pais: String, sl: String) -> bool:
@@ -1044,11 +1119,19 @@ class Mundo extends RefCounted:
 		var m0: String = bd.motivo_ctx
 		bd.motivo_ctx = motivo
 		pr.registrar_propietario(destino, fecha, motivo)
+		_bal_transf += 1
+		marcar_balance(int(paises[destino].tid))
+		if paises.has(origen):
+			marcar_balance(int(paises[origen].tid))
 		if edificios != null:
 			edificios.cambio_de_dueno(idx, origen)                  # las obras en curso se pierden; lo ya construido se queda con la tierra
 		if pr.ocupante >= 0:
 			bd.poner_i("ocupante", pr.tid, -1, "Cambio de dueño")      # un dueño nuevo: la ocupación anterior ya no tiene sentido
 		pr.favorabilidad = 35.0          # una provincia recién cambiada de dueño empieza descontenta
+		if estabilidad != null:
+			estabilidad.al_cambiar_dueno(idx, motivo)
+		if diplomacia != null and paises.has(origen):
+			diplomacia.al_cambiar_dueno(idx, int(paises[origen].tid), int(paises[destino].tid), motivo)
 		for cid in pr.ciudades:          # las ciudades cambian de país con su provincia
 			var ci: Ciudad = ciudades[int(cid)]
 			ci.pais = destino

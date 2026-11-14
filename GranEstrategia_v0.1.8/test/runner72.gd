@@ -308,15 +308,15 @@ func t_reloj_mapa() -> void:
 	main.reloj.ocupado = false
 	var d1: int = ia.dia_n
 	main._on_dia_diferido(true, true, 2)
-	ok(main._fases.size() == 3 + 7 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 7 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
+	ok(main._fases.size() == 3 + 9 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 9 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
 	var n0: int = main._fases.size()
 	main._correr_fases(0)
-	ok(main._fases.size() < n0 and main._fases.size() >= n0 - 3, "_correr_fases(presupuesto 0): corre al menos una fase (%d → %d)" % [n0, main._fases.size()])
+	ok((main._fases.size() < n0 or m._mes_en_curso) and main._fases.size() >= n0 - 3, "_correr_fases(presupuesto 0): corre al menos una fase o un trozo del mes (%d → %d, mes a medias: %s)" % [n0, main._fases.size(), str(m._mes_en_curso)])
 	main._vaciar_fases()
 	ok(main._fases.is_empty() and not main.reloj.ocupado, "_vaciar_fases: termina lo pendiente y libera al reloj")
 	ok(ia.dia_n == d1 + 2, "…y el día quedó simulado entero (2 días)")
 	main._on_dia_diferido(false, false, 1)
-	ok(main._fases.size() == 7, "sin cambio de mes: solo las 7 fases del día")
+	ok(main._fases.size() == 9, "sin cambio de mes: solo las 9 fases del día")
 	var d2: int = ia.dia_n
 	main._on_dia(false, false, 1)                       # un día nuevo termina primero el que estaba a medias
 	ok(main._fases.is_empty() and not main.reloj.ocupado and ia.dia_n == d2 + 2, "_on_dia termina antes el día que estaba a medias: 1 + 1 = 2 días (IA +%d)" % (ia.dia_n - d2))
@@ -559,6 +559,29 @@ func t_ejercito() -> void:
 			if not is_nan(a[i]) and not is_nan(b[i]):
 				max_dif = maxf(max_dif, absf(a[i] - b[i]))
 	ok(max_dif < 1e-6, "avanzar_mes(grupo, 3) × 3 grupos = 3 × avanzar_mes() (diferencia máxima %s)" % str(max_dif))
+	# 0.1.8.43: el mes repartido en trozos (límite de pelotones por llamada) da exactamente lo mismo que de una vez
+	for n in nombres:
+		bd.vars[n].col_f = (guardado[n] as PackedFloat64Array).duplicate()
+	bd.vars["bajas_mes"].col_f = cero.duplicate()
+	ej.avanzar_mes(1, 3)
+	var entero := {}
+	for n in ["edad_media", "experiencia", "familiaridad", "forma_fisica"]:
+		entero[n] = (bd.vars[n].col_f as PackedFloat64Array).duplicate()
+	for n in nombres:
+		bd.vars[n].col_f = (guardado[n] as PackedFloat64Array).duplicate()
+	bd.vars["bajas_mes"].col_f = cero.duplicate()
+	var trozos := 1
+	while ej.avanzar_mes(1, 3, 700) and trozos < 500:
+		trozos += 1
+	var dif_trozos := 0.0
+	for n in entero:
+		var a2: PackedFloat64Array = entero[n]
+		var b2: PackedFloat64Array = bd.vars[n].col_f
+		for i in a2.size():
+			if not is_nan(a2[i]) and not is_nan(b2[i]):
+				dif_trozos = maxf(dif_trozos, absf(a2[i] - b2[i]))
+	ok(trozos > 1 and dif_trozos < 1e-9, "avanzar_mes repartido en %d trozos de 700 pelotones = de una vez (diferencia máxima %s)" % [trozos, str(dif_trozos)])
+	ok(ej._cur_mes == 0 and ej._muertos_mes == 0, "…y no deja restos del mes a medias")
 	for n in nombres:
 		bd.vars[n].col_f = (guardado[n] as PackedFloat64Array).duplicate()
 

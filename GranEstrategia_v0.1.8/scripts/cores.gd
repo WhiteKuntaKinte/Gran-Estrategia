@@ -3,7 +3,7 @@ extends RefCounted
 ##   · Core NACIONAL (`core_nacional`, ID de país): el país para el que la provincia es tierra propia por historia. Al empezar, el país original.
 ##     No cambia al conquistarla: sirve para saber qué provincias perdidas puede reclamar un país y cuáles son «tierra ajena» en su mapa.
 ##   · Core CULTURAL (`core_cultural`, id de cultura): la cultura de su gente (datos/nombres_cultura.json). Se fija al empezar según el país original.
-## SIN EFECTOS de juego todavía (decisión de diseño): solo se guardan, se muestran en el HUD de la provincia y se pueden editar en Debug.
+## 0.1.8.43: ya tienen efecto: la estabilidad de cada provincia depende de si es tierra propia, de su cultura y de la conquista reciente (ver estabilidad.gd).
 
 var mundo
 var bd
@@ -35,6 +35,13 @@ func _cultura_de_origen(origen: String, pe) -> String:
 
 
 # ───────────── consultas ─────────────
+## Cultura que se considera «propia» de un país (la de su país original), "" si no se conoce.
+func cultura_de_pais(nombre: String) -> String:
+	var pe = mundo.paises.get(nombre)
+	return _cultura_de_origen(nombre, pe) if pe != null else ""
+
+
+
 ## Nombre del país con el core nacional de la provincia `pi` ("" = ninguno).
 func nacional(pi: int) -> String:
 	var id: int = bd.ref("core_nacional", mundo.provincias[pi].tid)

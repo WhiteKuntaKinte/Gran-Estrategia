@@ -116,6 +116,7 @@ var _alto_max := 470.0                        # alto máximo de la sección con 
 var _ver_guerra := -1
 var _msg_paz := ""                            # último resultado de una propuesta de paz (se muestra en Diplomacia)
 var _guerra_pendiente := -1                   # 0.1.8.3: ID del país al que el jugador está a punto de declarar la guerra (pide una segunda pulsación para confirmar)
+var _msg_dip := ""                            # 0.1.8.43: último resultado de una acción de diplomacia (alianza, regalo, rival)
 var _msg_guerra := ""                         # último resultado de declarar una guerra (se muestra en Diplomacia)
 var _guerra_tid_vista := -2                   # país cuya ficha se vio la última vez (al cambiar se olvida la confirmación pendiente)
 
@@ -1032,6 +1033,13 @@ func _sin_foco(n: Node) -> void:
 ## finanzas ni la economía (cambian cada día: no cuentan). Política, Diplomacia y Militar leen el estado vivo del juego (no de `d`): se rehacen siempre.
 const CLAVES_SOLO_ECONOMIA := ["fin", "fin_det", "eco"]
 
+## Vuelve a dibujar lo que se ve ahora aunque los datos no hayan cambiado (lo usan las subdivisiones al abrirse o elegirse una).
+func redibujar() -> void:
+	if panel != null and panel.visible and main != null and not datos.is_empty():
+		_fin_firma = 0
+		_dibujar()
+
+
 func refrescar(d: Dictionary) -> void:
 	if panel.visible and (pestana == "general" or pestana == "economia") and _firma_visible(d) == _firma_visible(datos):
 		datos = d                                                 # lo que se ve es igual, pero los datos que no se ven (finanzas...) quedan al día
@@ -1710,6 +1718,46 @@ func _tarjetas_provincia() -> void:
 		_card_ingreso(int(pis[0]))
 	_card_edificios(pis, una)
 	_card_cores(pis, una)
+	if una:
+		_card_subdivisiones(int(pis[0]))
+
+
+## 0.1.8.43 · Subdivisiones de la provincia: botón para abrirlas en el mapa y, abiertas, la lista de subprovincias reales con su superficie y su población estimada.
+func _card_subdivisiones(pi: int) -> void:
+	if not main.subprov_hay():
+		return
+	var m = main.mundo
+	var pr = m.provincias[pi]
+	var st: Dictionary = main.subprov_estado(pi)
+	var sec := _seccion("Subdivisiones")
+	if not bool(st["activa"]):
+		if bool(st.get("sin_datos", false)):
+			_nota(sec, "Esta provincia no cae sobre ninguna unidad administrativa de los datos (isla minúscula o zona sin división): no tiene subdivisiones.")
+		_boton(sec, "Ver subdivisiones en el mapa", func(): main.mostrar_subprovincias(pi))
+		_nota(sec, "También con doble clic sobre la provincia. Son los límites administrativos actuales (geoBoundaries): en épocas antiguas son una referencia moderna, no una división histórica.")
+		return
+	var lista: Array = st["lista"]
+	var el := int(st["elegida"])
+	_fila(sec, "i_prov", "Subprovincias", "%d en esta provincia" % lista.size())
+	if el >= 0 and el < lista.size():
+		var d: Dictionary = lista[el]
+		_fila(sec, "i_prov", "Elegida", String(d["nombre"]))
+		_fila(sec, "i_area", "Superficie", "%s km² · %.1f %% de la provincia" % [fmt_num(float(d["km2"])), 100.0 * float(d["frac"])])
+		_fila(sec, "i_pob", "Población estimada", "%s (la de la provincia, repartida por superficie)" % fmt_pob(pr.poblacion * float(d["frac"])))
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 2)
+	sec.add_child(vb)
+	for i in mini(lista.size(), 16):
+		var d: Dictionary = lista[i]
+		var b := _boton(vb, "%s  ·  %.1f %%" % [String(d["nombre"]), 100.0 * float(d["frac"])], func(): main.elegir_subprovincia(i))
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.flat = i != el
+		b.custom_minimum_size = Vector2(0.0, 24.0)
+		b.add_theme_font_size_override("font_size", 12)
+	if lista.size() > 16:
+		_nota(sec, "y %d más (se ven y se eligen en el mapa)…" % (lista.size() - 16))
+	_boton(sec, "Ocultar subdivisiones", func(): main.ocultar_subprovincias())
+	_nota(sec, "Clic en el mapa: elige una subprovincia; con el cursor encima se ve su nombre. %s." % main.SubprovinciasScript.CREDITO)
 
 
 func _card_ingreso(pi: int) -> void:
@@ -1735,7 +1783,18 @@ func _card_ingreso(pi: int) -> void:
 	var total: float = m.produccion_anual_usd(pais)
 	if total > 0.0 and pr.ocupante < 0:
 		_fila(sec, "i_pais", "Peso en los ingresos del país", pct(100.0 * rend / maxf(total, 1.0)))
-	_nota(sec, "Favorabilidad %d · devastación %d %%: una población descontenta o una tierra arrasada rinde menos." % [int(roundf(pr.favorabilidad)), int(roundf(pr.devastacion * 100.0))])
+	_nota(sec, "Devastación %d %%: una tierra arrasada rinde menos. La estabilidad (abajo) también cuenta: ×(0,5 + estabilidad ÷ 100)." % int(roundf(pr.devastacion * 100.0)))
+	if m.estabilidad != null and m.paises.has(pais) and pr.favorabilidad >= 0.0:
+		var ds: Dictionary = m.estabilidad.desglose(pi)
+		var se := _seccion("Estabilidad social")
+		var fav: float = float(ds["fav"])
+		var meta: float = float(ds["meta"])
+		var flecha := "↗" if meta > fav + 1.0 else ("↘" if meta < fav - 1.0 else "→")
+		_fila(se, "i_pob", "Estabilidad", "%d · %s %s (tiende a %d)" % [int(roundf(fav)), String(m.estabilidad.nivel(fav)), flecha, int(roundf(meta))])
+		for par in ds["partes"]:
+			if absf(float(par[1])) >= 0.5 and String(par[0]) != "Base":
+				_nota(se, "   %+d  %s" % [int(roundf(float(par[1]))), String(par[0])])
+		_nota(se, "Por debajo de 15 durante dos meses seguidos la provincia se amotina: se paga a los notables, se reprime con tropas o se concede la independencia (la tierra vuelve a su core nacional). Un imperio demasiado grande para su tamaño pierde estabilidad en todas sus provincias.")
 
 
 func _card_edificios(pis: Array, una: bool) -> void:
@@ -2025,6 +2084,7 @@ func _tab_diplomacia() -> void:
 		_guerra_tid_vista = int(v.get("tid", -1))
 		_guerra_pendiente = -1
 		_msg_guerra = ""
+		_msg_dip = ""
 	var guerras: Array = v["guerras"]
 	var abiertas := []
 	var cerradas := []
@@ -2059,6 +2119,7 @@ func _tab_diplomacia() -> void:
 			if int(rel_j["tregua"]) > 0:
 				_nota(sr, "Hay una tregua: la IA no te declarará la guerra en %s. Tú puedes romperla." % main.texto_duracion(int(rel_j["tregua"])))
 			_boton_guerra(sr, String(rel_j["rival"]), int(rel_j["tid"]), bool(rel_j["puede"]), String(rel_j["motivo"]))
+	_seccion_relaciones(v.get("relaciones", {}), int(v.get("tid", -1)))
 	var declarables: Array = v.get("declarables", [])
 	if not declarables.is_empty():
 		var sdg := _seccion("Declarar la guerra")
@@ -2095,7 +2156,7 @@ func _tab_diplomacia() -> void:
 	var sa := _seccion("Aliados y vasallos")
 	var rel: Array = v["relacionados"]
 	if rel.is_empty():
-		_nota(sa, "Todavía no hay aliados ni vasallos: son mecánicas en desarrollo. Cuando existan, sus tropas también se verán en tu mapa.")
+		_nota(sa, "Sin aliados todavía. Los vasallos aún no existen; las tropas de tus aliados se ven en tu mapa.")
 	for r in rel:
 		_fila_pais(sa, String(r["nombre"]), String(r["bandera"]), "Aliado", Tema.OK)
 	# vecinos
@@ -2119,6 +2180,54 @@ func _tab_diplomacia() -> void:
 		for g in cerradas:
 			var det2 := "%s · %s\n%s – %s · %d batallas" % [String(g["rol"]), String(g["causa"]), String(g["inicio_txt"]), String(g["fin_txt"]), int(g["batallas"])]
 			_fila_pais(sh, String(g["rival"]), String(g["rival_bandera"]), "Terminada", Tema.TENUE, det2)
+
+
+## 0.1.8.43 · Relaciones internacionales del país elegido: opinión contigo y sus partes, alianza, rival, infamia y coalición, con las acciones del jugador.
+func _seccion_relaciones(r: Dictionary, tid: int) -> void:
+	if r.is_empty():
+		return
+	var sr := _seccion("Relaciones internacionales")
+	if r.has("texto"):
+		_fila(sr, "i_dipl", "Relación contigo", String(r["texto"]))
+		for par in r["lectura"]:
+			_nota(sr, "   %+d  %s" % [int(roundf(float(par[1]))), String(par[0])])
+		var razones: Array = r["razones"]
+		for k in range(razones.size() - 1, maxi(razones.size() - 4, -1), -1):
+			_nota(sr, "   · %s (%+d)" % [String(razones[k][0]), int(roundf(float(razones[k][1])))])
+	var inf: float = float(r["infamia"])
+	_fila(sr, "i_devast", "Infamia", "%.1f%s" % [inf, "  ·  PELIGROSO: hay coalición en su contra" if inf >= float(r["umbral_coalicion"]) else ""])
+	_nota(sr, "La infamia sube 1 por cada provincia que se queda por la fuerza (2 si era de un tercero) y 5 si ataca a un aliado. Con %d o más, sus vecinos forman una coalición contra él. Se reduce a la mitad cada 900 días." % int(r["umbral_coalicion"]))
+	if String(r["rival"]) != "":
+		_fila(sr, "i_dipl", "Su rival declarado", String(r["rival"]))
+	var miembros: Array = r["coalicion"]
+	if not miembros.is_empty():
+		_nota(sr, "COALICIÓN contra este país: %s." % ", ".join(PackedStringArray(miembros)))
+	if String(r["en_coalicion_contra"]) != "":
+		_nota(sr, "Este país conspira en la coalición contra %s." % String(r["en_coalicion_contra"]))
+	if r.has("texto"):
+		var otro: int = int(r["tid"])
+		if bool(r["aliados"]):
+			_boton(sr, "Romper la alianza", func(): _pulsar_dip(main.romper_alianza_jugador(otro)))
+		else:
+			var b := _boton(sr, "Proponer una alianza", func(): _pulsar_dip(main.proponer_alianza_jugador(otro)), not bool(r["puede_aliarse"]))
+			b.tooltip_text = "Proponer una alianza\nSi lo atacan, tú recibes la llamada para entrar en la guerra (y al revés). La IA acepta si te tiene al menos 25 de opinión." if bool(r["puede_aliarse"]) else String(r["motivo_alianza"])
+		var bg := _boton(sr, "Enviar un regalo (10 días de ingresos · +12 de opinión)", func(): _pulsar_dip(main.regalo_jugador(otro)))
+		bg.tooltip_text = "Enviar un regalo\nMejora la opinión que tiene de ti; con 25 o más podrás proponerle una alianza."
+		if bool(r["rival_mio"]):
+			_boton(sr, "Quitar la rivalidad", func(): _pulsar_dip(main.rival_jugador(otro, false)))
+		else:
+			_boton(sr, "Declarar rival", func(): _pulsar_dip(main.rival_jugador(otro, true)), not bool(r["puede_rival"]))
+	if _msg_dip != "":
+		_nota(sr, _msg_dip)
+
+
+func _pulsar_dip(res: Dictionary) -> void:
+	_msg_dip = String(res.get("msg", ""))
+	if bool(res.get("ok", false)):
+		main.hud_aviso(_msg_dip)
+	var y: int = scroll_cuerpo.scroll_vertical
+	_dibujar()
+	scroll_cuerpo.scroll_vertical = y
 
 
 ## Botón «Declarar la guerra a X». La primera pulsación pide confirmar (cambia el texto); la segunda declara la guerra. `tregua` > 0: avisa de que se rompe.
@@ -2214,8 +2323,8 @@ func _tab_ejercito() -> void:
 		cj.add_theme_constant_override("separation", 4)
 		se.add_child(cj)
 		_barra(cj, "Devastación", float(v["devastacion"]) * 100.0, Color(0.93, 0.45, 0.35), 120.0)
-		_barra(cj, "Riesgo de motín", float(v["motin"]) * 100.0, Color(0.93, 0.62, 0.30), 120.0)
-		_nota(se, "Favorabilidad de la población: %d / 100. El riesgo de motín (fórmula provisional) sube con la devastación, el descontento y la poca familiaridad de la tropa; todavía no provoca motines.  La devastación baja sola con los meses y reduce lo que produce la provincia." % int(roundf(float(v["favorabilidad"]))))
+		_barra(cj, "Estabilidad", float(v["favorabilidad"]), Color(0.93, 0.62, 0.30), 120.0)
+		_nota(se, "Estabilidad de la población: %d / 100. Por debajo de 15 durante dos meses seguidos la provincia se amotina (ver «Estabilidad social» en la pestaña General). La devastación baja sola con los meses y reduce lo que produce la provincia." % int(roundf(float(v["favorabilidad"]))))
 		var pels: Array = v.get("pelotones", [])
 		var sp := _seccion("Pelotones")
 		if pels.is_empty():

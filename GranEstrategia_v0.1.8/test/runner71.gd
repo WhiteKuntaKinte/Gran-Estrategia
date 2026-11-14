@@ -216,7 +216,7 @@ func t_mundo() -> void:
 	ok(m.rival_por_entrar(jt, 999999 % m.provincias.size()) >= -1, "rival_por_entrar con una provincia cualquiera no se rompe")
 	# fases_dias / avanzar_dias
 	var fs: Array = m.fases_dias(3)
-	ok(fs.size() == 7, "fases_dias: economía + IA + ejército + obras + llegadas + batallas + ocupaciones = 7 (hay %d)" % fs.size())
+	ok(fs.size() == 9, "fases_dias: economía + IA + diplomacia + estabilidad + ejército + obras + llegadas + batallas + ocupaciones = 9 (hay %d)" % fs.size())
 	var todas_validas := true
 	for f in fs:
 		todas_validas = todas_validas and (f as Callable).is_valid()
@@ -614,7 +614,9 @@ func t_mapa() -> void:
 	ok(f_anio.size() == 3, "_fases_mes(año nuevo): + cierre anual")
 	var v_bd: int = m.bd.version
 	for f in f_mes:
-		(f as Callable).call()
+		var vuelta := 0
+		while bool((f as Callable).call()) and vuelta < 500:       # el desarrollo del mes se reparte: devuelve true mientras quede trabajo del ejército
+			vuelta += 1
 	ok(m.bd.version > v_bd, "las fases mensuales corren (la versión de la base sube)")
 	# _cierre_periodo
 	var f0 := filas_historial()

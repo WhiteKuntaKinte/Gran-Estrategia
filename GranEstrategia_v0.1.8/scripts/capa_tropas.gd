@@ -20,6 +20,7 @@ const RelojScript := preload("res://scripts/reloj.gd")
 const EjercitoScript := preload("res://scripts/ejercito.gd")
 const RedScript := preload("res://scripts/red_provincias.gd")
 const PerfilScript := preload("res://scripts/perfil.gd")
+const LoteScript := preload("res://scripts/lote_dibujo.gd")
 
 const ANCHO := 2400.0
 const ALTO_M := 28.0                 # alto de cada cuadro (píxeles de pantalla)
@@ -30,6 +31,8 @@ const BANDERA_W := 30.0
 const BANDERA_H := 20.0
 const MAX_MARCAS := 300
 const ORO := Color(1.0, 0.86, 0.3)
+const CUBETA_W := 160.0              # cubetas (en píxeles de pantalla) para detectar cuadros que se pisan
+const CUBETA_H := 32.0
 const FONDO := Color(0.04, 0.06, 0.12, 0.93)
 
 
@@ -125,6 +128,13 @@ var _col_usado := {}                # índice de paleta -> ID de marcha que lo t
 var _t_marchas := 0                 # última vez que se rehízo la capa de rutas (ms): limita los redibujos mientras el tiempo corre rápido
 var _t_flechas := 0                 # ... y la de flechas
 var n_carriles_max := 0             # carriles paralelos más anchos del último dibujo (para las pruebas)
+var _lote_a := LoteScript.new()     # 0.1.8.43: cuadros de tropas por lotes: fondos y bordes (debajo de las banderas)
+var _lote_b := LoteScript.new()     # ... y lo que va encima de la bandera (su borde, el triángulo de la columna, las espadas)
+var _cb_banderas := {}              # ID de país -> PackedVector2Array [posición, tamaño, ...] de sus banderas (coordenadas de mapa)
+var _cb_tc := PackedVector2Array()  # textos encolados: punto del mapa de su cuadro
+var _cb_tp := PackedVector2Array()  # ... posición local (píxeles de pantalla)
+var _cb_tt: Array = []              # ... y el texto
+var _cb_cubetas := {}               # cubeta -> [Rect2 de los cuadros encolados] (solo columnas, para vaciar antes de que dos se pisen)
 var _dib_pilas: Array = []
 var _dib_marchas: Array = []
 var _frac := 0.0
@@ -883,13 +893,14 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 					resto += int(regs[q][1])
 				txt = "+%d" % (regs.size() - nb2 + 1)
 				datos = {"t": "mas", "prov": int(p["prov"]), "pais": pa, "n": regs.size() - nb2 + 1, "sold": resto}
-				_dibujar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, false, en_combate, true, not vis.has(pa))
+				_encolar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, false, en_combate, true, not vis.has(pa))
 			else:
 				txt = str(int(rr[1]))
 				datos = {"t": "reg", "reg": int(rr[0]), "prov": int(p["prov"]), "pais": pa, "sold": int(rr[1]), "pel": int(rr[2])}
-				_dibujar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, es_sel, en_combate, false, not vis.has(pa))
+				_encolar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, es_sel, en_combate, false, not vis.has(pa))
 			var rect := Rect2(acept_c[j].x * zr + _off[i2] + acept_dx[j] - w2 * 0.5, acept_c[j].y * zr + cy - ALTO_M * 0.5, w2, ALTO_M)
 			_dib_pilas.append([rect, datos])
+	_vaciar_cajas(ci, k)
 	PerfilScript.anotar(prof, "5 dibujar cajas", t_p)
 	n_marcas = acept_i.size()
 	n_hostiles = 0
@@ -905,53 +916,108 @@ func _unir_dibujados() -> void:
 	dibujados = _dib_pilas + _dib_marchas
 
 
-## Dibuja un cuadro de tropas. `c` = punto del mapa, `off`/`dy` = desplazamiento en PÍXELES de pantalla, `w` = ancho en píxeles.
-func _dibujar_caja(ci: CanvasItem, k: float, c: Vector2, off: float, dy: float, w: float, txt: String, pais: String, marcha: bool, ang: float, es_sel: bool, combate := false, resumen := false, hostil := false, col_marcha := ORO) -> void:
+## CUADROS DE TROPAS POR LOTES (0.1.8.43). Antes cada cuadro hacía ~8 llamadas de dibujo de tipos distintos (rectángulo, borde, polígono, bandera, texto,
+## espadas) y el motor no podía fundirlas: con IA activas eran ~1.200 llamadas por fotograma. Ahora cada cuadro solo se ENCOLA y `_vaciar_cajas` lo dibuja
+## todo junto en pases: (1) fondos y bordes en una malla, (2) banderas agrupadas por país (una textura cada una), (3) detalles que van sobre la bandera
+## (su borde, el triángulo de la columna, las espadas) en otra malla, (4) los textos. Como un cuadro nunca debe tapar el texto de otro, si dos cuadros se
+## pisan (columnas en marcha) se vacía antes de encolar el segundo: el orden de pintado de siempre.
+func _encolar_caja(ci: CanvasItem, k: float, c: Vector2, off: float, dy: float, w: float, txt: String, pais: String, marcha: bool, ang: float, es_sel: bool, combate := false, resumen := false, hostil := false, col_marcha := ORO, detectar_solape := false) -> void:
 	var x0 := off - w * 0.5
 	var col := _color_de(pais)
-	ci.draw_set_transform(c, 0.0, Vector2(k, k))
 	var r := Rect2(x0, dy - ALTO_M * 0.5, w, ALTO_M)
+	if detectar_solape:
+		var rm := Rect2(c.x + x0 * k, c.y + (dy - ALTO_M * 0.5) * k, w * k, ALTO_M * k)
+		var kx := int(floorf(c.x / (CUBETA_W * k)))
+		var ky := int(floorf(c.y / (CUBETA_H * k)))
+		var pisa := false
+		for ix in range(kx - 1, kx + 2):
+			for iy in range(ky - 1, ky + 2):
+				var lst: Array = _cb_cubetas.get(ix * 100003 + iy, [])
+				for rq in lst:
+					if (rq as Rect2).intersects(rm):
+						pisa = true
+						break
+				if pisa:
+					break
+			if pisa:
+				break
+		if pisa:
+			_vaciar_cajas(ci, k)
+		var clave := kx * 100003 + ky
+		if not _cb_cubetas.has(clave):
+			_cb_cubetas[clave] = []
+		(_cb_cubetas[clave] as Array).append(rm)
+	_lote_a.base(c, k)
+	_lote_b.base(c, k)
 	if es_sel:
-		ci.draw_rect(r.grow(3.0), Color(ORO.r, ORO.g, ORO.b, 0.95), false, 2.5)
-	ci.draw_rect(r, FONDO, true)
+		_lote_a.marco(r.grow(3.0), 2.5, Color(ORO.r, ORO.g, ORO.b, 0.95))
+	_lote_a.rectangulo(r, FONDO)
 	var borde := Color(1.0, 0.25, 0.2, 1.0) if combate else col.lightened(0.15)
-	ci.draw_rect(r, borde, false, 2.4 if combate else 1.8)
+	_lote_a.marco(r, 2.4 if combate else 1.8, borde)
 	if hostil and not combate:                           # tropas enemigas: un filo rojo por fuera para distinguirlas de las tuyas
-		ci.draw_rect(r.grow(2.0), Color(0.95, 0.22, 0.18, 0.9), false, 1.6)
+		_lote_a.marco(r.grow(2.0), 1.6, Color(0.95, 0.22, 0.18, 0.9))
 	var x := x0 + 5.0
 	if resumen:                                         # cuadro «+N»: solo el texto, centrado
 		var tw := _ancho_txt(txt)
-		ci.draw_string(fuente, Vector2(off - tw * 0.5, dy + 5.5), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, FUENTE_PX, Color(0.98, 0.98, 1.0))
-		_espadas(ci, r, combate)
+		_cb_tc.append(c)
+		_cb_tp.append(Vector2(off - tw * 0.5, dy + 5.5))
+		_cb_tt.append(txt)
+		_encolar_espadas(r, combate)
 		return
 	if marcha:
-		var tri := PackedVector2Array([Vector2(7.0, 0.0), Vector2(-5.0, -6.0), Vector2(-2.0, 0.0), Vector2(-5.0, 6.0)])
-		for i in tri.size():
-			tri[i] = tri[i].rotated(ang) + Vector2(x + 6.0, dy)
-		ci.draw_colored_polygon(tri, col_marcha)           # el triángulo lleva el color de la línea de su ruta
+		var p0 := Vector2(7.0, 0.0).rotated(ang) + Vector2(x + 6.0, dy)
+		var p1 := Vector2(-5.0, -6.0).rotated(ang) + Vector2(x + 6.0, dy)
+		var p2 := Vector2(-2.0, 0.0).rotated(ang) + Vector2(x + 6.0, dy)
+		var p3 := Vector2(-5.0, 6.0).rotated(ang) + Vector2(x + 6.0, dy)
+		_lote_b.triangulo(p0, p1, p2, col_marcha)           # el triángulo lleva el color de la línea de su ruta
+		_lote_b.triangulo(p0, p2, p3, col_marcha)
 		x += 13.0
-	var tex := _bandera(pais)
 	var rb := Rect2(x, dy - BANDERA_H * 0.5, BANDERA_W, BANDERA_H)
-	if tex != null:
-		ci.draw_texture_rect(tex, rb, false)
+	if _bandera(pais) != null:
+		var lista: PackedVector2Array = _cb_banderas.get(pais, PackedVector2Array())
+		lista.append(c + rb.position * k)
+		lista.append(rb.size * k)
+		_cb_banderas[pais] = lista
 	else:
-		ci.draw_rect(rb, col, true)
-	ci.draw_rect(rb, Color(0.0, 0.0, 0.0, 0.55), false, 1.0)
-	ci.draw_string(fuente, Vector2(x + BANDERA_W + 6.0, dy + 5.5), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, FUENTE_PX, Color(0.98, 0.98, 1.0))
-	_espadas(ci, r, combate)
+		_lote_a.rectangulo(rb, col)
+	_lote_b.marco(rb, 1.0, Color(0.0, 0.0, 0.0, 0.55))
+	_cb_tc.append(c)
+	_cb_tp.append(Vector2(x + BANDERA_W + 6.0, dy + 5.5))
+	_cb_tt.append(txt)
+	_encolar_espadas(r, combate)
+
+
+## Dibuja de una vez todos los cuadros encolados (ver `_encolar_caja`) y deja las colas vacías.
+func _vaciar_cajas(ci: CanvasItem, k: float) -> void:
+	_lote_a.emitir(ci)
+	for pais in _cb_banderas:
+		var tex := _bandera(String(pais))
+		var lista: PackedVector2Array = _cb_banderas[pais]
+		for q in range(0, lista.size(), 2):
+			ci.draw_texture_rect(tex, Rect2(lista[q], lista[q + 1]), false)
+	_cb_banderas.clear()
+	_lote_b.emitir(ci)
+	for q in _cb_tt.size():
+		ci.draw_set_transform(_cb_tc[q], 0.0, Vector2(k, k))
+		ci.draw_string(fuente, _cb_tp[q], _cb_tt[q], HORIZONTAL_ALIGNMENT_LEFT, -1, FUENTE_PX, Color(0.98, 0.98, 1.0))
+	ci.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	_cb_tc.clear()
+	_cb_tp.clear()
+	_cb_tt.clear()
+	_cb_cubetas.clear()
 
 
 ## Insignia de batalla (espadas cruzadas sobre un disco rojo) en la esquina superior izquierda del cuadro.
-func _espadas(ci: CanvasItem, r: Rect2, combate: bool) -> void:
+func _encolar_espadas(r: Rect2, combate: bool) -> void:
 	if not combate:
 		return
 	var c := r.position + Vector2(2.0, 1.0)
-	ci.draw_circle(c, 9.0, Color(0.75, 0.08, 0.06, 1.0))
-	ci.draw_arc(c, 9.0, 0.0, TAU, 20, Color(1.0, 0.85, 0.8, 1.0), 1.2, true)
-	ci.draw_line(c + Vector2(-4.5, -4.5), c + Vector2(4.5, 4.5), Color(1.0, 1.0, 1.0, 1.0), 2.0, true)
-	ci.draw_line(c + Vector2(4.5, -4.5), c + Vector2(-4.5, 4.5), Color(1.0, 1.0, 1.0, 1.0), 2.0, true)
-	ci.draw_line(c + Vector2(-5.5, -1.5), c + Vector2(-1.5, -5.5), Color(1.0, 0.9, 0.5, 1.0), 1.4, true)
-	ci.draw_line(c + Vector2(1.5, -5.5), c + Vector2(5.5, -1.5), Color(1.0, 0.9, 0.5, 1.0), 1.4, true)
+	_lote_b.disco(c, 9.0, Color(0.75, 0.08, 0.06, 1.0), 16)
+	_lote_b.anillo(c, 9.0, 1.2, Color(1.0, 0.85, 0.8, 1.0), 20)
+	_lote_b.linea(c + Vector2(-4.5, -4.5), c + Vector2(4.5, 4.5), 2.0, Color(1.0, 1.0, 1.0, 1.0))
+	_lote_b.linea(c + Vector2(4.5, -4.5), c + Vector2(-4.5, 4.5), 2.0, Color(1.0, 1.0, 1.0, 1.0))
+	_lote_b.linea(c + Vector2(-5.5, -1.5), c + Vector2(-1.5, -5.5), 1.4, Color(1.0, 0.9, 0.5, 1.0))
+	_lote_b.linea(c + Vector2(1.5, -5.5), c + Vector2(5.5, -1.5), 1.4, Color(1.0, 0.9, 0.5, 1.0))
 
 
 # ─────────────────────────────────────────────────────────────
@@ -1053,10 +1119,11 @@ func _pintar_cajas_marchas(ci: CanvasItem) -> void:
 	var k := 1.0 / zr
 	for e in _cajas_m:
 		for c in (e["copias"] as Array):
-			_dibujar_caja(ci, k, c, 0.0, 0.0, float(e["w"]), String(e["txt"]), String(e["pais"]), true, float(e["ang"]), bool(e["es_sel"]), false, false, bool(e.get("hostil", false)), e.get("col", ORO))
-	if not _fantasma_dib.is_empty():
-		_dibujar_caja(ci, k, _fantasma_dib[0], 0.0, 0.0, float(_fantasma_dib[2]), String(_fantasma_dib[1]), String(_fantasma_dib[3]), false, 0.0, true)
-	ci.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+			_encolar_caja(ci, k, c, 0.0, 0.0, float(e["w"]), String(e["txt"]), String(e["pais"]), true, float(e["ang"]), bool(e["es_sel"]), false, false, bool(e.get("hostil", false)), e.get("col", ORO), true)
+	if not _fantasma_dib.is_empty():                    # el cuadrito que se arrastra va siempre encima de todo
+		_vaciar_cajas(ci, k)
+		_encolar_caja(ci, k, _fantasma_dib[0], 0.0, 0.0, float(_fantasma_dib[2]), String(_fantasma_dib[1]), String(_fantasma_dib[3]), false, 0.0, true)
+	_vaciar_cajas(ci, k)
 
 
 # ── Colores de las rutas (0.1.8.2a): cada columna en marcha tiene el suyo, distinto de los de las demás columnas activas ──

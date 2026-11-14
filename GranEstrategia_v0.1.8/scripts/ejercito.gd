@@ -439,9 +439,13 @@ func _repartir_pais(pais: String) -> Array:
 ## 0.1.8.3: con `n_grupos` > 1 (velocidades altas) cada mes solo se procesa UNA de las `n_grupos` partes de los pelotones, aplicándole los `n_grupos`
 ## meses de golpe con la fórmula cerrada (la recurrencia es lineal: x' = a·x + b → xₙ = aⁿ·x + b·(1 − aⁿ)/(1 − a)). El resultado es el mismo (salvo el
 ## «freno» por bajas, que usa el promedio mensual) y el coste por mes baja de ~21 ms a ~7 ms con 30.000 pelotones.
-func avanzar_mes(grupo := 0, n_grupos := 1) -> void:
+## 0.1.8.43: con `limite` (pelotones por llamada) el mes se reparte entre fotogramas: devuelve true mientras quede trabajo y hay que volver a llamarla
+## (sin límite, o al terminar, devuelve false). Son ~6 ms con 30.000 pelotones: partidos en trozos de 2-3 ms caben en el presupuesto del fotograma.
+var _cur_mes := 0                    # siguiente pelotón (de los que toca el grupo) que le toca al mes en curso
+var _muertos_mes := 0
+func avanzar_mes(grupo := 0, n_grupos := 1, limite := 1 << 30) -> bool:
 	if bd == null:
-		return
+		return false
 	var m := RETIRO_MENSUAL
 	var v_ed: PackedFloat64Array = bd.vars["edad_media"].col_f
 	var v_ex: PackedFloat64Array = bd.vars["experiencia"].col_f
@@ -452,11 +456,13 @@ func avanzar_mes(grupo := 0, n_grupos := 1) -> void:
 	var fn := float(n)
 	var ret := pow(1.0 - m, fn)                                      # lo que queda de la edad tras n meses
 	var b_ed := (1.0 - m) / 12.0 + m * EDAD_RECLUTA
-	var muertos := 0
-	for i in range(grupo if n > 1 else 0, _ix_todos.size(), n):       # 0.1.8.32: solo se recorre el grupo que toca (antes se miraban todos para saltarse 2 de cada 3)
-		var ix: int = _ix_todos[i]
+	var primero: int = grupo if n > 1 else 0
+	var total: int = ceili(float(_ix_todos.size() - primero) / float(n)) if _ix_todos.size() > primero else 0
+	var j_fin: int = total if limite >= total - _cur_mes else _cur_mes + limite
+	for j in range(_cur_mes, j_fin):                                   # 0.1.8.32: solo se recorre el grupo que toca (antes se miraban todos para saltarse 2 de cada 3)
+		var ix: int = _ix_todos[primero + j * n]
 		if bd.t_activo[ix] == 0:
-			muertos += 1
+			_muertos_mes += 1
 			continue
 		var e: float = v_ed[ix]
 		if n == 1:
@@ -480,7 +486,12 @@ func avanzar_mes(grupo := 0, n_grupos := 1) -> void:
 			v_fa[ix] = clampf(cfn * f + gf * (1.0 - cfn) / (1.0 - cf), 0.0, 100.0)
 		v_fi[ix] = fisico_de_edad(v_ed[ix])
 		v_bm[ix] = 0.0
-	muertos *= n                                                       # (se contaron solo los del grupo: el total es n veces eso, en promedio)
+	if j_fin < total:
+		_cur_mes = j_fin
+		return true                                                    # queda trabajo: el resto, en la próxima llamada
+	_cur_mes = 0
+	var muertos := _muertos_mes * n                                    # (se contaron solo los del grupo: el total es n veces eso, en promedio)
+	_muertos_mes = 0
 	if muertos > 4000 and muertos * 5 > _ix_todos.size():              # los pelotones disueltos se quitan de la lista (si no, cada mes recorre cada vez más muertos)
 		var vivos := PackedInt32Array()
 		for ix2 in _ix_todos:
@@ -489,6 +500,7 @@ func avanzar_mes(grupo := 0, n_grupos := 1) -> void:
 		_ix_todos = vivos
 	version += 1
 	actualizar_precios()
+	return false
 
 
 # ─────────────────────────────────────────────────────────────

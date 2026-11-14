@@ -46,6 +46,9 @@ const FACTOR_EXIGENCIA := 0.8           # lo que el vencedor exige por devolver 
 const SUBRONDA_DIAS := 4                # 0.1.8.3: un combate largo se parte en tramos de hasta 4 días (ver `_ronda`)
 const LOTE_BATALLAS := 5                # rondas de combate por llamada de `fase_batallas`
 const CORTE_BATALLAS_US := 5000         # 0.1.8.32: una llamada de `fase_batallas` se corta (entre sub-rondas) al pasar de 5 ms
+const PARCIAL_MIN_CELDAS := 6           # 0.1.8.43: una provincia de menos celdas que esto se conquista entera
+const PARCIAL_DECISIVO := 0.5           # con un puntaje de guerra de esto o más el vencedor se queda la provincia entera
+const PARCIAL_BASE := 0.4               # fracción mínima de una provincia grande que se queda un vencedor poco claro (sube con el puntaje)
 const DIAS_ESCANEO := 7                 # cada cuántos días corre la red de seguridad de ocupaciones
 
 var mundo
@@ -66,6 +69,7 @@ var _bat_cola: Array = []                # claves de las batallas que aún comba
 var _bat_lista := false                  # ¿hay un paso a medias? (la cola ya se armó)
 var _bat_curso = null                    # clave de la batalla que está combatiendo ahora (null = ninguna): puede quedar a medias entre dos llamadas
 var _bat_resto := 0                      # días de combate que le faltan a `_bat_curso` en este paso
+var parciales := 0                       # 0.1.8.43: cuántas conquistas parciales (la provincia cambió de forma) ha habido
 var _cache_part := {}                    # "por|de" -> [versión de la economía, fracción ocupada] (ver `participacion_ocupada`)
 
 
@@ -138,6 +142,8 @@ func declarar(agresor: int, defensor: int, causa := "Ataque a una provincia") ->
 	_sumar_guerras(agresor, 1)
 	_sumar_guerras(defensor, 1)
 	version += 1
+	if mundo.diplomacia != null:
+		mundo.diplomacia.al_declarar(agresor, defensor, causa)        # opinión, infamia y llamadas a los aliados
 	_avisar_jugador(agresor, defensor, gid, causa)
 	_revisar_pareja(agresor, defensor)
 	return gid
@@ -564,6 +570,7 @@ func _ocupar(prov_tid: int, por: int) -> void:
 		return
 	var dueno: int = ej.dueno_de_provincia(int(pr.idx))
 	var nombre_prov: String = String(pr.nombre)
+	mundo.marcar_balance(dueno)                                       # ocupada o liberada: su dueño cobra distinto
 	if por == dueno:
 		bd.poner_i("ocupante", prov_tid, -1, "Liberación")
 		mundo.evento(por, "%s liberó %s de la ocupación enemiga." % [bd.nombre_de(por), nombre_prov], dueno)
@@ -707,6 +714,8 @@ func firmar_paz(a: int, b: int, t: Dictionary, motivo := "Paz") -> Dictionary:
 	var gid: int = int(activas[k])
 	var posesion: bool = bool(t.get("posesion", false))
 	var indem: bool = bool(t.get("indemnizacion", false))
+	var s_a := puntaje_guerra(a, b)                                       # 0.1.8.43: se mide antes de cerrar las ocupaciones (decide si la conquista es entera o parcial)
+	var s_b := -s_a
 	var quedan_a: bool = posesion or bool(t.get("conserva_a", false))      # 0.1.8.2a: cada bando puede quedarse con lo que ocupa por separado
 	var quedan_b: bool = posesion or bool(t.get("conserva_b", false))
 	var cede: Array = t.get("cede", [])                                    # provincias de `a` que pasan a `b` por el tratado
@@ -754,6 +763,8 @@ func firmar_paz(a: int, b: int, t: Dictionary, motivo := "Paz") -> Dictionary:
 	var fecha_txt: String = BDScript.fecha_texto(bd.fecha)
 	for pi in oc_a + oc_b:
 		bd.poner_i("ocupante", mundo.provincias[int(pi)].tid, -1, "Fin de la ocupación (paz)")
+	mundo.marcar_balance(a)
+	mundo.marcar_balance(b)
 	bd.poner_f("guerra_fin", gid, float(bd.fecha), motivo)
 	activas.erase(k)
 	_sumar_guerras(a, -1)
@@ -765,11 +776,11 @@ func firmar_paz(a: int, b: int, t: Dictionary, motivo := "Paz") -> Dictionary:
 				cedidas_tratado += 1
 	if quedan_a:
 		for pi in oc_a:
-			mundo.transferir_provincia(int(pi), na, fecha_txt, "Paz con " + nb)
+			_quedarse(int(pi), na, s_a, fecha_txt, "Paz con " + nb)
 	if quedan_b:
 		for pi in oc_b:
 			if mundo.provincias[int(pi)].pais == na:                   # (las que ya se cedieron por el tratado no se repiten)
-				mundo.transferir_provincia(int(pi), nb, fecha_txt, "Paz con " + na)
+				_quedarse(int(pi), nb, s_b, fecha_txt, "Paz con " + na)
 	_expulsar_tropas(a, b)
 	_expulsar_tropas(b, a)
 	version += 1
@@ -787,7 +798,27 @@ func firmar_paz(a: int, b: int, t: Dictionary, motivo := "Paz") -> Dictionary:
 	mundo.evento(a, msg, b)
 	if mundo.ia != null:
 		mundo.ia.registrar_paz(a, b)                                  # tregua entre ellos (las IA no se vuelven a atacar enseguida)
+	if mundo.diplomacia != null:
+		mundo.diplomacia.al_paz(a, b)
 	return {"ok": true, "msg": msg, "ganadas": gan, "cedidas": ced, "indemnizacion": pago_local, "pagado_usd": pagado_usd}
+
+
+## 0.1.8.43 · Fracción de una provincia ocupada que se queda el vencedor: 1 (entera) si es chica o si ganó con claridad; si no, entre PARCIAL_BASE y 1 según el puntaje.
+func fraccion_conquista(pi: int, puntaje: float) -> float:
+	if pi < 0 or pi >= mundo.provincias.size() or (mundo.provincias[pi].anillos as Array).size() < PARCIAL_MIN_CELDAS or puntaje >= PARCIAL_DECISIVO:
+		return 1.0
+	return clampf(PARCIAL_BASE + maxf(puntaje, 0.0) * (1.0 - PARCIAL_BASE) / PARCIAL_DECISIVO, PARCIAL_BASE, 1.0)
+
+
+## El vencedor `quien` (nombre) se queda con la provincia ocupada `pi`: entera, o solo la parte pegada a su territorio si es grande y la victoria no fue clara.
+func _quedarse(pi: int, quien: String, puntaje: float, fecha_txt: String, motivo: String) -> void:
+	var f := fraccion_conquista(pi, puntaje)
+	if f < 1.0:
+		var r: Dictionary = mundo.ceder_parcial_a(pi, quien, f, motivo)
+		if bool(r.get("ok", false)):
+			parciales += 1
+			return
+	mundo.transferir_provincia(pi, quien, fecha_txt, motivo)
 
 
 ## Las tropas de `de` que quedaron dentro de provincias de `en` salen hacia su refugio (tras la paz no hay derecho a quedarse).

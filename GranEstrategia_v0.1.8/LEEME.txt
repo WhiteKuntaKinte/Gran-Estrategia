@@ -1,8 +1,43 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.42 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.43 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
-con sus provincias · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
-B = ventana Construir · T = ventana Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
+B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.43 — DESCUBRIMIENTOS A PANTALLA COMPLETA, IA CON CONSECUENCIAS, SUBPROVINCIAS REALES, PROVINCIAS QUE CAMBIAN DE FORMA Y PINTURAS POR LUGAR
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.43.md. Es la segunda y última versión para tus notas del 12 y 13 de noviembre: todo en una sola, con un ZIP al final, como pediste.)
+- PANTALLA DE DESCUBRIMIENTOS (tecla T o el botón de la barra; Esc vuelve atrás): ya no es una ventana, es pantalla completa. Arriba eliges la rama (Militar, Científica, Sociedad), cada una con su propio ambiente
+  (fragua con brasas, noche con constelaciones, violeta y oro); debajo, las secciones como tarjetas con la constelación de sus descubrimientos. Al entrar en una sección ves su ÁRBOL, que CRECE HACIA ARRIBA
+  como tu boceto, pero en ABANICO CIRCULAR (no cuadrícula): la raíz abajo en el centro, cada era un anillo y cada subsección una cuña; las líneas son curvas. Cada descubrimiento es un círculo grande sin texto y al pasar el ratón sale el globo con su nombre, año, estado, descripción, lo que necesita y lo que abre. COLORES: bloqueado NEGRO, aún lejano GRIS,
+  conocido VERDE, disponible DORADO. Un trazo naranja difuminado con flecha (sin texto) = el camino sigue en otra sección (púlsalo y te lleva); una línea que termina en una «T» = camino sin salida. Arrastra para moverte y usa la rueda para acercar o alejar (hasta ver los círculos enormes o la sección entera); entra centrado en lo que ya puedes investigar; botones «Mi frontera» y «Ver todo»; buscador, filtros y ficha.
+- IA CON CONSECUENCIAS (lo del Imperio romano que se comía el mundo en el año 1):
+  · RELACIONES: cada par de países tiene una OPINIÓN (−100 a +100) que cambia con lo que hacen (guerras, paces, regalos, alianzas cumplidas o rotas) y se olvida despacio. Hay ALIANZAS (hasta 3; si atacan a tu aliado te llega
+    la llamada, y si no acudes pierdes opinión y la alianza se rompe), un RIVAL por país (10 años) y tregua. Pestaña DIPLOMACIA del país elegido > «Relaciones internacionales»: opinión con sus partes, alianza, rival, infamia,
+    coalición, y los botones para proponer alianza, declarar rival o regalar dinero.
+  · INFAMIA Y COALICIONES: cada provincia que un país se queda por la fuerza le suma infamia (más cuanto más poblada), atacar a un aliado o romper una tregua también. Con mucha infamia sus vecinos forman una COALICIÓN
+    (de 2 a 8 países) que lo ataca junta hasta que se calma. Una IA con infamia alta deja de agredir por su cuenta.
+  · ESTABILIDAD SOCIAL POR PROVINCIA: cada provincia tiene una estabilidad (0–100, la antigua «favorabilidad», que ya multiplicaba la producción) que sube o baja según si la tierra es propia o conquistada, su cultura, la
+    distancia a la capital, la guerra, la devastación, la guarnición y la SOBREEXTENSIÓN (un país mucho más grande que con el que empezó). Si una provincia cae por debajo de 15 durante dos revisiones se AMOTINA (junto con las
+    vecinas agitadas del mismo pueblo) y puede independizarse o volver a su pueblo original. Tú recibes un aviso que PAUSA el juego: pagar a los notables, reprimir (hacen falta tropas), conceder la independencia o ignorar.
+  · LA IA DECIDE CON TODO ESO: no se alía sin opinión, no ataca a su aliado, con mucha infamia solo va contra su rival o su coalición, con el país inestable no se mete en guerras y tras una paz con provincias descansa
+    para digerirlas. Avisos nuevos: ALIANZA (una IA te propone una; pausa), LLAMADO (un aliado te llama a la guerra; pausa), REVUELTA (pausa) y COALICIÓN (aviso rojo, no pausa).
+  · El día del juego ahora tiene 9 fases (economía, IA, diplomacia, estabilidad, ejército, obras, llegadas, batallas, ocupaciones).
+- SUBPROVINCIAS REALES (opción B): doble clic en una provincia del país enfocado (o el botón de la tarjeta «Subdivisiones») abre sus subdivisiones en el mapa: límites reales de geoBoundaries ADM2, nombre al pasar el cursor, clic para
+  elegir una; la tarjeta lista cada una con su superficie y su población estimada (la de la provincia repartida por superficie). Cubren todo el mundo (214 países). Se calculan solo al pedirlas: no cuestan nada al cargar.
+  OJO: los límites son los de hoy; en el año 1, 1096 y 1500 son una referencia moderna, no una división histórica (la tarjeta lo dice). Los edificios siguen siendo por provincia.
+  CRÉDITO OBLIGATORIO (licencia CC BY 4.0): «geoBoundaries (William & Mary geoLab), CC BY 4.0». Sale en Opciones > Información, en la tarjeta de subdivisiones y aquí.
+- PROVINCIAS QUE CAMBIAN DE FORMA: al firmar una paz «quedándose con lo ocupado», una provincia grande ya no pasa entera: se parte (se queda las celdas más cercanas a su frontera; el resto sigue siendo del dueño).
+  Si el vencedor ganó con mucha claridad o la provincia es chica, pasa entera como antes. La población, la producción y las ciudades se reparten por superficie. Las subdivisiones abiertas se rehacen solas.
+- PINTURAS POR LUGAR: la pintura de arriba del panel ahora puede ser de la PROVINCIA (por ejemplo, la «Vista de Toledo» de El Greco en Toledo, el Gran Ola de Hokusai en Kanagawa) o, en EE. UU., de su ESTADO; si no tiene,
+  la de su país, y si el país tampoco tiene, la de su región según dónde cae la provincia (el Sáhara ya no usa la región del Mediterráneo), su continente o el mundo. 158 de las 295 pinturas son de lugares concretos
+  (de dominio público o CC0; autor, título y licencia en pinturas/CREDITOS.txt). Solo 2026 tiene pinturas de lugar.
+- MENOS TIRONES: los cuadros de tropas se dibujan en lotes (llamadas de dibujo del mundo en 2026: 327 → 109) y el mes del ejército se reparte entre fotogramas. Respuesta a tu F9 de la 0.1.8.42 (18 FPS de media en el año 1
+  con todas las IA a x6): año 1: 194 → 153 ms por fotograma, scripts 25,3 → 16,8 ms, llamadas de dibujo 555 → 158; 2026: 192 → 126 ms. OJO, lo que sale PEOR: con TODAS las IA activas a x6 el calendario avanza más despacio que antes (en mi equipo de pruebas ~2× menos días en el mismo tiempo, porque cada día cuesta más con la diplomacia y la estabilidad); la pantalla va más fluida a cambio. Si lo sientes lento, Opciones > prioridad de simulación «velocidad del tiempo»; y dime en tu F9 cómo lo notaste.
+- PRUEBAS: runner95 (diplomacia, estabilidad, IA con consecuencias, avisos y HUD: 129 comprobaciones), runner96 (subprovincias: 51), runner97 (cesión y conquista parcial: 34) y runner98 (pinturas por lugar: 34) nuevas; runner91 reescrita
+  para la pantalla de Descubrimientos (170); runner71, 72, 83, 84 y 93 ajustadas.
+- LO QUE TODAVÍA NO: edificios por subprovincia (siguen por provincia: antes hay que pasar a un formato compacto), subprovincias históricas por época, la vista de Relieve de altísima calidad (teselas), cuando me digas.
+NO SE PROBÓ: tu PC real (Intel HD 520): la pantalla de Descubrimientos con muchos nodos, abrir subdivisiones en provincias enormes, y una partida larga con todas las IA (a x6 en el año 1): ESO es lo que más necesito de tu
+  prueba, con F9 (grabo de verdad el resumen y lo comparo con el de la 0.1.8.42). El equilibrio de la IA a muy largo plazo lo revisé en simulaciones de 100 años (con todas las IA activas ni antes ni ahora aparece un país por encima de ~7 % de las provincias: no pude reproducir tu Imperio romano; lo que cambia es que hay la mitad de guerras declaradas y sobreviven más países); si vuelves a verlo, necesito tu partida.
 
 NUEVO EN 0.1.8.42 — DESCUBRIMIENTOS A LA VISTA, 4 ESCENARIOS, EDIFICIOS DE PARTIDA, GRABADOR GLOBAL Y MENOS TIRONES
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.42.md. Es la primera de dos versiones para tus notas del 12 de noviembre; la segunda, 0.1.8.43, trae subprovincias, provincias que cambian de forma y pinturas por provincia.

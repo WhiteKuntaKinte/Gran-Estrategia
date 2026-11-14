@@ -15,10 +15,12 @@ const PersonalizarScript := preload("res://scripts/personalizar_pais.gd")
 const CapaTropasScript := preload("res://scripts/capa_tropas.gd")
 const FusionScript := preload("res://scripts/fusion_mapa.gd")
 const TerritorioScript := preload("res://scripts/territorio.gd")
+const SubprovinciasScript := preload("res://scripts/subprovincias.gd")
+const CapaSubScript := preload("res://scripts/capa_subprovincias.gd")
 const TemaHud := preload("res://scripts/tema_hud.gd")
 const RankingScript := preload("res://scripts/ranking.gd")
 const ConstruirScript := preload("res://scripts/ventana_construir.gd")
-const DescubrimientosVentana := preload("res://scripts/ventana_descubrimientos.gd")
+const DescubrimientosPantalla := preload("res://scripts/pantalla_descubrimientos.gd")
 const BANDERAS_HD_MAX := 12                     # banderas HD (256 px) en memoria a la vez: el panel y el aviso de guerra piden una cada vez
 const PinturasScript := preload("res://scripts/pinturas.gd")
 const MateriasScript := preload("res://scripts/materias.gd")
@@ -30,7 +32,7 @@ const AvisosScript := preload("res://scripts/avisos.gd")
 const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 
-const VERSION := "0.1.8.42"
+const VERSION := "0.1.8.43"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -588,6 +590,10 @@ var orden_mover := {}          # {"reg": ID, "n": soldados, "grupo": [IDs] (si s
 var _t_hover_dest := 0
 var fusion                     # FusionScript: relleno por dueño y fronteras desde los dueños actuales (0.1.7.9.9F; desde 0.1.8.35 por celdas)
 var territorio                 # TerritorioScript (0.1.8.35): la forma de las provincias (qué celdas son de cuál) y las operaciones para cambiarla
+var subprov                    # SubprovinciasScript (0.1.8.43): subprovincias reales (geoBoundaries ADM2), se cargan al pedirlas
+var capa_sub                   # CapaSubScript: límites internos, resaltado y nombre de la subprovincia bajo el cursor (solo existe tras abrir una)
+var _subprov_hay := -1         # ¿están los datos de datos/subprov? (-1 = sin comprobar)
+var _sub_vacia := -1           # provincia en la que se intentó abrir las subdivisiones y no había datos (la ficha lo explica)
 var _ver_dueno := -1           # versión de `propietario` con la que está pintado el mapa
 var _ver_ocup := -1            # versión de `ocupante` con la que está pintado el mapa (0.1.8.1)
 const OCUP_BASE := 700000000   # IDs «virtuales» de dueño para pintar las provincias ocupadas: OCUP_BASE + dueño × OCUP_MOD + ocupante
@@ -621,7 +627,7 @@ var campana_rect := Rect2()           # territorio de la campaña en coordenadas
 var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
 var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
-var panel_descubrimientos             # DescubrimientosVentana (0.1.8.42): la ventana de Descubrimientos (tecla T), mientras está abierta
+var panel_descubrimientos             # DescubrimientosPantalla (0.1.8.43): la pantalla completa de Descubrimientos (tecla T), mientras está abierta
 var pinturas                          # PinturasScript (0.1.8.41): la pintura clásica de cada país, arriba de su panel
 var materias                          # MateriasScript (0.1.8.41): iconos de materias primas, sectores y monedas
 var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
@@ -1058,6 +1064,7 @@ func _process(delta: float) -> void:
 		_correr_pend_dueno()                                     # 0.1.8.32: una etapa por fotograma del repintado anterior (fronteras, nombres, país enfocado)
 	else:
 		_actualizar_prov_todas()                                 # líneas de provincia: cuando la capa se ve, si quedaron viejas (y, a x3+, como mucho cada 1,5 s)
+	_repintar_forma_pendiente()                                  # 0.1.8.43: celdas movidas por una paz (la provincia cambió de forma)
 	_sincronizar_propiedad(false, true, true)                    # un dueño cambió (conquista, anexión, debug): se repinta el mapa
 	_refrescar_panel_diferido()
 	_medir_sinc(t_sinc)
@@ -1417,6 +1424,9 @@ func _construir_mapa() -> void:
 		fusion.iniciar(self, vb, ib, cp, lista_fill, inst_fill, dueno_base, _celda_prov_de_anillos())
 	territorio = TerritorioScript.new()
 	territorio.iniciar(self)
+	territorio.forma_cambiada.connect(_forma_cambiada_sub)       # 0.1.8.43: una provincia cambió de forma: sus subprovincias guardadas ya no valen
+	if mundo != null:
+		mundo.cesion_parcial_cb = Callable(self, "ceder_parcial_a")
 	if fusion.listo:
 		_sincronizar_propiedad(true)
 		_cargar_relieve_archivo()
@@ -1796,8 +1806,8 @@ const CAM_VEL_TECLADO := 620.0                # píxeles del mapa por segundo co
 const CAM_VEL_SHIFT := 2.6
 
 func _mover_camara_teclado(delta: float) -> void:
-	if en_pausa or camara == null or _aviso_abierto():
-		return
+	if en_pausa or camara == null or _aviso_abierto() or (panel_descubrimientos != null and is_instance_valid(panel_descubrimientos)):
+		return                                           # con la pantalla de Descubrimientos abierta el mapa no se mueve por debajo
 	var foco := get_viewport().gui_get_focus_owner()
 	if foco is LineEdit or foco is TextEdit or foco is SpinBox:
 		return
@@ -1951,6 +1961,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			_arrastre_px += event.relative.length()
 			camara.position -= event.relative / camara.zoom.x
 			_normalizar_camara()
+		if capa_sub != null and capa_sub.activa() and not arrastrando:
+			capa_sub.mover(get_global_mouse_position(), event.position)
 		if not orden_mover.is_empty() and capa_tropas != null:
 			var ahora := Time.get_ticks_msec()
 			if ahora - _t_hover_dest >= 40:
@@ -2191,6 +2203,10 @@ func _anillo_bajo(pos: Vector2) -> Array:
 
 
 func _seleccionar(pos: Vector2) -> void:
+	if capa_sub != null and capa_sub.activa() and not _ctrl_pulsado() and capa_sub.elegir(pos):
+		if hud != null:
+			hud.redibujar()
+		return                                                    # con las subdivisiones abiertas, un clic dentro de la provincia elige la subprovincia
 	if _ctrl_pulsado() and _ciudad_en(pos) < 0 and _seleccionar_varias(pos):
 		return                                                    # Ctrl+clic sobre una provincia o un país: se suma a la selección (o se quita)
 	_limpiar_seleccion()
@@ -2352,12 +2368,14 @@ func _doble_click(pos: Vector2) -> void:
 		_ir_a_unidad(pi)
 		_seleccion_provincia(pi, String(a["k"]), p)
 		_tras_elegir_provincia(pi)
+		mostrar_subprovincias(pi)                                 # 0.1.8.43: el doble clic en una provincia abre sus subdivisiones
 		return
 	if _es_libre(pais):
 		_salir_foco()                                             # 0.1.8.39a: tierras sin reclamar: se va a esa zona, sin enfocar «el país» entero
 		_mover_camara_a(_bbox_anillos(mundo.provincias[pi].anillos), 0.5, 0.7, 2.0, 28.0)
 		_seleccion_provincia(pi, String(a["k"]), p)
 		_tras_elegir_provincia(pi)
+		mostrar_subprovincias(pi)
 		return
 	_enfocar_pais(pais, true)
 	_seleccion_pais(pais, String(a["k"]), p)
@@ -2366,6 +2384,162 @@ func _doble_click(pos: Vector2) -> void:
 func _limpiar_seleccion() -> void:
 	multi_sel.clear()
 	_borrar_resaltado()
+	if capa_sub != null:
+		capa_sub.ocultar()                                        # al elegir otra cosa se cierran las subdivisiones
+
+
+## Las subprovincias guardadas de las provincias que cambiaron de forma se descartan (y si la capa estaba abierta en una de ellas se cierra).
+func _forma_cambiada_sub(provs: PackedInt32Array) -> void:
+	if subprov != null:
+		for p in provs:
+			subprov.olvidar(int(p))
+	if capa_sub != null and capa_sub.activa() and provs.has(capa_sub.pi):
+		capa_sub.ocultar()
+		if hud != null:
+			hud.redibujar()
+
+
+## ── 0.1.8.43 · CESIÓN PARCIAL (las provincias cambian de forma con el tiempo) ───────────────────────────────────────────────────────────
+## Pasa a `destino` la fracción `fraccion` (0–1) de las celdas de `origen` más cercanas a él, y con ellas lo que vive encima: la población y su producción
+## (en proporción a la superficie que se mueve), y las ciudades cuya posición queda en las celdas movidas. Los edificios se quedan con la provincia.
+## Si cambia el dueño de la tierra, ambos países dejan registro. Devuelve {"ok", "celdas", "area", "pob", "msg"}.
+## `diferir` (lo usa la paz de la simulación): los datos cambian al momento, pero el repintado del mapa (relleno, fronteras, nombres: 15-25 ms por provincia) se
+## deja para los fotogramas siguientes, por etapas y agrupando varias cesiones seguidas (ver `_forma_pend`). Sin `diferir` (Debug, pruebas) todo se hace ya.
+func ceder_parcial(origen: int, destino: int, fraccion: float, motivo := "Cesión parcial", diferir := false) -> Dictionary:
+	var vacio := {"ok": false, "celdas": 0, "area": 0.0, "pob": 0.0, "msg": ""}
+	if mundo == null or territorio == null or not territorio.listo() or origen == destino or origen < 0 or destino < 0 \
+			or origen >= mundo.provincias.size() or destino >= mundo.provincias.size():
+		vacio["msg"] = "No se puede ceder: provincias o territorio no válidos."
+		return vacio
+	if territorio.celdas_frontera(origen, destino).is_empty():
+		vacio["msg"] = "Las provincias no son vecinas."
+		return vacio
+	var antes: PackedInt32Array = territorio.celdas_de(origen).duplicate()
+	var n := clampi(int(roundf(float(antes.size()) * clampf(fraccion, 0.0, 1.0))), 1, antes.size() - 1)
+	if antes.size() < 2:
+		vacio["msg"] = "La provincia tiene una sola celda: no se puede partir."
+		return vacio
+	var area0: float = territorio.area_provincia(origen)
+	_forma_diferida = diferir
+	var movidas: int = territorio.ceder(origen, destino, n)
+	_forma_diferida = false
+	if movidas <= 0:
+		vacio["msg"] = "No se movió ninguna celda."
+		return vacio
+	var ahora: PackedInt32Array = territorio.celdas_de(origen)
+	var cambiadas := PackedInt32Array()
+	var area_mov := 0.0
+	for c in antes:
+		if not ahora.has(c):
+			cambiadas.append(c)
+			area_mov += territorio.area_celda(c)
+	var parte := clampf(area_mov / maxf(area0, 1.0e-9), 0.0, 1.0)
+	var po = mundo.provincias[origen]
+	var pd = mundo.provincias[destino]
+	var pais_o: String = po.pais
+	var pais_d: String = pd.pais
+	var bd = mundo.bd
+	var m0: String = bd.motivo_ctx
+	bd.motivo_ctx = motivo
+	var pob_o: float = po.poblacion
+	var delta := pob_o * parte
+	var pob_d: float = pd.poblacion
+	var pc_o: float = bd.num("pib_pc_usd", po.tid, 0.0)
+	var pc_d: float = bd.num("pib_pc_usd", pd.tid, 0.0)
+	if delta > 0.0:
+		po.poblacion = maxf(pob_o - delta, 0.0)
+		pd.poblacion = pob_d + delta
+		if pc_o > 0.0 and (pob_d + delta) > 0.0:
+			bd.poner_f("pib_pc_usd", pd.tid, (pob_d * pc_d + delta * pc_o) / (pob_d + delta))      # la producción de lo que se mueve viaja con su gente
+	for cid in (po.ciudades as Array).duplicate():
+		var ci = mundo.ciudades[int(cid)]
+		var cel: int = territorio.celda_en(ci.pos)
+		if cel >= 0 and cambiadas.has(cel):
+			(po.ciudades as Array).erase(cid)
+			(pd.ciudades as Array).append(cid)
+			ci.provincia = destino
+			ci.pais = pais_d
+	bd.motivo_ctx = m0
+	mundo.cesiones_parciales += 1
+	if pais_o != pais_d and mundo.paises.has(pais_o) and mundo.paises.has(pais_d):
+		var fecha_txt: String = BDScript.fecha_texto(bd.fecha)
+		var txt := "%s (%d %% de %s)" % [motivo, int(roundf(parte * 100.0)), po.nombre]
+		mundo.paises[pais_o].historial.append({"tipo": "perdio", "provincia": origen, "con": pais_d, "fecha": fecha_txt, "motivo": txt})
+		mundo.paises[pais_d].historial.append({"tipo": "gano", "provincia": destino, "con": pais_o, "fecha": fecha_txt, "motivo": txt})
+		mundo.marcar_balance(int(mundo.paises[pais_o].tid))
+		mundo.marcar_balance(int(mundo.paises[pais_d].tid))
+	bd.version += 1
+	bd.version_eco += 1
+	return {"ok": true, "celdas": cambiadas.size(), "area": parte, "pob": delta,
+		"msg": "%s cede %d %% de %s (%d celdas) a %s." % [pais_o, int(roundf(parte * 100.0)), po.nombre, cambiadas.size(), pais_d]}
+
+
+## La provincia vecina de `origen` que es de `pais` y comparte más frontera con ella (−1 si no hay).
+func vecina_de_pais(origen: int, pais: String) -> int:
+	var mejor := -1
+	var mejor_n := 0
+	for v in territorio.provincias_vecinas(origen):
+		if mundo.provincias[int(v)].pais != pais:
+			continue
+		var n: int = territorio.celdas_frontera(origen, int(v)).size()
+		if n > mejor_n:
+			mejor_n = n
+			mejor = int(v)
+	return mejor
+
+
+## Cesión parcial de `origen` a `pais` (a través de la vecina suya con la que comparte más frontera). Es lo que llama la paz (`Guerra.firmar_paz`).
+func ceder_parcial_a(origen: int, pais: String, fraccion: float, motivo := "Cesión parcial", diferir := false) -> Dictionary:
+	var q := vecina_de_pais(origen, pais) if territorio != null and territorio.listo() else -1
+	if q < 0:
+		return {"ok": false, "celdas": 0, "area": 0.0, "pob": 0.0, "msg": "%s no tiene una provincia vecina a esta." % pais}
+	return ceder_parcial(origen, q, fraccion, motivo, diferir)
+
+
+## ── 0.1.8.43 · SUBPROVINCIAS ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ¿Hay datos de subprovincias en el proyecto? (solo mira si existen los archivos; la carga real ocurre al abrirlas)
+func subprov_hay() -> bool:
+	if _subprov_hay < 0:
+		_subprov_hay = 1 if (FileAccess.file_exists(SubprovinciasScript.CARPETA + "nombres.json") and FileAccess.file_exists(SubprovinciasScript.CARPETA + "indice.bin")) else 0
+	return _subprov_hay == 1
+
+
+## Abre las subdivisiones de la provincia `pi` en el mapa (la primera vez carga el índice y el país que haga falta). Devuelve false si no hay datos para ella.
+func mostrar_subprovincias(pi: int) -> bool:
+	if not subprov_hay() or mundo == null or pi < 0 or pi >= mundo.provincias.size():
+		return false
+	if subprov == null:
+		subprov = SubprovinciasScript.new()
+		subprov.iniciar(self)
+	if capa_sub == null:
+		capa_sub = CapaSubScript.new()
+		capa_sub.iniciar(self)
+		add_child(capa_sub)
+	var hecho: bool = capa_sub.mostrar(pi)
+	_sub_vacia = -1 if hecho else pi
+	if hud != null:
+		hud.redibujar()
+	return hecho
+
+
+func ocultar_subprovincias() -> void:
+	if capa_sub != null and capa_sub.activa():
+		capa_sub.ocultar()
+		if hud != null:
+			hud.redibujar()
+
+
+## Lo que necesita la ficha: {"activa", "pi", "lista", "elegida"}; con `pi` pedido, activa solo si la capa está abierta en esa provincia.
+func subprov_estado(pi: int) -> Dictionary:
+	var act: bool = capa_sub != null and capa_sub.activa() and capa_sub.pi == pi
+	return {"activa": act, "lista": capa_sub.lista if act else [], "elegida": capa_sub.elegida if act else -1, "sin_datos": _sub_vacia == pi}
+
+
+func elegir_subprovincia(i: int) -> void:
+	if capa_sub != null and capa_sub.activa():
+		capa_sub.elegir_indice(i)
+		if hud != null:
+			hud.redibujar()
 
 
 ## Quita del mapa lo resaltado (relleno, resplandor y borde) y apaga la respiración; no toca la selección múltiple.
@@ -2489,6 +2663,8 @@ const SEL_MATERIALES := {
 	"brillo": [COLOR_SEL, SEL_BRILLO_PX, 0.0, 1.0],
 	"borde": [Color(0.0, 0.0, 0.0, 1.0), SEL_BORDE_PX, 1.0, 0.0],
 	"mar": [Color(1.0, 0.85, 0.1, 0.9), 2.4, 1.0, 0.0],
+	"sub": [Color(1.0, 0.96, 0.78, 0.85), 1.3, 1.0, 0.0],          # 0.1.8.43: límites entre subprovincias
+	"sub_sel": [Color(1.0, 0.80, 0.10, 1.0), 2.6, 1.0, 0.0],       # la subprovincia elegida
 }
 var mats_sel: Dictionary = {}                          # clave de SEL_MATERIALES -> ShaderMaterial (compartido por todas las cintas de esa clase)
 var _shader_sel: Shader
@@ -2836,7 +3012,7 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 		elif String(d.get("tipo", "")) in ["provincia", "ciudad", "pais", "estado", "libre"]:
 			var pn := _pais_de_seleccion()                         # la pintura del país (o de su región, continente o el mundo si no tiene propia)
 			if pn != "":
-				d["pintura"] = pinturas.de_pais(pn)
+				d["pintura"] = _pintura_de_seleccion(pn)
 	if mundo != null and mundo.edificios != null and String(d.get("tipo", "")) in ["provincia", "ciudad", "pais", "estado"]:
 		var pis := _provincias_elegidas()                          # 0.1.8.40: las tarjetas Edificios / Cores / Ingreso y la ventana Construir trabajan sobre estas provincias
 		if not pis.is_empty():
@@ -2851,6 +3027,23 @@ func _enviar_hud(d: Dictionary, p: Vector2) -> void:
 	_actualizar_hint()
 	if debug_menu != null and is_instance_valid(debug_menu):
 		debug_menu.seleccion_cambio(sel_tipo)
+
+
+## 0.1.8.43 · La pintura del panel: la de la PROVINCIA (o la de la ciudad, por su provincia) si tiene una propia, la de su ESTADO en EE. UU., y si no la del país
+## (o la de su región según dónde cae la provincia, el continente o el mundo).
+func _pintura_de_seleccion(pais: String) -> Dictionary:
+	var pi := -1
+	match sel_tipo:
+		"provincia":
+			pi = int(sel_ref.get("pi", -1))
+		"ciudad":
+			if mundo != null and sel_ref.has("id"):
+				pi = int(mundo.ciudades[int(sel_ref["id"])].provincia)
+		"estado":
+			return pinturas.de_estado(pais, String(sel_ref.get("estado", "")))
+	if pi >= 0:
+		return pinturas.de_provincia(pi)
+	return pinturas.de_pais(pais)
 
 
 ## 0.1.8.40 · Las provincias que cubre lo elegido (índices de Mundo.provincias): la provincia (o la de la ciudad), todas las del país o estado,
@@ -2924,13 +3117,13 @@ func _cerrar_construir() -> void:
 	panel_construir = null
 
 
-## 0.1.8.42 · Ventana de Descubrimientos (tecla T o el botón de la barra): el catálogo completo, en cualquier época.
+## 0.1.8.43 · Pantalla de Descubrimientos (tecla T o el botón de la barra; antes, desde la 0.1.8.42, era una ventana): el catálogo completo a pantalla completa, en cualquier época.
 func _abrir_descubrimientos() -> void:
 	if mundo == null or mundo.descubrimientos == null or en_menu:
 		return
 	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
 		return
-	panel_descubrimientos = DescubrimientosVentana.new()
+	panel_descubrimientos = DescubrimientosPantalla.new()
 	add_child(panel_descubrimientos)
 	panel_descubrimientos.construir(self, fuente_ui)
 	panel_descubrimientos.cerrada.connect(_cerrar_descubrimientos)
@@ -3875,6 +4068,8 @@ func _iniciar_partida(p: Dictionary) -> void:
 		_on_jugar()
 		_sincronizar_propiedad(true)
 	_actualizar_barra()                                               # 0.1.8.3: la barra superior muestra tu país (o «Observador») desde el primer cuadro
+	if territorio != null:
+		territorio.calentar.call_deferred()                           # 0.1.8.43: la primera cesión parcial de una paz no paga la carga de la geometría
 
 
 
@@ -4091,6 +4286,22 @@ func _procesar_avisos() -> void:
 		if tipo == "paz" and g.en_guerra(int(av["ia"]), jt):
 			_abrir_aviso_paz(av, jt)
 			return
+		if tipo == "coalicion" and int(av["objetivo"]) == jt:
+			aviso(String(av["texto"]), "mal")                                  # 0.1.8.43: no pausa; es un aviso para que lo sepas (y para que busques aliados)
+			continue
+		if tipo == "revuelta" and int(av["pais"]) == jt:
+			_abrir_aviso_revuelta(av)
+			return
+		if tipo == "alianza" and int(av["jugador"]) == jt and mundo.diplomacia.motivo_sin_alianza(jt, int(av["ia"])) == "":
+			_asegurar_popup()
+			_pausar_por_aviso()
+			popup_guerra.mostrar_alianza(av)
+			return
+		if tipo == "llamado" and int(av["aliado"]) == jt and mundo.diplomacia.son_aliados(jt, int(av["ayuda_a"])) and not g.en_guerra(jt, int(av["contra"])):
+			_asegurar_popup()
+			_pausar_por_aviso()
+			popup_guerra.mostrar_llamado(av)
+			return
 
 
 func _asegurar_popup() -> void:
@@ -4112,10 +4323,54 @@ func _al_cerrar_aviso(accion: String) -> void:
 	match accion:
 		"reanudar":
 			_poner_velocidad(1)
-		"firmada", "seguir_guerra":
+		"firmada", "seguir_guerra", "revuelta", "alianza", "llamado":
 			_poner_velocidad(_vel_aviso)
 	if mundo != null and not mundo.avisos.is_empty():
 		_procesar_avisos.call_deferred()
+
+
+## 0.1.8.43 · Diplomacia del jugador: alianza, regalo y rivalidad. Cada una devuelve {"ok", "msg"}.
+func proponer_alianza_jugador(otro: int) -> Dictionary:
+	var jt := _tid_jug()
+	if jt < 0 or mundo.diplomacia == null:
+		return {"ok": false, "msg": "Controla un país para negociar."}
+	var ev: Dictionary = mundo.diplomacia.evaluar_alianza(jt, otro)
+	if not bool(ev["acepta"]):
+		return {"ok": false, "msg": String(ev["motivo"])}
+	mundo.diplomacia.formar_alianza(jt, otro, "Propuesta del jugador")
+	if capa_tropas != null:
+		capa_tropas.refrescar()                                       # las tropas del aliado ya se ven en tu mapa
+	return {"ok": true, "msg": "Alianza firmada con %s." % String(mundo.paises[mundo.bd.nombre_de(otro)].nombre_visible)}
+
+
+func romper_alianza_jugador(otro: int) -> Dictionary:
+	var jt := _tid_jug()
+	if jt < 0 or mundo.diplomacia == null or not mundo.diplomacia.son_aliados(jt, otro):
+		return {"ok": false, "msg": "No sois aliados."}
+	mundo.diplomacia.romper_alianza(jt, otro, "la rompió %s" % mundo.jugador)
+	mundo.diplomacia.cambiar_opinion(jt, otro, -25.0, "Rompió la alianza")
+	if capa_tropas != null:
+		capa_tropas.refrescar()
+	return {"ok": true, "msg": "Alianza rota: la opinión del otro país cae 25 puntos."}
+
+
+func regalo_jugador(otro: int) -> Dictionary:
+	var jt := _tid_jug()
+	if jt < 0 or mundo.diplomacia == null:
+		return {"ok": false, "msg": "Controla un país para negociar."}
+	return mundo.diplomacia.regalar(jt, otro)
+
+
+func rival_jugador(otro: int, declarar: bool) -> Dictionary:
+	var jt := _tid_jug()
+	if jt < 0 or mundo.diplomacia == null:
+		return {"ok": false, "msg": "Controla un país para negociar."}
+	if declarar:
+		if not mundo.diplomacia.declarar_rival(jt, otro):
+			return {"ok": false, "msg": "No se puede declarar rival a ese país."}
+		return {"ok": true, "msg": "%s es ahora tu rival: la IA no se aliará con él contigo y tus vecinos lo verán como la amenaza." % String(mundo.paises[mundo.bd.nombre_de(otro)].nombre_visible)}
+	mundo.diplomacia.quitar_rival(jt)
+	return {"ok": true, "msg": "Ya no tienes rival declarado."}
 
 
 ## Días que faltan para el primer contacto del agresor con tus provincias: [días, true si ya hay columnas en marcha hacia ti] o [-1, false].
@@ -4179,6 +4434,20 @@ func _abrir_aviso_guerra(av: Dictionary, jt: int) -> void:
 		"prov_jug": (mundo.paises[mundo.jugador].provincias as Array).size(), "prov_ag": (mundo.paises[nom_ag].provincias as Array).size() if mundo.paises.has(nom_ag) else 0,
 		"dias_contacto": dias, "contacto_columnas": bool(c[1]), "vel": vel,
 		"seg_vel": dias * float(RelojScript.SEG_POR_DIA[vel]), "seg_v1": dias * float(RelojScript.SEG_POR_DIA[1])})
+
+
+## 0.1.8.43 · Una provincia del jugador se amotina: pausa y pregunta qué hacer (pagar, reprimir, conceder o ignorar).
+func _abrir_aviso_revuelta(av: Dictionary) -> void:
+	_asegurar_popup()
+	_pausar_por_aviso()
+	var d: Dictionary = av.duplicate()
+	var nombres := []
+	for pi in av["provincias"]:
+		nombres.append(String(mundo.provincias[int(pi)].nombre))
+	d["nombres"] = nombres
+	var e = mundo.paises[mundo.jugador]
+	d["caja_usd"] = floorf(e.tesoreria / mundo._por_usd(mundo.jugador)) if e.tiene_tesoreria() and e.tesoreria > 0.0 else 0.0
+	popup_guerra.mostrar_revuelta(d)
 
 
 func _abrir_aviso_paz(av: Dictionary, jt: int) -> void:
@@ -4315,6 +4584,16 @@ func _mostrar_opciones_info() -> void:
 		cred.add_theme_font_size_override("font_size", 12)
 		TemaHud.rotular(cred, "nota")
 		menu_contenido.add_child(cred)
+	if subprov_hay():                                                 # 0.1.8.43: límites de subprovincias (CC BY 4.0: el crédito es obligatorio)
+		panel_menu_nodo.custom_minimum_size = Vector2(560.0, 440.0)
+		var csp := Label.new()
+		csp.text = SubprovinciasScript.CREDITO
+		csp.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		csp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		csp.add_theme_font_override("font", fuente_ui)
+		csp.add_theme_font_size_override("font_size", 12)
+		TemaHud.rotular(csp, "nota")
+		menu_contenido.add_child(csp)
 	if pinturas != null and pinturas.listo:                           # 0.1.8.41: las pinturas de los paneles son de dominio público: se citan de dónde vienen
 		var cp := Label.new()
 		cp.text = pinturas.texto_creditos()
@@ -4390,7 +4669,7 @@ func _cierre_periodo(politica: String, est: Dictionary) -> bool:
 ## Lo que pasa al cambiar de mes, en tres pasos cortos: desarrollo mensual, cierre mensual del historial y (si cambia el año) cierre anual.
 ## Se corre de golpe (`_on_dia`) o se reparte entre fotogramas (`_on_dia_diferido`): así lo mensual está escrito una sola vez.
 func _fases_mes(anio_nuevo: bool) -> Array:
-	var r := [mundo.avanzar_mes, _cierre_periodo.bind("mensual", {})]
+	var r := [mundo.avanzar_mes.bind(true), _cierre_periodo.bind("mensual", {})]
 	if anio_nuevo:
 		r.append(_cierre_periodo.bind("anual", {}))
 	return r
@@ -4545,7 +4824,7 @@ func _fin_pais(pais: String) -> Array:
 		r.append(["Provincias que más aportan", " · ".join(PackedStringArray(tops)), "i_prov", "fin_prov"])
 	r.append(["PIB de referencia (%d)" % epoca, fmt_dinero(e.pib_usd, "US$"), "i_eco", "fin_pib"])
 	r.append(["Velocidad de desarrollo", ("x%.2f" % e.velocidad_desarrollo).replace(".", ","), "i_eco", "fin_des"])
-	r.append(["Favorabilidad media de la población", "%d / 100" % int(roundf(mundo.favorabilidad_media(pais))), "i_pob", "fin_fav"])
+	r.append(["Estabilidad media de la población", "%d / 100" % int(roundf(mundo.favorabilidad_media(pais))), "i_pob", "fin_fav"])
 	if dv != null:
 		r.append(["Divisa", "%s (%s)" % [dv.nombre, dv.simbolo], ico_m, "fin_div"])
 		r.append(["Valor de la divisa", fmt_cambio(dv), ico_m, "fin_div"])
@@ -4613,7 +4892,7 @@ func _fin_detalles(pais: String) -> Dictionary:
 	t_ing += "%s %s al día  ·  %s al año\n" % [_c("En dólares:"), fmt_dinero(en_usd, "US$"), fmt_dinero(en_usd * 365.25, "US$")]
 	t_ing += "%s %s de la producción de sus provincias\n\n" % [_c("Cobra:"), hud.pct(tasa * 100.0)]
 	t_ing += _c("Fórmula:") + "\ningreso diario = producción anual × impuestos ÷ 365,25 × valor de la divisa"
-	t_ing += _nota_pie("La producción de cada provincia = habitantes × producción por habitante × multiplicador × (0,5 + favorabilidad ÷ 100).")
+	t_ing += _nota_pie("La producción de cada provincia = habitantes × producción por habitante × multiplicador × (0,5 + estabilidad ÷ 100).")
 	det["fin_ing"] = {"icono": ico_m, "titulo": "Ingresos del estado", "bb": t_ing, "barras": []}
 
 	# Impuestos
@@ -4641,7 +4920,7 @@ func _fin_detalles(pais: String) -> Dictionary:
 	var t_pib := "%s %s\n%s %s al año\n" % [_c("PIB de referencia %d:" % epoca), fmt_dinero(e.pib_usd, "US$"), _c("Producción actual de las provincias:"), fmt_dinero(prod, "US$")]
 	if e.pib_usd > 0.0:
 		t_pib += "%s %s\n" % [_c("Relación (producción ÷ PIB):"), hud.pct(prod / e.pib_usd * 100.0)]
-	t_pib += _nota_pie("El PIB de referencia es el punto de partida (no cambia). La producción de las provincias sí crece o cae con el desarrollo, las conquistas y la favorabilidad.")
+	t_pib += _nota_pie("El PIB de referencia es el punto de partida (no cambia). La producción de las provincias sí crece o cae con el desarrollo, las conquistas y la estabilidad.")
 	det["fin_pib"] = {"icono": "i_eco", "titulo": "PIB de referencia", "bb": t_pib, "barras": []}
 
 	# Desarrollo
@@ -4651,9 +4930,9 @@ func _fin_detalles(pais: String) -> Dictionary:
 	t_des += _nota_pie("Cada mes la producción por habitante de cada provincia crece según: crecimiento base × velocidad de la provincia × velocidad de su país dueño. El 2 % anual es un valor provisional.")
 	det["fin_des"] = {"icono": "i_eco", "titulo": "Velocidad de desarrollo", "bb": t_des, "barras": []}
 
-	# Favorabilidad
+	# Estabilidad (la variable interna se sigue llamando «favorabilidad»)
 	var fav: float = mundo.favorabilidad_media(pais)
-	var t_fav := "%s %d / 100\n%s x%s\n\n" % [_c("Favorabilidad media (ponderada por habitantes):"), int(roundf(fav)), _c("Rinde:"), ("%.2f" % (0.5 + fav / 100.0)).replace(".", ",")]
+	var t_fav := "%s %d / 100\n%s x%s\n\n" % [_c("Estabilidad media (ponderada por habitantes):"), int(roundf(fav)), _c("Rinde:"), ("%.2f" % (0.5 + fav / 100.0)).replace(".", ",")]
 	var barras_f := []
 	var ext: Array = mundo.extremos_favorabilidad(pais)
 	var n_prov: int = e.provincias.size()
@@ -4665,8 +4944,8 @@ func _fin_detalles(pais: String) -> Dictionary:
 		for i in n_pe:
 			barras_f.append([String(peores[i][0]), float(peores[i][1])])
 	t_fav += _c("Las 3 provincias más contentas y las 3 más descontentas (barras).") + "\n"
-	t_fav += _nota_pie("0 = la provincia rinde la mitad (x0,5); 100 = rinde una vez y media (x1,5). Las provincias conquistadas empiezan en 35.")
-	det["fin_fav"] = {"icono": "i_pob", "titulo": "Favorabilidad", "bb": t_fav, "barras": barras_f}
+	t_fav += _nota_pie("0 = la provincia rinde la mitad (x0,5); 100 = rinde una vez y media (x1,5). Las provincias conquistadas empiezan en 35 y, por debajo de 15 dos meses seguidos, se amotinan.")
+	det["fin_fav"] = {"icono": "i_pob", "titulo": "Estabilidad", "bb": t_fav, "barras": barras_f}
 
 	# Divisa
 	if dv != null:
@@ -4690,7 +4969,7 @@ func _fin_provincia(pi: int) -> Array:
 		["Producción anual de la provincia", fmt_dinero(rend, "US$") + "  ·  " + fmt_dinero(local, sim), "i_eco"],
 		["Aporta al total del país", hud.pct(pr.ingreso_efectivo_usd() / total_pais * 100.0), "i_pais"],
 		["Producción por habitante", fmt_dinero(pr.pib_pc, "US$") + " al año", "i_eco"],
-		["Favorabilidad de la población", "%d / 100" % int(roundf(pr.favorabilidad)), "i_pob"],
+		["Estabilidad de la población", "%d / 100" % int(roundf(pr.favorabilidad)), "i_pob"],
 		["Multiplicador de ingreso", ("x%.2f" % pr.mult_ingreso).replace(".", ","), "i_eco"],
 		["Velocidad de desarrollo", ("x%.2f" % pr.velocidad_desarrollo).replace(".", ","), "i_eco"],
 	])
@@ -4815,7 +5094,6 @@ func ejercito_vista() -> Dictionary:
 			v["pelotones"] = pels.slice(0, 40)
 			v["prov_tid"] = int(pr.tid)
 			v["devastacion"] = pr.devastacion
-			v["motin"] = mundo.riesgo_motin(pi2)
 			v["favorabilidad"] = pr.favorabilidad
 		_:
 			return {}
@@ -4982,7 +5260,33 @@ func diplomacia_vista() -> Dictionary:
 				var evv: Dictionary = puede_declarar_guerra(tv)
 				declarables.append({"nombre": String(mundo.paises[String(vn["nombre"])].nombre_visible), "tid": tv, "bandera": String(vn["bandera"]),
 					"tregua": _tregua_dias(jt, tv), "puede": bool(evv["ok"]), "motivo": String(evv["motivo"])})
-	return {"relacion": relacion, "declarables": declarables, "tid": tid, "guerras": guerras, "extranjeros_aqui": extranjeros, "propias_afuera": afuera, "relacionados": rel, "vecinos": vecinos.slice(0, 30),
+	var rels := {}                                    # 0.1.8.43: opinión, alianzas, rival, infamia y coalición
+	var dip = mundo.diplomacia
+	if dip != null:
+		rels = {"infamia": dip.infamia(tid), "umbral_coalicion": dip.INFAMIA_COALICION}
+		var rv: int = dip.rival_de(tid)
+		rels["rival"] = String(mundo.paises[mundo.bd.nombre_de(rv)].nombre_visible) if rv >= 0 and mundo.paises.has(mundo.bd.nombre_de(rv)) else ""
+		var coal = dip.coaliciones.get(tid)
+		var miembros := []
+		if coal != null:
+			for mt in coal["miembros"]:
+				miembros.append(String(mundo.bd.nombre_de(int(mt))))
+		rels["coalicion"] = miembros
+		var oc: int = dip.objetivo_coalicion_de(tid)
+		rels["en_coalicion_contra"] = String(mundo.bd.nombre_de(oc)) if oc >= 0 else ""
+		if jug != "" and mundo.paises.has(jug) and pais != jug:
+			var jt2 := int(mundo.paises[jug].tid)
+			var ev_al: Dictionary = dip.evaluar_alianza(jt2, tid)
+			rels["texto"] = dip.texto_relacion(jt2, tid)
+			rels["lectura"] = dip.lectura(jt2, tid)
+			rels["razones"] = dip.razones_de(jt2, tid)
+			rels["aliados"] = dip.son_aliados(jt2, tid)
+			rels["puede_aliarse"] = bool(ev_al["acepta"])
+			rels["motivo_alianza"] = String(ev_al["motivo"])
+			rels["rival_mio"] = dip.rival_de(jt2) == tid
+			rels["puede_rival"] = not dip.son_aliados(jt2, tid) and mundo.existe_pais(pais) and not mundo.es_inerte(pais)
+			rels["tid"] = tid
+	return {"relaciones": rels, "relacion": relacion, "declarables": declarables, "tid": tid, "guerras": guerras, "extranjeros_aqui": extranjeros, "propias_afuera": afuera, "relacionados": rel, "vecinos": vecinos.slice(0, 30),
 		"sucesos": sucesos, "tesoreria_en_rojo": ent.tiene_tesoreria() and ent.tesoreria < 0.0,
 		"puede_ordenar": puede_ordenar_pais(pais)}
 
@@ -5324,6 +5628,7 @@ func _correr_pend_dueno(todo := false) -> void:
 					_refrescar_foco()
 				_cambiadas_pend = PackedInt32Array()
 				_cambiadas_ant = PackedInt32Array()
+				_forma_provs.clear()
 				_foco_forzado = false
 		_ps(et, t_e)
 		if not todo:
@@ -5348,13 +5653,16 @@ func _anotar_cambios_dueno(dueno: PackedInt32Array) -> void:
 ## cambió de dueño era o pasó a ser del país enfocado o de uno de sus vecinos. Antes cualquier conquista del mundo entero rehacía (y deseleccionaba)
 ## el país enfocado.
 func _foco_tocado() -> bool:
-	if _cambiadas_pend.is_empty() or not mundo.paises.has(pais_foco):
+	if (_cambiadas_pend.is_empty() and _forma_provs.is_empty()) or not mundo.paises.has(pais_foco):
 		return true                                               # sin datos, o el país ya no existe: `_refrescar_foco` decide
 	var tid: int = mundo.paises[pais_foco].tid
 	var rel: Dictionary = fusion.vecinos_de(_dueno_ahora, tid, VACIO_ID)
 	rel[tid] = true
 	for j in _cambiadas_pend.size():
 		if rel.has(_dueno_ahora[_cambiadas_pend[j]]) or rel.has(_cambiadas_ant[j]):
+			return true
+	for p in _forma_provs:                                        # 0.1.8.43: provincias que cambiaron de forma (paz con cesión parcial)
+		if rel.has(_dueno_ahora[int(p)]):
 			return true
 	return false
 
@@ -5500,7 +5808,36 @@ func _territorio_cambio(provs: PackedInt32Array) -> void:
 			if not territorio.contiene(int(p), viejo):                # el punto de las tropas sigue dentro de la provincia: no se mueve
 				red.actualizar_centro(int(p), territorio.centro_provincia(int(p), viejo))
 	bloques_dueno.clear()
+	if _forma_diferida:
+		_forma_pend = true                                            # 0.1.8.43: la cesión viene de la simulación: el repintado se hace en el fotograma, no dentro de la paz
+		for p in provs:
+			_forma_provs[int(p)] = true
+		return
 	_sincronizar_propiedad(true)
+
+
+var _forma_diferida := false                  # true mientras una cesión parcial de la simulación mueve celdas: `_territorio_cambio` solo anota
+var _forma_pend := false                      # hay celdas movidas por la simulación que el mapa todavía no ha repintado
+var _forma_provs := {}                        # provincias que cambiaron de forma desde el último repintado del país enfocado (las mira `_foco_tocado`)
+var _t_forma := 0                             # cuándo se repintó la última vez (a x3 o más se agrupa: como mucho uno cada SINC_MIN_MS)
+
+
+## Repinta lo que dejaron pendiente las cesiones parciales de la simulación: el relleno ya, y fronteras, nombres y país enfocado en las etapas de los
+## fotogramas siguientes (una por fotograma). Varias cesiones seguidas se agrupan en un solo repintado. No toca la selección si el país enfocado no está cerca.
+func _repintar_forma_pendiente() -> void:
+	if not _forma_pend or not _pend_dueno.is_empty() or mundo == null or fusion == null or not fusion.listo:
+		return
+	if mundo.bd.version_propietario != _ver_dueno or mundo.bd.version_ocupacion != _ver_ocup:
+		return                                                    # hay un cambio de dueño sin repintar: su repintado ya incluye estas celdas (se reintenta después)
+	if reloj != null and reloj.velocidad >= 3 and Time.get_ticks_msec() - _t_forma < SINC_MIN_MS:
+		return
+	_forma_pend = false
+	_t_forma = Time.get_ticks_msec()
+	var dueno := _dueno_actual()
+	var colores := {}
+	fusion.pintar(_dueno_visual(dueno, colores), colores)
+	_dueno_ahora = dueno
+	_pend_dueno = ["fronteras", "etiquetas", "zoom", "foco"]
 
 
 ## Bloque contiguo más grande de cada dueño en `ids` (unión de provincias vecinas): {ID de dueño: {"rect": Rect2, "provs": [índices]}}.

@@ -4,6 +4,8 @@ extends Node
 ##      segundos reales a la velocidad que llevabas), para tener tiempo de reaccionar.
 ##   2. «FIN DE LA GUERRA»: el rival quiere cerrarla; se explica el MOTIVO y el jugador negocia el tratado con solo dos monedas de cambio,
 ##      PROVINCIAS y DINERO, que se pueden combinar. El rival evalúa en vivo (Guerra.evaluar_tratado) y la barra muestra si lo ofrecido alcanza.
+## 0.1.8.43: tres avisos más que también pausan el tiempo: «REVUELTA» (una provincia tuya se amotina: pagar, reprimir o conceder la independencia), «ALIANZA»
+## (una IA te propone aliarse) y «LLAMADA DE ALIANZA» (tu aliado está en guerra: ¿entras?).
 ## La lógica de la partida está en Guerra / MapaPrincipal; aquí solo se construye la interfaz.
 
 signal cerrado(accion: String)
@@ -18,7 +20,7 @@ var raiz: Control
 var caja: PanelContainer
 var cuerpo: VBoxContainer
 var abierto := false
-var tipo := ""                         # "guerra" | "paz" | ""
+var tipo := ""                         # "guerra" | "paz" | "revuelta" | "alianza" | "llamado" | ""
 var aviso: Dictionary = {}
 
 # negociación
@@ -246,6 +248,119 @@ func mostrar_paz(d: Dictionary) -> void:
 	bs.add_child(_boton("Cubrir lo que falta con dinero", _cubrir_con_dinero))
 	bs.add_child(_boton("SEGUIR EN GUERRA", func(): cerrar("seguir_guerra"), Tema.MAL))
 	_actualizar_eval()
+
+
+# ───────────── 3. Revuelta en una provincia tuya (0.1.8.43) ─────────────
+## `d` = el aviso de Estabilidad ({"pais", "provincias": [índices], "reino" (ID del país al que volvería, -1 = ninguno), "pago_usd", "fuerza_necesaria", "fuerza_disponible"})
+## más "caja_usd" (lo que tienes) y "nombres" (nombres de las provincias).
+func mostrar_revuelta(d: Dictionary) -> void:
+	_limpiar()
+	tipo = "revuelta"
+	aviso = d
+	abierto = true
+	capa.visible = true
+	var nombres: Array = d["nombres"]
+	var titulo := "REVUELTA EN %s" % String(nombres[0]).to_upper()
+	if nombres.size() > 1:
+		titulo += " Y %d MÁS" % (nombres.size() - 1)
+	_cabecera(main.mundo.jugador, titulo, "La población se amotina: estabilidad por los suelos.", Tema.MAL)
+	cuerpo.add_child(_linea())
+	cuerpo.add_child(_lbl("El tiempo está en PAUSA. Decide cómo responder:", 15, Tema.ORO, true))
+	var causas: Array = main.mundo.estabilidad.desglose(int(d["provincias"][0]))["partes"]
+	var malas := []
+	for c in causas:
+		if float(c[1]) <= -3.0:
+			malas.append("%s (%+d)" % [String(c[0]), int(roundf(float(c[1])))])
+	cuerpo.add_child(_lbl("Por qué: %s." % (", ".join(malas) if not malas.is_empty() else "descontento acumulado"), 13, Tema.TEXTO))
+	if nombres.size() > 1:
+		cuerpo.add_child(_lbl("Provincias del movimiento: %s." % ", ".join(nombres.slice(0, 8)) + ("…" if nombres.size() > 8 else ""), 13, Tema.TENUE))
+	var reino: int = int(d["reino"])
+	var nom_r: String = main.mundo.bd.nombre_de(reino) if reino >= 0 else ""
+	cuerpo.add_child(_linea())
+	var caja_ok: bool = float(d["caja_usd"]) >= float(d["pago_usd"])
+	var fuerza_ok: bool = float(d["fuerza_disponible"]) >= float(d["fuerza_necesaria"])
+	cuerpo.add_child(_boton("PAGAR A LOS NOTABLES · %s  (estabilidad +22 y un año de calma; si se repite, sale más caro)" % _usd(float(d["pago_usd"])), func(): _resolver_revuelta("pagar"), Tema.OK if caja_ok else Tema.TENUE))
+	(cuerpo.get_child(cuerpo.get_child_count() - 1) as Button).disabled = not caja_ok
+	cuerpo.add_child(_boton("REPRIMIR CON TROPAS · hay %s de %s soldados necesarios cerca  (+12, pero la tierra queda devastada y ganas infamia)" % [main.hud.fmt_num(float(d["fuerza_disponible"])), main.hud.fmt_num(float(d["fuerza_necesaria"]))], func(): _resolver_revuelta("reprimir"), Tema.ORO if fuerza_ok else Tema.TENUE))
+	(cuerpo.get_child(cuerpo.get_child_count() - 1) as Button).disabled = not fuerza_ok
+	if reino >= 0:
+		cuerpo.add_child(_boton("CONCEDER LA INDEPENDENCIA · la tierra vuelve a %s" % main._nombre_vis(nom_r), func(): _resolver_revuelta("conceder"), Tema.MAL))
+	cuerpo.add_child(_boton("IGNORARLA · %s" % ("la tierra pasa a %s" % main._nombre_vis(nom_r) if reino >= 0 else "los rebeldes saquean la tierra"), func(): _resolver_revuelta("ignorar")))
+	cuerpo.add_child(_lbl("Tienes %s en caja. Las revueltas vienen de conquistas recientes, tierras de otra cultura, lejanía de la capital, guerra y, sobre todo, de un imperio demasiado grande para su tamaño." % _usd(float(d["caja_usd"])), 12, Tema.NOTA))
+
+
+func _resolver_revuelta(op: String) -> void:
+	var res: Dictionary = main.mundo.estabilidad.resolver_revuelta(aviso, op)
+	if not bool(res.get("ok", false)):
+		main.aviso(String(res.get("msg", "")), "mal")
+		return
+	main.aviso(String(res.get("msg", "")), "aviso" if op != "pagar" else "info")
+	cerrar("revuelta")
+
+
+# ───────────── 4. Una IA te propone una alianza (0.1.8.43) ─────────────
+## `d` = {"ia": ID, "jugador": ID}
+func mostrar_alianza(d: Dictionary) -> void:
+	_limpiar()
+	tipo = "alianza"
+	aviso = d
+	abierto = true
+	capa.visible = true
+	var nom: String = main.mundo.bd.nombre_de(int(d["ia"]))
+	var dip = main.mundo.diplomacia
+	_cabecera(nom, "%s TE PROPONE UNA ALIANZA" % main._nombre_vis(nom).to_upper(), "Relación: %s" % dip.texto_relacion(int(d["jugador"]), int(d["ia"])), Tema.OK)
+	cuerpo.add_child(_linea())
+	cuerpo.add_child(_lbl("Aliados, si a uno lo atacan el otro recibe la llamada para entrar en la guerra. Si no acudes, la alianza se rompe y la opinión cae 35 puntos. Cada país puede tener hasta %d aliados." % dip.MAX_ALIADOS, 14, Tema.TEXTO))
+	var rv: int = dip.rival_de(int(d["ia"]))
+	if rv >= 0:
+		cuerpo.add_child(_lbl("%s considera rival a %s." % [main._nombre_vis(nom), main._nombre_vis(main.mundo.bd.nombre_de(rv))], 13, Tema.TENUE))
+	cuerpo.add_child(_linea())
+	var bs := HBoxContainer.new()
+	bs.add_theme_constant_override("separation", 10)
+	cuerpo.add_child(bs)
+	bs.add_child(_boton("ACEPTAR LA ALIANZA", func(): _responder_alianza(true), Tema.OK))
+	bs.add_child(_boton("RECHAZAR", func(): _responder_alianza(false)))
+
+
+func _responder_alianza(si: bool) -> void:
+	var dip = main.mundo.diplomacia
+	var a: int = int(aviso["jugador"])
+	var b: int = int(aviso["ia"])
+	if si:
+		if dip.formar_alianza(a, b, "Aceptó su propuesta"):
+			main.aviso("Alianza con %s." % main._nombre_vis(main.mundo.bd.nombre_de(b)), "ok")
+		else:
+			main.aviso(dip.motivo_sin_alianza(a, b), "mal")
+	else:
+		dip.cambiar_opinion(a, b, -5.0, "Rechazó su alianza")
+	cerrar("alianza")
+
+
+# ───────────── 5. Llamada de alianza (0.1.8.43) ─────────────
+## `d` = {"aliado": ID del jugador, "ayuda_a": ID del aliado en guerra, "contra": ID de su enemigo}
+func mostrar_llamado(d: Dictionary) -> void:
+	_limpiar()
+	tipo = "llamado"
+	aviso = d
+	abierto = true
+	capa.visible = true
+	var bd = main.mundo.bd
+	var nom_a: String = bd.nombre_de(int(d["ayuda_a"]))
+	var nom_c: String = bd.nombre_de(int(d["contra"]))
+	_cabecera(nom_a, "%s TE LLAMA A LA GUERRA" % main._nombre_vis(nom_a).to_upper(), "Tu aliado está en guerra con %s." % main._nombre_vis(nom_c), Tema.ORO)
+	cuerpo.add_child(_linea())
+	cuerpo.add_child(_lbl("Si entras, declaras la guerra a %s (no cuenta como agresión: no ganas infamia). Si te quedas fuera, la opinión de %s baja 35 puntos y la alianza se rompe." % [main._nombre_vis(nom_c), main._nombre_vis(nom_a)], 14, Tema.TEXTO))
+	cuerpo.add_child(_linea())
+	var bs := HBoxContainer.new()
+	bs.add_theme_constant_override("separation", 10)
+	cuerpo.add_child(bs)
+	bs.add_child(_boton("ENTRAR EN LA GUERRA contra %s" % main._nombre_vis(nom_c), func(): _responder_llamado(true), Tema.MAL))
+	bs.add_child(_boton("QUEDARME FUERA", func(): _responder_llamado(false)))
+
+
+func _responder_llamado(entra: bool) -> void:
+	main.mundo.diplomacia.responder_llamado(int(aviso["aliado"]), int(aviso["ayuda_a"]), int(aviso["contra"]), entra)
+	cerrar("llamado")
 
 
 static func _usd(v: float) -> String:

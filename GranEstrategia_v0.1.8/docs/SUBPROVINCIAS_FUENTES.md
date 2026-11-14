@@ -1,5 +1,8 @@
 # Subprovincias: de dónde sacar los límites (decisión para la 0.1.8.43)
 
+> **DECIDIDO (2026-11-13): opción B — límites reales de geoBoundaries ADM2 (compuesto CGAZ, CC BY 4.0), con el crédito «geoBoundaries (William & Mary geoLab), CC BY 4.0» visible en el juego y en LEEME.txt.**
+> Implementado en la 0.1.8.43 (`scripts/subprovincias.gd`, `scripts/capa_subprovincias.gd`, `herramientas/subprovincias/`, `datos/subprov/`); ver `NOTAS_TECNICAS_0.1.8.43.md` sección 4. El análisis de abajo se conserva como registro.
+
 Camilo pidió (2026-11-12) investigar la opción de **límites reales con atribución** y decidir él al empezar la 0.1.8.43.
 Objetivo del diseño: país → provincia → subprovincia (como estado → condado en EE. UU.), doble clic en una provincia para ver sus subdivisiones.
 Condición del proyecto: **Camilo puede vender el juego**; todo lo que entre debe permitir uso comercial. (No soy abogado: lo de abajo es lectura de las condiciones publicadas, hay que releerlas antes de publicar.)
