@@ -1,9 +1,15 @@
-# Checklist de testing — Gran Estrategia 0.1.8.44
+# Checklist de testing — Gran Estrategia 0.1.8.45
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.45 — FPS al subir la velocidad, historial en Descubrimientos, zoom solo al país propio
+- ✅ `runner100` — presupuesto de la simulación proporcional al fotograma (240 FPS → ~2,2 ms; 30 FPS → techo de 9 ms; mínimo 1,5 ms), historial ◀ ▶ (atrás, adelante, corte, sin repetidos, Alt+←, sobrevive a cerrar la pantalla), zoom solo al país propio (el ajeno se enfoca sin mover la cámara; observador como antes) (24 comprobaciones).
+- ✅ Banco de velocidad (headless, 249 IA): x6 de 64 → 111 FPS; x6 avanza 186 → 121 días/s; x1-x3 iguales.
+- ⬜ F9 en el portátil con la RTX 4060 a x3-x6 (debería pasar de ~70 a ~150 FPS) y en el PC con Intel HD 520 (debería quedar igual).
+- ⬜ Botones laterales del ratón en Descubrimientos (en el servidor no hay ratón con esos botones).
 
 ### 0.1.8.44 — registro de fallos y Descubrimientos como sistema solar
 - ✅ `runner99` — registro de fallos (`sesion.txt`, «CIERRE LIMPIO», copia de la sesión que terminó mal, máximo de copias), fondo espacial (negro, nebulosa del color de la rama, SIN planetas de fondo, sol), planetas (tamaño por enlaces, estados, sol de la raíz), estelas (solo con zoom suficiente, tope), emblemas por subsección (avance 0–1), cada cuña con su propio largo, calidad Baja (todo quieto) y cero redibujos por fotograma (70 comprobaciones).

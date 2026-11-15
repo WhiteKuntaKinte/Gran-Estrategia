@@ -5,7 +5,7 @@ extends Node
 ## · Archivos (carpeta de datos del usuario, `user://rendimiento/`): `rend_AAAAMMDD_HHMMSS.csv` (una fila por fotograma) y `…_resumen.txt` (lo que importa:
 ##   FPS medios, peores fotogramas, tirones por zoom y por vista). El resumen también queda en el portapapeles para pegarlo en el chat.
 ## · Columnas del CSV: t_s, dt_ms (lo que duró el fotograma), proceso_ms (todo el _process de Godot), render_cpu_ms y render_gpu_ms (si el equipo los da),
-##   draws, tri (triángulos), objetos, mem_video_mb, mem_tex_mb, zoom, cam_x, cam_y, vista, foco, velocidad, ms_zoom, ms_scripts_mapa, ms_ciudades, ms_tropas, marca.
+##   draws, tri (triángulos), objetos, mem_video_mb, mem_tex_mb, zoom, cam_x, cam_y, vista, foco, velocidad, ms_zoom, ms_scripts_mapa, ms_ciudades, ms_tropas, ms_sim (0.1.8.45: los días simulados en ese fotograma), marca.
 ## · F8 pone una MARCA en el archivo (por ejemplo antes de hacer zoom): la fila siguiente la lleva y el resumen las lista con su contexto.
 ## 0.1.8.42 · El grabador es GLOBAL: vive en la raíz del juego, no dentro de la partida. Sigue grabando en el menú principal, en la pausa, al cargar una «Nueva partida»
 ##   (que recarga la escena) y al cambiar de ajustes; si cierras el juego mientras graba, guarda el resumen al salir. Un «● REC» rojo arriba a la derecha avisa en todas
@@ -19,7 +19,7 @@ const UMBRAL_TIRON_MS := 50.0                   # un fotograma que dura más que
 const BANDAS_ZOOM := [[0.0, 1.0], [1.0, 2.0], [2.0, 4.0], [4.0, 8.0], [8.0, 99.0]]
 const NOMBRE_NODO := "GrabadorRendimiento"
 const VISTAS := ["tradicional", "relieve", "menu", "carga"]       # «menu» = menú principal · «carga» = mientras se recarga la escena (Nueva partida)
-const CABECERA := "t_s,dt_ms,proceso_ms,render_cpu_ms,render_gpu_ms,draws,tri,objetos,mem_video_mb,mem_tex_mb,zoom,cam_x,cam_y,vista,foco,velocidad,ms_zoom,ms_scripts_mapa,ms_ciudades,ms_tropas,marca"
+const CABECERA := "t_s,dt_ms,proceso_ms,render_cpu_ms,render_gpu_ms,draws,tri,objetos,mem_video_mb,mem_tex_mb,zoom,cam_x,cam_y,vista,foco,velocidad,ms_zoom,ms_scripts_mapa,ms_ciudades,ms_tropas,ms_sim,marca"
 
 var main
 var grabando := false
@@ -39,6 +39,9 @@ var _vistas: PackedStringArray = PackedStringArray()
 var _tiempos: PackedFloat32Array = PackedFloat32Array()
 var _draws: PackedInt32Array = PackedInt32Array()
 var _tris: PackedInt32Array = PackedInt32Array()
+var _vels: PackedByteArray = PackedByteArray()          # 0.1.8.45: velocidad del reloj en cada fotograma (para el resumen por velocidad)
+var _procs: PackedFloat32Array = PackedFloat32Array()   # 0.1.8.45: ms de _process (scripts) en cada fotograma
+var _sims: PackedFloat32Array = PackedFloat32Array()    # 0.1.8.45: ms de simulación de días en cada fotograma
 var _marcas: Array = []                         # [fila, texto]
 var _marca_pend := ""
 var _ult_flush_us := 0
@@ -91,6 +94,9 @@ func iniciar() -> bool:
 	_tiempos = PackedFloat32Array()
 	_draws = PackedInt32Array()
 	_tris = PackedInt32Array()
+	_vels = PackedByteArray()
+	_procs = PackedFloat32Array()
+	_sims = PackedFloat32Array()
 	_marcas = []
 	_marca_pend = ""
 	n_filas = 0
@@ -144,6 +150,7 @@ func _process(delta: float) -> void:
 	var vel := 0
 	var ms_z := 0.0
 	var ms_p := 0.0
+	var ms_sim := 0.0
 	if _juego_vivo():
 		z = main.camara.zoom.x
 		vista = "menu" if main.en_menu else ("relieve" if main.modo_relieve else "tradicional")
@@ -156,8 +163,9 @@ func _process(delta: float) -> void:
 		vel = main.reloj.velocidad if main.reloj != null else 0
 		ms_z = float(main.ms_zoom)
 		ms_p = float(main.ms_proceso)
-	_f.store_line("%.3f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d,%.1f,%.1f,%.3f,%.1f,%.1f,%s,%s,%d,%.2f,%.2f,%.2f,%.2f,%s" % [
-		t_s, dt, proceso, cpu, gpu, draws, tri, obj, mv, mt, z, cam.x, cam.y, vista, foco, vel, ms_z, ms_p, ms_ciud, tropas, _marca_pend])
+		ms_sim = float(main.ms_fases) if not main.en_menu and not main.en_pausa and vel > 0 else 0.0
+	_f.store_line("%.3f,%.2f,%.2f,%.2f,%.2f,%d,%d,%d,%.1f,%.1f,%.3f,%.1f,%.1f,%s,%s,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%s" % [
+		t_s, dt, proceso, cpu, gpu, draws, tri, obj, mv, mt, z, cam.x, cam.y, vista, foco, vel, ms_z, ms_p, ms_ciud, tropas, ms_sim, _marca_pend])
 	if _marca_pend != "":
 		_marcas.append([n_filas, _marca_pend, t_s, z, vista])
 		_marca_pend = ""
@@ -167,6 +175,9 @@ func _process(delta: float) -> void:
 	_tiempos.append(t_s)
 	_draws.append(draws)
 	_tris.append(tri)
+	_vels.append(clampi(vel, 0, 255))
+	_procs.append(proceso)
+	_sims.append(ms_sim)
 	n_filas += 1
 	if Time.get_ticks_usec() - _ult_flush_us > 2000000:         # cada 2 s se vuelca al disco: si el juego se cierra mal, no se pierde todo
 		_f.flush()
@@ -304,15 +315,44 @@ func resumen() -> String:
 			for v in l:
 				s += float(v)
 			t += "  %-11s zoom %4.1f–%-4.1f  %6d fot · %5.1f ms · p95 %5.1f · peor %6.1f\n" % [vista, float(b[0]), minf(float(b[1]), 32.0), l.size(), s / float(l.size()), percentil(l, 0.95), float(l[l.size() - 1])]
+	# 0.1.8.45: por velocidad del reloj (solo en partida): ¿bajan los FPS al subir la velocidad? ¿cuánto se lleva la simulación?
+	var hay_vel := false
+	var t_vel := "\nPor velocidad del reloj, en partida (fotogramas · FPS · ms medio · p95 · scripts · simulación):\n"
+	var por_vel: Array = [[], [], [], [], [], [], []]                     # una sola pasada: los dt de cada velocidad
+	var sp := PackedFloat64Array()
+	var ss := PackedFloat64Array()
+	sp.resize(7)
+	ss.resize(7)
+	for i in n:
+		var v := int(_vels[i])
+		if v < 7 and _vistas[i] != "menu" and _vistas[i] != "carga":
+			(por_vel[v] as Array).append(float(_dts[i]))
+			sp[v] += float(_procs[i])
+			ss[v] += float(_sims[i])
+	for v in 7:
+		var l: Array = por_vel[v]
+		if l.size() < 5:
+			continue
+		hay_vel = true
+		l.sort()
+		var s := 0.0
+		for x in l:
+			s += float(x)
+		var m := s / float(l.size())
+		t_vel += "  %-6s %7d fot · %4.0f FPS · %5.1f ms · p95 %5.1f · scripts %5.1f ms · simulación %5.1f ms\n" % [
+			"pausa" if v == 0 else "x%d" % v, l.size(), 1000.0 / maxf(m, 0.001), m, percentil(l, 0.95), sp[v] / float(l.size()), ss[v] / float(l.size())]
+	if hay_vel:
+		t += t_vel
 	# los peores fotogramas
 	var idx: Array = []
 	for i in n:
 		idx.append(i)
 	idx.sort_custom(func(a, b): return _dts[a] > _dts[b])
-	t += "\nLos 12 peores fotogramas (a los cuántos segundos · duración · zoom · vista · llamadas de dibujo · triángulos):\n"
+	t += "\nLos 12 peores fotogramas (a los cuántos segundos · duración · zoom · vista · velocidad · scripts · simulación · llamadas de dibujo · triángulos):\n"
 	for k in mini(12, n):
 		var i: int = idx[k]
-		t += "  %7.1f s · %6.1f ms · zoom %5.2f · %-11s · %d dibujos · %d tri\n" % [float(_tiempos[i]), float(_dts[i]), float(_zooms[i]), _vistas[i], _draws[i], _tris[i]]
+		t += "  %7.1f s · %6.1f ms · zoom %5.2f · %-11s · x%d · scripts %5.1f ms · sim %5.1f ms · %d dibujos · %d tri\n" % [float(_tiempos[i]), float(_dts[i]), float(_zooms[i]), _vistas[i],
+			int(_vels[i]), float(_procs[i]), float(_sims[i]), _draws[i], _tris[i]]
 	if not _marcas.is_empty():
 		t += "\nMarcas (F8):\n"
 		for m in _marcas:

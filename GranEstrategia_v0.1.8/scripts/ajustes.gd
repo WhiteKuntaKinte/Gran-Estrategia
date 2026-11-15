@@ -16,7 +16,7 @@ extends RefCounted
 ##   lineas_prov  true = en la campaña se dibujan las líneas de provincia de todos los países al acercar
 ##   ciudades     true = marcadores y nombres de ciudades al acercar
 ##   lagos        true = se dibujan los lagos
-##   sim_prio     0 = fluidez (la simulación gasta como mucho 4 ms por fotograma), 1 = equilibrada (9 ms), 2 = velocidad del tiempo (14 ms)
+##   sim_prio     0 = fluidez (la simulación usa hasta el 20 % del fotograma y como mucho 4 ms), 1 = equilibrada (35 %, 9 ms), 2 = velocidad del tiempo (50 %, 14 ms) — 0.1.8.45: antes eran ms fijos
 ## 0.1.8.37 · Interfaz y bordes:
 ##   tema         0 = Cartográfico, 1 = Moderno oscuro, 2 = Mixto (ver tema_hud.gd). Cambia en vivo desde Opciones y se guarda al momento
 ##   bordes       calidad de los bordes del mapa: 0 = Baja (línea fina de siempre), 1 = Media, 2 = Alta (borde HD: línea más gruesa y suave, con trazo de contorno)
@@ -36,6 +36,7 @@ const MAR_NOMBRES := ["Con profundidad", "Color liso (más rápido)"]
 const COSTA_NOMBRES := ["Detallada", "Detalle medio", "Detalle bajo (más rápido)"]
 const SIM_NOMBRES := ["Fluidez (el tiempo puede ir más lento)", "Equilibrada", "Velocidad del tiempo"]
 const SIM_PRESUPUESTO_US := [4000, 9000, 14000]                  # microsegundos por fotograma que gasta la simulación de días, según `sim_prio`
+const SIM_FRACCION := [0.2, 0.35, 0.5]                          # 0.1.8.45: parte de cada fotograma que puede usar la simulación (el µs de arriba es el techo)
 const BORDES_NOMBRES := ["Baja (más rápido)", "Media", "Alta (HD)"]
 const PRESETS_NOMBRES := ["Alta", "Media", "Baja", "Personalizada"]
 const PRESET_PERSONALIZADA := 3
@@ -137,6 +138,11 @@ static func con_preset(d: Dictionary, i: int) -> Dictionary:
 ## Microsegundos por fotograma que puede gastar la simulación de días con el ajuste `sim_prio` de `d`.
 static func presupuesto_sim_us(d: Dictionary) -> int:
 	return int(SIM_PRESUPUESTO_US[int(sanear(d)["sim_prio"])])
+
+
+## 0.1.8.45: parte del fotograma que puede usar la simulación con el ajuste `sim_prio` de `d`.
+static func fraccion_sim(d: Dictionary) -> float:
+	return float(SIM_FRACCION[int(sanear(d)["sim_prio"])])
 
 
 ## ¿Hay un archivo de ajustes guardado? Sin archivo, el juego arranca como siempre y no toca la ventana.

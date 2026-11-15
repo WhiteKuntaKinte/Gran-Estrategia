@@ -1,8 +1,16 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.44 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.45 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.45 — TUS NOTAS DEL 15 DE NOVIEMBRE (detalle en NOTAS_TECNICAS_0.1.8.45.md)
+- FPS AL SUBIR LA VELOCIDAD: la simulación ya no se lleva 9 ms fijos de cada fotograma; usa una parte (20 / 35 / 50 % según Opciones > Pantalla > Prioridad de la simulación).
+  En un PC rápido el juego conserva muchos más FPS a x3-x6; en uno flojo no cambia nada.
+- DESCUBRIMIENTOS, ATRÁS Y ADELANTE: botones ◀ ▶ junto a «Secciones» (o Alt+← / Alt+→, o los botones laterales del ratón) para recorrer los descubrimientos que viste,
+  aunque estén en otra sección o rama. Sirve para seguir las dependencias hacia atrás y volver.
+- ZOOM SOLO A TU PAÍS: un clic en otro país lo rotula y lo resalta, pero la cámara no se mueve. Al tuyo sí se acerca. Sin país (observador), como antes.
+- GRABADOR F9: el resumen trae una tabla por velocidad (FPS, scripts y simulación) y los peores fotogramas dicen a qué velocidad iban.
 
 NUEVO EN 0.1.8.44 — REGISTRO DE FALLOS Y DESCUBRIMIENTOS COMO UN SISTEMA SOLAR
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.44.md. Es la versión visual: sale de tus observaciones del 14 de noviembre sobre las capturas.)

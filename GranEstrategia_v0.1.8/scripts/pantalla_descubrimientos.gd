@@ -7,6 +7,9 @@ extends Node
 ## · ÁRBOL de la sección elegida (`arbol_descubrimientos.gd`): abanico circular que sube desde la raíz, círculos sin texto, globo con descripción al pasar el ratón, trazos hacia otras secciones y «T».
 ## · A la izquierda del árbol, la cinta de secciones de la rama para saltar de una a otra sin volver al hub.
 ## · Buscador por nombre en todo el catálogo, filtros por estado y por tipo; ficha del descubrimiento elegido (año, era, ruta, tipo, estado, lo que REQUIERE y lo que ABRE).
+## · 0.1.8.45 · HISTORIAL como un navegador: cada descubrimiento que abres (clic en un planeta, en una fila de «Requiere» / «Abre», un salto o la búsqueda)
+##   queda en el historial. «◀» / «▶» (o Alt+← / Alt+→, o los botones laterales del ratón) van atrás y adelante por lo que viste, aunque cambie de sección o de rama:
+##   así se sigue una cadena de dependencias hacia atrás y se vuelve. Abrir uno nuevo después de ir atrás corta lo que había adelante. Dura mientras el juego está abierto.
 ## No guarda nada en la partida: lee Descubrimientos (scripts/descubrimientos.gd). Se actualiza sola una vez por segundo mientras está abierta.
 ## Para ver lo que sabe tu país se usa el país que controlas; sin país (observador) se ve lo que sabe la historia en la fecha del reloj.
 
@@ -29,6 +32,9 @@ const OPCIONES_ESTADO := ["Todos los estados", "Solo conocidos", "Solo disponibl
 
 static var _ultima_seccion := 0             # al volver a abrir, vuelve a la última sección vista…
 static var _ultimo_en_arbol := false        # … y al árbol si estaba en él (si no, al hub de su rama)
+static var _hist := PackedInt32Array()      # 0.1.8.45: descubrimientos vistos, en orden (sobrevive a cerrar y abrir la pantalla)
+static var _hist_pos := -1                  # posición actual dentro de `_hist`
+const HIST_MAX := 200
 
 var main
 var fuente: Font
@@ -47,6 +53,8 @@ var cuentas := PackedInt32Array()           # por sección: cuántos conoce el p
 var totales := PackedInt32Array()           # por sección: cuántos hay
 var _btns_rama: Array = []
 var _btn_volver: Button
+var _btn_atras: Button
+var _btn_adelante: Button
 var _lbl_ruta: Label
 var _lbl_info: Label
 var _busca: LineEdit
@@ -420,6 +428,11 @@ func _armar_pestanas() -> void:
 	_btn_volver.tooltip_text = "Volver a las secciones de la rama\nAtajo: Esc"
 	_btn_volver.pressed.connect(_volver)
 	cont.add_child(_btn_volver)
+	_btn_atras = _boton_hist("◀", "Atrás\nEl descubrimiento que viste antes (sigue la cadena de dependencias hacia atrás).\nAtajo: Alt+← o el botón lateral del ratón", hist_atras)
+	cont.add_child(_btn_atras)
+	_btn_adelante = _boton_hist("▶", "Adelante\nVuelve al que dejaste al ir atrás.\nAtajo: Alt+→ o el botón lateral del ratón", hist_adelante)
+	cont.add_child(_btn_adelante)
+	_actualizar_botones_hist()
 	for r in d.ramas.size():
 		var b := Button.new()
 		b.toggle_mode = true
@@ -497,6 +510,81 @@ static func _miles(v: int) -> String:
 # ─────────────────────────────────────────────────────────────
 # Navegación: hub ⇄ árbol
 # ─────────────────────────────────────────────────────────────
+func _boton_hist(t: String, tip: String, f: Callable) -> Button:
+	var b := Button.new()
+	b.text = t
+	b.focus_mode = Control.FOCUS_NONE
+	b.custom_minimum_size = Vector2(38.0, 34.0)
+	b.tooltip_text = tip
+	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	b.pressed.connect(f)
+	return b
+
+
+# ─────────────────────────────────────────────────────────────
+# Historial (0.1.8.45)
+# ─────────────────────────────────────────────────────────────
+## Anota que se abrió `i`. Si se había ido atrás, lo de adelante se descarta (como en un navegador). No repite el mismo dos veces seguidas.
+func _hist_anotar(i: int) -> void:
+	if i < 0:
+		return
+	if _hist_pos >= 0 and _hist_pos < _hist.size() and _hist[_hist_pos] == i:
+		return
+	if _hist_pos < _hist.size() - 1:
+		_hist = _hist.slice(0, _hist_pos + 1)
+	_hist.append(i)
+	if _hist.size() > HIST_MAX:
+		_hist = _hist.slice(_hist.size() - HIST_MAX)
+	_hist_pos = _hist.size() - 1
+	_actualizar_botones_hist()
+
+
+func puede_atras() -> bool:
+	return _hist_pos > 0
+
+
+func puede_adelante() -> bool:
+	return _hist_pos >= 0 and _hist_pos < _hist.size() - 1
+
+
+func hist_atras() -> void:
+	if puede_atras():
+		_hist_pos -= 1
+		_ir_sin_anotar(_hist[_hist_pos])
+
+
+func hist_adelante() -> void:
+	if puede_adelante():
+		_hist_pos += 1
+		_ir_sin_anotar(_hist[_hist_pos])
+
+
+func _ir_sin_anotar(i: int) -> void:
+	_navegando_hist = true
+	ir_a(i)
+	_navegando_hist = false
+	_actualizar_botones_hist()
+
+
+var _navegando_hist := false
+
+func _actualizar_botones_hist() -> void:
+	if _btn_atras == null:
+		return
+	_btn_atras.disabled = not puede_atras()
+	_btn_adelante.disabled = not puede_adelante()
+	if puede_atras():
+		_btn_atras.tooltip_text = "Atrás: %s\nAtajo: Alt+← o el botón lateral del ratón" % String(d.nombre[_hist[_hist_pos - 1]])
+	if puede_adelante():
+		_btn_adelante.tooltip_text = "Adelante: %s\nAtajo: Alt+→ o el botón lateral del ratón" % String(d.nombre[_hist[_hist_pos + 1]])
+
+
+## Para las pruebas: vacía el historial.
+static func hist_vaciar() -> void:
+	_hist = PackedInt32Array()
+	_hist_pos = -1
+
+
 ## Secciones de una rama, en orden.
 func secciones_de(r: int) -> PackedInt32Array:
 	var res := PackedInt32Array()
@@ -587,6 +675,8 @@ func ir_a(i: int) -> void:
 		_entrar_seccion(s)
 	arbol.elegir(i, true)
 	_armar_ficha(i)
+	if not _navegando_hist:
+		_hist_anotar(i)
 
 
 func _cerrar_ficha() -> void:
@@ -601,13 +691,30 @@ func _al_elegir_nodo(i: int) -> void:
 		_panel_ficha.visible = false
 	else:
 		_armar_ficha(i)
+		_hist_anotar(i)
 
 
 ## Esc: primero cierra lo que está encima (resultados, ficha), luego sube un nivel (árbol → hub) y por último cierra la pantalla.
 func _input(ev: InputEvent) -> void:
-	if not (ev is InputEventKey) or not ev.pressed or ev.echo or ev.keycode != KEY_ESCAPE:
+	if raiz == null or not is_instance_valid(raiz) or d == null or d.n == 0:
 		return
-	if raiz == null or not is_instance_valid(raiz):
+	if ev is InputEventMouseButton and ev.pressed and (ev.button_index == MOUSE_BUTTON_XBUTTON1 or ev.button_index == MOUSE_BUTTON_XBUTTON2):
+		get_viewport().set_input_as_handled()                              # botones laterales del ratón: atrás / adelante
+		if ev.button_index == MOUSE_BUTTON_XBUTTON1:
+			hist_atras()
+		else:
+			hist_adelante()
+		return
+	if not (ev is InputEventKey) or not ev.pressed or ev.echo:
+		return
+	if ev.alt_pressed and (ev.keycode == KEY_LEFT or ev.keycode == KEY_RIGHT):
+		get_viewport().set_input_as_handled()
+		if ev.keycode == KEY_LEFT:
+			hist_atras()
+		else:
+			hist_adelante()
+		return
+	if ev.keycode != KEY_ESCAPE:
 		return
 	get_viewport().set_input_as_handled()
 	if _panel_res.visible:

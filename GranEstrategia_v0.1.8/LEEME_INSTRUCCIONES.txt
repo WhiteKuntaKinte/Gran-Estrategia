@@ -1,6 +1,6 @@
-GRAN ESTRATEGIA — 0.1.8.44 (DESARROLLO)
+GRAN ESTRATEGIA — 0.1.8.45 (DESARROLLO)
 
-1. Descomprime el ZIP de la 0.1.8.44 y abre la carpeta del proyecto (donde está project.godot) con Godot 4. (Desde esta versión cada entrega va con ZIP; el código también queda en GitHub, rama v0.1.8-development.)
+1. Descomprime el ZIP de la 0.1.8.45 y abre la carpeta del proyecto (donde está project.godot) con Godot 4. (Desde esta versión cada entrega va con ZIP; el código también queda en GitHub, rama v0.1.8-development.)
    Primera vez en una carpeta limpia (o tras bajar esta versión): deja que Godot IMPORTE las imágenes nuevas (iconos, banderas HD, pinturas); tarda un momento.
    NUEVO 0.1.8.37: el botón de lentes de la barra (VISTA) cambia entre Tradicional y Relieve (la vista Internacional se quitó en la 0.1.8.39); Ctrl+clic elige varias provincias o países; en Opciones > Pantalla
    eliges el TEMA (INTERFAZ) y los Bordes del mapa (Baja / Media / Alta). Ver LEEME.txt.

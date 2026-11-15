@@ -66,7 +66,8 @@ func t_reloj() -> void:
 	main._medir_sinc(Time.get_ticks_usec() - 5000)
 	ok(main.n_sinc == n0 + 2, "_medir_sinc sin mundo: no hace nada")
 	main.mundo = mundo_ref
-	# _presupuesto_restante
+	# _presupuesto_restante (0.1.8.45: cuenta desde el presupuesto de ESTE fotograma; aquí se fija al techo para medir lo de siempre)
+	main.presupuesto_fot_us = main.presupuesto_us
 	var p1: int = main._presupuesto_restante(Time.get_ticks_usec())
 	ok(p1 <= main.RelojScript.PRESUPUESTO_US and p1 > main.RelojScript.PRESUPUESTO_US - 3000, "_presupuesto_restante recién empezado ≈ el presupuesto completo (%d µs)" % p1)
 	var p2: int = main._presupuesto_restante(Time.get_ticks_usec() - 4000)

@@ -33,7 +33,7 @@ const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 const RegistroScript := preload("res://scripts/registro_fallos.gd")
 
-const VERSION := "0.1.8.44"
+const VERSION := "0.1.8.45"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -1092,12 +1092,13 @@ func _medir_sinc(t0_us: int) -> void:
 ## El reloj de un fotograma: termina primero el paso a medias (si lo hay), después empieza los que debe (cada uno junta todos los días debidos),
 ## todo dentro del presupuesto de tiempo del fotograma (`presupuesto_us`, por defecto RelojScript.PRESUPUESTO_US). Lo que no cabe queda para el siguiente fotograma.
 func _avanzar_reloj(delta: float) -> void:
+	presupuesto_fot_us = _presupuesto_fotograma(delta)
 	var t0 := Time.get_ticks_usec()
 	var dias := 0
 	reloj.acumular(delta)                                       # el tiempo del fotograma se suma al reloj UNA vez (también mientras un paso sigue repartido)
 	for _k in 8:
 		_correr_fases(_presupuesto_restante(t0))                # termina primero el paso a medias (si lo hay)...
-		if not _fases.is_empty() or Time.get_ticks_usec() - t0 >= presupuesto_us:
+		if not _fases.is_empty() or Time.get_ticks_usec() - t0 >= presupuesto_fot_us:
 			break                                               # se acabó el presupuesto del fotograma: el resto, en el siguiente
 		var n_d: int = reloj.avanzar(0.0)                       # ...y solo entonces empieza otro (que junta todos los días debidos)
 		dias += n_d
@@ -1117,7 +1118,23 @@ func _avanzar_reloj(delta: float) -> void:
 
 ## Microsegundos que le quedan al fotograma desde `t0_us` (siempre al menos 1: cada llamada a `_correr_fases` hace una fase como mínimo).
 func _presupuesto_restante(t0_us: int) -> int:
-	return maxi(presupuesto_us - (Time.get_ticks_usec() - t0_us), 1)
+	return maxi(presupuesto_fot_us - (Time.get_ticks_usec() - t0_us), 1)
+
+
+## 0.1.8.45 · PRESUPUESTO PROPORCIONAL. Antes la simulación gastaba SIEMPRE `presupuesto_us` (9 ms) por fotograma cuando iba atrasada (x3-x6 casi
+## siempre): en un equipo que dibuja en 4 ms eso es 4 + 9 = 13 ms por fotograma → de 240 a ~75 FPS (lo que viste en el portátil con la RTX 4060).
+## Ahora la simulación se queda con una PARTE del fotograma (`AjustesScript.SIM_FRACCION`, según «Prioridad de la simulación»): lo que tarda el resto
+## del fotograma (dibujo + scripts, medido el fotograma anterior) × fracción ÷ (1 − fracción), sin pasar nunca de `presupuesto_us` (el techo de
+## siempre) ni bajar de SIM_MIN_US. En un PC flojo (fotogramas de 25 ms o más) el resultado es el techo: nada cambia. En uno rápido el juego conserva
+## los FPS y el tiempo avanza igual de rápido en días por segundo, porque se simula un poco en cada uno de muchos más fotogramas.
+const SIM_MIN_US := 1500
+var presupuesto_fot_us := RelojScript.PRESUPUESTO_US     # lo que puede gastar la simulación en ESTE fotograma (µs)
+var sim_fraccion := 0.35                                 # parte del fotograma para la simulación (Ajustes `sim_prio`)
+
+func _presupuesto_fotograma(delta: float) -> int:
+	var resto_us := maxf(delta * 1.0e6 - ms_fases * 1000.0, 0.0)        # el fotograma anterior sin su simulación
+	var p := int(resto_us * sim_fraccion / maxf(1.0 - sim_fraccion, 0.05))
+	return clampi(p, mini(SIM_MIN_US, presupuesto_us), presupuesto_us)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -2339,7 +2356,7 @@ func _multi_dibujar(p: Vector2) -> void:
 ## ¿Hay que mover la cámara al enfocar con un clic? Solo si el país no se ve entero o se ve diminuto: si ya está bien a la vista,
 ## la cámara se queda quieta (con un clic por país, mover la cámara cada vez marea).
 func _foco_debe_mover(pais: String) -> bool:
-	if mundo == null or not mundo.paises.has(pais):
+	if mundo == null or not mundo.paises.has(pais) or not _zoom_a_pais_permitido(pais):
 		return false
 	var bb := _bbox_foco(pais)
 	var cen := bb.get_center()
@@ -2380,8 +2397,14 @@ func _doble_click(pos: Vector2) -> void:
 		_tras_elegir_provincia(pi)
 		mostrar_subprovincias(pi)
 		return
-	_enfocar_pais(pais, true)
+	_enfocar_pais(pais, _zoom_a_pais_permitido(pais))           # 0.1.8.45: a un país ajeno no se hace zoom, solo se rotula
 	_seleccion_pais(pais, String(a["k"]), p)
+
+
+## 0.1.8.45 · La cámara solo se acerca SOLA a tu propio país. Un clic (o doble clic) en otro país lo rotula y lo resalta (sus provincias con nombre,
+## el resto atenuado, su panel) pero la cámara se queda donde estaba. Sin país (observador) todos se comportan como antes.
+func _zoom_a_pais_permitido(pais: String) -> bool:
+	return mundo == null or mundo.jugador == "" or pais == mundo.jugador
 
 
 func _limpiar_seleccion() -> void:
@@ -3495,6 +3518,8 @@ func _aplicar_calidad(a: Dictionary) -> void:
 	q_ciudades = bool(c["ciudades"])
 	q_lagos = bool(c["lagos"])
 	presupuesto_us = AjustesScript.presupuesto_sim_us(c)
+	sim_fraccion = AjustesScript.fraccion_sim(c)
+	presupuesto_fot_us = presupuesto_us
 	q_relieve = AjustesScript.preset_de(c) != 2                  # 0.1.8.35: la calidad Baja no dibuja el relieve
 	_aplicar_relieve()
 	for n in capa_lagos:

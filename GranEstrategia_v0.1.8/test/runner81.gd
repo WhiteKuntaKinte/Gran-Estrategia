@@ -220,8 +220,8 @@ func t_grabador() -> void:
 		var c := lineas[i].split(",")
 		dts.append(float(c[1]))
 		vistas[c[13]] = true
-		if c[20] != "":
-			marcas.append(c[20])
+		if c[c.size() - 1] != "":
+			marcas.append(c[c.size() - 1])                                  # la marca es siempre la última columna (0.1.8.45 añadió ms_sim antes)
 	ok(float(dts.max()) > 0.0 and float(dts.min()) >= 0.0, "las duraciones de fotograma son números válidos")
 	ok(vistas.has("tradicional") and vistas.has("relieve"), "anota la vista de cada fotograma (tradicional y relieve)")
 	ok(marcas.has("zoom 2"), "la marca queda en su fila (marcas: %s)" % str(marcas))
