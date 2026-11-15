@@ -1,11 +1,11 @@
-; Gran Estrategia v0.1.8.43
+; Gran Estrategia v0.1.8.44
 config_version=5
 
 [animation]
 compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
-config/name="Gran Estrategia (0.1.8.43)"
+config/name="Gran Estrategia (0.1.8.44)"
 run/main_scene="res://mapa_principal.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="GranEstrategia"
@@ -14,6 +14,12 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 [gui]
 
 timers/tooltip_delay_sec=3600.0
+
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/enable_file_logging.pc=true
+file_logging/max_log_files=8
 
 [display]
 window/size/viewport_width=1280

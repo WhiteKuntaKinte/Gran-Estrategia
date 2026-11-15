@@ -190,6 +190,7 @@ func construir(m: Node, f: Font) -> void:
 	raiz.theme = _tema_pantalla()
 	capa.add_child(raiz)
 	fondo = FondoScript.new()
+	fondo.animado = _con_animacion()
 	fondo.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	raiz.add_child(fondo)
@@ -295,6 +296,17 @@ func _tema_pantalla() -> Theme:
 # ─────────────────────────────────────────────────────────────
 # Armado de la pantalla
 # ─────────────────────────────────────────────────────────────
+## El sol (la raíz del árbol) se movió por pantalla: el resplandor del fondo lo sigue. `p` está en coordenadas del árbol; el fondo ocupa toda la pantalla.
+func _al_mover_sol(p: Vector2) -> void:
+	if fondo != null and arbol != null:
+		fondo.poner_sol(p + arbol.get_global_rect().position - fondo.get_global_rect().position)
+
+
+## Cielo, planetas y estelas se mueven solos (shaders con TIME); con la calidad Baja quedan quietos para no gastar GPU en un PC flojo.
+func _con_animacion() -> bool:
+	return not ("ajustes" in main and int(main.AjustesScript.preset_de(main.ajustes)) == 2)
+
+
 ## El área de debajo de la barra y las pestañas: el hub y el árbol (uno a la vez) y la cinta de secciones.
 func _armar_zona() -> void:
 	var zona := Control.new()
@@ -310,10 +322,12 @@ func _armar_zona() -> void:
 	arbol = ArbolScript.new()
 	arbol.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	arbol.construir(d, fuente, fuente_neg)
+	arbol.animado = _con_animacion()
 	arbol.margen_izq = ANCHO_CINTA + 6.0
 	arbol.margen_der = ANCHO_FICHA + 24.0
 	arbol.elegido.connect(_al_elegir_nodo)
 	arbol.salto.connect(ir_a)
+	arbol.sol_movido.connect(_al_mover_sol)
 	arbol.visible = false
 	zona.add_child(arbol)
 	cinta = Cinta.new()

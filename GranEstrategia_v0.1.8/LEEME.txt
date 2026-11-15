@@ -1,8 +1,24 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.43 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.44 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.44 — REGISTRO DE FALLOS Y DESCUBRIMIENTOS COMO UN SISTEMA SOLAR
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.44.md. Es la versión visual: sale de tus observaciones del 14 de noviembre sobre las capturas.)
+- REGISTRO DE FALLOS: el juego deja rastro en una carpeta (Opciones > Información > «Abrir carpeta de registros»): godot.log (todo lo que imprime y cada error), sesion.txt (una línea de estado cada pocos segundos:
+  pantalla, fecha del juego, FPS, memoria) y, si el juego se cayó o lo cerró el sistema, cierre_inesperado_<fecha>.txt con la sesión anterior. Si se te cierra solo (o a tu amigo), mándame esos archivos.
+  OJO: no sé todavía por qué se cerró la 0.1.8.43 en el PC de tu amigo; en las notas técnicas explico qué sospecho y qué cambié (el mapa ya no se dibuja detrás de Descubrimientos y calidad Baja deja todo quieto).
+- DESCUBRIMIENTOS, EL CIELO: fondo NEGRO, como el espacio, con el color de la rama (rojo Militar, azul Científica, violeta Sociedad) como nebulosa suave; tres capas de estrellas que brillan y se mueven distinto,
+  una estrella fugaz de vez en cuando y brasas en Militar. No hay planetas de fondo: los únicos planetas son los descubrimientos.
+- PLANETAS: cada descubrimiento es un planeta de colores reales y neutros (rocoso, desértico, con océanos, helado, gigante de gas…), alumbrado por el SOL del sistema (la raíz de la sección): tiene su cara iluminada,
+  su terminación entre día y noche y gira sobre su eje. Bloqueado = negro, aún lejano = gris, conocido = a color, disponible = con halo dorado. El TAMAÑO depende de los enlaces (lo que pide + lo que abre).
+  Lo verde es la LÍNEA, no el planeta.
+- LÍNEAS CON ESTELA: finas, con cometas que las recorren (solo las conocidas; con muy poco zoom se apagan para no estorbar).
+- EMBLEMA POR SUBSECCIÓN: en la punta de cada cuña, un emblema que cambia con tu avance: un anillo que se llena, pétalos que se encienden uno a uno y una estrella dorada al conocerlo todo. Debajo, «x / y conocidos».
+- MÁS ESPACIO Y MÁS ORDEN: los planetas están mucho más separados y repartidos a lo ancho de su cuña; cada cuña termina en su último anillo con contenido (como pétalos de distinto largo): las más largas son las
+  subsecciones que siguen creciendo con el tiempo y las cortas las que se detuvieron. Zoom con la rueda, «Mi frontera» y «Ver todo» como antes.
+- Mientras Descubrimientos está abierta el mapa no se dibuja (menos trabajo para la tarjeta gráfica); al cerrarla vuelve tal cual. Calidad Baja (Opciones > Pantalla): fondo y árbol quietos, sin estelas ni giro.
 
 NUEVO EN 0.1.8.43 — DESCUBRIMIENTOS A PANTALLA COMPLETA, IA CON CONSECUENCIAS, SUBPROVINCIAS REALES, PROVINCIAS QUE CAMBIAN DE FORMA Y PINTURAS POR LUGAR
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.43.md. Es la segunda y última versión para tus notas del 12 y 13 de noviembre: todo en una sola, con un ZIP al final, como pediste.)

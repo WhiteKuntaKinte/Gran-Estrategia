@@ -1,27 +1,59 @@
 extends Control
-## FONDO AMBIENTAL de la pantalla de Descubrimientos (0.1.8.43): cada rama tiene su propio mundo y cada sección su propio tono.
-##  · Militar: fragua oscura, de rojos y brasas, con tajos diagonales y chispas que suben.
-##  · Científica: noche azul con constelaciones (estrellas unidas por hilos finos).
-##  · Sociedad: violeta y oro viejo con ondas concéntricas que nacen abajo, como una ciudad vista desde el aire.
-## Se dibuja UNA vez por cambio de rama, de sección o de tamaño (todo en una malla): no cuesta nada mientras se mueve el árbol.
+## FONDO AMBIENTAL de la pantalla de Descubrimientos. Desde la 0.1.8.44 es ESPACIO NEGRO ANIMADO con el color de la rama fundido en la nebulosa (Camilo: «el fondo muy como
+## el espacio, NEGRO, pero con la fusión del color de la rama»): nubes de nebulosa, tres capas de estrellas que parpadean y derivan, estrellas fugaces, el resplandor del sol
+## (la raíz del árbol) y, solo en Militar, brasas que suben. NO hay planetas de fondo: los únicos planetas son los descubrimientos. Cada rama tiene su acento y cada sección su tono:
+##  · Militar: rojo y brasas · Científica: azul hielo · Sociedad: violeta y oro viejo.
+## TODO lo anima el shader (`shaders/fondo_espacial.gdshader`, con TIME): el script solo le pasa los colores al cambiar de rama, de sección o de tamaño, y la posición del sol
+## cuando el árbol se mueve; nunca redibuja por fotograma. Con calidad Baja (`animado = false`) el cielo queda quieto y barato.
 
-const LoteScript := preload("res://scripts/lote_dibujo.gd")
+const SHADER_FONDO := preload("res://shaders/fondo_espacial.gdshader")
 
-## Por rama: [color de arriba, color de abajo, acento]
+## Por rama: [color de arriba, color de abajo, acento]. Arriba y abajo son casi NEGROS (un soplo del color); el acento es lo que tiñe la nebulosa.
 const PALETAS := [
-	[Color(0.23, 0.06, 0.07), Color(0.045, 0.025, 0.035), Color(1.0, 0.42, 0.24)],
-	[Color(0.03, 0.14, 0.22), Color(0.01, 0.035, 0.085), Color(0.35, 0.88, 0.98)],
-	[Color(0.19, 0.10, 0.24), Color(0.05, 0.03, 0.08), Color(1.0, 0.78, 0.38)],
+	[Color(0.026, 0.006, 0.008), Color(0.003, 0.002, 0.003), Color(1.0, 0.36, 0.22)],
+	[Color(0.005, 0.016, 0.030), Color(0.001, 0.003, 0.007), Color(0.32, 0.80, 1.0)],
+	[Color(0.020, 0.009, 0.030), Color(0.004, 0.003, 0.008), Color(0.86, 0.60, 1.0)],
 ]
 
+const LADO_NEBULOSA := 256                # lado (px) de la textura de ruido de la nebulosa
+
+static var _nebulosa: ImageTexture        # una sola para todo el programa: se hace la primera vez que se abre la pantalla (cuesta unos 10 ms)
+
 var rama := 0
-var seccion := 0                         # posición de la sección dentro de su rama (cambia el tono y el dibujo del patrón)
-var _lote := LoteScript.new()
+var seccion := 0                         # posición de la sección dentro de su rama (cambia el tono y la semilla del cielo)
+var animado := true:                     # false = cielo quieto (calidad Baja)
+	set(v):
+		animado = v
+		_poner_uniforms()
+var _mat: ShaderMaterial
+var _sol := Vector2(-1.0, -1.0)           # dónde está el sol (la raíz del árbol); (−1, −1) = sin árbol a la vista: centrado y un poco por debajo de la pantalla
+var redibujos := 0                       # (pruebas) cuántas veces se redibujó: debe ser UNA por cambio de tamaño, nunca una por fotograma
+
+
+func _init() -> void:
+	_mat = ShaderMaterial.new()
+	_mat.shader = SHADER_FONDO
+	_mat.set_shader_parameter("tex_neb", _textura_nebulosa())
+	material = _mat
+
+
+## Ruido fractal repetible (FBM de FastNoiseLite) para la nebulosa del shader. Se hace una vez y se comparte.
+static func _textura_nebulosa() -> ImageTexture:
+	if _nebulosa == null:
+		var ruido := FastNoiseLite.new()
+		ruido.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+		ruido.fractal_type = FastNoiseLite.FRACTAL_FBM
+		ruido.fractal_octaves = 4
+		ruido.frequency = 0.016
+		ruido.seed = 4417
+		_nebulosa = ImageTexture.create_from_image(ruido.get_seamless_image(LADO_NEBULOSA, LADO_NEBULOSA, false, false, 0.15, true))
+	return _nebulosa
 
 
 func fijar(r: int, s: int) -> void:
 	rama = clampi(r, 0, PALETAS.size() - 1)
 	seccion = maxi(s, 0)
+	_poner_uniforms()
 	queue_redraw()
 
 
@@ -34,85 +66,37 @@ func acento() -> Color:
 	return tono(PALETAS[rama][2], seccion)
 
 
+## Pasa al shader la paleta de la rama y de la sección, la semilla del cielo y si se anima.
+## Dónde está el sol (la raíz del árbol) en coordenadas de este control: el shader lo usa para el resplandor.
+func poner_sol(p: Vector2) -> void:
+	_sol = p
+	if _mat != null:
+		_mat.set_shader_parameter("u_sol", p if p.x > -0.5 else Vector2(size.x * 0.5, size.y * 1.05))
+
+
+func _poner_uniforms() -> void:
+	if _mat == null:
+		return
+	var pal: Array = PALETAS[rama]
+	_mat.set_shader_parameter("c_top", tono(pal[0], seccion))
+	_mat.set_shader_parameter("c_bot", tono(pal[1], seccion))
+	_mat.set_shader_parameter("c_acc", acento())
+	_mat.set_shader_parameter("u_rama", float(rama))
+	_mat.set_shader_parameter("u_seed", float(1 + rama * 7 + seccion * 3 % 29))
+	_mat.set_shader_parameter("u_anim", 1.0 if animado else 0.0)
+	_mat.set_shader_parameter("u_size", size)
+	_mat.set_shader_parameter("u_sol", _sol if _sol.x > -0.5 else Vector2(size.x * 0.5, size.y * 1.05))
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_RESIZED:
+		_poner_uniforms()
 		queue_redraw()
 
 
 func _draw() -> void:
+	redibujos += 1
 	if size.x < 4.0 or size.y < 4.0:
 		return
-	var pal: Array = PALETAS[rama]
-	var arriba := tono(pal[0], seccion)
-	var abajo := tono(pal[1], seccion)
-	var ac := acento()
-	_lote.limpiar()
-	_lote.base(Vector2.ZERO, 1.0)
-	_lote.degradado_v(Rect2(Vector2.ZERO, size), arriba, abajo)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 7919 * (rama + 1) + 104729 * seccion
-	match rama:
-		0:
-			_fragua(rng, ac)
-		1:
-			_constelaciones(rng, ac)
-		_:
-			_ondas(rng, ac)
-	# viñeta: los bordes se oscurecen
-	var v := Color(0.0, 0.0, 0.0, 0.55)
-	var t := Color(0.0, 0.0, 0.0, 0.0)
-	var m := minf(size.x, size.y) * 0.22
-	_lote.degradado_v(Rect2(0.0, 0.0, size.x, m), v, t)
-	_lote.degradado_v(Rect2(0.0, size.y - m, size.x, m), t, v)
-	_lote.degradado_h(Rect2(0.0, 0.0, m, size.y), v, t)
-	_lote.degradado_h(Rect2(size.x - m, 0.0, m, size.y), t, v)
-	_lote.emitir(self)
-
-
-func _fragua(rng: RandomNumberGenerator, ac: Color) -> void:
-	for k in 26:                                           # tajos diagonales muy tenues
-		var x := rng.randf_range(-0.1, 1.1) * size.x
-		var y := rng.randf_range(0.0, 1.0) * size.y
-		var largo := rng.randf_range(0.18, 0.5) * size.y
-		var a := Vector2(x, y)
-		var b := a + Vector2(largo * 0.55, -largo)
-		_lote.linea(a, b, rng.randf_range(1.0, 3.0), Color(ac.r, ac.g, ac.b, rng.randf_range(0.015, 0.05)))
-	for k in 90:                                           # brasas: más densas abajo
-		var u := rng.randf()
-		var y2 := size.y * (1.0 - u * u)
-		var x2 := rng.randf() * size.x
-		var r := rng.randf_range(0.8, 2.4)
-		_lote.disco(Vector2(x2, y2), r, Color(ac.r, ac.g * 0.9, ac.b * 0.6, rng.randf_range(0.10, 0.5) * (0.4 + 0.6 * (y2 / size.y))), 6)
-	_lote.disco_radial(Vector2(size.x * 0.5, size.y * 1.02), size.x * 0.55, Color(ac.r, ac.g, ac.b, 0.14), Color(ac.r, ac.g, ac.b, 0.0), 28)
-
-
-func _constelaciones(rng: RandomNumberGenerator, ac: Color) -> void:
-	var estrellas := PackedVector2Array()
-	for k in 150:
-		var p := Vector2(rng.randf() * size.x, rng.randf() * size.y)
-		estrellas.append(p)
-		var r := rng.randf_range(0.7, 2.1)
-		_lote.disco(p, r, Color(0.85, 0.95, 1.0, rng.randf_range(0.10, 0.55)), 6)
-	for k in 36:                                           # hilos entre estrellas cercanas
-		var a := estrellas[rng.randi() % estrellas.size()]
-		var mejor := Vector2.ZERO
-		var mejor_d := 1.0e9
-		for q in estrellas:
-			var dd := a.distance_to(q)
-			if dd > 20.0 and dd < mejor_d and dd < 170.0:
-				mejor = q
-				mejor_d = dd
-		if mejor_d < 1.0e8:
-			_lote.linea(a, mejor, 1.0, Color(ac.r, ac.g, ac.b, 0.12))
-	_lote.disco_radial(Vector2(size.x * 0.3, size.y * 0.2), size.x * 0.4, Color(ac.r, ac.g, ac.b, 0.07), Color(ac.r, ac.g, ac.b, 0.0), 28)
-
-
-func _ondas(rng: RandomNumberGenerator, ac: Color) -> void:
-	var c := Vector2(size.x * rng.randf_range(0.35, 0.65), size.y * 1.15)
-	for k in 14:
-		var r := (80.0 + float(k) * 95.0)
-		_lote.anillo(c, r, 1.4 + float(k % 3), Color(ac.r, ac.g, ac.b, 0.05 + 0.02 * float(k % 2)), 72)
-	for k in 70:                                           # puntitos de luz: casas y faroles
-		var p := Vector2(rng.randf() * size.x, size.y * (0.35 + 0.65 * rng.randf()))
-		_lote.disco(p, rng.randf_range(0.8, 1.9), Color(ac.r, ac.g, ac.b, rng.randf_range(0.08, 0.4)), 6)
-	_lote.disco_radial(Vector2(size.x * 0.5, size.y * 1.05), size.x * 0.5, Color(ac.r, ac.g, ac.b, 0.10), Color(ac.r, ac.g, ac.b, 0.0), 28)
+	_mat.set_shader_parameter("u_size", size)
+	draw_rect(Rect2(Vector2.ZERO, size), Color.WHITE)       # un solo rectángulo: el shader pinta el cielo

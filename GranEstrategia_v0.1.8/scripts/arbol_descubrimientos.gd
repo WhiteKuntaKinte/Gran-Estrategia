@@ -18,25 +18,49 @@ extends Control
 ##
 ## Todo se dibuja en UN solo control con paneo (arrastrar) y zoom (rueda), en lotes (`lote_dibujo.gd`): cuesta lo mismo con 20 que con 100 nodos.
 ## No hay un nodo por descubrimiento. Se redibuja solo cuando algo cambia (mover, zoom, hover, elegir, un cambio de estado).
+##
+## 0.1.8.44 · NODOS-PLANETA Y ESTELAS: los círculos son ESFERAS iluminadas que giran sobre su eje, sin anillos (`shaders/planeta.gdshader`), y por las líneas de lo que ya
+## se conoce (y por las cadenas del descubrimiento enfocado) corren cometas de luz (`shaders/estela.gdshader`). Para animarlos sin redibujar, el árbol tiene TRES capas hijas
+## que se arman junto con el dibujo normal y las anima el shader con TIME: estelas (sobre las líneas), planetas (sobre las estelas) y «encima» (anillos de foco, marcas de tipo,
+## leyenda y globo, siempre por encima de los planetas). Con calidad Baja (`animado = false`) los planetas no giran y no hay estelas.
+## EMBLEMAS POR SUBSECCIÓN: junto al nombre de cada cuña hay una insignia dibujada por código (`shaders/emblema.gdshader`) que CAMBIA con el avance: el aro se llena, los pétalos se
+## encienden uno a uno y, con la subsección completa, el núcleo se vuelve una estrella dorada. Además la cuña misma se ilumina un poco más cuanto más se conoce de ella.
 
 signal elegido(i: int)                  # clic sobre un círculo (-1 = clic en el vacío)
+signal sol_movido(p: Vector2)           # el sol (la raíz) cambió de lugar en pantalla: el fondo mueve su resplandor
 signal salto(i: int)                    # clic en un trazo naranja: ir a ese descubrimiento (de otra sección)
 
 const LoteScript := preload("res://scripts/lote_dibujo.gd")
+const LoteUVScript := preload("res://scripts/lote_uv.gd")
+const SHADER_PLANETA := preload("res://shaders/planeta.gdshader")
+const SHADER_ESTELA := preload("res://shaders/estela.gdshader")
+const SHADER_EMBLEMA := preload("res://shaders/emblema.gdshader")
+const FondoScript := preload("res://scripts/fondo_descubrimientos.gd")
+const MITAD_EMBLEMA := 1.35             # el cuadro del emblema mide 1,35 radios a cada lado: ahí cabe su halo
+const R_EMBLEMA := 34.0                 # radio del emblema de cada cuña (px a zoom 1; se acota entre 16 y 44 px al alejar o acercar)
+const LOD_ESTELAS := 0.22               # por debajo de este zoom no corren estelas (serían ruido)
+const MAX_ESTELAS := 700                # tope de líneas con estela por dibujo
+const SEMILLA_PASO := 4.0               # separación de las claves que el shader del planeta lee de UV (ver planeta.gdshader)
+const SOL_ESTADO := 4                   # «estado» del sol en el shader del planeta (los planetas usan 0…3); el estado y la dirección del sol viajan juntos en UV.y: estado + 5·dirección
+const DIRECCIONES_SOL := 32             # la dirección del sol se guarda en 32 pasos de 11,25° (sobra: el ojo no distingue menos)
+const MITAD_PLANETA := 1.9              # el cuadro del planeta mide 1,9 radios a cada lado: ahí cabe el brillo de afuera
 
-const SEP_NODO := 128.0                 # separación horizontal mínima entre centros de un mismo nivel y carril (0.1.8.43b: antes 56, el árbol iba comprimido)
-const SEP_NIVEL := 176.0                # separación vertical entre niveles (antes 86)
-const R_MIN := 22.0
-const R_MAX := 38.0
-const R_RAIZ := 360.0                   # radio del primer anillo (el de las raíces)
+const SEP_NODO := 230.0                 # separación horizontal mínima entre centros de un mismo nivel y carril (0.1.8.44: antes 128, antes 56; Camilo: «aprovecha el espacio», es infinito)
+const SEP_NIVEL := 310.0                # separación vertical entre niveles (antes 176)
+const R_MIN := 30.0                     # radio del planeta con un solo enlace…
+const R_MAX := 84.0                     # … y del que más enlaces tiene (el tamaño sale de los enlaces: lo que pide + lo que abre)
+const R_POR_ENLACE := 9.0               # radio = R_MIN + √(enlaces) · R_POR_ENLACE
+const R_RAIZ := 620.0                   # radio del primer anillo (el de las raíces)
+const LARGO_PUNTA := 150.0              # lo que sobresale la cuña más allá de su último anillo (ahí van su nombre y su emblema)
+const PESO_BARICENTRO := 0.25          # cuánto pesa, al acomodar un planeta en su cuña, el ángulo medio de sus prerrequisitos (el resto es reparto parejo)
 const HOLGURA_CUNA := 1.5               # holgura de cada cuña, en nodos
 const ANGULO_MAX := 2.62                # abanico máximo: 150°, para que todo quede por encima de la raíz
-const SUBFILA := 108.0                  # cuando un anillo está muy lleno sus nodos se reparten en hasta 3 sub-anillos pegados (en vez de abrir el abanico sin fin)
+const SUBFILA := 190.0                  # cuando un anillo está muy lleno sus nodos se reparten en hasta 3 sub-anillos pegados (en vez de abrir el abanico sin fin)
 const MAX_SUBFILAS := 3
 const LOD_MARCAS := 0.4                 # por debajo de este zoom no se dibujan los trazos hacia otras secciones (y las «T» desde el 70 % de esto)
-const MARGEN_X := 260.0                 # a los lados caben los años de cada anillo y los nombres de las cuñas
-const MARGEN_ARRIBA := 220.0            # por arriba sobresalen los trazos hacia otras secciones y las T
-const MARGEN_ABAJO := 200.0             # por abajo, los trazos de entrada
+const MARGEN_X := 420.0                 # a los lados caben los años de cada anillo y los nombres de las cuñas
+const MARGEN_ARRIBA := 380.0            # por arriba sobresalen los trazos hacia otras secciones y las T
+const MARGEN_ABAJO := 340.0             # por abajo, los trazos de entrada
 const ZOOM_MIN := 0.04
 const ZOOM_MAX := 2.8
 const ZOOM_AJUSTE_MIN := 0.05
@@ -45,7 +69,7 @@ const ZOOM_FRONTERA_MIN := 0.5          # y lo más lejos que llega ese encuadre
 const ZOOM_AL_ELEGIR := 0.7             # ir a un descubrimiento (búsqueda, otra sección) nunca lo deja más lejos que esto
 const PASO_RUEDA := 1.16
 const LETRA_NIVEL := 12
-const LARGO_TRAZO := 66.0               # largo (px a zoom 1) del trazo naranja hacia otra sección
+const LARGO_TRAZO := 100.0              # largo (px a zoom 1) del trazo naranja hacia otra sección
 
 const E_BLOQUEADO := 0
 const E_DISPONIBLE := 1
@@ -60,6 +84,7 @@ const C_NEGRO := Color(0.012, 0.012, 0.018)
 const C_NEGRO_BORDE := Color(0.40, 0.42, 0.50)
 const C_GRIS := Color(0.50, 0.51, 0.56)
 const C_GRIS_BORDE := Color(0.74, 0.75, 0.80)
+const C_MUESTRA := [C_NEGRO, Color(0.62, 0.50, 0.38), Color(0.42, 0.52, 0.66), C_GRIS]     # color de la muestra de cada estado en la leyenda, por estado (los planetas son de colores reales: negro, gris, o su aspecto natural)
 const C_ABRE := Color(0.72, 0.52, 1.0)          # lo que ESTE abre (violeta)
 const C_PASTILLA := Color(0.95, 0.55, 0.20)
 # Colores de texto y globo de TODA la pantalla de Descubrimientos: fijos y claros, porque el fondo siempre es oscuro (los del tema de la interfaz están pensados para papel claro)
@@ -69,6 +94,19 @@ const T_TENUE := Color(0.70, 0.73, 0.82)
 const T_NOTA := Color(0.62, 0.74, 0.95)
 const T_GLOBO_ARRIBA := Color(0.10, 0.11, 0.17)
 const T_GLOBO_ABAJO := Color(0.05, 0.06, 0.10)
+
+## Capa hija transparente al ratón: dibuja con su propio material y lo que le diga `al_dibujar` (se llama con la capa para pintar sobre ella).
+class CapaAnimada extends Control:
+	var al_dibujar := Callable()
+
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+		focus_mode = Control.FOCUS_NONE
+
+	func _draw() -> void:
+		if al_dibujar.is_valid():
+			al_dibujar.call(self)
+
 
 var d                                   # Descubrimientos
 var fuente: Font
@@ -113,6 +151,27 @@ var _lote := LoteScript.new()
 var _tx: Array = []                     # textos pendientes del dibujo en curso (ver `_t`)
 var dibujos := 0                        # (pruebas) cuántas veces se dibujó
 var nodos_dibujados := 0                # (pruebas) cuántos nodos entraron en el último dibujo
+var animado := true:                    # false = planetas quietos y sin estelas (calidad Baja)
+	set(v):
+		animado = v
+		_poner_animacion()
+var estelas_dibujadas := 0              # (pruebas) cuántas líneas con estela entraron en el último dibujo
+var planetas_dibujados := 0             # (pruebas) cuántos planetas entraron en el último dibujo
+var _sol_pant := Vector2.ZERO           # dónde cae el sol en pantalla en el último dibujo
+var _sol_avisado := Vector2(-1.0e9, -1.0e9)
+var emblemas_dibujados := 0             # (pruebas) cuántos emblemas de cuña entraron en el último dibujo
+var capa_estelas: CapaAnimada
+var capa_emblemas: CapaAnimada
+var capa_planetas: CapaAnimada
+var capa_encima: CapaAnimada
+var _mat_planeta: ShaderMaterial
+var _mat_estela: ShaderMaterial
+var _mat_emblema: ShaderMaterial
+var _lote_planetas := LoteUVScript.new()
+var _lote_estelas := LoteUVScript.new()
+var _lote_emblemas := LoteUVScript.new()
+var _cuenta := {}                       # subsección -> Vector2i(conocidos, total) dentro de esta sección (se recalcula en `refrescar`)
+var _vis: Array = []                    # [{i, c, r, e, aten, relleno}] de los planetas del último dibujo (los usa la capa de encima)
 
 
 func construir(descub, f: Font, f_neg: Font) -> void:
@@ -123,6 +182,36 @@ func construir(descub, f: Font, f_neg: Font) -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	focus_mode = Control.FOCUS_NONE
 	mouse_default_cursor_shape = Control.CURSOR_DRAG
+	_mat_estela = ShaderMaterial.new()
+	_mat_estela.shader = SHADER_ESTELA
+	_mat_planeta = ShaderMaterial.new()
+	_mat_planeta.shader = SHADER_PLANETA
+	_mat_emblema = ShaderMaterial.new()
+	_mat_emblema.shader = SHADER_EMBLEMA
+	capa_estelas = _nueva_capa(_mat_estela, func(ci): _lote_estelas.emitir_conservando(ci))
+	capa_emblemas = _nueva_capa(_mat_emblema, func(ci): _lote_emblemas.emitir_conservando(ci))
+	capa_planetas = _nueva_capa(_mat_planeta, func(ci): _lote_planetas.emitir_conservando(ci))
+	capa_encima = _nueva_capa(null, _dibujar_encima)
+	_poner_animacion()
+
+
+## Una capa hija a pantalla completa, transparente al ratón, con su material (o ninguno) y su función de dibujo.
+func _nueva_capa(mat: Material, f: Callable) -> CapaAnimada:
+	var c := CapaAnimada.new()
+	c.material = mat
+	c.al_dibujar = f
+	add_child(c)
+	c.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	return c
+
+
+func _poner_animacion() -> void:
+	if _mat_planeta == null:
+		return
+	_mat_planeta.set_shader_parameter("u_anim", 1.0 if animado else 0.0)
+	_mat_estela.set_shader_parameter("u_anim", 1.0 if animado else 0.0)
+	_mat_emblema.set_shader_parameter("u_anim", 1.0 if animado else 0.0)
+	queue_redraw()
 
 
 # ─────────────────────────────────────────────────────────────
@@ -141,9 +230,20 @@ func estado_nodo(i: int) -> int:
 
 func refrescar() -> void:
 	_est.clear()
+	_cuenta.clear()
 	for i in nodos:
-		_est[i] = estado_nodo(i)
+		var e := estado_nodo(i)
+		_est[i] = e
+		var sb: int = int(d.sub[i])
+		var cu: Vector2i = _cuenta.get(sb, Vector2i.ZERO)
+		_cuenta[sb] = Vector2i(cu.x + (1 if e == E_CONOCIDO else 0), cu.y + 1)
 	queue_redraw()
+
+
+## Fracción conocida (0…1) de la subsección `sb` dentro de esta sección.
+func avance_sub(sb: int) -> float:
+	var cu: Vector2i = _cuenta.get(sb, Vector2i.ZERO)
+	return float(cu.x) / float(cu.y) if cu.y > 0 else 0.0
 
 
 func fijar_tid(t: int) -> void:
@@ -263,8 +363,8 @@ func _distribuir() -> void:
 		th += a_w
 	# radios de los círculos según lo que cada uno abre
 	for i in nodos:
-		var n_dep: int = (d.dependientes[i] as PackedInt32Array).size()
-		radio[i] = clampf(R_MIN + sqrt(float(n_dep)) * 4.0, R_MIN, R_MAX)
+		var enlaces: int = (d.dependientes[i] as PackedInt32Array).size() + _prerrequisitos(i).size()
+		radio[i] = clampf(R_MIN + sqrt(float(enlaces)) * R_POR_ENLACE, R_MIN, R_MAX)
 	# radio de cada anillo: lo bastante lejos del anterior y lo bastante largo para que su celda más llena quepa en su cuña; si no cabe en una fila,
 	# los nodos se reparten en hasta MAX_SUBFILAS sub-anillos (se elige lo que deje el árbol más compacto)
 	var r_ini_nivel := R_RAIZ
@@ -317,24 +417,35 @@ func _distribuir() -> void:
 				var r_fila := mejor_r + float(fila) * SUBFILA
 				for j in range(fila, deseados.size(), filas):
 					grupo.append([float((deseados[j] as Array)[0]) * r_fila, int((deseados[j] as Array)[1])])
-				var ss := _separar(grupo, float(cu[0]) * r_fila + SEP_NODO * 0.55, float(cu[1]) * r_fila - SEP_NODO * 0.55)
+				var lo_g := float(cu[0]) * r_fila + SEP_NODO * 0.55
+				var hi_g := float(cu[1]) * r_fila - SEP_NODO * 0.55
+				for jj in grupo.size():                              # reparto PAREJO por toda la cuña (las filas se llenan de lado a lado y el árbol no se va a un costado); el baricentro de lo que lo une solo ordena y empuja un poco
+					var uniforme := lo_g + (float(jj) + 0.5) * (hi_g - lo_g) / float(grupo.size())
+					(grupo[jj] as Array)[0] = lerpf(uniforme, float((grupo[jj] as Array)[0]), PESO_BARICENTRO)
+				var ss := _separar(grupo, lo_g, hi_g)
 				for j2 in grupo.size():
 					var nid: int = int((grupo[j2] as Array)[1])
 					ang[nid] = ss[j2] / r_fila
 					dist[nid] = r_fila
 		r_ini_nivel = mejor_r + float(mejor_k - 1) * SUBFILA + SEP_NIVEL
+	# hasta dónde llega cada cuña: hasta su último anillo con algo (+ LARGO_PUNTA). Las subsecciones que dejaron de crecer quedan CORTAS y se ve (en vez de un hueco al fondo de una cuña larga)
+	for cr0 in carriles:
+		var nmax := 0
+		for i in nodos:
+			if int(d.sub[i]) == int(cr0["sub"]):
+				nmax = maxi(nmax, int(prof[i]))
+		cr0["r_fin"] = float(anillos_fin[nmax]) + LARGO_PUNTA
 	# posiciones (con la raíz en el origen; luego se desplaza todo para que el árbol quede en coordenadas positivas)
 	var caja := Rect2(Vector2.ZERO, Vector2.ZERO)
-	var r_ult: float = anillos_fin[niveles - 1]
 	for i in nodos:
 		var p := _polar(float(ang[i]), float(dist[i]))
 		pos[i] = p
 		var rr: float = radio[i]
 		caja = caja.expand(p - Vector2(rr, rr) - Vector2(30.0, 30.0)).expand(p + Vector2(rr, rr) + Vector2(30.0, 30.0))
-	for cr in carriles:                                                  # el borde del abanico: nombres de las cuñas
+	for cr in carriles:                                                  # la punta de cada cuña: su nombre y su emblema
 		for aa in [float(cr["a0"]), float(cr["a1"]), (float(cr["a0"]) + float(cr["a1"])) * 0.5]:
-			caja = caja.expand(_polar(float(aa), r_ult + 140.0))
-	caja = caja.expand(Vector2(-160.0, 230.0)).expand(Vector2(160.0, 230.0))        # el cubo de la raíz y su título
+			caja = caja.expand(_polar(float(aa), float(cr["r_fin"]) + 260.0))
+	caja = caja.expand(Vector2(-280.0, 340.0)).expand(Vector2(280.0, 340.0))        # el sol (la raíz) y su título
 	var desp := Vector2(MARGEN_X, MARGEN_ARRIBA) - caja.position
 	apex = desp
 	for i in nodos:
@@ -631,7 +742,7 @@ func _gui_input(ev: InputEvent) -> void:
 				_actualizar_foco()
 				queue_redraw()
 			elif hover >= 0 or hover_pastilla >= 0:
-				queue_redraw()                              # el globo de información sigue al ratón
+				capa_encima.queue_redraw()                  # el globo de información sigue al ratón: solo se repinta la capa de encima, no todo el árbol
 			mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if (hover >= 0 or hover_pastilla >= 0) else Control.CURSOR_DRAG
 
 
@@ -690,9 +801,17 @@ func _colores_estado(e: int) -> Array:
 func _draw() -> void:
 	dibujos += 1
 	nodos_dibujados = 0
+	estelas_dibujadas = 0
+	planetas_dibujados = 0
+	emblemas_dibujados = 0
 	_lote.limpiar()
+	_lote_planetas.limpiar()
+	_lote_estelas.limpiar()
+	_lote_emblemas.limpiar()
+	_vis.clear()
 	_tx.clear()
 	if d == null or nodos.is_empty():
+		_repintar_capas()
 		return
 	_lote.base(Vector2.ZERO, 1.0)
 	var z := zoom
@@ -700,7 +819,6 @@ func _draw() -> void:
 	var vis_arbol := Rect2((-origen) / z, size / z).grow(60.0)
 	var hay_foco := _foco >= 0
 	var sp := clampf(z, 0.75, 1.4)                                       # escala de puntas, «T» y trazos: crecen un poco al acercar, no se pierden al alejar
-	var r_borde: float = float(anillos_fin[niveles - 1]) + 100.0
 	var r_ini: float = float(anillos[0]) * 0.5
 	_lote.base(origen, z)                                                # lo que sigue está en coordenadas del árbol
 	# cuñas: una banda en forma de abanico por subsección (alternan de tono) y un filete radial entre ellas
@@ -708,23 +826,25 @@ func _draw() -> void:
 		var cr: Dictionary = carriles[c]
 		var a0: float = cr["a0"]
 		var a1: float = cr["a1"]
-		var pasos := clampi(int((a1 - a0) * r_borde / 150.0), 3, 48)
-		var col_b := Color(1.0, 1.0, 1.0, 0.04 if c % 2 == 0 else 0.016)
+		var r_c: float = cr["r_fin"]
+		var pasos := clampi(int((a1 - a0) * r_c / 150.0), 3, 48)
+		var av_c := avance_sub(int(cr["sub"]))
+		var col_b := Color(1.0, 1.0, 1.0, (0.035 if c % 2 == 0 else 0.014) * (1.0 + 1.2 * av_c))     # la cuña se ilumina con lo que se conoce de ella
 		var visible_c := false
 		var p_ant_i := apex + _polar(a0, r_ini)
-		var p_ant_o := apex + _polar(a0, r_borde)
+		var p_ant_o := apex + _polar(a0, r_c)
 		for k in pasos:
 			var ak := lerpf(a0, a1, float(k + 1) / float(pasos))
 			var p_i := apex + _polar(ak, r_ini)
-			var p_o := apex + _polar(ak, r_borde)
+			var p_o := apex + _polar(ak, r_c)
 			if vis_arbol.intersects(Rect2(p_ant_i, p_o - p_ant_i).abs().merge(Rect2(p_ant_o, p_i - p_ant_o).abs())):
 				_lote.cuadrilatero(p_ant_i, p_ant_o, p_o, p_i, col_b)
 				visible_c = true
 			p_ant_i = p_i
 			p_ant_o = p_o
 		if visible_c:
-			_lote.linea(apex + _polar(a0, r_ini), apex + _polar(a0, r_borde), 1.0 / z, Color(1.0, 1.0, 1.0, 0.06))
-	_lote.linea(apex + _polar(abanico * 0.5, r_ini), apex + _polar(abanico * 0.5, r_borde), 1.0 / z, Color(1.0, 1.0, 1.0, 0.06))
+			_lote.linea(apex + _polar(a0, r_ini), apex + _polar(a0, r_c), 1.0 / z, Color(1.0, 1.0, 1.0, 0.06))
+	_lote.linea(apex + _polar(abanico * 0.5, r_ini), apex + _polar(abanico * 0.5, float(carriles[carriles.size() - 1]["r_fin"])), 1.0 / z, Color(1.0, 1.0, 1.0, 0.06))
 	# anillos: una guía tenue por nivel (la era), de un borde del abanico al otro
 	var th_i := -abanico * 0.5 - 0.03
 	var th_f := abanico * 0.5 + 0.03
@@ -763,18 +883,33 @@ func _draw() -> void:
 		var ancho := 2.2
 		if hay_foco and (a == _foco or _prev.has(a)) and (b == _foco or _prev.has(b)):
 			col = T_ORO
-			ancho = 3.6
+			ancho = 2.0
 		elif hay_foco and (b == _foco or _sig.has(b)) and (a == _foco or _sig.has(a)):
 			col = C_ABRE
-			ancho = 3.6
+			ancho = 2.0
 		elif hay_foco:
 			col = Color(1.0, 1.0, 1.0, 0.07)
 		elif int(_est.get(a, 0)) == E_CONOCIDO:
-			col = Color(C_CONOCIDO.r, C_CONOCIDO.g, C_CONOCIDO.b, 0.7)
+			col = Color(C_CONOCIDO.r, C_CONOCIDO.g, C_CONOCIDO.b, 0.50)
+			ancho = 1.2                                                  # un hilo: lo que se ve es la ESTELA que corre por él
 		else:
 			col = Color(1.0, 1.0, 1.0, 0.26)
 		_lote.tira(pts, (ancho + 2.4) / z, Color(col.r, col.g, col.b, col.a * 0.25), bool(ar["o"]))     # halo suave (la malla no tiene suavizado propio)
 		_lote.tira(pts, ancho / z, col, bool(ar["o"]))
+		if animado and z >= LOD_ESTELAS and estelas_dibujadas < MAX_ESTELAS:      # cometa de luz: solo por lo conocido y por las cadenas del enfocado
+			var tcol := Color(0.0, 0.0, 0.0, 0.0)
+			if hay_foco and (a == _foco or _prev.has(a)) and (b == _foco or _prev.has(b)):
+				tcol = Color(T_ORO.r, T_ORO.g, T_ORO.b, 1.0)
+			elif hay_foco and (b == _foco or _sig.has(b)) and (a == _foco or _sig.has(a)):
+				tcol = Color(C_ABRE.r, C_ABRE.g, C_ABRE.b, 1.0)
+			elif not hay_foco and int(_est.get(a, 0)) == E_CONOCIDO:
+				tcol = Color(C_CONOCIDO.r, C_CONOCIDO.g, C_CONOCIDO.b, 1.0)
+			if tcol.a > 0.0:
+				var sp_e := PackedVector2Array()
+				for q_e in pts:
+					sp_e.append(_a_pantalla(q_e))
+				_lote_estelas.cinta(sp_e, 8.0 * sp, tcol, float((a * 37) % 211))
+				estelas_dibujadas += 1
 	_lote.base(Vector2.ZERO, 1.0)
 	for ar2 in aristas:                                                  # punta de flecha: llega al círculo del nodo de más afuera, en la dirección de la curva
 		if not vis_arbol.intersects(ar2["caja"] as Rect2):
@@ -823,15 +958,13 @@ func _draw() -> void:
 		var atenuada := hay_foco and ni != _foco and hover_pastilla != k
 		var alfa_t := 0.28 if atenuada else (1.0 if hover_pastilla == k else 0.9)
 		_dibujar_trazo(ta, tb, tr[2], bool((pastillas[k] as Dictionary)["arriba"]), alfa_t, 3.4 if hover_pastilla == k else 2.4, _escala_pastilla())
-	# la raíz: un cubo dorado abajo en el centro
+	# el SOL del sistema (la raíz): un cuadro de la malla de planetas; el shader lo dibuja con granulación y corona, y de él sale la luz de todos los planetas
 	var ap := _a_pantalla(apex)
-	var r_hub := clampf(54.0 * z, 12.0, 70.0)
-	if vista.grow(r_hub + 60.0).has_point(ap):
-		_lote.disco_radial(ap, r_hub * 2.6, Color(1.0, 0.84, 0.4, 0.28), Color(1.0, 0.84, 0.4, 0.0), 32)
-		_lote.disco(ap, r_hub + 3.0, T_ORO, 36)
-		_lote.disco(ap, r_hub, Color(0.07, 0.06, 0.05, 1.0), 36)
-		_lote.disco(ap, r_hub * 0.45, Color(1.0, 0.84, 0.4, 0.85), 24)
-	# círculos
+	var r_hub := clampf(70.0 * z, 16.0, 110.0)
+	if vista.grow(r_hub * 2.0 + 60.0).has_point(ap):
+		_lote_planetas.cuadro(ap, r_hub * MITAD_PLANETA, Color.WHITE, Vector2(0.0, SEMILLA_PASO * float(SOL_ESTADO)), MITAD_PLANETA)
+	_sol_pant = ap
+	# planetas: cada círculo es un cuadro de la malla con UV que el shader vuelve esfera (y hace girar, alumbrada por el sol); los anillos de foco y las marcas de tipo van en la capa de encima
 	for i2 in nodos:
 		var c := _a_pantalla(pos[i2])
 		var r := _radio_px(i2)
@@ -840,27 +973,10 @@ func _draw() -> void:
 		nodos_dibujados += 1
 		var e: int = int(_est.get(i2, E_BLOQUEADO))
 		var atenuado := (hay_foco and i2 != _foco and not _prev.has(i2) and not _sig.has(i2)) or not _pasa_filtro(i2)
-		var cols := _colores_estado(e)
-		var relleno: Color = cols[0]
-		var borde: Color = cols[1]
-		var alfa := 0.22 if atenuado else 1.0
-		if e == E_DISPONIBLE and not atenuado:                       # brillo dorado alrededor de lo que se puede investigar ya
-			_lote.disco_radial(c, r * 2.4, Color(C_DISPONIBLE.r, C_DISPONIBLE.g, C_DISPONIBLE.b, 0.38), Color(C_DISPONIBLE.r, C_DISPONIBLE.g, C_DISPONIBLE.b, 0.0), 28)
-		elif e == E_CONOCIDO and not atenuado:
-			_lote.disco_radial(c, r * 1.8, Color(C_CONOCIDO.r, C_CONOCIDO.g, C_CONOCIDO.b, 0.20), Color(C_CONOCIDO.r, C_CONOCIDO.g, C_CONOCIDO.b, 0.0), 24)
-		relleno.a = relleno.a * alfa
-		borde.a = borde.a * (0.35 if atenuado else 1.0)
-		var segm := 28 if r > 22.0 else (20 if r > 9.0 else 14)
-		var grosor_borde := clampf(r * 0.12, 2.0, 4.5)
-		if i2 == _foco:
-			_lote.disco(c, r + grosor_borde + 4.0, Color(1.0, 1.0, 1.0, 0.95), 32)
-		elif _prev.has(i2) and hay_foco:
-			_lote.disco(c, r + grosor_borde + 3.0, T_ORO, 28)
-		elif _sig.has(i2) and hay_foco:
-			_lote.disco(c, r + grosor_borde + 3.0, C_ABRE, 28)
-		_lote.disco(c, r + grosor_borde, borde, segm)
-		_lote.disco(c, r, relleno, segm)
-		_marca_tipo(c, r, String(d.tipo[i2]), relleno, atenuado)
+		var qb := int(roundf(fposmod(atan2(ap.y - c.y, ap.x - c.x), TAU) / TAU * float(DIRECCIONES_SOL))) % DIRECCIONES_SOL      # hacia dónde cae el sol visto desde este planeta
+		_lote_planetas.cuadro(c, r * MITAD_PLANETA, Color(1.0, 1.0, 1.0, 0.22 if atenuado else 1.0), Vector2(SEMILLA_PASO * float(i2), SEMILLA_PASO * (float(e) + float(SOL_ESTADO + 1) * float(qb))), MITAD_PLANETA)
+		planetas_dibujados += 1
+		_vis.append({"i": i2, "c": c, "r": r, "aten": atenuado})
 	# textos: título de la raíz, años de cada anillo (borde izquierdo del abanico) y nombre de cada cuña (borde de afuera)
 	if vista.grow(r_hub + 200.0).has_point(ap):
 		var nombre_sec := String(d.secciones[seccion]["nombre"]).to_upper()
@@ -879,22 +995,72 @@ func _draw() -> void:
 	for c3 in carriles.size():
 		var cr3: Dictionary = carriles[c3]
 		var am: float = (float(cr3["a0"]) + float(cr3["a1"])) * 0.5
-		var pn := _a_pantalla(apex + _polar(am, r_borde + 40.0))
-		var anch := (float(cr3["a1"]) - float(cr3["a0"])) * (r_borde + 40.0) * z - 10.0
-		if not vista.grow(40.0).has_point(pn) or anch < 80.0:
+		var r_p: float = float(cr3["r_fin"]) + 40.0
+		var pn := _a_pantalla(apex + _polar(am, r_p))
+		var anch := (float(cr3["a1"]) - float(cr3["a0"])) * r_p * z - 10.0
+		if not vista.grow(40.0).has_point(pn) or anch < 50.0:
 			continue
-		var anch_t := minf(anch, 260.0)
+		var anch_t := clampf(anch, 150.0, 300.0)
+		var r_em := clampf(R_EMBLEMA * z, 16.0, 44.0)
+		# el bloque emblema + nombre + cuenta se aparta de la punta en la dirección de la cuña (en las cuñas de los lados no pisa sus propios planetas)
+		var dir_c := _polar(am, 1.0)
+		var medio_alto := r_em + 28.0
+		pn += dir_c * (absf(dir_c.x) * minf(anch_t, 190.0) * 0.5 + absf(dir_c.y) * medio_alto + 10.0)
 		_t(true, Vector2(pn.x - anch_t * 0.5, pn.y), _recortar(fuente_neg, String(cr3["nombre"]), 13, anch_t), 13, Color(1.0, 1.0, 1.0, 0.82), anch_t, HORIZONTAL_ALIGNMENT_CENTER)
-	_leyenda()
+		var cu3: Vector2i = _cuenta.get(int(cr3["sub"]), Vector2i.ZERO)
+		_t(false, Vector2(pn.x - anch_t * 0.5, pn.y + 16.0), "%d / %d conocidos" % [cu3.x, cu3.y], 11, T_TENUE, anch_t, HORIZONTAL_ALIGNMENT_CENTER)
+		var pe := pn + Vector2(0.0, -(r_em + 26.0))                          # emblema: justo encima del nombre
+		if vista.grow(r_em * 2.0).has_point(pe):
+			var acento: Color = (FondoScript.PALETAS[clampi(int(d.secciones[seccion]["rama"]), 0, 2)] as Array)[2]
+			_lote_emblemas.cuadro(pe, r_em * MITAD_EMBLEMA, Color(acento.r, acento.g, acento.b, avance_sub(int(cr3["sub"]))), Vector2(SEMILLA_PASO * float(int(cr3["sub"]) + 1), 0.0), MITAD_EMBLEMA)
+			emblemas_dibujados += 1
 	_lote.emitir(self)
-	_t_emitir()
-	# globo de información
-	if hover >= 0 and not _arrastrando:
+	_t_emitir(self)
+	_repintar_capas()
+	if _sol_pant != _sol_avisado:
+		_sol_avisado = _sol_pant
+		sol_movido.emit(_sol_pant)
+
+
+## Las tres capas hijas se repintan junto con el árbol (estelas y planetas con la geometría que se acaba de armar; «encima» se arma en su propio dibujo).
+func _repintar_capas() -> void:
+	if capa_estelas == null:
+		return
+	capa_estelas.queue_redraw()
+	capa_emblemas.queue_redraw()
+	capa_planetas.queue_redraw()
+	capa_encima.queue_redraw()
+
+
+## Capa de encima: anillos de foco, marca de tipo de cada planeta, leyenda y globo de información (siempre por encima de los planetas). Se puede repintar sola (el globo sigue al ratón).
+func _dibujar_encima(ci: CanvasItem) -> void:
+	_lote.limpiar()
+	_tx.clear()
+	if d == null or nodos.is_empty():
+		return
+	_lote.base(Vector2.ZERO, 1.0)
+	var hay_foco := _foco >= 0
+	for v in _vis:
+		var i2: int = v["i"]
+		var c: Vector2 = v["c"]
+		var r: float = v["r"]
+		var aten: bool = v["aten"]
+		if i2 == _foco:
+			_lote.anillo(c, r + 3.5, 4.5, Color(1.0, 1.0, 1.0, 0.95), 40)
+		elif hay_foco and _prev.has(i2):
+			_lote.anillo(c, r + 2.5, 3.0, T_ORO, 32)
+		elif hay_foco and _sig.has(i2):
+			_lote.anillo(c, r + 2.5, 3.0, C_ABRE, 32)
+		_marca_tipo(c, r, String(d.tipo[i2]), aten)
+	_leyenda()
+	_lote.emitir(ci)
+	_t_emitir(ci)
+	if hover >= 0 and not _arrastrando:                                  # globo de información
 		_globo_nodo(hover)
 	elif hover_pastilla >= 0 and not _arrastrando:
 		_globo_pastilla(hover_pastilla)
-	_lote.emitir(self)
-	_t_emitir()
+	_lote.emitir(ci)
+	_t_emitir(ci)
 
 
 ## Trazo naranja que sale de un círculo hacia otra sección: se difumina y lleva una flecha a la mitad (hacia afuera = abre algo allá; hacia la raíz = lo necesita de allá).
@@ -915,15 +1081,20 @@ func _dibujar_trazo(a: Vector2, b: Vector2, dir: Vector2, hacia_afuera: bool, al
 func _leyenda() -> void:
 	var x0 := margen_izq + 70.0                                  # arriba a la izquierda: abajo a la izquierda están las raíces, lo primero que se mira
 	var y0 := 16.0
-	var panel := Rect2(x0 - 8.0, y0 - 8.0, 468.0, 76.0)
+	var panel := Rect2(x0 - 8.0, y0 - 8.0, 540.0, 76.0)
 	_lote.rectangulo(panel, Color(0.0, 0.0, 0.0, 0.5))
 	_lote.marco(panel, 1.0, Color(1.0, 1.0, 1.0, 0.14))
 	var x := x0 + 8.0
-	var estados := [[E_BLOQUEADO, "Bloqueado"], [E_LEJANO, "Aún lejano"], [E_CONOCIDO, "Conocido"], [E_DISPONIBLE, "Disponible"]]
+	var estados := [[E_BLOQUEADO, "Bloqueado"], [E_LEJANO, "Aún lejano"], [E_CONOCIDO, "Conocido (línea verde)"], [E_DISPONIBLE, "Disponible"]]
 	for e in estados:
-		var cols := _colores_estado(int(e[0]))
-		_lote.disco(Vector2(x, y0 + 8.0), 8.0, cols[1] as Color, 14)
-		_lote.disco(Vector2(x, y0 + 8.0), 6.2, cols[0] as Color, 14)
+		var ei: int = int(e[0])
+		var cp := Vector2(x, y0 + 8.0)
+		if ei == E_DISPONIBLE:
+			_lote.disco(cp, 10.0, Color(C_DISPONIBLE.r, C_DISPONIBLE.g, C_DISPONIBLE.b, 0.45), 16)     # el halo dorado
+		_lote.disco(cp, 7.6, C_NEGRO_BORDE if ei == E_BLOQUEADO else (C_GRIS_BORDE if ei == E_LEJANO else Color(0.0, 0.0, 0.0, 0.55)), 16)
+		_lote.disco(cp, 6.6, C_MUESTRA[ei], 16)
+		if ei == E_CONOCIDO:
+			_lote.rectangulo(Rect2(x - 8.0, y0 + 19.5, 16.0, 2.6), C_CONOCIDO)                       # lo verde es la línea
 		_t(false, Vector2(x + 13.0, y0 + 12.0), String(e[1]), 12, T_TEXTO)
 		x += 36.0 + fuente.get_string_size(String(e[1]), HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
 	var y1 := y0 + 32.0
@@ -936,15 +1107,19 @@ func _leyenda() -> void:
 	_t(false, Vector2(x0 + 2.0, y0 + 58.0), "Rueda: zoom · arrastrar: mover · mouse encima o clic: descripción", 11, T_TENUE)
 
 
-## Marca del tipo dentro del círculo (los conocimientos no llevan): unidad ▲, arma/equipo ◆, vehículo ■, edificio ⬟, gobierno ★ (pentágono), diplomacia ✚, técnica ●.
-func _marca_tipo(c: Vector2, r: float, tipo: String, relleno: Color, atenuado: bool) -> void:
+## Marca del tipo dentro del planeta (los conocimientos no llevan): unidad ▲, arma/equipo ◆, vehículo ■, edificio ⬟, gobierno ⬢, diplomacia ✚, técnica ●, recurso ⯃.
+## Blanca con una sombra oscura debajo: se lee sobre cualquier superficie, de día o de noche.
+func _marca_tipo(c: Vector2, r: float, tipo: String, atenuado: bool) -> void:
 	if r < 7.0 or tipo == "K":
 		return
-	var luz := relleno.get_luminance()
-	var col := Color(0.0, 0.0, 0.0, 0.62) if luz > 0.35 else Color(1.0, 1.0, 1.0, 0.78)
-	if atenuado:
-		col.a *= 0.4
-	var m := r * 0.46
+	var m := r * 0.30
+	var sombra := Color(0.0, 0.0, 0.0, 0.45 * (0.4 if atenuado else 1.0))
+	var luz := Color(1.0, 1.0, 1.0, 0.72 * (0.4 if atenuado else 1.0))
+	_trazar_marca(c, m * 1.22, tipo, sombra)
+	_trazar_marca(c, m, tipo, luz)
+
+
+func _trazar_marca(c: Vector2, m: float, tipo: String, col: Color) -> void:
 	match tipo:
 		"U":
 			_lote.poligono(c, m * 1.15, 3, col)
@@ -970,11 +1145,11 @@ func _t(negrita: bool, p: Vector2, txt: String, tam: int, col: Color, ancho := -
 	_tx.append([negrita, p, txt, tam, col, ancho, alin])
 
 
-func _t_emitir() -> void:
+func _t_emitir(ci: CanvasItem) -> void:
 	for pasada in 2:
 		for t in _tx:
 			if bool(t[0]) == (pasada == 1):
-				draw_string(fuente_neg if pasada == 1 else fuente, t[1], t[2], t[6], t[5], t[3], t[4])
+				ci.draw_string(fuente_neg if pasada == 1 else fuente, t[1], t[2], t[6], t[5], t[3], t[4])
 	_tx.clear()
 
 

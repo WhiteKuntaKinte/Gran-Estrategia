@@ -536,7 +536,8 @@ func t_menu() -> void:
 	ok(t.has("INFORMACIÓN") and t.has("Países / soberanías: %d\nProvincias administrativas: %d\nUnidades territoriales representadas: %d" % [paises.size(), n_prov, main.provincias.size()]), "INFORMACIÓN: los tres datos del mapa de siempre (%d países, %d provincias, %d unidades)" % [paises.size(), n_prov, main.provincias.size()])
 	ok(t.has("Las provincias son subdivisiones de los países; no se cuentan como países independientes."), "INFORMACIÓN: la nota de siempre")
 	ok(t.has("Versión %s" % main.VERSION), "INFORMACIÓN: muestra la versión (%s)" % main.VERSION)
-	ok(textos_botones(main.menu_contenido) == ["VOLVER"], "INFORMACIÓN: un botón VOLVER")
+	ok(textos_botones(main.menu_contenido) == ["Abrir carpeta de registros", "VOLVER"], "INFORMACIÓN: el botón de la carpeta de registros (0.1.8.44) y VOLVER")
+	ok(t.has("Registro de fallos: %s" % ProjectSettings.globalize_path("user://logs/")), "INFORMACIÓN: dice dónde está la carpeta de registros de fallos")
 	boton(main.menu_contenido, "VOLVER").pressed.emit()
 	ok(textos_botones(main.menu_contenido) == ["PANTALLA", "INFORMACIÓN", "VOLVER"], "VOLVER de INFORMACIÓN regresa a OPCIONES")
 	# Pantalla

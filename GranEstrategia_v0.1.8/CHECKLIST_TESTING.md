@@ -1,9 +1,14 @@
-# Checklist de testing — Gran Estrategia 0.1.8.43
+# Checklist de testing — Gran Estrategia 0.1.8.44
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.44 — registro de fallos y Descubrimientos como sistema solar
+- ✅ `runner99` — registro de fallos (`sesion.txt`, «CIERRE LIMPIO», copia de la sesión que terminó mal, máximo de copias), fondo espacial (negro, nebulosa del color de la rama, SIN planetas de fondo, sol), planetas (tamaño por enlaces, estados, sol de la raíz), estelas (solo con zoom suficiente, tope), emblemas por subsección (avance 0–1), cada cuña con su propio largo, calidad Baja (todo quieto) y cero redibujos por fotograma (70 comprobaciones).
+- ✅ `runner91` (170) sigue pasando con el árbol rehecho (abanico, anillos, ninguna línea vuelve a la raíz, círculos con aire).
+- ✅ Revisión visual con capturas (xvfb, GL por software): cielo negro con nebulosa de la rama, estrellas más brillantes, planetas con cara iluminada y terminación, líneas finas con estela, emblemas en la punta de cada cuña, cuñas de distinto largo.
 
 ### Mapa, interfaz y datos
 - ✅ `runner3` — mapa: clic selecciona, doble clic enfoca un país, V cambia de vista, X cierra, clic en el mar, Esc pausa y reanuda.
@@ -242,6 +247,17 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 
 ## B. Lo que tienes que probar tú en tu PC (⬜)
 Marca cada casilla cuando lo hayas probado y dime qué pasó.
+
+### 0.1.8.44 (para probar en tu PC)
+- ⬜ **Que abra y no se cierre sola** (lo más importante): abre el juego, juega unos minutos, entra a Descubrimientos (T) y pasea por varias secciones y ramas. Si en algún PC se cierra sola: Opciones > Información > «Abrir carpeta de registros» y mándame `godot.log` y `cierre_inesperado_*.txt` (o `sesion.txt`).
+- ⬜ **Descubrimientos, el cielo**: ¿el fondo es NEGRO como el espacio, con el color de la rama solo como nebulosa suave? ¿Las estrellas de atrás brillan lo suficiente? ¿Hay algún planeta de fondo? (no debería).
+- ⬜ **Planetas**: ¿se ven con colores realistas y neutros, con una cara iluminada hacia el sol (la raíz) y girando? ¿El bloqueado se ve negro, el lejano gris, el conocido a color y el disponible con halo dorado? ¿El tamaño se siente proporcional a los enlaces?
+- ⬜ **Líneas con estela**: ¿las líneas verdes son finas y se ven como estelas de cometa? ¿Se siente bien el movimiento, ni demasiado ni muy poco?
+- ⬜ **Orden y espacio**: ¿el árbol aprovecha el espacio y se entiende mejor con las cuñas de distinto largo («pétalos»)? ¿Los nombres y emblemas de cada subsección se leen sin pisar los planetas?
+- ⬜ **Emblemas**: ¿cambian con el avance de la subsección (anillo que se llena, pétalos que se encienden, estrella dorada al 100 %)?
+- ⬜ **Rendimiento**: F9 con la pantalla de Descubrimientos abierta (entra a una sección grande y muévete con la rueda) y pega el resumen. Si se trabase: Opciones > Pantalla > Calidad Baja deja fondo y árbol quietos; dime si así va fluido.
+- ⬜ **Al cerrar Descubrimientos (Esc)**: ¿el mapa vuelve igual que estaba (zoom, selección, vista)?
+- ⬜ **F9 con todas las IA** y la partida normal de 2026 (pendientes de la 0.1.8.43, siguen valiendo).
 
 ### 0.1.8.43 (para probar en tu PC)
 - ⬜ **F9 con todas las IA** (lo más importante): escenario 1 d. C., todas las IA activas, velocidad x6, F9, haz zoom in / out, deja correr un par de minutos y F9 otra vez; pega el resumen. Lo comparo contra el de la 0.1.8.42 (18 FPS de media, 181 fotogramas lentos). Y otro F9 en 2026 normal.

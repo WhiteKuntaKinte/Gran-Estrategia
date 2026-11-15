@@ -31,8 +31,9 @@ const PerfilScript := preload("res://scripts/perfil.gd")
 const AvisosScript := preload("res://scripts/avisos.gd")
 const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
+const RegistroScript := preload("res://scripts/registro_fallos.gd")
 
-const VERSION := "0.1.8.43"
+const VERSION := "0.1.8.44"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -628,11 +629,13 @@ var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
 var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
 var panel_descubrimientos             # DescubrimientosPantalla (0.1.8.43): la pantalla completa de Descubrimientos (tecla T), mientras está abierta
+var _mapa_oculto_desc := false         # 0.1.8.44: mientras la pantalla de Descubrimientos está abierta el mapa NO se dibuja (la pantalla es opaca: dibujarlo era gasto puro de GPU)
 var pinturas                          # PinturasScript (0.1.8.41): la pintura clásica de cada país, arriba de su panel
 var materias                          # MateriasScript (0.1.8.41): iconos de materias primas, sectores y monedas
 var avisos                            # AvisosScript (0.1.8.38): avisos apilados arriba a la derecha
 var fichas                            # FichasScript (0.1.8.38): fichas al pasar el ratón (reemplazan al tooltip nativo)
 var grabador                          # GrabadorScript (0.1.8.39): graba el rendimiento fotograma a fotograma (F9; Debug > Rendimiento)
+var registro                          # RegistroScript (0.1.8.44): deja rastro en `user://logs/` (sesión en curso y copia de la que terminó mal)
 var popup_guerra                      # PopupGuerraScript (0.1.8.2a): avisos «te declararon la guerra» y «fin de la guerra»; se crea al primer aviso
 var _vel_aviso := 1                   # velocidad que llevaba el juego cuando salió el aviso (0 = ya estaba en pausa)
 var etiq_cont := {}                   # continente -> [[CapaTexto, primer carácter, último carácter]] de su nombre horneado
@@ -3123,10 +3126,14 @@ func _abrir_descubrimientos() -> void:
 		return
 	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
 		return
+	_marca_rend("descubrimientos: abre")
 	panel_descubrimientos = DescubrimientosPantalla.new()
 	add_child(panel_descubrimientos)
 	panel_descubrimientos.construir(self, fuente_ui)
 	panel_descubrimientos.cerrada.connect(_cerrar_descubrimientos)
+	if visible:
+		visible = false
+		_mapa_oculto_desc = true
 
 
 func _alternar_descubrimientos() -> void:
@@ -3138,8 +3145,12 @@ func _alternar_descubrimientos() -> void:
 
 func _cerrar_descubrimientos() -> void:
 	if panel_descubrimientos != null and is_instance_valid(panel_descubrimientos):
+		_marca_rend("descubrimientos: cierra")
 		panel_descubrimientos.queue_free()
 	panel_descubrimientos = null
+	if _mapa_oculto_desc:
+		visible = true
+		_mapa_oculto_desc = false
 
 
 func _seleccion_continente(cont: String, p: Vector2) -> void:
@@ -3396,6 +3407,7 @@ func _crear_hud() -> void:
 	add_child(fichas)
 	fichas.construir(self, fuente_ui)
 	grabador = GrabadorScript.obtener(self)                      # 0.1.8.42: global (vive en la raíz): sobrevive al menú y a «Nueva partida»
+	registro = RegistroScript.obtener(self)                      # 0.1.8.44: registro de fallos a archivo (global, como el grabador)
 	hud.cerrar_pedido.connect(cerrar_seleccion)
 	hud.miga_pedida.connect(_on_miga)
 	hud.vista_elegida.connect(_elegir_vista)
@@ -3501,6 +3513,8 @@ func _aplicar_calidad(a: Dictionary) -> void:
 func _marca_rend(texto: String) -> void:
 	if grabador != null and is_instance_valid(grabador):
 		grabador.marcar(texto)
+	if registro != null and is_instance_valid(registro):                  # 0.1.8.44: los mismos hitos quedan en `user://logs/sesion.txt`
+		registro.anotar(texto)
 
 
 ## 0.1.8.39 · Enciende o apaga el grabador de rendimiento (F9 o Debug > Rendimiento). Al apagarlo guarda el CSV y el resumen y copia el resumen.
@@ -4603,6 +4617,16 @@ func _mostrar_opciones_info() -> void:
 		cp.add_theme_font_size_override("font_size", 12)
 		TemaHud.rotular(cp, "nota")
 		menu_contenido.add_child(cp)
+	var ruta_logs := ProjectSettings.globalize_path("user://logs/")                       # 0.1.8.44: dónde quedan los registros si el juego se cierra solo
+	var lbl_logs := Label.new()
+	lbl_logs.text = "Registro de fallos: %s" % ruta_logs
+	lbl_logs.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+	lbl_logs.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_logs.add_theme_font_override("font", fuente_ui)
+	lbl_logs.add_theme_font_size_override("font_size", 12)
+	TemaHud.rotular(lbl_logs, "nota")
+	menu_contenido.add_child(lbl_logs)
+	_boton_menu("Abrir carpeta de registros", func(): OS.shell_open(ruta_logs))
 	var version := Label.new()
 	version.text = "Versión %s" % VERSION
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
