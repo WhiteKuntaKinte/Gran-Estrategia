@@ -1,5 +1,5 @@
 {
- "version": "0.1.8.48",
+ "version": "0.1.8.49",
  "ayuda": "Efectos de los edificios (0.1.8.48). No se edita a mano: lo genera herramientas/construir_efectos_edificios.py. Cada efecto es [tipo, peso, habitantes que atiende cada unidad (0 si es plano)].",
  "tipos": {
   "sal": {
@@ -195,6 +195,13 @@
     0
    ]
   ],
+  "taller_artesano": [
+   [
+    "ren",
+    0.02,
+    40000
+   ]
+  ],
   "drenaje_urbano": [
    [
     "sal",
@@ -236,6 +243,13 @@
     "com",
     3.0,
     200000
+   ]
+  ],
+  "palacio_gobierno": [
+   [
+    "ord",
+    2.5,
+    300000
    ]
   ],
   "torres_y_almenas": [
@@ -300,6 +314,20 @@
     100000
    ]
   ],
+  "teatro_anfiteatro": [
+   [
+    "ord",
+    2,
+    100000
+   ]
+  ],
+  "tribunal_audiencia": [
+   [
+    "ord",
+    2,
+    200000
+   ]
+  ],
   "acueducto": [
    [
     "sal",
@@ -341,6 +369,13 @@
     200000
    ]
   ],
+  "cuartel_guarnicion": [
+   [
+    "def",
+    0.15,
+    0
+   ]
+  ],
   "red_viaria_imperial": [
    [
     "mov",
@@ -365,11 +400,30 @@
     300000
    ]
   ],
+  "templo_pagoda": [
+   [
+    "ord",
+    2,
+    100000
+   ]
+  ],
   "limes_fronteras_fortificadas": [
    [
     "def",
     0.5,
     0
+   ]
+  ],
+  "caravasar_posada": [
+   [
+    "mov",
+    0.05,
+    0
+   ],
+   [
+    "ren",
+    0.015,
+    100000
    ]
   ],
   "ciudades_romanas_servicios": [
@@ -389,6 +443,25 @@
     250000
    ]
   ],
+  "molinos_hidraulicos": [
+   [
+    "ren",
+    0.03,
+    150000
+   ],
+   [
+    "com",
+    2,
+    150000
+   ]
+  ],
+  "iglesia_parroquial": [
+   [
+    "ord",
+    2,
+    60000
+   ]
+  ],
   "monasterios_copistas": [
    [
     "ord",
@@ -401,6 +474,13 @@
     "ord",
     1.5,
     200000
+   ]
+  ],
+  "mezquita_aljama": [
+   [
+    "ord",
+    2.5,
+    100000
    ]
   ],
   "escuelas_monasticas": [
@@ -467,11 +547,35 @@
     0
    ]
   ],
+  "astillero": [
+   [
+    "ren",
+    0.04,
+    300000
+   ],
+   [
+    "mov",
+    0.05,
+    0
+   ]
+  ],
   "catedral_gotica": [
    [
     "ord",
     3.0,
     250000
+   ]
+  ],
+  "molinos_viento": [
+   [
+    "ren",
+    0.025,
+    120000
+   ],
+   [
+    "com",
+    2,
+    120000
    ]
   ],
   "feria_comercial": [
@@ -503,6 +607,25 @@
     60000
    ]
   ],
+  "casa_consistorial": [
+   [
+    "ord",
+    2.5,
+    150000
+   ]
+  ],
+  "casa_gremio": [
+   [
+    "ren",
+    0.02,
+    150000
+   ],
+   [
+    "ord",
+    1.5,
+    150000
+   ]
+  ],
   "castillo_concentrico": [
    [
     "def",
@@ -510,11 +633,25 @@
     0
    ]
   ],
+  "banco_casa_cambio": [
+   [
+    "ren",
+    0.04,
+    300000
+   ]
+  ],
   "lazaretos": [
    [
     "sal",
     0.05,
     120000
+   ]
+  ],
+  "altos_hornos": [
+   [
+    "ren",
+    0.06,
+    800000
    ]
   ],
   "esclusas_canales": [
@@ -544,6 +681,13 @@
     "ren",
     0.03,
     300000
+   ]
+  ],
+  "polvorin": [
+   [
+    "def",
+    0.08,
+    0
    ]
   ],
   "arsenal_fundicion": [
@@ -584,11 +728,25 @@
     0
    ]
   ],
+  "lonja_bolsa": [
+   [
+    "ren",
+    0.05,
+    600000
+   ]
+  ],
   "fortificaciones_permanentes": [
    [
     "def",
     0.9,
     0
+   ]
+  ],
+  "parlamento_edificio": [
+   [
+    "ord",
+    3.5,
+    1000000
    ]
   ],
   "fuertes_costeros": [
@@ -624,6 +782,20 @@
     300000
    ]
   ],
+  "fabrica_vapor": [
+   [
+    "ren",
+    0.07,
+    1000000
+   ]
+  ],
+  "prision": [
+   [
+    "ord",
+    2,
+    300000
+   ]
+  ],
   "puentes_colgantes": [
    [
     "mov",
@@ -643,6 +815,13 @@
     400000
    ]
   ],
+  "cuartel_estado_mayor": [
+   [
+    "def",
+    0.2,
+    0
+   ]
+  ],
   "barrios_obreros": [
    [
     "urb",
@@ -658,6 +837,25 @@
     "sal",
     0.01,
     150000
+   ]
+  ],
+  "comisaria_policia": [
+   [
+    "ord",
+    3,
+    400000
+   ]
+  ],
+  "estacion_ferrocarril": [
+   [
+    "mov",
+    0.2,
+    0
+   ],
+   [
+    "ren",
+    0.04,
+    800000
    ]
   ],
   "parques_publicos": [
@@ -696,6 +894,13 @@
     "com",
     3.0,
     400000
+   ]
+  ],
+  "acerias": [
+   [
+    "ren",
+    0.08,
+    1500000
    ]
   ],
   "hospital_moderno": [
@@ -739,6 +944,13 @@
     "mov",
     0.1,
     0
+   ]
+  ],
+  "casa_del_pueblo": [
+   [
+    "ord",
+    2.5,
+    300000
    ]
   ],
   "transporte_urbano_masivo": [
@@ -796,6 +1008,13 @@
     "def",
     1.0,
     0
+   ]
+  ],
+  "estadio": [
+   [
+    "ord",
+    2,
+    500000
    ]
   ],
   "laboratorios_industriales": [
@@ -897,6 +1116,13 @@
     0
    ]
   ],
+  "estacion_radar": [
+   [
+    "def",
+    0.3,
+    0
+   ]
+  ],
   "bunker_nuclear": [
    [
     "def",
@@ -923,6 +1149,18 @@
     500000
    ]
   ],
+  "centro_comercial": [
+   [
+    "ren",
+    0.03,
+    1000000
+   ],
+   [
+    "urb",
+    0.02,
+    1000000
+   ]
+  ],
   "defensa_aerea_integrada": [
    [
     "def",
@@ -934,6 +1172,25 @@
    [
     "def",
     0.3,
+    0
+   ]
+  ],
+  "parque_industrial": [
+   [
+    "ren",
+    0.05,
+    2000000
+   ]
+  ],
+  "puerto_contenedores": [
+   [
+    "ren",
+    0.06,
+    3000000
+   ],
+   [
+    "mov",
+    0.1,
     0
    ]
   ],
@@ -961,6 +1218,13 @@
     "ren",
     0.03,
     2000000
+   ]
+  ],
+  "centro_mando_control": [
+   [
+    "def",
+    0.25,
+    0
    ]
   ],
   "parque_eolico": [

@@ -33,7 +33,7 @@ const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 const RegistroScript := preload("res://scripts/registro_fallos.gd")
 
-const VERSION := "0.1.8.48"
+const VERSION := "0.1.8.49"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0

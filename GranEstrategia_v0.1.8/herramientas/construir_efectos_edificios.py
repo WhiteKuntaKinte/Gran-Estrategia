@@ -20,7 +20,7 @@ de vida), así que sal / com / urb / ren solo cuentan lo construido DESPUÉS. de
 import json, os, sys
 
 RAIZ = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-VERSION = "0.1.8.48"
+VERSION = "0.1.8.49"
 
 TIPOS = {
     "sal": {"nombre": "Salud", "por_habitante": True, "tope": 0.25, "unidad": "puntos de salud efectiva (0-1)",
@@ -148,6 +148,39 @@ EFECTOS = {
     "escuelas_militares": [("def", 0.10, 0)],
     "academia_militar_moderna": [("def", 0.15, 0)],
     "centro_operaciones_ciberneticas": [("def", 0.15, 0)],
+    # 0.1.8.49
+    "taller_artesano": [("ren", 0.020, 40 * K)],
+    "molinos_hidraulicos": [("ren", 0.030, 150 * K), ("com", 2, 150 * K)],
+    "molinos_viento": [("ren", 0.025, 120 * K), ("com", 2, 120 * K)],
+    "casa_gremio": [("ren", 0.020, 150 * K), ("ord", 1.5, 150 * K)],
+    "caravasar_posada": [("mov", 0.050, 0), ("ren", 0.015, 100 * K)],
+    "astillero": [("ren", 0.040, 300 * K), ("mov", 0.050, 0)],
+    "banco_casa_cambio": [("ren", 0.040, 300 * K)],
+    "lonja_bolsa": [("ren", 0.050, 600 * K)],
+    "altos_hornos": [("ren", 0.060, 800 * K)],
+    "fabrica_vapor": [("ren", 0.070, 1 * M)],
+    "acerias": [("ren", 0.080, 1500 * K)],
+    "estacion_ferrocarril": [("mov", 0.20, 0), ("ren", 0.040, 800 * K)],
+    "parque_industrial": [("ren", 0.050, 2 * M)],
+    "puerto_contenedores": [("ren", 0.060, 3 * M), ("mov", 0.10, 0)],
+    "centro_comercial": [("ren", 0.030, 1 * M), ("urb", 0.020, 1 * M)],
+    "tribunal_audiencia": [("ord", 2, 200 * K)],
+    "prision": [("ord", 2, 300 * K)],
+    "comisaria_policia": [("ord", 3, 400 * K)],
+    "casa_consistorial": [("ord", 2.5, 150 * K)],
+    "palacio_gobierno": [("ord", 2.5, 300 * K)],
+    "parlamento_edificio": [("ord", 3.5, 1 * M)],
+    "iglesia_parroquial": [("ord", 2, 60 * K)],
+    "mezquita_aljama": [("ord", 2.5, 100 * K)],
+    "templo_pagoda": [("ord", 2, 100 * K)],
+    "teatro_anfiteatro": [("ord", 2, 100 * K)],
+    "estadio": [("ord", 2, 500 * K)],
+    "casa_del_pueblo": [("ord", 2.5, 300 * K)],
+    "cuartel_guarnicion": [("def", 0.15, 0)],
+    "polvorin": [("def", 0.080, 0)],
+    "cuartel_estado_mayor": [("def", 0.20, 0)],
+    "estacion_radar": [("def", 0.30, 0)],
+    "centro_mando_control": [("def", 0.25, 0)],
 }
 # edificios sin efecto propio a propósito (su efecto ya está en otra parte del modelo)
 SOLO_SABER = ["escuelas_escribas", "academias_filosoficas", "biblioteca", "observatorios_astronomicos", "casa_de_traduccion", "madrasas_escuelas",

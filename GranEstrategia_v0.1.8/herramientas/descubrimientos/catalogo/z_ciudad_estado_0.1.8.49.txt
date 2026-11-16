@@ -1,0 +1,52 @@
+## +SOC|ECO
+### Talleres, gremios y casas de comercio
+taller_artesano|Talleres artesanos|2|B|artesanos_especializados
+casa_gremio|Casas de gremio|4|B|gremios_artesanos
+caravasar_posada|Caravasares y posadas de camino|3|B|comercio_larga_distancia,red_viaria_imperial
+centro_comercial|Centros comerciales|9|B|grandes_almacenes,autopista
+### Dinero, bancos y bolsa
+banco_casa_cambio|Bancos y casas de cambio|4|B|banca_comercial
+lonja_bolsa|Lonjas y bolsa de valores|5|B|bolsa_valores
+## +CIE|ENE
+### Molinos y fuerza del agua y del viento
+molinos_hidraulicos|Molinos hidráulicos|3|B|molino_agua
+molinos_viento|Molinos de viento|4|B|molino_viento
+## +CIE|TRA
+### Puertos, astilleros y estaciones
+astillero|Astilleros|4|B|barco_vela,puerto_piedra
+estacion_ferrocarril|Estaciones de ferrocarril|7|B|locomotora_vapor
+puerto_contenedores|Puertos de contenedores|9|B|contenedor_maritimo
+## +CIE|MAN
+### Fundición y acero
+altos_hornos|Altos hornos|5|B|alto_horno,molino_agua
+acerias|Acerías|7|B|acero_bessemer,maquina_vapor
+### Fábricas y máquinas
+fabrica_vapor|Fábricas de vapor|6|B|maquina_vapor,fabrica_textil
+parque_industrial|Parques industriales|9|B|produccion_en_serie
+## +SOC|LEY
+### Tribunales y cárceles
+tribunal_audiencia|Tribunales y audiencias|3|B|tribunales
+prision|Prisiones|6|B|derecho_penal_moderno
+comisaria_policia|Comisarías y cuarteles de policía|7|B|policia_moderna
+## +SOC|GOB
+### Palacios, ayuntamientos y parlamentos
+casa_consistorial|Casas consistoriales|4|B|derecho_comun,asamblea_estamental
+palacio_gobierno|Palacios de gobierno|2|B|monarquia_divina
+parlamento_edificio|Palacios del parlamento|6|B|parlamento
+## +SOC|REL
+### Templos, teatros y estadios
+iglesia_parroquial|Iglesias parroquiales|3|B|religion_monoteista,religion_universal
+mezquita_aljama|Mezquitas|4|B|religion_universal
+templo_pagoda|Templos y pagodas|3|B|religion_universal
+teatro_anfiteatro|Teatros y anfiteatros|3|B|teatro_drama
+estadio|Estadios deportivos|7|B|deporte_organizado
+## +SOC|CIV
+### Casas del pueblo
+casa_del_pueblo|Casas del pueblo y sedes sindicales|7|B|sindicatos
+## +MIL|LOG
+### Cuarteles y centros de mando
+cuartel_guarnicion|Cuarteles y guarniciones|3|B|ejercito_profesional
+polvorin|Polvorines|5|B|polvora,salitre_polvora_suministro
+cuartel_estado_mayor|Cuarteles de estado mayor|7|B|estado_mayor_general
+estacion_radar|Estaciones de radar|8|B|radar_vigilancia_terrestre
+centro_mando_control|Centros de mando y control|9|B|comando_control_digital
