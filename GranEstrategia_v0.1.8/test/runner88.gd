@@ -1,5 +1,5 @@
 extends Node
-## 0.1.8.41 · PRUEBAS DE LOS ICONOS DE EDIFICIOS: los 109 PNG (128 px, con mipmaps, todos distintos, ninguno vacío), uno por edificio de datos/edificios.json,
+## 0.1.8.41 · PRUEBAS DE LOS ICONOS DE EDIFICIOS: los 141 PNG (128 px, con mipmaps, todos distintos, ninguno vacío), uno por edificio de datos/edificios.json,
 ## y su uso en la ventana Construir (filas y obras en curso) y en la tarjeta «Edificios» del HUD de provincia.
 var main
 var fallos := 0
@@ -75,7 +75,7 @@ func texturas(n: Node, acc := []) -> Array:
 func t_archivos() -> void:
 	print("[T] ── Archivos: iconos/edificios/")
 	var ed = main.mundo.edificios
-	ok(ed != null and ed.n == 109, "el catálogo tiene 109 edificios (%d)" % ed.n)
+	ok(ed != null and ed.n == 141, "el catálogo tiene 141 edificios (%d)" % ed.n)
 	var sin := []
 	var tam_mal := []
 	var vacios := []
@@ -104,7 +104,7 @@ func t_archivos() -> void:
 		if huellas.has(h):
 			repetidos.append("%s = %s" % [sl, huellas[h]])
 		huellas[h] = sl
-	ok(sin.is_empty(), "los 109 tienen su icono (faltan: %s)" % str(sin))
+	ok(sin.is_empty(), "los 141 tienen su icono (faltan: %s)" % str(sin))
 	ok(tam_mal.is_empty(), "todos de 128×128 (mal: %s)" % str(tam_mal))
 	ok(sin_mip.is_empty(), "todos con mipmaps (sin: %s)" % str(sin_mip))
 	ok(vacios.is_empty(), "ninguno casi vacío (%s)" % str(vacios))
@@ -122,7 +122,7 @@ func t_archivos() -> void:
 	var t0 := Time.get_ticks_usec()
 	for e in ed.n:
 		main.icono("edificios/" + String(ed.slug[e]))
-	ok(Time.get_ticks_usec() - t0 < 5000, "pedir los 109 ya cargados cuesta %.2f ms (caché)" % (float(Time.get_ticks_usec() - t0) / 1000.0))
+	ok(Time.get_ticks_usec() - t0 < 5000, "pedir los 141 ya cargados cuesta %.2f ms (caché)" % (float(Time.get_ticks_usec() - t0) / 1000.0))
 
 
 ## Un edificio conocido por `pais` que todavía se puede construir en `pi` (no está en `excluir`).
@@ -146,7 +146,7 @@ func t_construir() -> void:
 	main._abrir_construir()
 	await fotogramas(2)
 	var ms := float(Time.get_ticks_usec() - t0) / 1000.0
-	print("[T] (abrir Construir con los iconos de los 109: %.0f ms)" % ms)
+	print("[T] (abrir Construir con los iconos de los 141: %.0f ms)" % ms)
 	var w = main.panel_construir
 	ok(w != null and is_instance_valid(w), "se abre la ventana")
 	ok(w.vf.raiz.texture_filter == CanvasItem.TEXTURE_FILTER_PARENT_NODE, "la raíz de la ventana no cambia el filtro (los fondos no pagan mipmaps)")
@@ -160,8 +160,8 @@ func t_construir() -> void:
 			malas.append(String(ed.slug[e]))
 		elif ic.custom_minimum_size.x >= 40.0:
 			distintos += 1
-	ok(w._filas.size() == 109 and malas.is_empty(), "las 109 filas llevan el icono de su edificio (mal: %s)" % str(malas))
-	ok(distintos == 109, "cada icono se pide a 40 px (%d)" % distintos)
+	ok(w._filas.size() == 141 and malas.is_empty(), "las 141 filas llevan el icono de su edificio (mal: %s)" % str(malas))
+	ok(distintos == 141, "cada icono se pide a 40 px (%d)" % distintos)
 	# chips de categoría: el icono se dibuja de verdad (con expand_icon en un botón de ancho automático quedaba de 0 px)
 	var chips_mal := []
 	for k in w._btns_cat:

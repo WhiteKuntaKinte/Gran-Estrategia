@@ -44,7 +44,7 @@ func run() -> void:
 
 func t_catalogo() -> void:
 	print("[T] ── Catálogo ampliado")
-	ok(d.n == 1814 and d.secciones.size() == 40, "1.814 descubrimientos en 40 secciones (%d / %d)" % [d.n, d.secciones.size()])
+	ok(d.n == 1846 and d.secciones.size() == 40, "1.846 descubrimientos en 40 secciones (%d / %d)" % [d.n, d.secciones.size()])
 	var nuevos := ["archivos_estatales", "posta_imperial", "censo_periodico", "presupuesto_nacional", "registro_parroquial", "estadisticas_vitales", "tablas_de_mortalidad",
 		"escuelas_primeras_letras", "aprendizaje_gremial", "formacion_de_maestros", "correspondencia_erudita", "bibliotecas_publicas", "enciclopedias", "congresos_cientificos",
 		"oficio_herrero", "oficio_medico", "oficio_arquitecto", "oficio_navegante", "ensayo_de_metales", "normalizacion_industrial", "prospeccion_minera", "caminos_de_peaje",
@@ -214,7 +214,7 @@ func t_generador() -> void:
 	var gen := raiz.path_join("herramientas/construir_descubrimientos.py")
 	var s1 := []
 	var c1 := OS.execute(cmd, ["-I", gen, "--solo-comprobar"], s1, true)
-	ok(c1 == 0 and String(s1[0]).contains("1814 descubrimientos"), "el generador comprueba el catálogo entero sin errores")
+	ok(c1 == 0 and String(s1[0]).contains("1846 descubrimientos"), "el generador comprueba el catálogo entero sin errores")
 	var tmp := OS.get_user_data_dir().path_join("enlaces_malos.txt")
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	f.store_string("bronce|sextante|un enlace con un año imposible\n")

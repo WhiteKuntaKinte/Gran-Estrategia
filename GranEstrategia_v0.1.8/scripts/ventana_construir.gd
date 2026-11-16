@@ -274,6 +274,10 @@ func refrescar(forzar := false) -> void:
 	# filas
 	var visibles := 0
 	var ordena := puede_ordenar() and not validas.is_empty()
+	var bases := PackedFloat64Array()                                              # 0.1.8.49: lo que vale cada provincia, una vez (no una por edificio)
+	bases.resize(validas.size())
+	for k in validas.size():
+		bases[k] = ed.base_local(int(validas[k]))
 	for fl in _filas:
 		var e: int = fl["e"]
 		var conoce: bool = not validas.is_empty() and ed.conoce(pais, e)
@@ -282,7 +286,7 @@ func refrescar(forzar := false) -> void:
 		if not ver:
 			continue
 		visibles += 1
-		_poner_fila(fl, e, conoce, ordena, tes + fondo, con_tes)                     # se paga primero del fondo de obras y luego de la tesorería
+		_poner_fila(fl, e, conoce, ordena, tes + fondo, con_tes, bases)                     # se paga primero del fondo de obras y luego de la tesorería
 	filas_visibles = visibles
 
 
@@ -294,7 +298,7 @@ func _texto_destino() -> String:
 	return "%d provincias de %s" % [validas.size(), main._nombre_vis(pais)]
 
 
-func _poner_fila(fl: Dictionary, e: int, conoce: bool, ordena: bool, tes: float, con_tes: bool) -> void:
+func _poner_fila(fl: Dictionary, e: int, conoce: bool, ordena: bool, tes: float, con_tes: bool, bases: PackedFloat64Array) -> void:
 	var ed = _ed()
 	var lbl_costo: Label = fl["lbl_costo"]
 	var lbl_est: Label = fl["lbl_est"]
@@ -305,14 +309,17 @@ func _poner_fila(fl: Dictionary, e: int, conoce: bool, ordena: bool, tes: float,
 	var ok_n := 0
 	var costo_ok := 0.0
 	var primer_motivo := ""
-	for pi in validas:
-		construidos += ed.cantidad(int(pi), e)
-		en_obra += ed.en_obra(int(pi), e)
+	var frac: float = ed.fraccion_de(e)
+	for k in n:
+		var pi: int = int(validas[k])
+		construidos += ed.cantidad(pi, e)
+		en_obra += ed.en_obra(pi, e)
 		if conoce:
-			var r: Dictionary = ed.puede(pais, int(pi), e)
+			var cst: float = bases[k] * frac
+			var r: Dictionary = ed.puede_con_costo(pais, pi, e, cst)
 			if bool(r["ok"]):
 				ok_n += 1
-				costo_ok += ed.costo_local(int(pi), e)
+				costo_ok += cst
 			elif primer_motivo == "":
 				primer_motivo = String(r["motivo"])
 	var dias: int = ed.dias_de(e)
@@ -324,7 +331,7 @@ func _poner_fila(fl: Dictionary, e: int, conoce: bool, ordena: bool, tes: float,
 		btn.text = "Bloqueado"
 		btn.tooltip_text = "Tu país todavía no conoce este descubrimiento."
 		return
-	var uno: float = ed.costo_local(int(validas[0]), e) if n >= 1 else 0.0
+	var uno: float = bases[0] * frac if n >= 1 else 0.0
 	if n == 1:
 		lbl_costo.text = "Costo %s · %d días de obra" % [_dinero(uno), dias]
 	else:

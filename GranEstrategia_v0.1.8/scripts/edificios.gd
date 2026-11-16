@@ -430,6 +430,17 @@ func conocidos(pais: String) -> PackedInt32Array:
 
 ## ¿Puede `pais` construir `e` en la provincia `pi`? {"ok": bool, "motivo": String}. El motivo sale aunque no sea posible, para mostrarlo en la interfaz.
 func puede(pais: String, pi: int, e: int) -> Dictionary:
+	return puede_con_costo(pais, pi, e, -1.0)
+
+
+## Costo en la divisa del dueño de lo que valdría un edificio de fracción 1 en la provincia `pi`: el costo de `e` es `_frac[e]` por esto. Las listas de grupo (ventana Construir
+## con varias provincias) lo calculan UNA vez por provincia y no una por edificio (0.1.8.49: con 141 edificios y un país entero el refresco pasaba de 400 ms).
+func base_local(pi: int) -> float:
+	return _prod_base_usd(pi) * _por_usd(mundo.provincias[pi].pais)
+
+
+## Lo mismo que `puede`, con el costo local ya calculado (`costo` < 0 = calcularlo aquí).
+func puede_con_costo(pais: String, pi: int, e: int, costo: float) -> Dictionary:
 	if not listo or e < 0 or e >= n or pi < 0 or pi >= mundo.provincias.size():
 		return {"ok": false, "motivo": "No existe."}
 	var pr = mundo.provincias[pi]
@@ -444,7 +455,8 @@ func puede(pais: String, pi: int, e: int) -> Dictionary:
 	if cantidad(pi, e) + en_obra(pi, e) >= tope[e]:
 		return {"ok": false, "motivo": ("Ya está construido." if tope[e] == 1 else "Ya tiene el máximo (%d) en esta provincia." % tope[e])
 			if cantidad(pi, e) >= tope[e] else "Ya hay una obra de este tipo en curso."}
-	var costo := costo_local(pi, e)
+	if costo < 0.0:
+		costo = costo_local(pi, e)
 	var p = mundo.paises[pais]
 	if costo > 0.0 and p.tiene_tesoreria() and p.tesoreria + p.fondo_obras < costo:
 		return {"ok": false, "motivo": "No alcanza la tesorería."}
