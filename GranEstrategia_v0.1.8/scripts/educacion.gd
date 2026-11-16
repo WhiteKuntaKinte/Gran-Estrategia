@@ -293,7 +293,7 @@ func decidir_ia(p, en_guerra: bool, fatiga: float) -> void:
 	var sal_saber: float = float(v[IndicesScript.I_SALUD])
 	var tes: float = p.tesoreria
 	var ingreso: float = maxf(mundo.ingreso_diario_local(p.nombre), 1.0)
-	var balance: float = mundo.balance_diario_local(p.nombre)
+	var balance: float = mundo.balance_diario_rapido(p.nombre)
 	var meses_caja := 99.0                                      # cuántos meses aguanta la caja si todo sigue igual (99 = no se vacía)
 	if balance < 0.0:
 		meses_caja = tes / (-balance * 30.0)
@@ -310,10 +310,13 @@ func decidir_ia(p, en_guerra: bool, fatiga: float) -> void:
 	var obj_cie := DemografiaRef.GASTO_REF_CIE * mult * (0.2 + 0.8 * clampf(edu_saber * 2.2, 0.0, 1.0))
 	var obj_obr := DemografiaRef.GASTO_REF_OBR * mult
 	var obj_san := DemografiaRef.GASTO_REF_SAN * mult * (0.3 + 0.7 * clampf(sal_saber * 2.5, 0.0, 1.0)) * (1.0 + 0.4 * clampf(fatiga / 100.0, 0.0, 1.0))
-	p.gasto_educacion = p.gasto_educacion + (obj_edu - p.gasto_educacion) * AJUSTE_MENSUAL
-	p.gasto_ciencia = p.gasto_ciencia + (obj_cie - p.gasto_ciencia) * AJUSTE_MENSUAL
-	p.gasto_obras = p.gasto_obras + (obj_obr - p.gasto_obras) * AJUSTE_MENSUAL
-	p.gasto_sanidad = p.gasto_sanidad + (obj_san - p.gasto_sanidad) * AJUSTE_MENSUAL
+	var cambio := false
+	cambio = _poner_gasto(p, "gasto_educacion", p.gasto_educacion + (obj_edu - p.gasto_educacion) * AJUSTE_MENSUAL) or cambio
+	cambio = _poner_gasto(p, "gasto_ciencia", p.gasto_ciencia + (obj_cie - p.gasto_ciencia) * AJUSTE_MENSUAL) or cambio
+	cambio = _poner_gasto(p, "gasto_obras", p.gasto_obras + (obj_obr - p.gasto_obras) * AJUSTE_MENSUAL) or cambio
+	cambio = _poner_gasto(p, "gasto_sanidad", p.gasto_sanidad + (obj_san - p.gasto_sanidad) * AJUSTE_MENSUAL) or cambio
+	if cambio:
+		mundo.marcar_balance(tid)                                    # solo se rehace la fila de balance de este país (no las ~250)
 	# política de investigación: en guerra, más militar; en paz y con estudios, más ciencia
 	var mil := 0.24 + (0.30 if en_guerra else 0.0) * (1.0 - clampf(fatiga / 100.0, 0.0, 0.8))
 	var cie := 0.36 + 0.14 * clampf(edu_saber * 2.0, 0.0, 1.0) - (0.10 if en_guerra else 0.0)
@@ -322,6 +325,23 @@ func decidir_ia(p, en_guerra: bool, fatiga: float) -> void:
 	fijar_politica(tid, float(act[RAMA_MIL]) + (mil - float(act[RAMA_MIL])) * AJUSTE_MENSUAL, float(act[RAMA_CIE]) + (cie - float(act[RAMA_CIE])) * AJUSTE_MENSUAL,
 		float(act[RAMA_SOC]) + (soc - float(act[RAMA_SOC])) * AJUSTE_MENSUAL)
 	decisiones += 1
+
+
+## Escribe una partida del presupuesto de una IA directo en la columna: sin historial y SIN subir `version_eco`. La IA ajusta cada partida todos los meses en pasos
+## pequeños; por el setter de `Pais` cada ajuste (de unos 8 países al día) subía la versión económica y rehacía el balance de los ~250 países (7 ms por día) y
+## guardaba una fila de historial por cambio. Devuelve true si cambió el valor.
+func _poner_gasto(p, nombre_var: String, valor: float) -> bool:
+	var v = bd.vars[nombre_var]
+	var ix: int = bd.idx(int(p.tid))
+	if ix < 0:
+		return false
+	var nuevo := clampf(valor, 0.0, 0.3)
+	var viejo: float = v.col_f[ix]
+	if not is_nan(viejo) and absf(viejo - nuevo) < 1.0e-6:
+		return false
+	v.col_f[ix] = nuevo
+	v.desde[ix] = bd.fecha
+	return true
 
 
 ## Olvida lo guardado (salto de fecha, escenario nuevo).

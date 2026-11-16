@@ -268,6 +268,8 @@ class Pais extends RefCounted:
 	var fatiga_guerra: float:
 		get:
 			return bd.num("fatiga_guerra", tid, 0.0)
+		set(v):
+			bd.poner_f("fatiga_guerra", tid, clampf(v, 0.0, 100.0))
 
 
 class Continente extends RefCounted:
@@ -597,6 +599,18 @@ class Mundo extends RefCounted:
 	func balance_diario_local(pais: String) -> float:
 		return ingreso_neto_diario_local(pais) - mantenimiento_diario_local(pais)
 
+	## 0.1.8.47 · Igual que `balance_diario_local`, pero con lo que la economía armó hoy (fila de balance y soldados de su último día): no recorre los ejércitos.
+	## Para decisiones mensuales de la IA (el dato puede tener un día de retraso; recalcular los soldados de todos los países cuesta ~3 ms con 250 IA).
+	func balance_diario_rapido(pais: String) -> float:
+		if not paises.has(pais):
+			return 0.0
+		var tid: int = int(paises[pais].tid)
+		var pos: int = int(_bal_pos.get(tid, -1))
+		if pos < 0 or pos >= _bal.size() or int(_bal[pos][0]) != tid:
+			return balance_diario_local(pais)
+		var f: Array = _bal[pos]
+		return float(f[3]) - float(_sold_ult.get(tid, 0)) * float(f[4])
+
 	## Precio por UNIDAD (1.000 soldados) en la divisa del país: {"mant": al año, "recl": pago único}.
 	func precios_unidad_local(pais: String) -> Dictionary:
 		if ejercito == null or not paises.has(pais):
@@ -853,6 +867,7 @@ class Mundo extends RefCounted:
 	var _bal_ver_prop := -1
 	var _bal_mes := -100                # valor de `_mes_n` (meses simulados) cuando se armaron los balances
 	var _bal_pos := {}                  # 0.1.8.43: ID de país -> posición de su fila en `_bal`
+	var _sold_ult := {}                 # 0.1.8.47: soldados por país del último día de economía (ID de país -> soldados)
 	var _bal_sucios := {}               # ... países cuyas provincias cambiaron (conquista, cesión) desde que se armaron los balances
 	var _bal_transf := 0                # ... y cuántas transferencias de provincia hubo (cada una sube `version_propietario` una vez)
 
@@ -923,6 +938,7 @@ class Mundo extends RefCounted:
 			_actualizar_balances_sucios()
 		var col: PackedFloat64Array = v.col_f
 		var sold: Dictionary = ejercito.soldados_por_pais() if ejercito != null else {}
+		_sold_ult = sold
 		var rojos := {}
 		for f in _bal:
 			var tid: int = f[0]

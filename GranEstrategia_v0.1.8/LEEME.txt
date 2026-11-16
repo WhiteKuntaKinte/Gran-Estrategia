@@ -1,8 +1,32 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.46 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.47 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.47 — GENTE: LA POBLACIÓN VIVE, ESTUDIA Y PESA (Fase 1, parte B)
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.47.md y docs/DEMOGRAFIA.md. Sale de tus mensajes del 16 de noviembre: "sigue desarrollándolo… haz las bases más fuertes".)
+- DEMOGRAFÍA VIVA: hasta ahora la población era un número fijo. Ahora cada provincia NACE y MUERE, se vuelve más URBANA y más LETRADA según lo que su país SABE (el catálogo de descubrimientos) y lo que gana cada habitante.
+  Sin medicina o comida segura se muere ~44 de cada 1.000 al año; con la medicina de hoy ~8. El mismo modelo da el mundo del año 1 (254 millones, casi sin crecer), el de 1500 (468 millones) y el de 2026 (8.349 millones,
+  +0,76 % al año, 64 % urbano, 87 % alfabetizado). Si el planeta descubre antes la higiene o la agricultura, la población crece antes. Nada de esto está escrito por época: sale del saber.
+- LA ECONOMÍA CRECE SEGÚN EL SABER: antes la renta subía 2 % al año en cualquier época (en 200 años el año 1 era 50 veces más rico sin descubrir nada). Ahora el crecimiento depende de cuánto sabe el país: el mundo antiguo apenas crece
+  y se acelera al descubrir. En 2026 todo queda igual.
+- PRESUPUESTO DEL ESTADO: cada país tiene 4 partidas (educación, ciencia, obras y sanidad, como fracción de los impuestos) que se descuentan ANTES de llegar a la tesorería. La sanidad baja la mortalidad, la educación sube la
+  alfabetización, la ciencia ayuda a descubrir. La barra de tropas muestra el ingreso NETO. Las IA ajustan su presupuesto cada mes (recortan en guerra, austeridad si se quedan sin caja, invierten si sobra).
+- POLÍTICA DE INVESTIGACIÓN Y CAPACIDAD: cada país reparte su esfuerzo entre Militar / Científica / Sociedad y tiene una capacidad de investigar (gente con estudios superiores × gasto en ciencia). Pesa en quién descubre cada cosa
+  (el planeta descubre, 0.1.8.46) y qué tan rápido se entera de lo que descubren los demás.
+- 40 OFICIOS: la gente activa se reparte en 40 oficios (campesinos, soldados, médicos, maestros, ingenieros…), cada uno con su nivel de estudios y el campo del catálogo del que depende (sin cirugía no hay cirujanos). Por ahora
+  se ven en la ficha y en Debug; todavía no mueven la economía (viene después).
+- FATIGA DE GUERRA: sube por cada día en guerra y por cada muerto en combate, y baja en paz. Con fatiga alta (30) la IA NO declara guerras nuevas y con más (45) PIDE LA PAZ aunque vaya perdiendo ("cansancio"). También resta estabilidad.
+  El ejército de la IA ya no puede pasar del 3,2 % de la gente en edad de trabajar de su país.
+- 43 DESCUBRIMIENTOS NUEVOS (ahora 1.814) y 16 enlaces entre ramas: obstetricia y pediatría, ambulancias, vacunación infantil, jabón y baños públicos, cloración del agua, rotación de cuatro hojas, polders, crédito agrario, escuelas
+  agrícolas, maíz híbrido, pedagogía, escolaridad obligatoria, jardín de infantes, secundaria para todos, códigos de construcción… Hacen falta para que la salud, el campo y la escuela tengan ESCALONES y no lleguen de golpe en el siglo XIX.
+- INTERFAZ: tarjeta "Saber social" en la ficha del país (los 4 índices de saber, gente activa y oficios) y Debug > Gente (demografía, estudios, presupuesto y oficios de un país; fatiga editable; avanzar días con el reloj real).
+- COSTE: el día de juego con todas las IA cuesta ~1,8 ms más tanto en 1500 (3,3 → 5,2 ms) como en 2026 (11,0 → 12,7 ms por día, medido 3 veces): el calendario va ~15 % más despacio en 2026 (más en 1500) a x6 con todas las IA activas; los fotogramas no cambian. En las notas técnicas explico
+  las dos trampas de rendimiento que encontré y arreglé (el presupuesto de la IA rehacía el balance de 250 países cada día).
+- LO QUE NO ENTRÓ A PROPÓSITO: migración entre provincias, epidemias, hambrunas por clima, y que los oficios muevan la economía o la mortalidad (0.1.8.48). Las constantes del modelo son PROVISIONALES: si algo se ve raro (un país que se llena
+  demasiado rápido, una época que no crece), mándame el F9 y la fecha y se ajusta una constante, no el diseño.
+- PARA PROBAR (F9): año 1 o 1500 con todas las IA a x6 unos 100 años, mirando la población mundial (Debug > Gente); y una partida normal de 2026. Mándame el resumen F9 y las notas de la prueba.
 
 NUEVO EN 0.1.8.46 — CIMIENTOS DEL SABER (Fase 1, parte A) Y LA SIMULACIÓN QUE NO TE ROBA FPS
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.46.md. Es la primera mitad de la Fase 1 del plan: "nada sin porqué". La parte B —población con edades, burocracia, educación, presupuesto— va en la 0.1.8.47 y 0.1.8.48.)

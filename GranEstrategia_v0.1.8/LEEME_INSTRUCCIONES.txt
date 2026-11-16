@@ -1,12 +1,14 @@
-GRAN ESTRATEGIA — 0.1.8.46 (DESARROLLO)
+GRAN ESTRATEGIA — 0.1.8.47 (DESARROLLO)
 
-1. Descomprime el ZIP de la 0.1.8.46 y abre la carpeta del proyecto (donde está project.godot) con Godot 4. (Desde esta versión cada entrega va con ZIP; el código también queda en GitHub, rama v0.1.8-development.)
+1. Descomprime el ZIP de la 0.1.8.47 y abre la carpeta del proyecto (donde está project.godot) con Godot 4. (Desde esta versión cada entrega va con ZIP; el código también queda en GitHub, rama v0.1.8-development.)
    Primera vez en una carpeta limpia (o tras bajar esta versión): deja que Godot IMPORTE las imágenes nuevas (iconos, banderas HD, pinturas); tarda un momento.
    NUEVO 0.1.8.37: el botón de lentes de la barra (VISTA) cambia entre Tradicional y Relieve (la vista Internacional se quitó en la 0.1.8.39); Ctrl+clic elige varias provincias o países; en Opciones > Pantalla
    eliges el TEMA (INTERFAZ) y los Bordes del mapa (Baja / Media / Alta). Ver LEEME.txt.
    NUEVO 0.1.8.38: el panel del país se MUEVE (arrastra su cabecera; doble clic = vuelve a su sitio) y se REDIMENSIONA (bordes izquierdo, derecho y de abajo; ancho y se reparte en 2 o 3 columnas de tarjetas);
    el Debug (F1) abre en una CUADRÍCULA de secciones con migas «Menú Debug › Sección»; Debug, Mi país y Ranking se agrandan desde cualquier borde y recuerdan dónde los dejaste;
    los avisos salen apilados arriba a la derecha y los tooltips son fichas (título, detalle y atajo). HUD de provincia, Construir y los totales de grupo: 0.1.8.38b.
+   NUEVO 0.1.8.47: LA POBLACIÓN VIVE (cada provincia nace, muere, estudia y se hace urbana según lo que su país sabe; presupuesto con 4 partidas —educación, ciencia, obras, sanidad—; 40 oficios; fatiga de guerra
+   que frena a la IA; 43 descubrimientos nuevos, ahora 1.814). Tarjeta «Saber social» en la ficha del país y Debug > Gente. Para el F9: año 1 o 1500 con todas las IA a x6 unos 100 años (mira la población mundial en Debug > Gente) y una partida de 2026. Ver LEEME.txt.
    NUEVO 0.1.8.46: EL PLANETA DESCUBRE (en una partida nueva los descubrimientos ya no llegan solos con la fecha: los hace un país y los demás los aprenden por contagio; Debug > Descub. permite volver a la historia fija),
    1.771 descubrimientos con enlaces nuevos entre ramas, receta (edificios y materias que ayudan) y «por qué lo pide» en la ficha, y una simulación que reacciona al fotograma (no te roba FPS a x3–x6). Para el F9: año 1 o 1500 con todas las IA a x6. Ver LEEME.txt.
    NUEVO 0.1.8.44: la pantalla de Descubrimientos es ahora un SISTEMA SOLAR: fondo negro con el color de la rama como nebulosa, estrellas que brillan, cada descubrimiento es un planeta de colores reales alumbrado por

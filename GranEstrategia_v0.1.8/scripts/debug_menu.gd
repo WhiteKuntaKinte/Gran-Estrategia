@@ -37,6 +37,7 @@ const SECCIONES := [
 	["ejercito", "Ejército", "i_ejercito", "Reclutar, causar bajas, mover pelotones y devastar."],
 	["edif", "Edificios", "i_prov", "Da o quita edificios, termina obras y cambia los cores de lo elegido."],
 	["desc", "Descub.", "i_estrella", "Busca descubrimientos y concede o quita los de cada fecha."],
+	["gente", "Gente", "i_pob", "Demografía, estudios, presupuesto y oficios de un país; apaga las guías de la IA."],
 	["rend", "Rend.", "i_dens", "Tu equipo, los FPS y qué capas apagar para ir más ligero."],
 ]
 
@@ -150,6 +151,12 @@ var btn_desc_saber: Button
 var lbl_desc_ficha: Label
 var filtro_desc: LineEdit
 var lista_desc: ItemList
+# Gente (0.1.8.47)
+var sel_gente := {}
+var pais_gente := ""
+var lbl_gente_mundo: Label
+var lbl_gente_pais: Label
+var btn_gente_guias: Button
 # Edificios y cores (0.1.8.40)
 var lbl_edif_res: Label
 var filtro_edif: LineEdit
@@ -226,6 +233,7 @@ func construir(m: Node, f: Font) -> void:
 	_pagina_historia()
 	_pagina_ejercito()
 	_pagina_descubrimientos()
+	_pagina_gente()
 	_pagina_edificios()
 	_pagina_rendimiento()
 	_ir_menu()
@@ -442,6 +450,8 @@ func _ir_a(clave: String) -> void:
 			_refrescar_ejercito_pagina()
 		"desc":
 			_refrescar_desc()
+		"gente":
+			_refrescar_gente()
 		"edif":
 			_refrescar_edif()
 		"rend":
@@ -577,6 +587,10 @@ func seleccion_cambio(tipo: String) -> void:
 		_refrescar_ejercito_pagina()
 	elif pestana_actual == "edif":
 		_refrescar_edif()
+	elif pestana_actual == "gente" and tipo in ["pais", "estado"]:
+		var pg_sel: String = main.debug_pais_seleccionado()
+		if pg_sel != "":
+			_seleccionar_en(sel_gente, pg_sel)
 
 
 # ───────────── Pestaña Jugador ─────────────
@@ -2294,6 +2308,129 @@ func _pagina_descubrimientos() -> void:
 	var nota := _lbl("La HISTORIA es todo lo que tiene año <= el año del reloj. Cada país parte de ella y solo se aparta si le concedes o quitas un descubrimiento aquí. Al fijar una fecha en Tiempo, todos los países vuelven a la historia de ese año.", 11, C_TENUE)
 	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	pg.add_child(nota)
+
+
+# ───────────── Pestaña Gente (0.1.8.47) ─────────────
+func _pagina_gente() -> void:
+	var pg := _nueva_pagina("gente")
+	lbl_gente_mundo = _lbl("", 12, C_TEXTO)
+	lbl_gente_mundo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_gente_mundo)
+	btn_gente_guias = _boton("", func():
+		var dm = main.mundo.demografia
+		if dm == null:
+			_decir("Este mundo no tiene demografía.", false)
+			return
+		dm.guias_ia = not dm.guias_ia
+		_decir("Las IA %s su presupuesto y su política de investigación." % ("vuelven a decidir" if dm.guias_ia else "dejan de decidir"))
+		_refrescar_gente())
+	pg.add_child(btn_gente_guias)
+	pg.add_child(_boton("RECALCULAR TODA LA GENTE (como al empezar la partida)", func():
+		var dm = main.mundo.demografia
+		if dm == null:
+			_decir("Este mundo no tiene demografía.", false)
+			return
+		var t0 := Time.get_ticks_msec()
+		dm.reiniciar()
+		_refrescar_gente()
+		_decir("Demografía recalculada desde lo que saben los países hoy (%d ms)." % (Time.get_ticks_msec() - t0))))
+	pg.add_child(HSeparator.new())
+	sel_gente = _selector_pais("País a examinar", 110.0, func(n: String):
+		pais_gente = n
+		_refrescar_gente())
+	pg.add_child(sel_gente["caja"])
+	pg.add_child(_boton("← Usar el país seleccionado en el mapa", func():
+		var p: String = main.debug_pais_seleccionado()
+		if p == "":
+			_decir("No hay ningún país seleccionado en el mapa: pulsa uno primero.", false)
+			return
+		_seleccionar_en(sel_gente, p)))
+	lbl_gente_pais = _lbl("Elige un país en la lista.", 12, C_ORO)
+	lbl_gente_pais.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_gente_pais)
+	var fila := HBoxContainer.new()
+	fila.add_theme_constant_override("separation", 6)
+	pg.add_child(fila)
+	var b1 := _boton("CANSAR DE GUERRA (+25)", func(): _gente_fatiga(25.0))
+	b1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fila.add_child(b1)
+	var b2 := _boton("DESCANSAR (0)", func(): _gente_fatiga(-1000.0))
+	b2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	fila.add_child(b2)
+	var nota := _lbl("Todo sale de lo que el país sabe (catálogo de descubrimientos) y de su renta: ver docs/DEMOGRAFIA.md. Las provincias se revisan una vez cada 120 días; las medias del país se publican al cerrar cada vuelta.", 11, C_TENUE)
+	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(nota)
+
+
+func _gente_fatiga(delta: float) -> void:
+	var m = main.mundo
+	if pais_gente == "" or not m.paises.has(pais_gente):
+		_decir("Primero elige un país de la lista.", false)
+		return
+	var p = m.paises[pais_gente]
+	p.fatiga_guerra = clampf(p.fatiga_guerra + delta, 0.0, 100.0)
+	_decir("%s: cansancio de guerra %d de 100." % [pais_gente, roundi(p.fatiga_guerra)])
+	_refrescar_gente()
+
+
+func _refrescar_gente() -> void:
+	if lbl_gente_mundo == null:
+		return
+	var m = main.mundo
+	var dm = m.demografia
+	var ed = m.educacion
+	if dm == null or ed == null or not dm.listo:
+		lbl_gente_mundo.text = "Este mundo no tiene demografía (falta datos/variables.json o el catálogo de descubrimientos)."
+		lbl_gente_pais.text = ""
+		btn_gente_guias.text = "—"
+		return
+	var f = main.hud
+	var t := "MUNDO: %s habitantes · %+.2f %% al año · %d vueltas completas (%d provincias revisadas)\n" % [f.fmt_pob(dm.mundo_hab), dm.crecimiento_mundo() * 100.0, dm.vueltas, dm.revisadas]
+	t += "Fase del día: pico %.2f ms por lote · %d decisiones de presupuesto de las IA\n" % [dm.ms_max, ed.decisiones]
+	var lista := []
+	for nombre in m.paises:
+		var tp: int = int(m.paises[nombre].tid)
+		var pp: float = dm.poblacion_pais(tp)
+		if pp > 0.0:
+			lista.append([pp, String(nombre), tp])
+	lista.sort_custom(func(a, b): return float(a[0]) > float(b[0]))
+	t += "Los 8 más poblados:\n"
+	for i in mini(8, lista.size()):
+		var tp2: int = int(lista[i][2])
+		t += "  %s: %s (%+.2f %%, alfab. %d %%, urbana %d %%)\n" % [String(lista[i][1]), f.fmt_pob(float(lista[i][0])), dm.crecimiento_pais(tp2) * 100.0, roundi(100.0 * dm.media_pais(tp2, dm.K_ALF)), roundi(100.0 * dm.media_pais(tp2, dm.K_URB))]
+	lbl_gente_mundo.text = t
+	btn_gente_guias.text = "LAS IA DECIDEN SU PRESUPUESTO: %s (pulsa para cambiar)" % ("SÍ" if dm.guias_ia else "NO")
+	if pais_gente == "" or not m.paises.has(pais_gente):
+		lbl_gente_pais.text = "Elige un país en la lista."
+		return
+	var p = m.paises[pais_gente]
+	var tid: int = int(p.tid)
+	var r: Dictionary = ed.resumen_pais(tid)
+	var saber: PackedFloat32Array = r["saber"]
+	var u := "%s\n" % pais_gente
+	u += "Población %s · %+.2f %% al año (nacen %.1f, mueren %.1f por mil)\n" % [f.fmt_pob(dm.poblacion_pais(tid)), dm.crecimiento_pais(tid) * 100.0, dm.media_pais(tid, dm.K_NAT), dm.media_pais(tid, dm.K_MOR)]
+	u += "Niños %d %% · mayores %d %% · gente activa %s\n" % [roundi(100.0 * dm.media_pais(tid, dm.K_JOV)), roundi(100.0 * dm.media_pais(tid, dm.K_MAY)), f.fmt_pob(float(r["activos"]))]
+	u += "Urbana %d %% · alfabetizada %d %% · %.1f años de escuela · bienestar %d\n" % [roundi(100.0 * dm.media_pais(tid, dm.K_URB)), roundi(100.0 * float(r["alfab"])), float(r["esc"]), roundi(dm.media_pais(tid, dm.K_BIE))]
+	u += "Saber social: salud %d %% · agricultura %d %% · educación %d %% · urbanismo %d %%\n" % [roundi(100.0 * float(saber[0])), roundi(100.0 * float(saber[1])), roundi(100.0 * float(saber[2])), roundi(100.0 * float(saber[3]))]
+	u += "Presupuesto (de los impuestos): educación %.1f %% · ciencia %.1f %% · obras %.1f %% · sanidad %.1f %%%s\n" % [100.0 * p.gasto_educacion, 100.0 * p.gasto_ciencia, 100.0 * p.gasto_obras, 100.0 * p.gasto_sanidad, " (a mano)" if bool(r["manual"]) else ""]
+	var pol: PackedFloat32Array = r["politica"]
+	u += "Investigación: %d %% militar · %d %% científica · %d %% sociedad · peso en los descubrimientos ×%.2f · investigadores %s\n" % [roundi(100.0 * float(pol[0])), roundi(100.0 * float(pol[1])), roundi(100.0 * float(pol[2])), float(r["f_cap"]), f.fmt_pob(float(r["investigadores"]))]
+	u += "Cansancio de guerra: %d de 100 · calidad de los docentes: %d de 100\n" % [roundi(p.fatiga_guerra), roundi(float(r["calidad"]))]
+	var ofs: Array = (ed.fuerza_laboral(tid) as Array).duplicate()
+	ofs.sort_custom(func(a, b): return float(a["n"]) > float(b["n"]))
+	u += "Oficios:"
+	var k := 0
+	for o in ofs:
+		if float(o["n"]) < 1.0 or k >= 14:
+			continue
+		u += "  %s %s ·" % [String(o["nombre"]), f.fmt_pob(float(o["n"]))]
+		k += 1
+	u += "\nPor grupos:"
+	for g in ed.grupos:
+		var n_g: float = ed.trabajadores_de(tid, String(g))
+		if n_g >= 1.0:
+			u += "  %s %s ·" % [String(g), f.fmt_pob(n_g)]
+	lbl_gente_pais.text = u
 
 
 ## El país cuyo estado se muestra: el que controlas (si controlas uno); si no, -1 = solo la historia.

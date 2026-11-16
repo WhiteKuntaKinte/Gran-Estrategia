@@ -1,9 +1,18 @@
-# Checklist de testing — Gran Estrategia 0.1.8.46
+# Checklist de testing — Gran Estrategia 0.1.8.47
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.47 — Gente: demografía viva, educación, presupuesto y oficios
+- ✅ `runner104` — la demografía: el modelo en funciones puras (acceso al saber, natalidad, mortalidad, edades, alfabetización, bienestar, la economía según el saber), calibración por época (año 1: 254 M, 39,8 / 39,2 ‰, +0,06 %/año; 1096: 367 M; 1500: 468 M, −0,03 %/año; 2026: 8.349 M, 15,7 / 8,1 ‰, +0,76 %/año, 64 % urbano, 87 % alfabetizado), invariantes (4 años sin NaN ni valores fuera de rango en 7.650 provincias), coste de la fase (~0,9 ms por día en 2026), consultas y fatiga de guerra (75 comprobaciones).
+- ✅ `runner105` — educación y presupuesto: las 4 partidas y su descuento de los impuestos, capacidad de investigar y política de investigación (su peso en quién descubre y en la difusión), los 40 oficios, decisiones mensuales de la IA (guerra, austeridad, holgura, país a mano, jugador), fatiga de guerra → la IA no ataca y pide la paz, ejército limitado por la gente activa, tarjeta «Saber social» y Debug > Gente, y los dos arreglos de coste: `decidir_ia` no sube la versión económica (marca solo el balance de ese país) y `balance_diario_rapido` da lo mismo que `balance_diario_local` (79 comprobaciones).
+- ✅ Ajustadas: runner71 y runner72 (el día tiene 10 fases), runner73 (la foto económica de la IA trae gente activa e ingreso neto), runner77 (1.814 / 1.783 / 363), runner91 y runner94 (conteos), runner95 (cansancio de guerra), runner102 (catálogo con +43 y +16 enlaces).
+- ✅ Regresión completa runner71–105 (salvo los bancos 89, 90 y 101): **0 fallos y 0 «SCRIPT ERROR» / «Parse Error»** en las 32 pruebas; auditoría de variables: 1.660 funciones, **0 funciones repetidas y 0 variables repetidas**, nada nuevo sin uso (revisado a mano).
+- ✅ Revisión de rendimiento: ver NOTAS_TECNICAS_0.1.8.47.md §7 (un día con todas las IA, media de 3 pares: 2026 11,0 → 12,7 ms; 1500 3,3 → 5,2 ms; el mapa y el zoom no cambian: 6,9 ms por fotograma como en la 0.1.8.46).
+- ⬜ Nada de esta versión se ha visto en tu pantalla (la tarjeta «Saber social» y Debug > Gente se probaron por código, sin GPU).
+- ⬜ **Pedirte:** F9 con el año 1 o 1500 y todas las IA a x6 unos 100 años (mira la población mundial en Debug > Gente: debería moverse poco en 1 y 1500) y una partida normal de 2026.
 
 ### 0.1.8.46 — cimientos del saber (el planeta descubre) y simulación que reacciona
 - ✅ `runner102` — catálogo ampliado (41 nuevos, año dentro de su era, sin ciclos), 49 enlaces entre ramas con su porqué, recetas válidas (grupos de edificios cumplibles a su fecha, materias que existen), validador del generador y azar sin estado (33 comprobaciones).

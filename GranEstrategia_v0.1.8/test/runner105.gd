@@ -79,6 +79,7 @@ func run() -> void:
 	await t_ia_y_presupuesto()
 	await t_saber_integrado()
 	await t_hud()
+	await t_debug()
 	print("[T] ═══ RESULTADO runner105: %d OK, %d FALLOS" % [n_ok, fallos])
 	get_tree().quit(1 if fallos > 0 else 0)
 
@@ -292,6 +293,21 @@ func t_ia_y_presupuesto() -> void:
 	ok(ed.decisiones == n1, "se puede apagar (Debug)")
 	m.demografia.guias_ia = true
 	m.ia.desactivar(nombre)
+	# 6) coste (0.1.8.47): el presupuesto de la IA no rehace los balances de ~250 países ni guarda historial, y el balance rápido coincide con el de siempre
+	m._economia_dia()
+	p.gasto_educacion = 0.04
+	p.gasto_obras = 0.025
+	m._economia_dia()
+	var ve0: int = m.bd.version_eco
+	m._bal_sucios.clear()
+	ed.decidir_ia(p, true, 0.0)
+	ok(m.bd.version_eco == ve0, "decidir_ia no sube la versión económica (si no, cada día se rehacen los balances de ~250 países)")
+	ok(m._bal_sucios.has(tid), "…pero marca el balance de ese país para rehacerlo (solo el suyo)")
+	m._economia_dia()
+	var rap: float = m.balance_diario_rapido(nombre)
+	var loc: float = m.balance_diario_local(nombre)
+	ok(absf(rap - loc) <= 1.0e-6 * maxf(absf(loc), 1.0), "balance_diario_rapido da lo mismo que balance_diario_local tras la economía del día (%.2f vs %.2f)" % [rap, loc])
+	ok(m.balance_diario_rapido("País que no existe") == 0.0, "…y 0 para un país que no existe")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -391,3 +407,29 @@ func t_hud() -> void:
 			pila.append(h)
 	ok(sliders >= 7, "en tu país el panel trae deslizadores: 4 partidas + 3 ramas de investigación (%d)" % sliders)
 	main.mundo.jugador = ""
+
+
+# ─────────────────────────────────────────────────────────────
+func t_debug() -> void:
+	print("[T] ── Debug › Gente")
+	main._abrir_debug()
+	await esperar(0.4)
+	var d = main.debug_menu
+	ok(d != null and d._tarjetas.has("gente"), "el Debug trae la sección «Gente»")
+	d._ir_a("gente")
+	await esperar(0.2)
+	var m = main.mundo
+	ok(d.lbl_gente_mundo.text.contains("MUNDO") and d.lbl_gente_mundo.text.contains("Los 8 más poblados"), "resumen del mundo con los países más poblados")
+	ok(d.btn_gente_guias.text.contains("SÍ"), "las guías de la IA aparecen encendidas")
+	d.btn_gente_guias.pressed.emit()
+	ok(not m.demografia.guias_ia and d.btn_gente_guias.text.contains("NO"), "el botón apaga las guías de la IA")
+	d.btn_gente_guias.pressed.emit()
+	ok(m.demografia.guias_ia, "…y las vuelve a encender")
+	d._seleccionar_en(d.sel_gente, "Colombia")
+	await esperar(0.1)
+	var t: String = d.lbl_gente_pais.text
+	ok(d.pais_gente == "Colombia" and t.contains("Colombia") and t.contains("Saber social") and t.contains("Presupuesto") and t.contains("Oficios"), "ficha de Colombia: población, saber social, presupuesto y oficios")
+	d._gente_fatiga(25.0)
+	ok(absf(m.paises["Colombia"].fatiga_guerra - 25.0) < 0.01 and d.lbl_gente_pais.text.contains("25 de 100"), "«Cansar de guerra» sube la fatiga y la muestra")
+	d._gente_fatiga(-1000.0)
+	ok(m.paises["Colombia"].fatiga_guerra == 0.0, "«Descansar» la deja en 0")

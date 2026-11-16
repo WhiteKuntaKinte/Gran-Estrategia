@@ -13,7 +13,7 @@ ve algo raro, se cambia una constante en `scripts/demografia.gd` o `scripts/educ
 |---|---|
 | `scripts/indices_saber.gd` | 4 índices de saber por país (0-1), contados del catálogo de descubrimientos: **salud** (65 % MED + 35 % SAL), **agricultura** (80 % AGR + 20 % BIO), **educación** (70 % EDU + 30 % HUM), **urbanismo** (50 % TER + 50 % ING). Cada país se refresca una vez al año (rotando). También `campo(clave)` y `fraccion_campo(tid, clave)` (qué parte de un campo conoce un país; `CIE.COM` y `SOC.COM` distinguen las dos ramas con código `COM`). |
 | `scripts/demografia.gd` | La fase del día `Demografia.fase_dia`: revisa 1/120 de las provincias por día (lotes de 70) con el tiempo REAL desde su última revisión (pasos exactos en forma cerrada: da lo mismo revisar cada mes que cada año). Escribe directo en las columnas de la base. Acumula las medias por país y las publica al cerrar cada vuelta. También la **fatiga de guerra** (por país, cada 30 días) y la calidad de los docentes. |
-| `scripts/educacion.gd` | Capacidad de investigar (`factor_capacidad`), **política de investigación** (`factor_rama` / `factor_seccion`), difusión (`factor_difusion`), los **40 oficios** (`fuerza_laboral`) y las **decisiones de presupuesto de las IA** (`decidir_ia`). |
+| `scripts/educacion.gd` | Capacidad de investigar (`factor_capacidad`), **política de investigación** (`factor_rama` / `factor_seccion`), difusión (`factor_difusion`), los **40 oficios** (`fuerza_laboral`) y las **decisiones de presupuesto de las IA** (`decidir_ia`, que escribe las partidas con `_poner_gasto`: directo en la columna, sin historial ni subir `version_eco`). |
 | `datos/carreras.json` | Los 40 oficios (lo genera `herramientas/construir_carreras.py`; **no editar a mano**). |
 | `herramientas/anadir_variables_047.py` | Añade las 15 variables nuevas a `datos/variables.json` (idempotente). |
 
@@ -28,7 +28,7 @@ ve algo raro, se cambia una constante en `scripts/demografia.gd` o `scripts/educ
 
 * **Natalidad**: `42,4 ‰ × (1 − baja) × (0,8 + 0,4 × bienestar/100) × (1 − 0,35 × devastación)`, con
   `baja = 0,50 × alfab^1,2 + 0,16 × urbanización + 0,18 × acceso^1,3 + 0,05 × salud`. Mínimo 7 ‰.
-* **Mortalidad**: `45 ‰ × (1 − 0,70 × sig((S − 0,55)/0,12) − 0,20 × sig((S − 0,30)/0,15)) × (0,85 + 3,2 × mayores)` + hambre (bienestar < 30) + guerra
+* **Mortalidad**: `44 ‰ × (1 − 0,70 × sig((S − 0,55)/0,12) − 0,20 × sig((S − 0,30)/0,15)) × (0,85 + 3,2 × mayores)` + hambre (bienestar < 30) + guerra
   (devastación, ocupación) + freno maltusiano (solo en sociedades agrarias que pasan el límite de la tierra). `S` = salud efectiva = resiliencia × acceso × gasto
   en sanidad; la **resiliencia** es 55 % saber de salud + 45 % saber de agricultura. La sigmoide moderna (centro 0,55) es «la medicina de verdad»: casi nada hasta
   que el saber madura, luego la mortalidad cae de golpe. Mínimo 1,5 ‰.
@@ -52,7 +52,12 @@ ve algo raro, se cambia una constante en `scripts/demografia.gd` o `scripts/educ
   con τ = 540 días en paz).
 * **IA**: una IA activa revisa su presupuesto cada mes (`Educacion.decidir_ia`): recorta en guerra, austeridad si la caja se vacía, invierte si sobra; no gasta en
   escuelas ni ciencia que su país aún no conoce; en guerra apunta su investigación a lo militar, en paz a la ciencia. Lo que lleva el jugador o fijó a mano no se toca.
-  El ejército de la IA se limita por la gente en edad activa (un país envejecido puede reclutar menos).
+  El ejército de la IA se limita por la gente en edad activa: nunca pasa de `MAX_ACTIVA_EJERCITO` = 3,2 % de ella (~1,5 % de la población), además de los topes de siempre
+  (un país envejecido o poco poblado puede reclutar menos). Con los ingresos **netos** de las partidas del presupuesto (`ing` de la foto de la IA).
+* **Fatiga de guerra → guerra y paz** (`ia.gd`): con fatiga ≥ `FATIGA_NO_ATACA` (30) un país no declara guerras nuevas; con ≥ `FATIGA_PIDE_PAZ` (45) y al menos
+  `PAZ_CANSADA_DIAS` (60) de guerra pide la paz aunque vaya perdiendo (motivo «cansancio»; cada uno se queda con lo que ocupa).
+* **Interfaz**: tarjeta «Saber social» en la ficha del país (los 4 índices, gente activa, oficios) y Debug > Gente (índices, demografía y presupuesto de un país, fatiga editable,
+  avance de días con el reloj real).
 * **Día de 10 fases**: economía, IA, diplomacia, estabilidad, **demografía**, ejército, obras, llegadas, batallas, ocupaciones.
 
 ## Los 40 oficios
@@ -67,24 +72,36 @@ Hoy es información (ficha del país, Debug) y la base de efectos futuros (médi
 
 | Escenario | Población | Natalidad / mortalidad | Crecimiento | Urbana | Alfabetizada | Niños / 65+ |
 |---|---|---|---|---|---|---|
-| Año 1 | 254 M | 39,9 / 39,5 ‰ | +0,04 %/año (+200 años: 282 M) | 6 % | 2 % | 38 % / 3 % |
-| 1096 | 367 M | ~38 / ~38 ‰ | ≈ 0 | — | — | — |
-| 1500 | 468 M | 38,6 / 38,3 ‰ | +0,03 %/año (+150 años: 518 M, +0,10 %/año al final) | 9 % | 10 % | 37 % / 3 % |
-| 2026 | 8.349 M | 15,7 / 8,4 ‰ | +0,73 %/año | 64 % | 87 % | 18 % / 14 % |
+| Año 1 | 254 M | 39,8 / 39,2 ‰ | +0,06 %/año (+50 años: 263 M) | 6 % | 2 % | 38 % / 3 % |
+| 1096 | 367 M | ~38 / ~38 ‰ | −0,05 %/año | — | — | — |
+| 1500 | 468 M | ~38 / ~38 ‰ | −0,03 %/año | 9 % | 7 % | 37 % / 3 % |
+| 2026 | 8.349 M | 15,7 / 8,1 ‰ | +0,76 %/año | 64 % | 87 % | 18 % / 14 % |
 
 Valores históricos de referencia: ~250 M en el año 1, ~400 M en 1100, ~460-500 M en 1500; hoy ~8.200 M con ~0,9 %/año. El crecimiento de 2026 se acelera con el
 tiempo por efecto de composición (11,5 mil millones a +40 años frente a los ~10,2 de la ONU): conocido, aceptado por ahora.
+
+**Aviso sobre el catálogo.** Los índices de saber son la *fracción de secciones conocidas* de cada campo: si se añaden descubrimientos a una sección, los índices
+de las épocas antiguas bajan (el denominador crece) y la natalidad y la mortalidad del año 1 se mueven. La 0.1.8.47 añadió 43 descubrimientos (`z_gente_0.1.8.47.txt`)
+y por eso `MORT_MAX` pasó de 45 a 44. **Tras ampliar el catálogo, correr `runner104` y retocar `MORT_MAX` / `NAT_MAX` si el año 1 o el 1500 dejan de estar en ~0 %/año.**
 
 ## Coste
 
 | Medida | Valor |
 |---|---|
-| `fase_dia` en 2026 | ~0,9 ms por día de juego (70 provincias por lote, ~1 ms) |
+| Repaso de provincias (`fase_dia`, 70 por lote) | 2026 ~0,9 ms por día de juego; 1500 ~0,4 ms |
+| Fase completa (con la parte de países y las decisiones de las IA) | 2026 ~1,5 ms por día; 1500 ~0,8 ms |
+| Un día entero con todas las IA (runner89 / banco propio) | 2026: 11,0 → 12,7 ms (+1,75); 1500: 3,3 → 5,2 ms (+1,85), media de 3 pares, respecto a la 0.1.8.46 |
 | `sembrar()` al empezar | ~80 ms (2026) |
 | Memoria | +16 columnas de 37.359 filas ≈ +7 MB |
 
 ## Límites conocidos / siguiente
 
+* **Dos trampas de coste que ya se evitaron** (medidas con un banco por fase): (1) cambiar las partidas del presupuesto por el setter de `Pais` sube `version_eco` y rehace
+  el balance de ~250 países en `_economia_dia` (de 0,5 a 7 ms por día) y guarda historial: por eso `Educacion._poner_gasto` escribe la columna directo y avisa con
+  `Mundo.marcar_balance(tid)`; (2) `balance_diario_local` recalcula los soldados de todos los países cuando cambió el ejército (~3 ms con 250 IA): la IA usa
+  `Mundo.balance_diario_rapido`, que lee la fila de balance y los soldados del último día de economía (puede llevar un día de retraso; da igual para una decisión mensual).
+* Pendiente de coste (viene de antes, no de la demografía): `Ejercito.soldados_por_pais` recorre todos los pelotones una vez al día (~3 ms en 2026); llevar la cuenta
+  por país de forma incremental lo dejaría casi gratis.
 * Los oficios todavía no mueven la economía ni la mortalidad (solo se muestran).
 * La población no migra entre provincias (solo crece o decrece en su sitio).
 * No hay epidemias, hambrunas por clima ni catástrofes: el bienestar baja solo con la tierra, la guerra y la ocupación.
