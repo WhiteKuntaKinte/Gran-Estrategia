@@ -1,0 +1,62 @@
+## +CIE|ENE
+### Centrales y redes eléctricas
+central_electrica|Central eléctrica pública|7|T|dinamo,lampara_electrica
+oleoducto_gasoducto|Oleoductos y gasoductos|7|T|petroleo_perforacion,acero_bessemer
+red_electrica_nacional|Red eléctrica nacional|8|G|central_electrica,transformador_alterna,presupuesto_nacional
+electrificacion_rural|Electrificación rural|8|G|red_electrica_nacional,motor_electrico
+central_nuclear_civil|Centrales nucleares civiles|9|T|reactor_nuclear,red_electrica_nacional
+eficiencia_energetica|Eficiencia y etiquetado energético|9|G|red_electrica_nacional,derecho_ambiental
+mercado_electrico|Mercado eléctrico y tarifas|9|G|red_electrica_nacional,contabilidad_publica
+## +CIE|ELE
+### Comunicación de masas
+telefonia_automatica|Telefonía automática (conmutador)|7|T|telefono
+television_color|Televisión en color|9|T|television_electronica
+navegacion_satelital_civil|Navegación satelital civil|9|T|gps_militar,telefonia_celular_digital
+## +CIE|COM
+### Software y sociedad digital
+hoja_calculo|Hoja de cálculo|9|T|computadora_personal,lenguajes_alto_nivel
+software_libre|Software libre y código abierto|9|G|sistema_operativo,internet_tecnologia
+firma_digital|Firma y documentos digitales|9|G|criptografia_clave_publica,contratos_escritos
+cibernetica|Cibernética y control por realimentación|9|K|circuitos_logicos,programa_almacenado
+## +CIE|TRA
+### Redes de transporte
+ferrocarril_transcontinental|Ferrocarril transcontinental|7|T|locomotora_vapor,rieles_hierro,telegrafo_electrico
+senalizacion_ferroviaria|Señalización ferroviaria y semáforos|7|T|locomotora_vapor,telegrafo_electrico
+vuelo_supersonico_civil|Transporte aéreo supersónico|9|T|motor_jet_civil,rec_aleantes
+carga_aerea_expres|Carga aérea y mensajería exprés|9|T|aviacion_comercial,logistica_just_in_time
+taxi_plataforma|Transporte por plataforma|10|T|economia_plataformas,navegacion_satelital_civil
+## +CIE|MAN
+### Fábricas y máquinas
+fabrica_electrificada|Fábrica electrificada|8|T|central_electrica,motor_electrico,cadena_montaje
+## +SOC|ECO
+### Dinero, bancos y bolsa
+proteccionismo_arancelario|Aduanas y proteccionismo arancelario|6|G|mercantilismo,sistema_tributario
+regulacion_bancaria|Regulación bancaria tras las crisis|8|G|banca_central,bolsa_valores
+## +SOC|GOB
+### Estados y territorios
+descentralizacion_administrativa|Descentralización administrativa|9|G|federalismo,burocracia_moderna
+referendum_moderno|Referéndum y consulta popular|7|G|democracia_directa,democracia_representativa
+## +SOC|LEY
+### Derecho de las nuevas fronteras
+derecho_del_mar|Derecho del mar|9|G|derecho_internacional_clasico,navegacion_oceanica
+derecho_aeronautico|Derecho aéreo y aviación civil|8|G|aviacion_comercial,derecho_internacional_clasico
+derecho_espacial|Derecho espacial|9|G|tratados_desarme,satelite_comunicaciones
+marcas_diseno_industrial|Marcas y diseño industrial|7|G|patentes_propiedad_intelectual,produccion_en_serie
+derecho_quiebras|Derecho de quiebras|4|G|derecho_mercantil,credito_prestamo
+## +SOC|DIP
+### Fronteras y personas
+pasaportes_fronteras|Pasaportes y control de fronteras|8|G|diplomacia_permanente,registro_civil
+extradicion_tratados|Extradición|7|G|derecho_internacional_clasico,policia_moderna
+asilo_refugiados|Asilo y estatuto de los refugiados|9|G|derechos_humanos_universales,cruz_roja_humanitaria
+## +SOC|COM
+### Prensa, radio y pantalla
+censura_previa|Censura previa y licencias de imprenta|5|G|imprenta,derecho_canonico
+## +SOC|REL
+### Cultura de masas
+cine_sonoro|Cine sonoro|8|T|cine,fonografo_grabacion
+## +SOC|CIV
+### Naturaleza y ciudadanía
+parques_nacionales|Parques nacionales y conservación|7|G|romanticismo,asociaciones_civicas
+## +MIL|LOG
+### Mapas y servicios del ejército
+topografia_militar_moderna|Servicios topográficos militares|7|T|cartografia_militar,mapas_geologicos

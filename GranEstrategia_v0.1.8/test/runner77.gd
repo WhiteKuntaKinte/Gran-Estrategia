@@ -1,5 +1,5 @@
 extends Node
-## 0.1.8.36 · PRUEBAS DE LOS DESCUBRIMIENTOS: el catálogo de 1.846 descubrimientos enlazado con el reloj (cada uno con su año).
+## 0.1.8.36 · PRUEBAS DE LOS DESCUBRIMIENTOS: el catálogo de 1.882 descubrimientos enlazado con el reloj (cada uno con su año).
 ## Cubre: datos (coherencia año/prerrequisitos/era dentro del motor), la frontera histórica de cualquier año contra una cuenta por fuerza bruta,
 ## avanzar el reloj año a año == empezar directamente en ese año, saltos del Debug hacia atrás y adelante, estado propio de un país (conceder / quitar),
 ## disponibles, textos de año, el escenario 2026 y el año 1 d. C. dentro del juego, el reloj que trae descubrimientos al cruzar de año, y el coste.
@@ -81,7 +81,7 @@ func t_datos() -> void:
 	var t0 := Time.get_ticks_msec()
 	var d = nuevo()
 	var ms := Time.get_ticks_msec() - t0
-	ok(d.n == 1846, "el catálogo trae 1.846 descubrimientos (%d)" % d.n)
+	ok(d.n == 1882, "el catálogo trae 1.882 descubrimientos (%d)" % d.n)
 	ok(d.idx_de_slug.size() == d.n, "los slugs no se repiten")
 	ok(d.eras.size() == 12 and d.ramas.size() == 3 and d.secciones.size() == 40, "12 eras, 3 ramas, 40 secciones")
 	ok(ms < 400, "leer y armar el catálogo tarda %d ms (< 400)" % ms)
@@ -134,7 +134,7 @@ func t_frontera() -> void:
 	d.iniciar(1)
 	ok(d.anio_actual == 1 and d.cuenta_f == 371, "año 1 d. C.: la historia conoce 371 descubrimientos (%d)" % d.cuenta_f)
 	d.iniciar(2026)
-	ok(d.cuenta_f == 1815, "año 2026: la historia conoce 1.815 de 1.846 (%d)" % d.cuenta_f)
+	ok(d.cuenta_f == 1851, "año 2026: la historia conoce 1.851 de 1.882 (%d)" % d.cuenta_f)
 	var fallos_b := 0
 	for a in [-3000000, -50000, -10000, -3500, -3300, -1200, -44, 0, 1, 2, 100, 500, 800, 1000, 1066, 1450, 1500, 1650, 1789, 1800, 1900, 1914, 1945, 1969, 1990, 2000, 2010, 2026, 2027, 2030, 2100]:
 		d.iniciar(a)
@@ -172,7 +172,7 @@ func t_tiempo() -> void:
 	var total_nuevos := 0
 	for a in range(2, 2027):
 		total_nuevos += d.avanzar_a(a)
-	ok(total_nuevos == 1815 - 371, "avanzar el reloj del año 1 a 2026 trae 1.444 descubrimientos (%d)" % total_nuevos)
+	ok(total_nuevos == 1851 - 371, "avanzar el reloj del año 1 a 2026 trae 1.480 descubrimientos (%d)" % total_nuevos)
 	var e2 = nuevo()
 	e2.iniciar(2026)
 	ok(d.frontera == e2.frontera and d.cuenta_f == e2.cuenta_f, "avanzar año a año == empezar directamente en 2026")
@@ -322,7 +322,7 @@ func t_juego() -> void:
 	await arrancar(2026)
 	var d = m.descubrimientos
 	ok(d != null, "Mundo trae descubrimientos")
-	ok(d != null and d.n == 1846 and d.anio_actual == 2026 and d.cuenta_f == 1815, "2026: 1.815 descubrimientos conocidos")
+	ok(d != null and d.n == 1882 and d.anio_actual == 2026 and d.cuenta_f == 1851, "2026: 1.851 descubrimientos conocidos")
 	var pais := ""
 	for p in m.paises:
 		if not m.paises[p].inerte and m.paises[p].provincias.size() > 0:
@@ -338,7 +338,7 @@ func t_juego() -> void:
 	main.debug_fijar_fecha(1500, 1, 1)
 	ok(m.conoce_descubrimiento(pais, "imprenta") and not m.conoce_descubrimiento(pais, "maquina_vapor"), "1500: hay imprenta, aún no hay máquina de vapor")
 	main.debug_fijar_fecha(2026, 1, 1)
-	ok(d.cuenta_f == 1815, "volver a 2026 deja 1.815")
+	ok(d.cuenta_f == 1851, "volver a 2026 deja 1.851")
 	# el reloj trae descubrimientos al cruzar de año (modo HISTORIA FIJA; desde la 0.1.8.46 el modo normal es «el planeta descubre», que prueba runner103)
 	ok(m.saber != null and m.saber.activo and d.modo_planeta, "(0.1.8.46) el modo normal es «el planeta descubre»")
 	m.saber.desactivar()
@@ -393,7 +393,7 @@ func t_juego() -> void:
 	# volver a 2026 recarga lo de 2026
 	await arrancar(2026)
 	d = m.descubrimientos
-	ok(d != null and d.anio_actual == 2026 and d.cuenta_f == 1815, "volver al escenario 2026 recarga 1.815")
+	ok(d != null and d.anio_actual == 2026 and d.cuenta_f == 1851, "volver al escenario 2026 recarga 1.851")
 	# pestaña Debug
 	main._on_jugar()
 	await esperar(0.5)
@@ -421,4 +421,4 @@ func t_juego() -> void:
 		ok(dm.lbl_desc_ficha.text.contains("Año"), "la ficha muestra el año")
 		dm.filtro_desc.text = ""
 		dm._refrescar_desc()
-		ok(dm.lbl_desc_res.text.contains("1.815") or dm.lbl_desc_res.text.contains("1815"), "el resumen cuenta 1.815 conocidos")
+		ok(dm.lbl_desc_res.text.contains("1.851") or dm.lbl_desc_res.text.contains("1851"), "el resumen cuenta 1.851 conocidos")

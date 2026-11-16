@@ -1,5 +1,5 @@
 extends Node
-## 0.1.8.46 · PRUEBAS DE LOS CIMIENTOS DEL SABER: catálogo ampliado (41 descubrimientos nuevos y 49 enlaces entre ramas en la 0.1.8.46; +43 y +16 en la 0.1.8.47), recetas (edificios y materias que ayudan)
+## 0.1.8.46 · PRUEBAS DE LOS CIMIENTOS DEL SABER: catálogo ampliado (41 descubrimientos nuevos y 49 enlaces entre ramas en la 0.1.8.46; +43 y +16 en la 0.1.8.47; +36 y +41 en la 0.1.8.50), recetas (edificios y materias que ayudan)
 ## con su validador, y el azar sin estado (scripts/azar.gd).
 const AzarScript := preload("res://scripts/azar.gd")
 const DescubrimientosScript := preload("res://scripts/descubrimientos.gd")
@@ -35,6 +35,7 @@ func run() -> void:
 	ok(d.cargar(js), "el catálogo carga con las columnas de la receta (edif, mat, regla)")
 	t_catalogo()
 	t_enlaces()
+	t_tejido_050()
 	t_recetas()
 	t_generador()
 	t_azar()
@@ -44,7 +45,7 @@ func run() -> void:
 
 func t_catalogo() -> void:
 	print("[T] ── Catálogo ampliado")
-	ok(d.n == 1846 and d.secciones.size() == 40, "1.846 descubrimientos en 40 secciones (%d / %d)" % [d.n, d.secciones.size()])
+	ok(d.n == 1882 and d.secciones.size() == 40, "1.882 descubrimientos en 40 secciones (%d / %d)" % [d.n, d.secciones.size()])
 	var nuevos := ["archivos_estatales", "posta_imperial", "censo_periodico", "presupuesto_nacional", "registro_parroquial", "estadisticas_vitales", "tablas_de_mortalidad",
 		"escuelas_primeras_letras", "aprendizaje_gremial", "formacion_de_maestros", "correspondencia_erudita", "bibliotecas_publicas", "enciclopedias", "congresos_cientificos",
 		"oficio_herrero", "oficio_medico", "oficio_arquitecto", "oficio_navegante", "ensayo_de_metales", "normalizacion_industrial", "prospeccion_minera", "caminos_de_peaje",
@@ -112,6 +113,75 @@ func t_enlaces() -> void:
 				cruzados += 1
 				break
 	ok(cruzados > 150, "hay descubrimientos que piden algo de otra rama (%d)" % cruzados)
+
+
+func t_tejido_050() -> void:
+	print("[T] ── Tejido del saber II (0.1.8.50: 36 descubrimientos y 41 enlaces)")
+	var nuevos := [
+		"central_electrica", "oleoducto_gasoducto", "red_electrica_nacional", "electrificacion_rural",
+		"central_nuclear_civil", "eficiencia_energetica", "mercado_electrico", "telefonia_automatica",
+		"television_color", "navegacion_satelital_civil", "hoja_calculo", "software_libre",
+		"firma_digital", "cibernetica", "ferrocarril_transcontinental", "senalizacion_ferroviaria",
+		"vuelo_supersonico_civil", "carga_aerea_expres", "taxi_plataforma", "fabrica_electrificada",
+		"proteccionismo_arancelario", "regulacion_bancaria", "descentralizacion_administrativa", "referendum_moderno",
+		"derecho_del_mar", "derecho_aeronautico", "derecho_espacial", "marcas_diseno_industrial",
+		"derecho_quiebras", "pasaportes_fronteras", "extradicion_tratados", "asilo_refugiados",
+		"censura_previa", "cine_sonoro", "parques_nacionales", "topografia_militar_moderna"
+	]
+	var faltan := []
+	for s in nuevos:
+		if d.indice(s) < 0:
+			faltan.append(s)
+	ok(faltan.is_empty() and nuevos.size() == 36, "los 36 descubrimientos nuevos existen (faltan: %s)" % str(faltan))
+	var pares := [
+		["television_satelite_cable", "satelite_comunicaciones"], ["smartphone_adopcion", "telefonia_celular_digital"], ["internet_publico", "navegador_buscador"],
+		["comercio_electronico", "cifrado_web_ssl"], ["redes_sociales", "www_web"], ["streaming_video", "fibra_optica"],
+		["cadenas_suministro_globales", "contenedor_maritimo"], ["logistica_just_in_time", "codigo_barras_inventario"], ["mercados_financieros_globales", "satelite_comunicaciones"],
+		["derivados_financieros", "computadora_personal"], ["banca_electronica", "computadora_digital"], ["tarjeta_credito", "credito_consumo"],
+		["fordismo", "cadena_montaje"], ["publicidad_masiva", "imprenta_rotativa"], ["propaganda_masiva", "radiodifusion"],
+		["agencia_senales", "criptoanalisis_mecanico"], ["guerra_relampago", "radio_campana"], ["armas_combinadas", "radio_campana"],
+		["doctrina_movilizacion_ferroviaria", "red_telegrafica"], ["logistica_motorizada", "camion"], ["guerra_total", "propaganda_masiva"],
+		["guerra_hibrida", "redes_sociales"], ["guerra_red_centrica", "internet_tecnologia"], ["ciberguerra", "ciberseguridad"],
+		["armas_antisatelite", "satelite_comunicaciones"], ["tren_alta_velocidad", "electrificacion_rural"], ["contenedor_maritimo", "buque_motor_diesel"],
+		["tabuladora_hollerith", "censo_periodico"], ["internet_de_las_cosas", "sensores_mems"], ["vehiculos_autonomos", "lidar_sensor"],
+		["planificacion_central", "estadistica_oficial"], ["banca_central", "contabilidad_partida_doble"], ["sociedad_anonima", "companias_comerciales"],
+		["derecho_ambiental", "movimiento_ecologista"], ["igualdad_genero_legal", "sufragio_femenino"], ["derechos_minorias", "derechos_civiles_movimiento"],
+		["ong", "cruz_roja_humanitaria"], ["union_supranacional", "integracion_regional"], ["tratado_no_proliferacion", "armas_nucleares"],
+		["acuerdos_climaticos", "derecho_ambiental"], ["criptomonedas", "criptografia_clave_publica"]
+	]
+	var malos := []
+	var sin_porque := []
+	for p in pares:
+		var a: int = d.indice(p[0])
+		var b: int = d.indice(p[1])
+		if a < 0 or b < 0:
+			malos.append("%s←%s (no existe)" % [p[0], p[1]])
+			continue
+		var pide: bool = (d.req[a] as PackedInt32Array).has(b)
+		for g in d.req_o[a]:
+			if (g as PackedInt32Array).has(b):
+				pide = true
+		if not pide:
+			malos.append("%s no pide %s" % [p[0], p[1]])
+		elif int(d.anio[b]) > int(d.anio[a]):
+			malos.append("%s (%d) pide %s (%d) que es posterior" % [p[0], int(d.anio[a]), p[1], int(d.anio[b])])
+		if d.por_que_requisito(a, b) == "":
+			sin_porque.append(p[0])
+	ok(pares.size() == 41 and malos.is_empty(), "los 41 enlaces nuevos están en los prerrequisitos y ninguno pide algo posterior (%s)" % str(malos))
+	ok(sin_porque.is_empty(), "cada enlace nuevo trae su porqué (sin: %s)" % str(sin_porque))
+	# cadena de la energía: la central abre la red, la red abre la electrificación rural, la central nuclear y el mercado eléctrico
+	var red: int = d.indice("red_electrica_nacional")
+	var dep: PackedInt32Array = d.dependientes[red]
+	ok(dep.has(d.indice("electrificacion_rural")) and dep.has(d.indice("central_nuclear_civil")) and dep.has(d.indice("mercado_electrico")), "«Abre» de la red eléctrica nacional trae la electrificación rural, la nuclear civil y el mercado eléctrico (%d)" % dep.size())
+	ok((d.req[d.indice("taxi_plataforma")] as PackedInt32Array).has(d.indice("navegacion_satelital_civil")), "el taxi por plataforma pide la navegación satelital civil")
+	# ninguno de los nuevos cae en una sección que alimenta los índices de saber (la demografía no se mueve)
+	var prohibidas := ["MED", "SAL", "AGR", "BIO", "EDU", "HUM", "TER", "ING"]
+	var en_saber := []
+	for s in nuevos:
+		var cod := String(d.secciones[int(d.seccion[d.indice(s)])]["cod"])
+		if prohibidas.has(cod):
+			en_saber.append("%s (%s)" % [s, cod])
+	ok(en_saber.is_empty(), "ningún descubrimiento nuevo cae en una sección de los índices de saber (%s)" % str(en_saber))
 
 
 func t_recetas() -> void:
@@ -214,7 +284,7 @@ func t_generador() -> void:
 	var gen := raiz.path_join("herramientas/construir_descubrimientos.py")
 	var s1 := []
 	var c1 := OS.execute(cmd, ["-I", gen, "--solo-comprobar"], s1, true)
-	ok(c1 == 0 and String(s1[0]).contains("1846 descubrimientos"), "el generador comprueba el catálogo entero sin errores")
+	ok(c1 == 0 and String(s1[0]).contains("1882 descubrimientos"), "el generador comprueba el catálogo entero sin errores")
 	var tmp := OS.get_user_data_dir().path_join("enlaces_malos.txt")
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	f.store_string("bronce|sextante|un enlace con un año imposible\n")

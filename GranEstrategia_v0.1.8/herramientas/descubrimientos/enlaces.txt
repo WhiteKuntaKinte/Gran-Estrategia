@@ -64,3 +64,45 @@ hospital_moderno|hospicios_beneficencia|El hospital moderno hereda las casas de 
 educacion_publica|pedagogia_cientifica|La escuela pública necesita un método de enseñanza
 formacion_de_maestros|pedagogia_cientifica|Enseñar a enseñar es una ciencia
 oms_cooperacion_sanitaria|control_vectores|La OMS nace de las campañas contra el paludismo y el tifus
+# 0.1.8.50
+television_satelite_cable|satelite_comunicaciones|Los canales por cable y satélite viven de los satélites de comunicaciones
+smartphone_adopcion|telefonia_celular_digital|El teléfono inteligente se apoya en la red celular digital
+internet_publico|navegador_buscador|Sin navegador el público no entra a la red
+comercio_electronico|cifrado_web_ssl|Pagar en línea exige un canal cifrado
+redes_sociales|www_web|Las redes sociales nacen sobre la web
+streaming_video|fibra_optica|El vídeo en línea necesita la banda ancha de la fibra
+cadenas_suministro_globales|contenedor_maritimo|Sin contenedores no hay cadenas de suministro globales
+logistica_just_in_time|codigo_barras_inventario|Entregar justo a tiempo exige saber qué hay y dónde
+mercados_financieros_globales|satelite_comunicaciones|Los mercados operan sin pausa gracias a las comunicaciones por satélite
+derivados_financieros|computadora_personal|Valorar derivados exige cálculo en cada mesa de operaciones
+banca_electronica|computadora_digital|La banca electrónica corre sobre computadoras digitales
+tarjeta_credito|credito_consumo|La tarjeta es el crédito al consumo hecho plástico
+fordismo|cadena_montaje|El fordismo es la cadena de montaje convertida en sistema
+publicidad_masiva|imprenta_rotativa|La publicidad masiva empezó en la prensa de rotativas
+propaganda_masiva|radiodifusion|La propaganda llega a todos por la radio
+agencia_senales|criptoanalisis_mecanico|Las agencias de señales heredan a los descifradores de la guerra
+guerra_relampago|radio_campana|El ataque rápido se coordina por radio
+armas_combinadas|radio_campana|Combinar armas exige hablar entre ellas
+doctrina_movilizacion_ferroviaria|red_telegrafica|Movilizar por tren se ordena por telégrafo
+logistica_motorizada|camion|El camión es la logística motorizada
+guerra_total|propaganda_masiva|La guerra total necesita voluntad de toda la población
+guerra_hibrida|redes_sociales|La guerra híbrida usa las redes sociales como campo de batalla
+guerra_red_centrica|internet_tecnologia|La guerra en red se apoya en la red
+ciberguerra|ciberseguridad|Atacar y defender sistemas parte de la ciberseguridad
+armas_antisatelite|satelite_comunicaciones|Para derribar un satélite hay que haberlos puesto en órbita
+tren_alta_velocidad|electrificacion_rural|La alta velocidad corre sobre vías electrificadas
+contenedor_maritimo|buque_motor_diesel|El contenedor viaja en buques de motor
+tabuladora_hollerith|censo_periodico|La tabuladora se inventó para contar el censo
+internet_de_las_cosas|sensores_mems|Las cosas conectadas son sensores diminutos
+vehiculos_autonomos|lidar_sensor|Un coche sin conductor ve con lidar
+planificacion_central|estadistica_oficial|Planificar toda la economía exige estadística oficial
+banca_central|contabilidad_partida_doble|Un banco central lleva sus libros por partida doble
+sociedad_anonima|companias_comerciales|La sociedad anónima hereda a las compañías comerciales
+derecho_ambiental|movimiento_ecologista|Las leyes ambientales nacen de los movimientos ecologistas
+igualdad_genero_legal|sufragio_femenino|Tras el voto llega la igualdad ante la ley
+derechos_minorias|derechos_civiles_movimiento|Los derechos de las minorías siguen a la lucha por los derechos civiles
+ong|cruz_roja_humanitaria|Las ONG heredan el modelo de la Cruz Roja
+union_supranacional|integracion_regional|Las uniones supranacionales crecen de la integración regional
+tratado_no_proliferacion|armas_nucleares|Se prohíbe extender lo que ya existe
+acuerdos_climaticos|derecho_ambiental|Los pactos climáticos son derecho ambiental entre Estados
+criptomonedas|criptografia_clave_publica|El dinero digital se firma con clave pública
