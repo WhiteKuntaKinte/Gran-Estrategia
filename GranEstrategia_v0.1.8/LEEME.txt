@@ -1,8 +1,20 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.48 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.49 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.49 — 32 EDIFICIOS NUEVOS: ECONOMÍA, ORDEN Y CULTO, MANDO Y DEFENSA
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.49.md. Sale de tus mensajes del 16 de noviembre: "añade más contenido y ensámblalo al juego".)
+- 32 EDIFICIOS NUEVOS, AHORA 141 (129 con efectos), cada uno con su descubrimiento (ya son 1.846), su icono propio y su costo:
+  ECONOMÍA: talleres artesanos, casas de gremio, caravasares y posadas, molinos hidráulicos y de viento, astilleros, bancos y casas de cambio, lonjas y bolsa, altos hornos, fábricas de vapor, acerías, estaciones de ferrocarril, parques industriales, puertos de contenedores y centros comerciales.
+  ORDEN Y CULTO: tribunales, prisiones, comisarías, casas consistoriales, palacios de gobierno, palacios del parlamento, iglesias parroquiales, mezquitas, templos y pagodas, teatros y anfiteatros, estadios y casas del pueblo.
+  MANDO Y DEFENSA: cuarteles y guarniciones, polvorines, cuarteles de estado mayor, estaciones de radar y centros de mando y control.
+- EFECTOS: los de economía suman producción (y comida o vivienda en algunos); los de orden y culto suman a la meta de estabilidad de la provincia; los de mando dan defensa fija; los caravasares, astilleros, ferrocarril y puertos dan movilidad. Los que producen solo cuentan lo construido DESPUÉS de empezar la partida, como todos.
+- LA POBLACIÓN NO CAMBIA: los descubrimientos nuevos están fuera de los índices de saber, así que la demografía queda calibrada igual (254 M en el año 1, 468 M en 1500, 8.349 M en 2026).
+- ARREGLO DE COSTE: abrir Construir con un país entero (Ctrl+clic en países) tardaba 468 ms con 141 filas; ahora 173 ms (el costo base de cada provincia se calcula una vez, no una por edificio).
+- COSTE: ver NOTAS_TECNICAS_0.1.8.49.md §4 (2026 13,3 → 13,5 ms y 1500 5,6 → 5,8 ms por día (ruido); arranque de 2026 más rápido (edificios de partida 1,55 → 1,0 s); Construir con un país entero 468 → 173 ms).
+- PARA PROBAR: abre Construir (tecla B) y mira los iconos nuevos con una provincia y con un país entero; el F9 de la 0.1.8.48 (año 1 con todas las IA a x6 y una partida de 2026) sigue pendiente.
 
 NUEVO EN 0.1.8.48 — LOS EDIFICIOS POR FIN HACEN ALGO, EL DINERO DE OBRAS TIENE DUEÑO Y LA IA CONSTRUYE CON CRITERIO
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.48.md y docs/EDIFICIOS_EFECTOS.md. Sale de tus mensajes del 16 de noviembre: "haz las bases más fuertes… sobre todo creación de contenido y ensamblamiento al juego".)

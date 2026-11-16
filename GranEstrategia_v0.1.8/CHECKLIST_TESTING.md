@@ -1,9 +1,20 @@
-# Checklist de testing — Gran Estrategia 0.1.8.48
+# Checklist de testing — Gran Estrategia 0.1.8.49
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.49 — 32 edificios nuevos (economía, orden y culto, mando y defensa)
+- ✅ Catálogo: 141 edificios (129 con efecto + 12 «solo saber»), 1.846 descubrimientos (año 1: 371; 2026: 1.815), 141 iconos distintos (los 32 nuevos dibujados por código y revisados en una hoja de contacto).
+- ✅ Ajustadas a los conteos nuevos: runner77, runner83 (141 edificios), runner88 (141 iconos), runner91 y runner102 (1.846), runner106 (129 + 12).
+- ✅ Arreglo de coste: refrescar la ventana Construir con un país entero tardaba 468 ms con 141 filas (límite de runner83: 400 ms); ahora 173 ms (`Edificios.base_local` + `puede_con_costo`: el costo base de cada provincia se calcula una vez).
+- ✅ Calibración demográfica intacta (runner104: 75 comprobaciones sin cambios) porque las secciones elegidas no alimentan los índices de saber.
+- ✅ Regresión completa runner71–107 (runner74 con ventana virtual, 221 comprobaciones): **0 fallos** en todas.
+- ✅ Auditoría de variables: `python3 herramientas/auditar_codigo.py`: **1.693 funciones, 0 funciones repetidas, 0 variables repetidas.** Nuevas: `Edificios.base_local`, `Edificios.puede_con_costo`, `Edificios._abs_de`, `_ef_abs_de`, `_NUM_TXT` (todas tienen uso fuera de su definición; revisado a mano porque la auditoría no lista lo que no se usa). `datos/variables.json` no cambió.
+- ✅ Revisión de rendimiento: 2026 13,3 → 13,5 ms y 1500 5,6 → 5,8 ms por día (ruido); arranque de 2026 más rápido (edificios de partida 1,55 → 1,0 s); Construir con un país entero 468 → 173 ms
+- ⬜ Los iconos nuevos y la ventana Construir con 141 filas no se han visto en tu pantalla (se probaron por código, sin GPU).
+- ⬜ **Pedirte:** abre Construir (B) con una provincia y con un país entero (Ctrl+clic en países) y dime si los iconos y la lista se ven bien y rápido; el F9 pendiente de la 0.1.8.48 (año 1 con todas las IA a x6 y una partida de 2026) sigue en pie.
 
 ### 0.1.8.48 — Edificios con efectos reales, fondo de obras, obras públicas de la IA y cuenta de soldados incremental
 - ✅ `runner106` — efectos de los edificios: datos puros (97 con efecto + 12 «solo saber» = 109; 7 clases, topes, sin NaN), fondo de obras (arranque de 180 días, aporte diario, tope de 3 años, el exceso vuelve a la tesorería, construir paga primero del fondo, `puede`), modelo (saturación, dilución por habitantes, regla de partida «solo cuenta lo construido después» en salud / comida / vivienda / producción), producción (el producto por habitante sube al terminar la obra, no al guardar), IA (construye solo con fondo, nunca con la tesorería, no toca al jugador, respeta topes y obras en curso, coste por día) e interfaz (línea «Efectos» en Construir, fondo en su cabecera, sección EFECTOS del HUD, Debug > Edificios) (98 comprobaciones).

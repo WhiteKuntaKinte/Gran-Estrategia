@@ -65,6 +65,7 @@ var ef_solo_saber := PackedStringArray() # edificios sin efecto propio a propós
 var _ef_tope := PackedFloat32Array()
 var _ef_hab := PackedByteArray()         # 1 = el efecto depende de cuánta gente atiende el edificio
 var _ef_de: Array = []                   # por edificio: Array de [clase, peso, habitantes que atiende cada unidad]
+var _ef_abs_de: Array = []               # lo mismo pero solo orden, defensa y movilidad (lo que cuenta TODO lo construido: sembrar_iniciales solo suma esto)
 var _base := {}                          # tid de provincia -> texto de edificios con el que empezó la partida
 var _nuevos := {}                        # tid -> true: la provincia tiene más de lo que tenía al empezar
 var _s_abs := {}                         # tid -> PackedFloat32Array(2 · N_EF) con TODO lo construido: [habitantes·peso ×N_EF, peso ×N_EF]
@@ -122,6 +123,14 @@ func cargar_efectos(js: Dictionary) -> bool:
 				return false
 			lista.append([k, float(par[1]), float(par[2])])
 		_ef_de[i] = lista
+	_ef_abs_de = []
+	_ef_abs_de.resize(n)
+	for i in n:
+		var la := []
+		for x in (_ef_de[i] as Array):
+			if int(x[0]) >= EF_ORD:
+				la.append(x)
+		_ef_abs_de[i] = la
 	ef_solo_saber = PackedStringArray(js.get("solo_saber", []))
 	efectos_listos = true
 	return true
@@ -150,9 +159,7 @@ func iniciar(m) -> void:
 			_obras[pr.idx] = _leer_obras(t)
 		var te: String = bd.txt("edificios", pr.tid, "")
 		if te != "":                                         # lo que ya había es la partida de la época: sus efectos ya están en los datos
-			_base[pr.tid] = te
-			if efectos_listos:
-				_s_abs[pr.tid] = _sumas(_dict_de_texto(te), null)
+			_base[pr.tid] = te                                # sus sumas de efectos se calculan al primer uso (`_abs_de`)
 	_recalcular_prox()
 
 
@@ -171,10 +178,10 @@ const PIB_REF_MODERNO := 25000.0                                                
 
 
 ## Cuántos edificios de cada tipo tiene de partida una provincia con ese desarrollo (0–1); `difusion[e]` y `umbral[e]` ya calculados. Pura: sirve para probar.
-func cantidad_inicial(e: int, pi: int, desarrollo: float, difusion: float) -> int:
+func cantidad_inicial(e: int, pi: int, desarrollo: float, difusion: float, umbral_e := -1.0) -> int:
 	if difusion <= 0.004:
 		return 0
-	var u: float = float(UMBRAL_CLASE.get(clase[e], 0.5))
+	var u: float = umbral_e if umbral_e >= 0.0 else float(UMBRAL_CLASE.get(clase[e], 0.5))     # `umbral_e`: el que ya tiene calculado quien llama (0.1.8.49: sembrar_iniciales lo hace 1M de veces)
 	var t: float = clampf((desarrollo - u) / 0.2, 0.0, 1.0)
 	var esperado: float = float(tope[e]) * difusion * t * t * (3.0 - 2.0 * t)
 	var c := int(floor(esperado))
@@ -187,12 +194,15 @@ func cantidad_inicial(e: int, pi: int, desarrollo: float, difusion: float) -> in
 
 
 ## Reparte los edificios de partida del escenario del año `anio`. Se llama una vez, al empezar (Mundo.iniciar_edificios).
+const _NUM_TXT := ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+
+
 func sembrar_iniciales(anio_epoca: int) -> int:
 	if not listo or mundo == null:
 		return 0
 	var difusion := PackedFloat32Array()
 	difusion.resize(n)
-	var activos: Array = []
+	var activos := PackedInt32Array()
 	for e in n:
 		var edad := float(anio_epoca - anio[e])
 		var tc: float = float(TIEMPO_CLASE.get(clase[e], 400.0))
@@ -222,20 +232,26 @@ func sembrar_iniciales(anio_epoca: int) -> int:
 		var desarrollo := 0.6 * pop_f + 0.4 * pib_f
 		var partes := PackedStringArray()                           # `activos` va en orden de índice: el texto sale ya en el orden canónico de `_guardar`
 		var suma := 0
+		var rs := PackedFloat32Array()                              # sumas de orden, defensa y movilidad de lo sembrado (`_s_abs`), sin volver a leer el texto
+		rs.resize(2 * N_EF)
 		for e in activos:
 			if desarrollo <= umbral[e]:
 				continue
-			var c := cantidad_inicial(e, pr.idx, desarrollo, difusion[e])
+			var c := cantidad_inicial(e, pr.idx, desarrollo, difusion[e], umbral[e])
 			if c > 0:
-				partes.append(prefijo[e] + str(c))
+				partes.append(prefijo[e] + (_NUM_TXT[c] if c < _NUM_TXT.size() else str(c)))
 				suma += c
+				for x in (_ef_abs_de[e] as Array):
+					var kx: int = x[0]
+					rs[kx] += float(c) * float(x[1]) * float(x[2])
+					rs[N_EF + kx] += float(c) * float(x[1])
 		if suma > 0:
 			var texto := ";".join(partes)
 			bd.inicial_s("edificios", pr.tid, texto)                # valores de partida: sin historial ni avisos de cambio
 			bd.inicial_f("num_edificios", pr.tid, float(suma))
 			_base[pr.tid] = texto
 			if efectos_listos:
-				_s_abs[pr.tid] = _sumas(_dict_de_texto(texto), null)
+				_s_abs[pr.tid] = rs
 			total += suma
 	version += 1
 	return total
@@ -689,9 +705,21 @@ func efecto_nuevo(pi: int, k: int, pop: float) -> float:
 	return 0.0 if s == null else _valor(s, k, pop)
 
 
+## Sumas de efectos de TODO lo construido en la provincia `tid`. Las de los edificios de partida se calculan la primera vez que alguien las pide (si la provincia no ha cambiado desde
+## entonces, `_s_abs` no la tiene y lo de partida es todo lo que hay); null si no tiene ninguno.
+func _abs_de(tid: int):
+	var s = _s_abs.get(tid)
+	if s == null and efectos_listos:
+		var te = _base.get(tid)
+		if te != null:
+			s = _sumas(_dict_de_texto(String(te)), null)
+			_s_abs[tid] = s
+	return s
+
+
 ## Efecto de la clase `k` (EF_ORD, EF_DEF, EF_MOV) de TODO lo construido en la provincia (también lo de partida): los datos reales no lo traen.
 func efecto_abs(pi: int, k: int, pop := 0.0) -> float:
-	var s = _s_abs.get(mundo.provincias[pi].tid)
+	var s = _abs_de(mundo.provincias[pi].tid)
 	return 0.0 if s == null else _valor(s, k, pop)
 
 
@@ -703,7 +731,7 @@ func ganancias(pi: int, e: int, pop: float) -> PackedFloat32Array:
 		return r
 	var tid: int = mundo.provincias[pi].tid
 	var s_n = _s_nue.get(tid)
-	var s_a = _s_abs.get(tid)
+	var s_a = _abs_de(tid)
 	for x in (_ef_de[e] as Array):
 		var k: int = x[0]
 		var s = s_a if k >= EF_ORD else s_n
