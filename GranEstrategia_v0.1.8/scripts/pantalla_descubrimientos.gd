@@ -1,5 +1,5 @@
 extends Node
-## PANTALLA DE DESCUBRIMIENTOS (0.1.8.43): el catálogo COMPLETO de 1.730 descubrimientos a pantalla completa, en cualquier época.
+## PANTALLA DE DESCUBRIMIENTOS (0.1.8.43): el catálogo COMPLETO de 1.771 descubrimientos a pantalla completa, en cualquier época.
 ## Tecla T o el botón «Descubrimientos» de la barra de arriba. Esc vuelve atrás (ficha → hub → cierra).
 ##
 ## · HUB: arriba las tres ramas (Militar, Científica, Sociedad), cada una con su propio ambiente (`fondo_descubrimientos.gd`); debajo, las secciones de la rama
@@ -708,6 +708,8 @@ func _input(ev: InputEvent) -> void:
 	if not (ev is InputEventKey) or not ev.pressed or ev.echo:
 		return
 	if ev.alt_pressed and (ev.keycode == KEY_LEFT or ev.keycode == KEY_RIGHT):
+		if _busca != null and _busca.has_focus():
+			return                                                         # 0.1.8.46: escribiendo en el buscador, Alt+flechas son del campo de texto (mover por palabras), no del historial
 		get_viewport().set_input_as_handled()
 		if ev.keycode == KEY_LEFT:
 			hist_atras()
@@ -829,6 +831,11 @@ func _armar_ficha(i: int) -> void:
 	var est := _lbl(_texto_estado(i, e, tid), 13, _color_estado(e))
 	est.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_ficha.add_child(est)
+	var tp := _texto_planeta(i)
+	if tp != "":
+		var lp := _lbl(tp, 12, ArbolScript.T_NOTA)
+		lp.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_ficha.add_child(lp)
 	var sec: int = int(d.seccion[i])
 	var ruta := "%s › %s" % [String(d.ramas[int(d.secciones[sec]["rama"])]["nombre"]), String(d.secciones[sec]["nombre"])]
 	if int(d.sub[i]) >= 0:
@@ -853,18 +860,19 @@ func _armar_ficha(i: int) -> void:
 	_ficha.add_child(_lbl("REQUIERE", 11, ArbolScript.T_ORO, true))
 	var hay := false
 	for r in d.req[i]:
-		_ficha.add_child(_fila_relacion(int(r), tid, ""))
+		_ficha.add_child(_fila_relacion(int(r), tid, "", i))
 		hay = true
 	for g in d.req_o[i]:
 		if g.size() == 1:
-			_ficha.add_child(_fila_relacion(int(g[0]), tid, ""))
+			_ficha.add_child(_fila_relacion(int(g[0]), tid, "", i))
 		else:
 			_ficha.add_child(_lbl("Basta uno de:", 11, ArbolScript.T_NOTA))
 			for r2 in g:
-				_ficha.add_child(_fila_relacion(int(r2), tid, "   "))
+				_ficha.add_child(_fila_relacion(int(r2), tid, "   ", i))
 		hay = true
 	if not hay:
 		_ficha.add_child(_lbl("Nada: es una raíz del árbol.", 12, ArbolScript.T_TENUE))
+	_armar_receta(i, tid)
 	_ficha.add_child(HSeparator.new())
 	var abre: PackedInt32Array = d.dependientes[i]
 	_ficha.add_child(_lbl("ABRE (%d)" % abre.size(), 11, ArbolScript.T_ORO, true))
@@ -874,6 +882,50 @@ func _armar_ficha(i: int) -> void:
 		_ficha.add_child(_fila_relacion(int(abre[k]), tid, ""))
 	if abre.size() > MAX_RELACIONES:
 		_ficha.add_child(_lbl("…y %d más." % (abre.size() - MAX_RELACIONES), 12, ArbolScript.T_TENUE))
+
+
+## Qué pasa con `i` en el PLANETA (solo cuando los descubrimientos los hace el motor de scripts/saber.gd): quién lo descubrió, o que todavía nadie.
+func _texto_planeta(i: int) -> String:
+	var sb = main.mundo.saber
+	if not d.modo_planeta or sb == null or not sb.listo:
+		return ""
+	if d.frontera[i] == 0:
+		return "El planeta aún no lo ha descubierto (en la historia llegó en %s)." % d.anio_texto(int(d.anio[i]))
+	var q: Dictionary = sb.quien(i)
+	if q.is_empty():
+		return "Ya se conocía al empezar la partida."
+	return "Lo descubrió %s en %s (en la historia: %s)." % [String(q["pais"]), d.anio_texto(int(q["anio"])), d.anio_texto(int(d.anio[i]))]
+
+
+## La RECETA de `i`: edificios y materias que facilitan descubrirlo (los prerrequisitos ya están arriba). ✓ = el país los tiene.
+func _armar_receta(i: int, tid: int) -> void:
+	var tiene_receta := not (d.edif[i] as Array).is_empty() or not (d.mat[i] as PackedStringArray).is_empty()
+	var sb = main.mundo.saber
+	if not tiene_receta or sb == null:
+		return
+	var pais := ""
+	if tid >= 0:
+		pais = String(main.mundo.bd.nombre_de(tid))
+	var r: Dictionary = sb.receta_de(i, pais)
+	_ficha.add_child(HSeparator.new())
+	_ficha.add_child(_lbl("RECETA (ayuda a descubrirlo)", 11, ArbolScript.T_ORO, true))
+	for g in r["edif"]:
+		var ops := PackedStringArray()
+		for o in g["opciones"]:
+			ops.append("%s%s" % [String(o["nombre"]), " ✓" if bool(o["tiene"]) else ""])
+		var l := _lbl("%s %s\n   Basta uno: %s" % ["✓" if bool(g["tiene"]) else "·", String(g["razon"]), ", ".join(ops)], 12, ArbolScript.T_TEXTO if bool(g["tiene"]) else ArbolScript.T_NOTA)
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_ficha.add_child(l)
+	if not (r["mat"] as Array).is_empty():
+		var ms := PackedStringArray()
+		for m in r["mat"]:
+			ms.append("%s%s" % [String(m["nombre"]), " ✓" if bool(m["tiene"]) else ""])
+		var lm := _lbl("Materias que ayudan: " + ", ".join(ms), 12, ArbolScript.T_TEXTO)
+		lm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_ficha.add_child(lm)
+	if pais != "" and absf(float(r["factor"]) - 1.0) > 0.01:
+		var lf := _lbl("Facilidad para tu país: ×%.2f" % float(r["factor"]), 12, ArbolScript.T_NOTA)
+		_ficha.add_child(lf)
 
 
 func _texto_estado(i: int, e: int, tid: int) -> String:
@@ -900,7 +952,7 @@ func _texto_estado(i: int, e: int, tid: int) -> String:
 
 
 ## Una fila de la ficha: el descubrimiento `r` con su estado (✓ lo conoce, · no); al pulsarla la pantalla va a él.
-func _fila_relacion(r: int, tid: int, sangria: String) -> Button:
+func _fila_relacion(r: int, tid: int, sangria: String, desde := -1) -> Button:
 	var e: int = arbol.estado_nodo(r)
 	var b := Button.new()
 	b.flat = true
@@ -914,6 +966,10 @@ func _fila_relacion(r: int, tid: int, sangria: String) -> Button:
 	var sr: int = int(d.seccion[r])
 	b.tooltip_text = "%s\n%s · %s\n%s › %s\nClic: ir a este descubrimiento" % [String(d.nombre[r]), d.anio_texto(int(d.anio[r])), String(ArbolScript.NOMBRE_ESTADO[e]),
 		String(d.ramas[int(d.secciones[sr]["rama"])]["nombre"]), String(d.secciones[sr]["nombre"])]
+	if desde >= 0:
+		var por: String = d.por_que_requisito(desde, r)
+		if por != "":
+			b.tooltip_text += "\nPor qué lo pide: " + por
 	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	b.pressed.connect(ir_a.bind(r))
 	filas_ficha += 1

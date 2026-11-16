@@ -1,5 +1,5 @@
 extends RefCounted
-## Descubrimientos (0.1.8.36): el catálogo de 1.730 descubrimientos (Militar, Científica, Sociedad) enlazado con el RELOJ.
+## Descubrimientos (0.1.8.36): el catálogo de descubrimientos (1.771 desde la 0.1.8.46; Militar, Científica, Sociedad) enlazado con el RELOJ.
 ##
 ## ¿Qué guarda?
 ##  · CATÁLOGO (datos/descubrimientos.json, lo genera herramientas/construir_descubrimientos.py): cada descubrimiento con su era, tipo, sección,
@@ -7,6 +7,8 @@ extends RefCounted
 ##    durante la partida, por eso NO vive en la base de datos de territorios (esa guarda «un valor por lugar y por fecha»).
 ##  · FRONTERA HISTÓRICA: lo que la humanidad ya sabe en la fecha del juego = todos los descubrimientos con año <= año del reloj. Es lo que permite
 ##    empezar una partida en cualquier época (año 1, 2026, lo que haga falta) y que el Debug viaje en el tiempo.
+##  · RECETA (0.1.8.46): además de los prerrequisitos, cada descubrimiento trae `edif` (grupos de edificios: basta uno de cada grupo), `mat` (materias que
+##    ayudan) y `regla` (por qué, texto en `razones`). La usa scripts/saber.gd, el motor por el que el planeta descubre lo que viene.
 ##  · ESTADO POR PAÍS: qué descubrimientos conoce cada país. Un país que nunca se tocó no gasta memoria: lee la frontera. En cuanto un país se
 ##    aparta de la historia (`conceder` / `quitar`: la futura investigación propia) recibe su propia copia (1 byte por descubrimiento).
 ##
@@ -34,6 +36,11 @@ var anio := PackedInt32Array()
 var origen := PackedStringArray()             # h = histórico a mano · a = ajustado · x = hipotético
 var req: Array = []                           # índice -> PackedInt32Array (hacen falta TODOS)
 var req_o: Array = []                         # índice -> Array de PackedInt32Array (de cada grupo basta UNO)
+var edif: Array = []                          # índice -> Array de PackedInt32Array (grupos de edificios; basta UNO de cada grupo)
+var mat: Array = []                           # índice -> PackedStringArray (materias que ayudan)
+var regla: Array = []                         # índice -> PackedInt32Array (una razón por grupo de edificios; texto en `razones`)
+var razones := PackedStringArray()
+var _por_que := {}                            # d * 4096 + r -> texto: por qué existe el enlace extra (enlaces.txt)
 var idx_de_slug := {}
 var nombre_plano := PackedStringArray()       # el nombre sin tildes y en minúsculas (para buscar)
 var dependientes: Array = []                  # índice -> PackedInt32Array de los que lo piden como prerrequisito (de `req` o de cualquier alternativa de `req_o`)
@@ -53,6 +60,7 @@ var cuenta_f := 0                             # cuántos de `orden` (los primero
 var frontera := PackedByteArray()             # 1 = ya existe en la frontera histórica
 var estado := {}                              # tid de país -> PackedByteArray (solo países apartados de la historia)
 var ultimos: Array = []                       # los más recientes que entraron a la frontera: [{"idx", "anio"}], el más nuevo al final
+var modo_planeta := false                     # 0.1.8.46: true = la frontera ya NO sigue a la historia: la llena scripts/saber.gd (el planeta descubre) y todo país tiene estado propio
 
 
 # ─────────────────────────────────────────────────────────────
@@ -61,7 +69,7 @@ var ultimos: Array = []                       # los más recientes que entraron 
 ## Lee el JSON del catálogo. Devuelve false (y no deja nada a medias) si el formato no es el esperado.
 func cargar(d: Dictionary) -> bool:
 	var cols: Array = d.get("columnas", [])
-	if cols != ["slug", "nombre", "era", "tipo", "seccion", "sub", "tema", "anio", "origen", "req", "req_o"]:
+	if cols != ["slug", "nombre", "era", "tipo", "seccion", "sub", "tema", "anio", "origen", "req", "req_o", "edif", "mat", "regla"]:
 		push_error("datos/descubrimientos.json: columnas inesperadas")
 		return false
 	var filas: Array = d.get("filas", [])
@@ -78,6 +86,9 @@ func cargar(d: Dictionary) -> bool:
 	origen.resize(m)
 	req.resize(m)
 	req_o.resize(m)
+	edif.resize(m)
+	mat.resize(m)
+	regla.resize(m)
 	idx_de_slug.clear()
 	for i in m:
 		var f: Array = filas[i]
@@ -102,8 +113,27 @@ func cargar(d: Dictionary) -> bool:
 				pg.append(int(x))
 			os.append(pg)
 		req_o[i] = os
+		var eg: Array = []
+		for g in f[11]:
+			var pe := PackedInt32Array()
+			for x in g:
+				pe.append(int(x))
+			eg.append(pe)
+		edif[i] = eg
+		var pm := PackedStringArray()
+		for x in f[12]:
+			pm.append(String(x))
+		mat[i] = pm
+		var pr := PackedInt32Array()
+		for x in f[13]:
+			pr.append(int(x))
+		regla[i] = pr
 		idx_de_slug[slug[i]] = i
 	n = m
+	razones = PackedStringArray(d.get("razones", []))
+	_por_que.clear()
+	for t in d.get("por_que", []):
+		_por_que[int(t[0]) * 4096 + int(t[1])] = String(t[2])
 	_armar_dependientes()
 	eras = d.get("eras", [])
 	ramas = d.get("ramas", [])
@@ -129,6 +159,11 @@ func cargar(d: Dictionary) -> bool:
 	anio_actual = NINGUNO
 	cuenta_f = 0
 	return true
+
+
+## Por qué `i` pide a `r` (texto de enlaces.txt), o "" si es un enlace del catálogo base.
+func por_que_requisito(i: int, r: int) -> String:
+	return String(_por_que.get(i * 4096 + r, ""))
 
 
 ## Minúsculas y sin tildes: así «polvora» encuentra «Pólvora».
@@ -191,6 +226,7 @@ func cuenta_hasta(a: int) -> int:
 ## Nueva partida en el año `a`: la frontera es la historia de ese año y ningún país se aparta de ella.
 func iniciar(a: int) -> void:
 	estado.clear()
+	modo_planeta = false                                      # volver a la historia pura; scripts/saber.gd lo vuelve a activar si le toca
 	_armar_frontera(a)
 	_marcar_ultimos_iniciales()
 
@@ -333,12 +369,30 @@ func total_por_era() -> PackedInt32Array:
 	return r
 
 
-## Los `k` descubrimientos que siguen en el tiempo (los primeros que todavía no entran a la frontera).
+## Los `k` descubrimientos que siguen en el tiempo (los primeros, por año, que todavía no entran a la frontera).
 func proximos(k: int) -> PackedInt32Array:
 	var r := PackedInt32Array()
+	if modo_planeta:                                          # la frontera ya no es un prefijo de `orden`: se salta lo que el planeta ya descubrió
+		for j in n:
+			if frontera[orden[j]] == 0:
+				r.append(orden[j])
+				if r.size() >= k:
+					break
+		return r
 	for j in range(cuenta_f, mini(cuenta_f + k, n)):
 		r.append(orden[j])
 	return r
+
+
+## 0.1.8.46 · El planeta descubrió `i` (lo hizo algún país): entra a la frontera como «lo más reciente». Solo en modo planeta.
+func marcar_planeta(i: int, a: int) -> void:
+	if i < 0 or i >= n or frontera[i] == 1:
+		return
+	frontera[i] = 1
+	cuenta_f += 1
+	ultimos.append({"idx": i, "anio": a})
+	if ultimos.size() > MAX_ULTIMOS:
+		ultimos = ultimos.slice(ultimos.size() - MAX_ULTIMOS)
 
 
 # ─────────────────────────────────────────────────────────────

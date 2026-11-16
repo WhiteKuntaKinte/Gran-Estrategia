@@ -1,0 +1,52 @@
+# Enlaces extra entre descubrimientos (0.1.8.46): requisitos que se SUMAN a los del catálogo, para que el árbol sea más tupido y cada saber apoye a otros.
+# Formato:  descubrimiento|requisito nuevo|por qué     (el requisito puede ser a o (a|b) como en el catálogo; varios en una línea con coma)
+# Las reglas del generador siguen valiendo: el requisito existe, no hay ciclos y el año del descubrimiento no es anterior al del requisito.
+registro_civil|registro_parroquial|El Estado hereda los libros de bautizos y entierros de la Iglesia
+estadistica_oficial|estadisticas_vitales|Las oficinas estadísticas parten de las cifras de nacimientos y muertes
+burocracia_moderna|contabilidad_publica|Una administración moderna necesita cuentas públicas
+fisco_moderno|archivos_estatales|Cobrar impuestos exige registros
+burocracia|archivos_estatales|Sin archivo no hay burocracia
+impuesto_renta|presupuesto_nacional|El impuesto sobre la renta nace con el presupuesto votado
+servicio_civil|meritocracia_examenes|La carrera administrativa por examen
+planificacion_estatal|presupuesto_nacional|Planificar es presupuestar a largo plazo
+pensiones|tablas_de_mortalidad|Las pensiones se calculan con tablas de mortalidad
+seguros_vida_actuariales|tablas_de_mortalidad|El seguro de vida es matemática de mortalidad
+sanidad_urbana|estadisticas_vitales|Se limpia la ciudad donde la estadística muestra que se muere
+epidemiologia|estadisticas_vitales|La epidemiología necesita contar casos y muertes
+salud_publica|estadisticas_vitales|La salud pública gobierna con cifras
+educacion_publica|escuelas_primeras_letras|La escuela estatal hereda las primeras letras
+alfabetizacion_masiva|formacion_de_maestros|Alfabetizar a todos requiere maestros formados
+formacion_profesional|aprendizaje_gremial|La formación profesional estatal viene del aprendizaje gremial
+revistas_cientificas|correspondencia_erudita|Las revistas nacen de las cartas entre eruditos
+cooperacion_cientifica_internacional|congresos_cientificos|Los congresos preceden a la cooperación organizada
+becas_intercambio|intercambio_de_sabios|Las becas continúan el intercambio de sabios
+acceso_abierto_ciencia|bibliotecas_publicas|El acceso abierto es la biblioteca pública del siglo XXI
+financiacion_publica_ciencia|presupuesto_nacional|Financiar la ciencia es una partida del presupuesto
+laboratorios_industriales|normalizacion_industrial|El laboratorio industrial mide y normaliza
+sufragio_censitario|censo_periodico|Votar por renta exige saber quién es quién
+redistritacion_electoral|censo_periodico|Los distritos se trazan con el censo
+megaciudades|transicion_demografica|Las megaciudades llegan con la explosión urbana de la posguerra
+correo_regular_publico|posta_imperial|El correo público hereda la posta
+espada_acero|oficio_herrero|Forjar acero es oficio de herrero
+casco_hierro|oficio_herrero|Forjar cascos es oficio de herrero
+canon_acero|oficio_herrero|El cañón de acero sigue siendo forja
+cirugia_clasica|oficio_medico|La cirugía es oficio de médico
+escuelas_medicina|oficio_medico|Las escuelas de medicina formalizan el oficio
+anatomia_clasica|oficio_medico|Galeno era médico
+cupula|oficio_arquitecto|Las cúpulas las levantan arquitectos
+catedral_gotica|oficio_arquitecto|Las catedrales las proyectan arquitectos
+acueducto|oficio_arquitecto|El acueducto se proyecta
+brujula|oficio_navegante|La brújula la adopta el navegante
+navegacion_oceanica|oficio_navegante|Cruzar océanos es oficio de navegante
+sextante|oficio_navegante|El sextante es instrumento de navegante
+cronometro_marino|oficio_navegante|El cronómetro marino resuelve la longitud del navegante
+rec_caucho|prospeccion_minera|Encontrar un recurso nuevo exige prospectar
+rec_bauxita|prospeccion_minera|Encontrar la bauxita exige prospectar
+rec_fosfatos_nitratos|prospeccion_minera|Fosfatos y nitratos se descubren prospectando
+rec_petroleo|prospeccion_minera|El petróleo se encontró prospectando
+rec_aleantes|prospeccion_minera|Níquel, cromo y manganeso se buscan con prospección
+rec_uranio|prospeccion_minera|El uranio se busca con prospección
+rec_litio|prospeccion_minera|El litio se busca con prospección
+hierro_forja|ensayo_de_metales|Para forjar hierro hay que saber ensayarlo
+moneda_acunada|ensayo_de_metales|Acuñar exige ley de metal comprobada
+acero_crisol|ensayo_de_metales|El acero de crisol exige ensayo de la aleación

@@ -4,9 +4,12 @@
 Fuente de verdad (se edita a mano, nunca el JSON):
   herramientas/descubrimientos/catalogo/*.txt   → qué descubrimientos hay, su era, su tipo y sus prerrequisitos
   herramientas/descubrimientos/anios.tsv        → el AÑO de cada uno (el enlace con el reloj del juego)
+  herramientas/descubrimientos/enlaces.txt      → (0.1.8.46) prerrequisitos EXTRA entre ramas, con su porqué: slug|requisito|porqué
+  herramientas/receta_descubrimientos.py        → (0.1.8.46) la RECETA: edificios y materias que ayudan a descubrirlo (ver ese archivo)
 
 Formato del catálogo:
   ## RAMA|COD|Nombre|descripción|@tema      cabecera de sección (el 5.º campo, opcional, marca el tema de color)
+  ## +RAMA|COD                              (0.1.8.46) REABRE una sección ya definida para añadirle subsecciones y descubrimientos desde otro archivo
   ### Subsección @tema                      subsección (el @tema es opcional)
   slug|Nombre|era|tipo|prerrequisitos       un descubrimiento. Prerrequisitos: a,b,(c|d)  = a Y b Y (c O d)
 
@@ -14,10 +17,15 @@ Reglas que COMPRUEBA este script (si falla alguna no escribe nada):
   1. todo prerrequisito existe, no hay autorreferencias ni ciclos;
   2. todo descubrimiento tiene año, y no sobra ningún año;
   3. año >= año de cada prerrequisito Y (y de al menos UNA alternativa de cada grupo O);
-  4. el año cae dentro del rango de su era.
+  4. el año cae dentro del rango de su era;
+  5. (0.1.8.46) enlaces.txt: el descubrimiento y el requisito existen, y se cumplen las reglas 1 y 3 con el requisito añadido;
+  6. (0.1.8.46) receta: cada grupo de edificios se puede cumplir a la fecha del descubrimiento (si no, el grupo se descarta y se avisa),
+     un edificio no pide nada que dependa de él, y las materias existen en datos/economia.json.
 
 Uso:  python3 herramientas/construir_descubrimientos.py            (escribe datos/descubrimientos.json)
       python3 herramientas/construir_descubrimientos.py --solo-comprobar
+      python3 herramientas/construir_descubrimientos.py --solo-comprobar --enlaces=otro.txt   (prueba un archivo de enlaces distinto; lo usa test/runner102)
+      python3 herramientas/construir_descubrimientos.py --avisos      (lista todos los grupos de edificios descartados)
 """
 import glob
 import json
@@ -26,11 +34,16 @@ import re
 import sys
 from collections import OrderedDict
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import receta_descubrimientos as RECETA
+
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CAT = os.path.join(RAIZ, "herramientas", "descubrimientos", "catalogo")
 ANIOS = os.path.join(RAIZ, "herramientas", "descubrimientos", "anios.tsv")
+ENLACES = os.path.join(RAIZ, "herramientas", "descubrimientos", "enlaces.txt")
+ECONOMIA = os.path.join(RAIZ, "datos", "economia.json")
 SALIDA = os.path.join(RAIZ, "datos", "descubrimientos.json")
-VERSION = "0.1.8.36"
+VERSION = "0.1.8.46"
 
 RAMAS = [("MIL", "Militar"), ("CIE", "Científica"), ("SOC", "Sociedad")]
 TIPOS = OrderedDict([
@@ -98,6 +111,14 @@ def leer_catalogo(errores):
                 if sub not in s["subs"]:
                     s["subs"].append(sub)
                 s["subtags"][sub] = tag
+                continue
+            if linea.startswith("## +"):
+                p = linea[4:].split("|")
+                if len(p) != 2 or (p[0].strip(), p[1].strip()) not in secciones:
+                    errores.append(f"{nombre_f}:{ln} «## +» pide una sección que no existe: {linea}")
+                    continue
+                rama, sec = p[0].strip(), p[1].strip()
+                sub = None
                 continue
             if linea.startswith("## "):
                 p = linea[3:].split("|")
@@ -200,7 +221,114 @@ def comprobar(nodos, anios, errores):
         errores.append("hay ciclos en los prerrequisitos: " + ", ".join(sorted(s for s, d in indeg.items() if d > 0)[:10]))
 
 
-def construir(nodos, secciones, anios, origen):
+def leer_enlaces(nodos, errores):
+    """enlaces.txt (0.1.8.46): suma prerrequisitos extra a los del catálogo. Devuelve [(slug, requisito, porqué)] para el JSON."""
+    pq = []
+    ruta = ENLACES
+    for a in sys.argv:
+        if a.startswith("--enlaces="):
+            ruta = a.split("=", 1)[1]
+    if not os.path.exists(ruta):
+        if ruta != ENLACES:
+            errores.append(f"no existe {ruta}")
+        return pq
+    for ln, crudo in enumerate(open(ruta, encoding="utf-8"), 1):
+        linea = crudo.rstrip("\n")
+        if not linea.strip() or linea.startswith("#"):
+            continue
+        p = [x.strip() for x in linea.split("|")]
+        if len(p) != 3 or not p[2]:
+            errores.append(f"enlaces.txt:{ln} formato: slug|requisito|porqué")
+            continue
+        slug, req, razon = p
+        if slug not in nodos:
+            errores.append(f"enlaces.txt:{ln} el descubrimiento «{slug}» no existe")
+            continue
+        ands, ors = parse_req(req)
+        if not ands and not ors:
+            errores.append(f"enlaces.txt:{ln} requisito vacío")
+            continue
+        n = nodos[slug]
+        for a in ands:
+            if a not in n["ands"] and not any(a in g for g in n["ors"]):
+                n["ands"].append(a)
+            pq.append((slug, a, razon))
+        for g in ors:
+            if g not in n["ors"]:
+                n["ors"].append(g)
+            for a in g:
+                pq.append((slug, a, razon))
+    return pq
+
+
+def materias_validas():
+    """Nombres de materias primas que existen en datos/economia.json."""
+    if not os.path.exists(ECONOMIA):
+        return None
+    e = json.load(open(ECONOMIA, encoding="utf-8"))
+    return {m for v in e.get("pais", {}).values() for m in v.get("mat", [])}
+
+
+def armar_recetas(nodos, anios, errores, avisos):
+    """Aplica herramientas/receta_descubrimientos.py a cada nodo y comprueba la receta. Devuelve {slug: (grupos de slugs, materias, reglas)}."""
+    mats = materias_validas()
+    edificios = {s for s, n in nodos.items() if n["tipo"] == "B"}
+    orden = list(nodos.keys())
+    pos = {s: i for i, s in enumerate(orden)}
+    hijos = {s: [] for s in nodos}
+    for s, n in nodos.items():
+        for d in list(n["ands"]) + [x for g in n["ors"] for x in g]:
+            if d in hijos:
+                hijos[d].append(s)
+    # descendientes (transitivos) como máscaras de bits, de las hojas hacia la raíz
+    desc = {}
+    visitando = set()
+
+    def d_de(s):
+        if s in desc:
+            return desc[s]
+        if s in visitando:
+            return 0
+        visitando.add(s)
+        m = 0
+        for h in hijos[s]:
+            m |= (1 << pos[h]) | d_de(h)
+        visitando.discard(s)
+        desc[s] = m
+        return m
+    sys.setrecursionlimit(20000)
+    out = {}
+    for s, n in nodos.items():
+        if s not in anios:
+            continue
+        y = anios[s]
+        grupos, mat, reglas = RECETA.receta(n, y)
+        gs, rs = [], []
+        for g, r in zip(grupos, reglas):
+            ok = []
+            for b in g:
+                if b not in nodos:
+                    errores.append(f"receta ({s}): el edificio «{b}» no existe")
+                elif b not in edificios:
+                    errores.append(f"receta ({s}): «{b}» no es un edificio (tipo B)")
+                elif b == s or (d_de(s) >> pos[b]) & 1:
+                    pass                                                    # sería un ciclo
+                elif anios.get(b, 10 ** 9) <= y:
+                    ok.append(b)
+            if ok:
+                gs.append(ok)
+                rs.append(r)
+            else:
+                avisos.append(f"receta ({s}, {y}): ningún edificio del grupo de la regla {r} existe a esa fecha; se descarta el grupo")
+        if mats is not None:
+            for m in mat:
+                if m not in mats:
+                    errores.append(f"receta ({s}): la materia «{m}» no está en economia.json")
+        out[s] = (gs, mat, rs)
+    return out
+
+
+def construir(nodos, secciones, anios, origen, recetas, por_que):
     ordenR = {c: i for i, (c, _) in enumerate(RAMAS)}
     claves = sorted(secciones.keys(), key=lambda k: ordenR.get(k[0], 99))      # estable: respeta el orden de los archivos dentro de cada rama
     sec_idx = {k: i for i, k in enumerate(claves)}
@@ -220,21 +348,28 @@ def construir(nodos, secciones, anios, origen):
         sub = sub_idx.get((k, n["sub"]), -1) if n["sub"] else -1
         tag = secciones[k]["subtags"].get(n["sub"]) if n["sub"] else None
         tag = tag or secciones[k]["tag"]
+        gs, mat, rs = recetas[s]
         filas.append([s, n["nombre"], n["era"], n["tipo"], sec_idx[k], sub, tema_idx.get(tag, -1), anios[s], origen.get(s, "h"),
-                      [pos[p] for p in n["ands"]], [[pos[p] for p in g] for g in n["ors"]]])
+                      [pos[p] for p in n["ands"]], [[pos[p] for p in g] for g in n["ors"]],
+                      [[pos[b] for b in g] for g in gs], mat, rs])
     return {
         "version": VERSION,
-        "ayuda": ("Catálogo de DESCUBRIMIENTOS del juego (1.730). No se edita a mano: lo genera herramientas/construir_descubrimientos.py desde "
+        "ayuda": ("Catálogo de DESCUBRIMIENTOS del juego (%d). No se edita a mano: lo genera herramientas/construir_descubrimientos.py desde "
                   "herramientas/descubrimientos/. Cada descubrimiento lleva su AÑO (a. C. en negativo): un país lo conoce cuando el año del reloj es >= ese año. "
                   "req = índices (posición en `filas`) de los prerrequisitos que hacen falta TODOS; req_o = grupos de alternativas (basta UNO de cada grupo). "
-                  "origen del año: h = histórico asignado a mano · a = ajustado por prerrequisitos o era · x = hipotético (futuro)."),
+                  "origen del año: h = histórico asignado a mano · a = ajustado por prerrequisitos o era · x = hipotético (futuro). "
+                  "RECETA (0.1.8.46): edif = grupos de edificios (basta UNO de cada grupo; índices en `filas`) que un país necesita para descubrirlo sin penalización · "
+                  "mat = materias primas de economia.json que ayudan · regla = por qué (índice en `razones`, un valor por grupo de edificios). "
+                  "por_que = [descubrimiento, requisito, texto] de los enlaces de enlaces.txt.") % len(filas),
         "eras": [{"nombre": e[0], "desde": e[1], "hasta": e[2]} for e in ERAS],
         "tipos": [{"cod": c, "nombre": v} for c, v in TIPOS.items()],
         "temas": [{"cod": c, "nombre": v} for c, v in TEMAS.items()],
         "ramas": [{"cod": c, "nombre": v} for c, v in RAMAS],
         "secciones": [{"rama": ordenR[k[0]], "cod": k[1], "nombre": secciones[k]["nombre"], "desc": secciones[k]["desc"]} for k in claves],
         "subsecciones": subs_todas,
-        "columnas": ["slug", "nombre", "era", "tipo", "seccion", "sub", "tema", "anio", "origen", "req", "req_o"],
+        "razones": RECETA.RAZONES,
+        "por_que": [[pos[a], pos[b], t] for a, b, t in por_que if a in pos and b in pos],
+        "columnas": ["slug", "nombre", "era", "tipo", "seccion", "sub", "tema", "anio", "origen", "req", "req_o", "edif", "mat", "regla"],
         "filas": filas,
     }
 
@@ -243,13 +378,23 @@ def main():
     errores = []
     nodos, secciones = leer_catalogo(errores)
     anios, origen = leer_anios(errores)
+    por_que = leer_enlaces(nodos, errores)
     comprobar(nodos, anios, errores)
+    avisos = []
+    recetas = armar_recetas(nodos, anios, errores, avisos) if not errores else {}
     if errores:
         print("ERRORES (%d):" % len(errores))
         for e in errores[:60]:
             print("  ·", e)
         sys.exit(1)
-    datos = construir(nodos, secciones, anios, origen)
+    datos = construir(nodos, secciones, anios, origen, recetas, por_que)
+    con_ed = sum(1 for f in datos["filas"] if f[11])
+    con_mat = sum(1 for f in datos["filas"] if f[12])
+    print("recetas: %d con edificios · %d con materias · %d enlaces extra con porqué · %d grupos descartados" % (con_ed, con_mat, len(datos["por_que"]), len(avisos)))
+    for a in avisos[:(len(avisos) if "--avisos" in sys.argv else 3)]:
+        print("  aviso:", a)
+    if len(avisos) > 3 and "--avisos" not in sys.argv:
+        print("  … (con --avisos salen los %d)" % len(avisos))
     print("%d descubrimientos · %d secciones · %d subsecciones · conocidos en el año 1: %d · en 2026: %d" % (
         len(datos["filas"]), len(datos["secciones"]), len(datos["subsecciones"]),
         sum(1 for f in datos["filas"] if f[7] <= 1), sum(1 for f in datos["filas"] if f[7] <= 2026)))

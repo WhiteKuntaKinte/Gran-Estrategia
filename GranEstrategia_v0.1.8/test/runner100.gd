@@ -1,6 +1,6 @@
 extends Node
-## 0.1.8.45 · PRUEBAS DE LAS NOTAS DEL 15-11-2026:
-##  · Presupuesto proporcional de la simulación: en un equipo rápido la simulación ya no se lleva 9 ms fijos por fotograma; en uno lento sigue el techo de siempre.
+## 0.1.8.45 · PRUEBAS DE LAS NOTAS DEL 15-11-2026 (el presupuesto se reescribió en la 0.1.8.46):
+##  · Presupuesto de la simulación por REACCIÓN (0.1.8.46): usa el techo cuando cabe en la espera del VSync y se frena solo cuando alarga el fotograma.
 ##  · Historial atrás / adelante de la pantalla de Descubrimientos.
 ##  · La cámara solo se acerca sola al país propio: un clic en un país ajeno lo enfoca (rótulo) sin mover la cámara.
 const AjustesScript := preload("res://scripts/ajustes.gd")
@@ -49,20 +49,82 @@ func run() -> void:
 	get_tree().quit(1 if fallos > 0 else 0)
 
 
+## Un fotograma sintético: el periodo es lo que tarda el equipo en dibujar, o el periodo del monitor si es mayor, más la simulación que el juego se permita.
+## Devuelve {fps, sim_us (media), periodo_us (media)} de los últimos 400 de `frames` fotogramas con la simulación siempre atrasada (x6).
+## `tirones`: cada tantos fotogramas uno dura 100 ms (carga puntual, disco...).
+func correr_modelo(periodo_monitor_us: float, trabajo_us: float, frames: int, tirones := 0) -> Dictionary:
+	main._per_ema_us = 0.0
+	main._sim_ema_us = 0.0
+	main.periodo_monitor_us = periodo_monitor_us
+	main._t_monitor = -1.0e9                                                  # que no relea el monitor real (en headless da 0)
+	main.presupuesto_fot_us = main.SIM_MIN_US
+	main.ms_fases = 0.0
+	var sim_tot := 0.0
+	var per_tot := 0.0
+	var n := 0
+	var delta := maxf(periodo_monitor_us, trabajo_us) / 1.0e6
+	for f in frames:
+		main._actualizar_periodo(delta)
+		main.presupuesto_fot_us = main._presupuesto_fotograma()
+		var sim := float(main.presupuesto_fot_us)
+		main.ms_fases = sim / 1000.0
+		var periodo := maxf(periodo_monitor_us, trabajo_us + sim)
+		if tirones > 0 and f % tirones == 0:
+			periodo += 100000.0
+		delta = periodo / 1.0e6
+		if f >= frames - 400:
+			sim_tot += sim
+			per_tot += periodo
+			n += 1
+	main.ms_fases = 0.0
+	return {"fps": 1.0e6 / (per_tot / float(n)), "sim_us": sim_tot / float(n), "periodo_us": per_tot / float(n)}
+
+
 func t_presupuesto() -> void:
-	print("[T] ── Presupuesto de la simulación por fotograma")
-	ok(AjustesScript.SIM_FRACCION.size() == AjustesScript.SIM_PRESUPUESTO_US.size(), "una fracción por cada prioridad de simulación")
-	ok(is_equal_approx(main.sim_fraccion, 0.35), "Equilibrada: la simulación usa hasta el 35 %% del fotograma (%.2f)" % main.sim_fraccion)
-	main.ms_fases = 0.0
-	var rapido: int = main._presupuesto_fotograma(1.0 / 240.0)                # equipo que dibuja a 240 FPS
-	ok(rapido < 3000 and rapido >= main.SIM_MIN_US, "a 240 FPS la simulación pide ~2,2 ms y no 9 ms (%d µs)" % rapido)
-	var lento: int = main._presupuesto_fotograma(1.0 / 30.0)                  # PC flojo a 30 FPS
-	ok(lento == main.presupuesto_us, "a 30 FPS se queda con el techo de siempre (%d µs)" % lento)
-	main.ms_fases = 4.0
-	var con_sim: int = main._presupuesto_fotograma(0.013)                     # 13 ms de los que 4 fueron simulación: el resto (9 ms) es lo que cuenta
-	ok(absi(con_sim - int(9000.0 * 0.35 / 0.65)) < 50, "descuenta la simulación del fotograma anterior al medir el resto (%d µs)" % con_sim)
-	ok(main._presupuesto_fotograma(0.0) == main.SIM_MIN_US, "nunca baja del mínimo (%d µs): el tiempo siempre avanza" % main.SIM_MIN_US)
-	main.ms_fases = 0.0
+	print("[T] ── Presupuesto de la simulación por fotograma (0.1.8.46: por reacción)")
+	ok(AjustesScript.SIM_TOLERANCIA.size() == AjustesScript.SIM_PRESUPUESTO_US.size(), "una tolerancia por cada prioridad de simulación")
+	ok(is_equal_approx(main.sim_tolerancia, 0.30), "Equilibrada: la simulación puede alargar el fotograma un 30 %% (%.2f)" % main.sim_tolerancia)
+	ok(is_equal_approx(AjustesScript.tolerancia_sim({"sim_prio": 0}), 0.10) and is_equal_approx(AjustesScript.tolerancia_sim({"sim_prio": 2}), 0.60), "Fluidez 10 %, Velocidad del tiempo 60 %")
+	var techo: int = main.presupuesto_us
+	# 1. monitor de 60 Hz con VSync, el equipo dibuja en 4 ms: la simulación cabe en la espera, así que se queda con el techo y los FPS no bajan
+	var a := correr_modelo(16667.0, 4000.0, 1500)
+	ok(a["sim_us"] >= 0.92 * float(techo) and a["fps"] > 59.0, "60 Hz con VSync: la simulación usa el techo (%d de %d µs) y se mantienen los FPS (%.1f)" % [int(a["sim_us"]), techo, a["fps"]])
+	# 2. monitor de 240 Hz y dibujo de 3 ms: la simulación puede llegar hasta la tolerancia (30 % sobre trabajo + mínimo) pero no más
+	var b := correr_modelo(4167.0, 3000.0, 3000)
+	ok(b["periodo_us"] <= (3000.0 + float(main.SIM_MIN_US)) * 1.33 and b["sim_us"] >= float(main.SIM_MIN_US), "240 Hz: el fotograma se alarga como mucho ~30 %% (%d µs de simulación, %.0f FPS)" % [int(b["sim_us"]), b["fps"]])
+	ok(b["fps"] > 150.0, "240 Hz: no cae de 240 a ~70 FPS como en la 0.1.8.44 (%.0f FPS)" % b["fps"])
+	# 3. sin VSync ni tope, dibujo de 4,2 ms: cada µs de simulación cuesta FPS, y la tolerancia lo limita
+	var c := correr_modelo(0.0, 4200.0, 3000)
+	ok(c["periodo_us"] <= (4200.0 + float(main.SIM_MIN_US)) * 1.33 and c["fps"] > 120.0, "sin tope: %.0f FPS con %d µs de simulación" % [c["fps"], int(c["sim_us"])])
+	ok(c["sim_us"] > 2500.0, "…y la simulación no se queda en el mínimo: usa la tolerancia (%d µs)" % int(c["sim_us"]))
+	# 4. PC flojo: 30 ms por fotograma, la simulación llega al techo como siempre
+	var d := correr_modelo(0.0, 30000.0, 3000)
+	ok(d["sim_us"] >= 0.9 * float(techo), "PC flojo (30 ms): la simulación usa el techo de siempre (%d µs)" % int(d["sim_us"]))
+	# 5. más tolerancia = más simulación (Velocidad del tiempo > Equilibrada > Fluidez)
+	var tol0: float = main.sim_tolerancia
+	var us := []
+	for t in AjustesScript.SIM_TOLERANCIA:
+		main.sim_tolerancia = float(t)
+		us.append(float(correr_modelo(0.0, 4200.0, 3000)["sim_us"]))
+	main.sim_tolerancia = tol0
+	ok(us[0] < us[1] and us[1] < us[2], "la prioridad ordena la simulación: %d < %d < %d µs" % [int(us[0]), int(us[1]), int(us[2])])
+	# 6. con tirones sueltos de 100 ms (un fotograma de cada 97) el presupuesto no se desploma ni se dispara, y nunca sale de [mínimo, techo]
+	var e := correr_modelo(0.0, 4200.0, 4000, 97)
+	ok(e["sim_us"] >= float(main.SIM_MIN_US) and e["sim_us"] <= float(techo) and e["fps"] > 100.0, "con tirones sueltos de 100 ms: %d µs de simulación, %.0f FPS" % [int(e["sim_us"]), e["fps"]])
+	# 7. el tiempo siempre avanza: ni siquiera con una pantalla lentísima el presupuesto baja del mínimo
+	var f := correr_modelo(0.0, 90000.0, 800)
+	ok(f["sim_us"] >= float(main.SIM_MIN_US) - 1.0 and f["sim_us"] <= float(techo), "PC lentísimo (90 ms): entre el mínimo y el techo (%d µs)" % int(f["sim_us"]))
+	# 8. pausa y menú: ms_fases vuelve a 0 (el periodo medido es solo trabajo del equipo)
+	main.ms_fases = 5.0
+	main.en_pausa = true
+	main._process(0.016)
+	ok(main.ms_fases == 0.0, "en pausa no hay simulación que medir")
+	main.en_pausa = false
+	main._per_ema_us = 0.0
+	main._sim_ema_us = 0.0
+	main.periodo_monitor_us = 0.0
+	main._t_monitor = 0.0
+	main.presupuesto_fot_us = main.SIM_MIN_US
 
 
 func t_historial() -> void:

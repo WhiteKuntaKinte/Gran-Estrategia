@@ -33,7 +33,7 @@ const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 const RegistroScript := preload("res://scripts/registro_fallos.gd")
 
-const VERSION := "0.1.8.45"
+const VERSION := "0.1.8.46"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -1076,6 +1076,8 @@ func _process(delta: float) -> void:
 		_procesar_avisos()
 	if reloj != null and not en_menu and not en_pausa:
 		_avanzar_reloj(delta)
+	else:
+		ms_fases = 0.0                                              # en pausa o en el menú no se simula: el periodo medido es solo trabajo del equipo
 	ms_proceso = float(Time.get_ticks_usec() - t_proc) / 1000.0
 
 
@@ -1092,7 +1094,7 @@ func _medir_sinc(t0_us: int) -> void:
 ## El reloj de un fotograma: termina primero el paso a medias (si lo hay), después empieza los que debe (cada uno junta todos los días debidos),
 ## todo dentro del presupuesto de tiempo del fotograma (`presupuesto_us`, por defecto RelojScript.PRESUPUESTO_US). Lo que no cabe queda para el siguiente fotograma.
 func _avanzar_reloj(delta: float) -> void:
-	presupuesto_fot_us = _presupuesto_fotograma(delta)
+	presupuesto_fot_us = _presupuesto_fotograma()
 	var t0 := Time.get_ticks_usec()
 	var dias := 0
 	reloj.acumular(delta)                                       # el tiempo del fotograma se suma al reloj UNA vez (también mientras un paso sigue repartido)
@@ -1121,20 +1123,72 @@ func _presupuesto_restante(t0_us: int) -> int:
 	return maxi(presupuesto_fot_us - (Time.get_ticks_usec() - t0_us), 1)
 
 
-## 0.1.8.45 · PRESUPUESTO PROPORCIONAL. Antes la simulación gastaba SIEMPRE `presupuesto_us` (9 ms) por fotograma cuando iba atrasada (x3-x6 casi
-## siempre): en un equipo que dibuja en 4 ms eso es 4 + 9 = 13 ms por fotograma → de 240 a ~75 FPS (lo que viste en el portátil con la RTX 4060).
-## Ahora la simulación se queda con una PARTE del fotograma (`AjustesScript.SIM_FRACCION`, según «Prioridad de la simulación»): lo que tarda el resto
-## del fotograma (dibujo + scripts, medido el fotograma anterior) × fracción ÷ (1 − fracción), sin pasar nunca de `presupuesto_us` (el techo de
-## siempre) ni bajar de SIM_MIN_US. En un PC flojo (fotogramas de 25 ms o más) el resultado es el techo: nada cambia. En uno rápido el juego conserva
-## los FPS y el tiempo avanza igual de rápido en días por segundo, porque se simula un poco en cada uno de muchos más fotogramas.
+## 0.1.8.46 · PRESUPUESTO POR REACCIÓN. La 0.1.8.45 daba a la simulación una parte del PERIODO del fotograma, y ese periodo incluye la espera del VSync o del
+## tope de FPS: en un monitor de 60 Hz el fotograma dura 16,7 ms aunque se dibuje en 4, así que la simulación recibía ~6,5 ms en vez de los 9 que cabían gratis
+## (−28 % de días por segundo sin ganar un solo FPS). Ahora se separa lo que cuesta cada cosa:
+##  · `_per_ema_us`: el periodo del fotograma, suavizado. `_sim_ema_us`: lo que de él fue simulación (`ms_fases`, medido de verdad). El trabajo del equipo
+##    sin simulación es la resta. `periodo_monitor_us`: lo que dura un fotograma aunque no se haga nada (VSync a la frecuencia del monitor o el tope de FPS).
+##  · Periodo base = lo mayor entre el del monitor y (trabajo + SIM_MIN_US). Cada fotograma con el tiempo corriendo: si el periodo suavizado pasa de
+##    `base × (1 + tolerancia)` el presupuesto baja un 15 %; si no, sube SIM_SUBE_US. La tolerancia es la «Prioridad de la simulación» (Ajustes `sim_prio`):
+##    10 % Fluidez · 30 % Equilibrada · 60 % Velocidad del tiempo. Como la base no depende del propio presupuesto, no hay a dónde deslizarse.
+##  · Nunca pasa de `presupuesto_us` (el techo de siempre: 4 / 9 / 14 ms) ni baja de SIM_MIN_US (el tiempo siempre avanza).
+## Resultado: con VSync a 60 Hz y un dibujo de 4 ms la simulación usa el techo completo (cabe en la espera, no estorba); a 240 Hz solo gasta lo que cuesta hasta
+## la tolerancia; en un PC flojo (30 ms por fotograma) llega al techo, igual que antes. Si el monitor no dice su frecuencia, se supone sin espera (algo más prudente).
 const SIM_MIN_US := 1500
+const SIM_SUBE_US := 200                                 # lo que sube el presupuesto en cada fotograma sin exceso
+const SIM_BAJA := 0.85                                   # multiplicador cuando el periodo se pasa de la tolerancia
+const PER_SUAVE := 0.1                                   # peso de cada fotograma en el periodo suavizado
 var presupuesto_fot_us := RelojScript.PRESUPUESTO_US     # lo que puede gastar la simulación en ESTE fotograma (µs)
-var sim_fraccion := 0.35                                 # parte del fotograma para la simulación (Ajustes `sim_prio`)
+var sim_tolerancia := 0.30                               # cuánto puede alargar la simulación el periodo del fotograma (Ajustes `sim_prio`)
+var periodo_monitor_us := 0.0                            # lo que dura un fotograma sin hacer nada (µs); 0 = sin VSync ni tope (o frecuencia desconocida)
+var _per_ema_us := 0.0                                   # periodo del fotograma, suavizado (µs); 0 = aún sin medir
+var _sim_ema_us := 0.0                                   # la parte de ese periodo que fue simulación (µs)
+var _t_monitor := 0.0                                    # segundos desde la última lectura del monitor
 
-func _presupuesto_fotograma(delta: float) -> int:
-	var resto_us := maxf(delta * 1.0e6 - ms_fases * 1000.0, 0.0)        # el fotograma anterior sin su simulación
-	var p := int(resto_us * sim_fraccion / maxf(1.0 - sim_fraccion, 0.05))
-	return clampi(p, mini(SIM_MIN_US, presupuesto_us), presupuesto_us)
+
+## Lo que dura un fotograma sin hacer nada: el periodo del monitor con VSync, o el del tope de FPS; el mayor de los dos. 0 si no hay ninguno.
+static func leer_periodo_monitor() -> float:
+	var t := 0.0
+	if DisplayServer.window_get_vsync_mode() != DisplayServer.VSYNC_DISABLED:
+		var hz := DisplayServer.screen_get_refresh_rate()
+		if hz > 1.0:
+			t = 1.0e6 / hz
+	if Engine.max_fps > 0:
+		t = maxf(t, 1.0e6 / float(Engine.max_fps))
+	return t
+
+
+## Cada fotograma (también en pausa): mide el periodo y la parte que fue simulación. `delta` es lo que tardó el fotograma anterior.
+func _actualizar_periodo(delta: float) -> void:
+	var us := delta * 1.0e6
+	if us <= 0.0:
+		return
+	_t_monitor += delta
+	if _t_monitor >= 2.0:                                    # VSync y tope pueden cambiar en Opciones
+		_t_monitor = 0.0
+		periodo_monitor_us = leer_periodo_monitor()
+	if _per_ema_us <= 0.0:
+		_per_ema_us = us
+		_sim_ema_us = ms_fases * 1000.0
+		return
+	_per_ema_us += (us - _per_ema_us) * PER_SUAVE
+	_sim_ema_us += (ms_fases * 1000.0 - _sim_ema_us) * PER_SUAVE
+
+
+## El presupuesto de simulación de este fotograma (µs): sube mientras el periodo aguante y baja en cuanto se pasa de la tolerancia.
+func _presupuesto_fotograma() -> int:
+	var techo := presupuesto_us
+	var piso := mini(SIM_MIN_US, techo)
+	if _per_ema_us <= 0.0:
+		return clampi(presupuesto_fot_us, piso, techo)
+	var trabajo := maxf(_per_ema_us - _sim_ema_us, 0.0)
+	var base := maxf(periodo_monitor_us, trabajo + float(piso))
+	var p := presupuesto_fot_us
+	if _per_ema_us > base * (1.0 + sim_tolerancia):
+		p = int(float(p) * SIM_BAJA)
+	else:
+		p += SIM_SUBE_US
+	return clampi(p, piso, techo)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -1187,6 +1241,7 @@ func _cargar_info() -> void:
 		mundo.iniciar_ejercito(_leer_json_opcional("res://datos/ejercito.json"), _leer_json_opcional("res://datos/nombres_cultura.json"),
 			_leer_json_opcional("res://datos/vecinos_prov.json"))
 		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"), epoca)            # 0.1.8.40: edificios y cores (van después de las culturas); 0.1.8.42: con los edificios de partida de la época
+		mundo.iniciar_saber()                                                                       # 0.1.8.46: la historia se congela en el año de partida y el planeta descubre lo que viene
 		pinturas = PinturasScript.new()                                                             # 0.1.8.41: pinturas por país, región y continente (pinturas/creditos.json)
 		pinturas.iniciar(self)
 		materias = MateriasScript.new()                                                             # 0.1.8.41: iconos de recursos, rubros y monedas (datos/materias_iconos.json)
@@ -3518,8 +3573,11 @@ func _aplicar_calidad(a: Dictionary) -> void:
 	q_ciudades = bool(c["ciudades"])
 	q_lagos = bool(c["lagos"])
 	presupuesto_us = AjustesScript.presupuesto_sim_us(c)
-	sim_fraccion = AjustesScript.fraccion_sim(c)
-	presupuesto_fot_us = presupuesto_us
+	sim_tolerancia = AjustesScript.tolerancia_sim(c)
+	presupuesto_fot_us = mini(SIM_MIN_US, presupuesto_us)         # arranca bajo y sube
+	_per_ema_us = 0.0
+	_sim_ema_us = 0.0
+	periodo_monitor_us = leer_periodo_monitor()
 	q_relieve = AjustesScript.preset_de(c) != 2                  # 0.1.8.35: la calidad Baja no dibuja el relieve
 	_aplicar_relieve()
 	for n in capa_lagos:
@@ -6131,7 +6189,7 @@ func debug_fijar_fecha(a: int, m: int, d: int) -> void:
 	reloj.fijar(a, m, d)
 	mundo.bd.fecha = BDScript.fecha_int(reloj.anio, reloj.mes, reloj.dia)
 	if mundo.descubrimientos != null:
-		mundo.descubrimientos.sincronizar(reloj.anio, true)               # 0.1.8.36: saltar de fecha = todos los países reciben la historia de ese año
+		mundo.sincronizar_descubrimientos(reloj.anio)                     # 0.1.8.36: saltar de fecha = todos los países reciben la historia de ese año (0.1.8.46: y el planeta vuelve a descubrir desde ahí)
 	_actualizar_barra()
 
 

@@ -1,11 +1,25 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.45 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.46 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
 
+NUEVO EN 0.1.8.46 — CIMIENTOS DEL SABER (Fase 1, parte A) Y LA SIMULACIÓN QUE NO TE ROBA FPS
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.46.md. Es la primera mitad de la Fase 1 del plan: "nada sin porqué". La parte B —población con edades, burocracia, educación, presupuesto— va en la 0.1.8.47 y 0.1.8.48.)
+- EL PLANETA DESCUBRE: en una partida nueva la historia ya no regala los descubrimientos al llegar su año. Se congela en el año de partida y lo que viene lo descubre UN país primero (el que más puede: gente,
+  vocación por rama, edificios y materias primas) y los demás lo aprenden por CONTAGIO: vecinos, aliados y algún viajero lejano; los continentes aislados tardan. Con la misma semilla sale la misma partida. Nadie descubre
+  algo sin saber sus requisitos. El ritmo sigue de cerca a la historia (de 1500 a 1600 salen 26 descubrimientos con una semilla y 23 con otra; la historia real trajo 26). Debug > Descub. tiene el botón «VOLVER A LA HISTORIA FIJA» / «QUE EL PLANETA DESCUBRA».
+- 41 DESCUBRIMIENTOS NUEVOS (ahora 1.771) y 49 ENLACES ENTRE RAMAS con su porqué (la brújula pide el oficio de navegante, el petróleo pide prospección minera…): archivos y presupuesto del Estado, registros y estadística de población,
+  escuelas y títulos, recursos, transporte y comercio. Más dependencias = el árbol se entrelaza más entre secciones.
+- RECETA EN LA FICHA: cada descubrimiento dice qué ayuda a descubrirlo además de sus requisitos: EDIFICIOS (basta uno de cada grupo; sin ellos se puede, pero cuesta mucho más), MATERIAS PRIMAS que produce tu país (ayudan, nunca bloquean)
+  y «Facilidad para tu país: ×N». Al pasar el mouse por una fila de «Requiere» sale «Por qué lo pide». Arriba aparece quién lo descubrió y cuándo, o «El planeta aún no lo ha descubierto».
+- SIMULACIÓN QUE REACCIONA (en tu portátil rápido): el tiempo a x3–x6 ya no se come los FPS. Con VSync a 60 Hz usa el techo de siempre (cabe en la espera, no estorba); a 240 Hz solo gasta lo que cuesta hasta la tolerancia
+  (Opciones > Pantalla > Prioridad de la simulación: Fluidez 10 % · Equilibrada 30 % · Velocidad del tiempo 60 %); en un PC flojo llega al techo, igual que antes.
+- LO QUE NO ENTRÓ A PROPÓSITO: edificios nuevos (no se agregan hasta tener efectos reales), el costo en dinero de investigar (hasta que puedas investigar, parte B) y guardar partida (la semilla es un atributo de la partida en curso).
+- PARA PROBAR (F9): año 1 o 1500 con todas las IA a x6 unos años, y una partida normal de 2026. Mándame el resumen F9 y las notas de la prueba.
+
 NUEVO EN 0.1.8.45 — TUS NOTAS DEL 15 DE NOVIEMBRE (detalle en NOTAS_TECNICAS_0.1.8.45.md)
-- FPS AL SUBIR LA VELOCIDAD: la simulación ya no se lleva 9 ms fijos de cada fotograma; usa una parte (20 / 35 / 50 % según Opciones > Pantalla > Prioridad de la simulación).
+- FPS AL SUBIR LA VELOCIDAD: la simulación ya no se lleva 9 ms fijos de cada fotograma; usa una parte (20 / 35 / 50 % según Opciones > Pantalla > Prioridad de la simulación). (0.1.8.46: esa regla se cambió por una que reacciona al fotograma, ver arriba.)
   En un PC rápido el juego conserva muchos más FPS a x3-x6; en uno flojo no cambia nada.
 - DESCUBRIMIENTOS, ATRÁS Y ADELANTE: botones ◀ ▶ junto a «Secciones» (o Alt+← / Alt+→, o los botones laterales del ratón) para recorrer los descubrimientos que viste,
   aunque estén en otra sección o rama. Sirve para seguir las dependencias hacia atrás y volver.

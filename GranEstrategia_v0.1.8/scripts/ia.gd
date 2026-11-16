@@ -205,6 +205,15 @@ func vecinos_de(pais: String) -> Array:
 	return r
 
 
+## IDs de los países que tocan a `tid` (por tierra o estrecho, según los dueños). Lo usa scripts/saber.gd para contagiar descubrimientos. No filtra por campaña.
+## NO rehace las fronteras (eso son decenas de ms): lee la vecindad de la última vez que alguna IA las preparó, que se renueva sola cada pocos días; solo si
+## nunca se hizo la prepara. Una vecindad con unos días de retraso no cambia nada para un contagio que tarda meses.
+func vecinos_ids(tid: int) -> Array:
+	if _vecinos_dueno.is_empty():
+		_preparar_frentes()
+	return (_vecinos_dueno.get(tid, {}) as Dictionary).keys()
+
+
 ## Los países en los que tiene sentido poner una IA en este modo (campaña: solo los de la campaña).
 func candidatos() -> Array:
 	var r := []

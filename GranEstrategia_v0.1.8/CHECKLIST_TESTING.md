@@ -1,9 +1,18 @@
-# Checklist de testing — Gran Estrategia 0.1.8.45
+# Checklist de testing — Gran Estrategia 0.1.8.46
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.46 — cimientos del saber (el planeta descubre) y simulación que reacciona
+- ✅ `runner102` — catálogo ampliado (41 nuevos, año dentro de su era, sin ciclos), 49 enlaces entre ramas con su porqué, recetas válidas (grupos de edificios cumplibles a su fecha, materias que existen), validador del generador y azar sin estado (33 comprobaciones).
+- ✅ `runner103` — el planeta descubre: arranque con copia por país, misma semilla = misma partida, ritmo contra la historia, difusión por vecinos / aliados / viajeros, bloqueo, peso de edificios y materias, salto de fecha y cambio de modo, 3 años con el reloj real, invariante «nadie sabe algo sin sus requisitos» y la ficha con receta y «por qué lo pide» (54 comprobaciones).
+- ✅ `runner101` (banco + prueba) — con todas las IA y el reloj real: motor 0,68 ms por mes (peor 1,4 ms) en 2026 y 0,33 ms (peor 1,2 ms) en 1500; falla si pasa de 1,5 ms de promedio o 20 ms en el peor mes.
+- ✅ `runner100` — presupuesto de la simulación por reacción (60 Hz, 240 Hz, sin VSync, PC flojo, prioridades, tirones, mínimo, pausa), historial de Descubrimientos y zoom solo al país propio.
+- ✅ `runner77`, `runner91`, `runner94` ajustadas a 1.771 / 1.740 / 360 y al modo del planeta (las pruebas del reloj de la historia lo apagan antes).
+- ✅ Regresión completa runner71–103 (salvo bancos 89 y 90): 0 fallos y 0 «SCRIPT ERROR» / «Parse Error»; auditoría de variables: 0 funciones y 0 variables repetidas, nada sin uso.
+- ⬜ Nada de esta versión se ha visto en tu pantalla: el motor es lógica y la ficha se probó por código (sin GPU), no a ojo.
 
 ### 0.1.8.45 — FPS al subir la velocidad, historial en Descubrimientos, zoom solo al país propio
 - ✅ `runner100` — presupuesto de la simulación proporcional al fotograma (240 FPS → ~2,2 ms; 30 FPS → techo de 9 ms; mínimo 1,5 ms), historial ◀ ▶ (atrás, adelante, corte, sin repetidos, Alt+←, sobrevive a cerrar la pantalla), zoom solo al país propio (el ajeno se enfoca sin mover la cámara; observador como antes) (24 comprobaciones).
@@ -253,6 +262,15 @@ Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulad
 
 ## B. Lo que tienes que probar tú en tu PC (⬜)
 Marca cada casilla cuando lo hayas probado y dime qué pasó.
+
+### 0.1.8.46 (para probar en tu PC)
+- ⬜ **F9 con todas las IA** (lo más importante): escenario 1 d. C. (y otro con 1500), todas las IA activas, x6, F9, zoom in / out, un par de minutos y F9 otra vez; pega el resumen. Lo comparo contra el de la 0.1.8.43/45: ahora la simulación del día incluye el motor del saber (≈ 1 ms por mes).
+- ⬜ **El planeta descubre**: empieza en 1 d. C., deja correr 100 años con las IA y abre Descubrimientos (T): ¿lo que salió te parece razonable y llegó a ritmo con la historia (acueductos, papel, imprenta…)? Abre la ficha de uno nuevo: ¿dice quién lo descubrió, cuándo y «en la historia: …»?
+- ⬜ **Contagio**: elige un descubrimiento hecho hace poco: ¿tu país lo conoce y uno aislado (Américas, Oceanía) todavía no? Pasados unos años, ¿le llega?
+- ⬜ **Receta en la ficha**: en un descubrimiento con receta, ¿se entiende el bloque «Receta» (✓ / ·, «Basta uno de…», materias que ayudan, «Facilidad para tu país: ×N»)? ¿El «Por qué lo pide» al pasar el mouse sobre Requiere tiene sentido?
+- ⬜ **Debug > Descub.**: el botón «VOLVER A LA HISTORIA FIJA» / «QUE EL PLANETA DESCUBRA»; la línea «PLANETA hasta…» en la lista.
+- ⬜ **Qué se siente al subir la velocidad** en el portátil con la RTX 4060 (x3–x6): ¿los FPS aguantan? Y con Opciones > Pantalla > Prioridad de la simulación en «Velocidad del tiempo», ¿gana días por segundo sin tirones?
+- ⬜ **Tiempo de carga y memoria**: en el servidor no cambian (2026: 426 → 428 MB, misma carga); dime si en tu PC notas algo distinto.
 
 ### 0.1.8.44 (para probar en tu PC)
 - ⬜ **Que abra y no se cierre sola** (lo más importante): abre el juego, juega unos minutos, entra a Descubrimientos (T) y pasea por varias secciones y ramas. Si en algún PC se cierra sola: Opciones > Información > «Abrir carpeta de registros» y mándame `godot.log` y `cierre_inesperado_*.txt` (o `sesion.txt`).

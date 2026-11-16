@@ -16,6 +16,8 @@ const RedProvinciasScript := preload("res://scripts/red_provincias.gd")
 const IAScript := preload("res://scripts/ia.gd")
 const PerfilScript := preload("res://scripts/perfil.gd")
 const DescubrimientosScript := preload("res://scripts/descubrimientos.gd")
+const SaberScript := preload("res://scripts/saber.gd")
+const AzarScript := preload("res://scripts/azar.gd")
 const EdificiosScript := preload("res://scripts/edificios.gd")
 const CoresScript := preload("res://scripts/cores.gd")
 const DiplomaciaScript := preload("res://scripts/diplomacia.gd")
@@ -250,6 +252,9 @@ class Mundo extends RefCounted:
 	var mandos                          # Mandos: nombres de la cadena de mando por cultura
 	var ia                              # IA: decisiones de los países controlados por el ordenador (0.1.8.2; ninguno al arrancar)
 	var descubrimientos                 # Descubrimientos (0.1.8.36): catálogo con años + qué conoce cada país (null si falta datos/descubrimientos.json)
+	var saber                           # Saber (0.1.8.46): el planeta descubre lo que viene (null si no hay descubrimientos; `saber.activo` = false vuelve a la historia fija)
+	var semilla_partida := 0            # 0.1.8.46: semilla de esta partida (azar sin estado: misma semilla = mismos descubrimientos). Se fija sola; las pruebas usan Engine.set_meta("semilla_partida", n)
+	var materias_pais := {}             # 0.1.8.46: nombre de país -> PackedStringArray de materias primas de economia.json (ayudan a descubrir; datos de 2026)
 	var edificios                       # Edificios (0.1.8.40): catálogo de 109 edificios, obras y construcción por provincia (null si falta datos/edificios.json)
 	var cores                           # Cores (0.1.8.40): core nacional y core cultural de cada provincia (null hasta que se llama iniciar_edificios)
 	var diplomacia                      # Diplomacia (0.1.8.43): opinión, alianzas, rivales, infamia y coaliciones (null hasta que se llama iniciar_ejercito)
@@ -454,6 +459,10 @@ class Mundo extends RefCounted:
 		for nombre in economia.get("pais", {}):
 			if paises.has(nombre):
 				_poner_principal(paises[nombre].tid, economia["pais"][nombre], fn_principal)
+				var ms := PackedStringArray()
+				for x in economia["pais"][nombre].get("mat", []):
+					ms.append(String(x))
+				materias_pais[nombre] = ms
 		for k in economia.get("region", {}):
 			var tid2: int = bd.id_de("estado", k)
 			if tid2 < 0:
@@ -1089,11 +1098,32 @@ class Mundo extends RefCounted:
 			if mas:
 				return true
 		_mes_en_curso = false
-		if descubrimientos != null:                                  # 0.1.8.36: cada año nuevo del reloj trae sus descubrimientos (11 de cada 12 meses no hace nada)
+		if saber != null and saber.activo and saber.listo:           # 0.1.8.46: el planeta descubre (riesgo mensual, contagio entre países)
+			saber.mes()
+		elif descubrimientos != null:                                # 0.1.8.36: historia fija: cada año nuevo del reloj trae sus descubrimientos (11 de cada 12 meses no hace nada)
 			descubrimientos.avanzar_a(BaseDatosScript.anio_de_fecha(bd.fecha))
 		bd.version += 1
 		bd.version_eco += 1
 		return false
+
+	## 0.1.8.46: empieza «el planeta descubre» (scripts/saber.gd): congela la historia en el año de partida. Se llama al final de la carga, con edificios e IA ya creados.
+	func iniciar_saber() -> void:
+		saber = null
+		if descubrimientos == null:
+			return
+		if semilla_partida == 0:
+			semilla_partida = int(Engine.get_meta("semilla_partida")) if Engine.has_meta("semilla_partida") else AzarScript.semilla_nueva()
+		var sb = SaberScript.new()
+		if sb.iniciar(self, semilla_partida):
+			saber = sb
+
+	## 0.1.8.46: salto de fecha del Debug: todos los países reciben la historia de ese año y, si el planeta descubre, se vuelve a congelar ahí.
+	func sincronizar_descubrimientos(anio: int) -> void:
+		if descubrimientos == null:
+			return
+		descubrimientos.sincronizar(anio, true)
+		if saber != null and saber.activo:
+			saber.reiniciar()
 
 	## ¿El país `pais` (nombre) conoce el descubrimiento `sl` (slug)? Falso si no hay catálogo o el país/descubrimiento no existen.
 	func conoce_descubrimiento(pais: String, sl: String) -> bool:

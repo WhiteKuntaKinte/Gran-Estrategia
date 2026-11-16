@@ -1,0 +1,59 @@
+## +SOC|LEY
+### Archivos, administración y presupuesto del Estado
+archivos_estatales|Archivos y registros del Estado|2|G|censo_poblacion,escuelas_escribas
+reservas_grano_estatales|Reservas estatales de grano|2|G|almacenamiento_granos,archivos_estatales
+posta_imperial|Posta imperial y relevos de caballos|3|T|servicio_postal,red_viaria_imperial
+cancilleria_real|Cancillería y secretarios de despacho|4|G|archivos_estatales,burocracia
+delegacion_virreinal|Virreyes y gobernadores con mando delegado|5|G|imperio_colonial,provincias_administrativas,cancilleria_real
+ministerios_especializados|Ministerios especializados|6|G|cancilleria_real,fisco_moderno,estado_nacion
+contabilidad_publica|Contabilidad pública y cuentas del reino|6|G|fisco_moderno,contabilidad_partida_doble,ministerios_especializados
+censo_periodico|Censo periódico|6|G|censo_poblacion,registro_civil
+presupuesto_nacional|Presupuesto nacional votado|7|G|contabilidad_publica,parlamento
+auditoria_estatal|Tribunal de cuentas y auditoría estatal|7|G|contabilidad_publica,burocracia_moderna
+telegrafo_de_gobierno|Telégrafo de Estado|7|G|telegrafo_electrico,burocracia_moderna
+## +SOC|TER
+### Población y estadística
+registro_parroquial|Registros parroquiales de nacimientos y muertes|5|K|derecho_canonico,censo_poblacion
+estadisticas_vitales|Estadísticas vitales (natalidad y mortalidad)|6|K|registro_parroquial,estadistica
+tablas_de_mortalidad|Tablas de mortalidad y esperanza de vida|6|K|estadisticas_vitales
+demografia_cientifica|Demografía científica|6|K|tablas_de_mortalidad
+urbanizacion_masiva|Urbanización masiva|7|T|urbanismo_industrial,demografia_cientifica
+transicion_demografica|Transición demográfica|9|K|demografia_cientifica,sanidad_urbana
+planificacion_familiar|Planificación familiar|9|G|anticoncepcion_hormonal,transicion_demografica
+cuidado_de_mayores|Sistemas de cuidado de mayores|9|G|pensiones,transicion_demografica
+## +SOC|EDU
+### Escuelas, maestros y títulos
+escuelas_primeras_letras|Escuelas de primeras letras|4|T|escuelas_monasticas,escritura_alfabetica,diccionarios_gramaticas
+aprendizaje_gremial|Aprendizaje formal en gremios|4|T|gremios_artesanos,aprendizaje_oficios
+colegios_humanistas|Colegios humanistas|5|T|universidades_medievales,imprenta
+formacion_de_maestros|Escuelas normales (formación de maestros)|7|T|educacion_publica
+doctorado_investigacion|Doctorado de investigación|7|T|universidades_investigacion
+titulos_profesionales|Colegios y títulos profesionales|7|G|universidades_investigacion,formacion_profesional
+orientacion_vocacional|Orientación vocacional y pruebas de aptitud|8|K|formacion_profesional,psicologia_experimental
+### Difusión del saber
+correspondencia_erudita|Correspondencia erudita (la República de las Letras)|5|T|imprenta,servicio_postal
+intercambio_de_sabios|Intercambio de sabios y embajadas culturales|4|A|casa_de_traduccion
+bibliotecas_publicas|Bibliotecas públicas|6|G|biblioteca,imprenta
+enciclopedias|Enciclopedias|6|K|imprenta,filosofia_ilustracion,academias_ciencias
+sociedades_eruditas|Sociedades eruditas|6|T|correspondencia_erudita,academias_ciencias
+congresos_cientificos|Congresos científicos|7|T|revistas_cientificas,sociedades_eruditas
+## +CIE|BAS
+### Oficios y profesiones
+oficio_herrero|Oficio de herrero|3|T|hierro_forja,aprendizaje_oficios
+oficio_medico|Oficio de médico|3|T|medicina_humoral,aprendizaje_oficios
+oficio_arquitecto|Oficio de arquitecto|3|T|ladrillo_cocido,arco_boveda,plano_ortogonal_urbano
+oficio_navegante|Oficio de navegante|4|T|astrolabio,cartografia_ptolemaica
+## +CIE|QUI
+### Ensayo y normalización de materiales
+ensayo_de_metales|Ensayo y copelación de metales|2|T|metalurgia_cobre,horno_tiro
+## +CIE|MAN
+normalizacion_industrial|Normalización industrial (piezas intercambiables)|7|T|maquinas_herramienta,medicion_longitud
+## +CIE|REC
+### Prospección
+prospeccion_minera|Prospección minera|5|T|mineria_subterranea,derechos_mineros
+## +CIE|TRA
+### Caminos y correo
+caminos_de_peaje|Caminos de peaje|6|T|calzada_pavimentada,fisco_moderno
+## +SOC|COM
+### Red del Estado
+red_telegrafica_nacional|Red telegráfica nacional|7|T|telegrafo_electrico,telegrafo_de_gobierno

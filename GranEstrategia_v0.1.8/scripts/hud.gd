@@ -518,7 +518,7 @@ func _construir_barra() -> void:
 	btn_descubrimientos.custom_minimum_size = Vector2(0.0, 32.0)
 	btn_descubrimientos.focus_mode = Control.FOCUS_NONE
 	btn_descubrimientos.add_theme_font_size_override("font_size", 13)
-	btn_descubrimientos.tooltip_text = "Descubrimientos\nTodo el catálogo (1.730): lo que conoces, lo que puedes investigar y lo que viene, con sus requisitos.\nAtajo: T"
+	btn_descubrimientos.tooltip_text = "Descubrimientos\nTodo el catálogo (1.771): lo que conoces, lo que puedes investigar y lo que viene, con sus requisitos.\nAtajo: T"
 	_estilo_boton(btn_descubrimientos, 3.0)
 	btn_descubrimientos.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn_descubrimientos.pressed.connect(func(): descubrimientos_pedido.emit())

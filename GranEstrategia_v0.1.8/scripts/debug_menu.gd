@@ -145,6 +145,8 @@ const CAPAS_REND := [["relleno", "Relleno de países"], ["mar", "Mar"], ["lagos"
 # 0.1.8.36: pestaña Descubrimientos
 var lbl_desc_res: Label
 var lbl_desc_lista: Label
+var lbl_desc_saber: Label                # 0.1.8.46: resumen del motor «el planeta descubre» (scripts/saber.gd)
+var btn_desc_saber: Button
 var lbl_desc_ficha: Label
 var filtro_desc: LineEdit
 var lista_desc: ItemList
@@ -2236,6 +2238,22 @@ func _pagina_descubrimientos() -> void:
 	pg.add_child(lbl_desc_res)
 	var b_ven := _boton("ABRIR LA VENTANA DE DESCUBRIMIENTOS (T)", func(): main._abrir_descubrimientos())
 	pg.add_child(b_ven)
+	lbl_desc_saber = _lbl("", 11, C_TENUE)
+	lbl_desc_saber.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_desc_saber)
+	btn_desc_saber = _boton("", func():
+		var sb = main.mundo.saber
+		if sb == null:
+			_decir("No hay motor de descubrimientos en este mundo.", false)
+			return
+		if sb.activo:
+			sb.desactivar()
+			_decir("Historia fija: todos los países vuelven a saber lo mismo que la historia de este año.")
+		else:
+			sb.activar()
+			_decir("El planeta descubre desde hoy (semilla %d)." % sb.semilla)
+		_refrescar_desc())
+	pg.add_child(btn_desc_saber)
 	pg.add_child(HSeparator.new())
 	filtro_desc = LineEdit.new()
 	filtro_desc.placeholder_text = "Buscar descubrimiento (bronce, pólvora, internet...)"
@@ -2295,7 +2313,11 @@ func _refrescar_desc(mantener := -1) -> void:
 		lista_desc.clear()
 		return
 	var tid := _desc_tid()
-	var t := "Año del reloj: %s · la historia conoce %s de %s descubrimientos" % [d.anio_texto(main.reloj.anio), _miles(d.cuenta_f), _miles(d.n)]
+	var t := "Año del reloj: %s · %s conoce %s de %s descubrimientos" % [d.anio_texto(main.reloj.anio), "el planeta" if d.modo_planeta else "la historia", _miles(d.cuenta_f), _miles(d.n)]
+	var sbr = main.mundo.saber
+	lbl_desc_saber.text = ("EL PLANETA DESCUBRE · " + sbr.resumen()) if sbr != null and sbr.activo else "Historia fija: la frontera sigue al reloj y todos los países saben lo mismo."
+	btn_desc_saber.text = "VOLVER A LA HISTORIA FIJA" if sbr != null and sbr.activo else "QUE EL PLANETA DESCUBRA (semilla de la partida)"
+	btn_desc_saber.disabled = sbr == null
 	if tid >= 0:
 		t += "\n%s conoce %s" % [main.mundo.jugador, _miles(d.cantidad(tid))]
 	if not d.ultimos.is_empty():
@@ -2319,7 +2341,7 @@ func _refrescar_desc(mantener := -1) -> void:
 	lbl_desc_res.text = t
 	lista_desc.clear()
 	ids_lista_desc.clear()
-	# 0.1.8.42 · la lista es COMPLETA (los 1.730, de cualquier época, ordenados por año); una fila divisoria marca hasta dónde llega la historia en la fecha del reloj
+	# 0.1.8.42 · la lista es COMPLETA (los 1.771, de cualquier época, ordenados por año); una fila divisoria marca hasta dónde llega la historia en la fecha del reloj
 	var q := filtro_desc.text.strip_edges()
 	var cand := PackedInt32Array()
 	if q == "":
@@ -2329,10 +2351,17 @@ func _refrescar_desc(mantener := -1) -> void:
 		cand = d.buscar(q)
 		lbl_desc_lista.text = "%d resultados." % cand.size()
 	var fila_frontera := -1
+	var k_front: int = d.cuenta_f                          # en el modo planeta la frontera no es un prefijo de la lista por año: la línea va antes del primero que el planeta aún no tiene
+	if d.modo_planeta:
+		k_front = d.n
+		for k2 in d.n:
+			if d.frontera[d.orden[k2]] == 0:
+				k_front = k2
+				break
 	for k in cand.size():
 		var i: int = cand[k]
-		if q == "" and k == d.cuenta_f:
-			fila_frontera = lista_desc.add_item("──────── HISTORIA hasta %s (abajo: lo que aún no llega) ────────" % d.anio_texto(d.anio_actual))
+		if q == "" and k == k_front:
+			fila_frontera = lista_desc.add_item("──────── %s hasta %s (abajo: lo que aún no llega) ────────" % ["PLANETA" if d.modo_planeta else "HISTORIA", d.anio_texto(d.anio_actual)])
 			lista_desc.set_item_selectable(fila_frontera, false)
 			lista_desc.set_item_custom_fg_color(fila_frontera, Tema.ORO)
 			ids_lista_desc.append(-1)
