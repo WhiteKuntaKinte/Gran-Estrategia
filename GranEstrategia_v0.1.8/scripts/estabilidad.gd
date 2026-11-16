@@ -9,6 +9,8 @@ extends RefCounted
 ##   · conquista reciente: hasta −20, se disipa en 5 años
 ##   · distancia a la capital: hasta −10 (la capital misma: +10)
 ##   · país en guerra: −4; provincia ocupada por el enemigo: −18; devastación: hasta −20
+##   · BIENESTAR de la gente (0.1.8.47, scripts/demografia.gd): de −8 (hambre y sin salud) a +5 (vive bien); neutro en 58
+##   · FATIGA DE GUERRA del país (0.1.8.47): hasta −12; sube cada día en guerra y con las bajas, y baja despacio en paz
 ##   · SOBREEXTENSIÓN: hasta −20 cuando el país tiene mucho más territorio que con el que empezó (a partir de 1,2 × y hasta 2,8 ×), y hasta −6 por tamaño absoluto
 ##   · guarnición: hasta +8 según los soldados propios que haya en la provincia
 ## Con la favorabilidad por debajo de UMBRAL_REVUELTA durante MESES_REVUELTA ciclos seguidos, la provincia se AMOTINA (junto con las vecinas del mismo pueblo
@@ -20,6 +22,7 @@ const BDScript := preload("res://scripts/base_datos.gd")
 const CICLO_DIAS := 30
 const BASE := 56.0
 const PASO_MAX := 5.0
+const BIENESTAR_NEUTRO := 58.0             # 0.1.8.47: con este bienestar la meta no cambia; por debajo resta (hasta −8), por encima suma (hasta +5)
 const UMBRAL_AGITADA := 28.0               # por debajo, la provincia cuenta como agitada (y se suma al grupo de un motín)
 const UMBRAL_REVUELTA := 15.0
 const MESES_REVUELTA := 2
@@ -48,6 +51,8 @@ var _c_cc := PackedStringArray()
 var _c_oc := PackedInt32Array()
 var _c_gu := PackedFloat64Array()
 var _c_dv := PackedFloat64Array()
+var _c_bi := PackedFloat64Array()          # 0.1.8.47: bienestar de la provincia
+var _c_fg := PackedFloat64Array()          # 0.1.8.47: fatiga de guerra del país
 var _paises := {}                          # ID país -> {nombre, e, cap, cap_dia, cult, ix, base}
 var _marca := {}                           # ID país -> día del último `marcar_balance` por estabilidad
 var _res_cache := {}                       # ID país -> [día, media simple, agitadas, total]
@@ -93,6 +98,8 @@ func _cargar_columnas() -> void:
 	_c_oc = bd.vars["ocupante"].col_i
 	_c_gu = bd.vars["guerras_activas"].col_f
 	_c_dv = bd.vars["devastacion"].col_f
+	_c_bi = bd.vars["bienestar"].col_f if bd.vars.has("bienestar") else PackedFloat64Array()
+	_c_fg = bd.vars["fatiga_guerra"].col_f if bd.vars.has("fatiga_guerra") else PackedFloat64Array()
 
 
 func _info_pais(t: int) -> Dictionary:
@@ -168,6 +175,16 @@ func _meta(pi: int, ix: int, due: int, d: int, det = null) -> float:
 		m -= 4.0
 		if det != null:
 			det.append(["País en guerra", -4.0])
+	if ix < _c_bi.size() and not is_nan(_c_bi[ix]):                  # 0.1.8.47: la gente con hambre y sin salud se agita; la que vive bien, no
+		x = clampf((_c_bi[ix] - BIENESTAR_NEUTRO) * 0.2, -8.0, 5.0)
+		m += x
+		if det != null and absf(x) > 0.4:
+			det.append(["Bienestar de la gente (%d)" % int(roundf(_c_bi[ix])), x])
+	if ix_p >= 0 and ix_p < _c_fg.size() and not is_nan(_c_fg[ix_p]) and _c_fg[ix_p] > 0.0:
+		x = -0.12 * _c_fg[ix_p]                                      # fatiga de guerra: hasta −12
+		m += x
+		if det != null and x < -0.4:
+			det.append(["Fatiga de guerra (%d)" % int(roundf(_c_fg[ix_p])), x])
 	var oc: int = _c_oc[ix]
 	if oc >= 0 and oc != due:
 		m -= 18.0

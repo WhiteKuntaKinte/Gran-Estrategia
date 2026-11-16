@@ -1,0 +1,57 @@
+## +CIE|MED
+### Madres, niños y trabajo
+obstetricia_cientifica|Obstetricia científica|7|K|parteria,anatomia_patologica
+pediatria|Pediatría|7|K|obstetricia_cientifica,estadisticas_vitales
+cesarea_segura|Cesárea segura|8|T|obstetricia_cientifica,anestesia,antisepsia
+atencion_prenatal|Atención prenatal|8|G|obstetricia_cientifica,estadisticas_vitales
+medicina_del_trabajo|Medicina del trabajo|6|K|anatomia_moderna
+### Socorro, vectores y nutrición
+ambulancia_volante|Ambulancia volante|6|T|anatomia_moderna
+primeros_auxilios|Primeros auxilios y socorrismo|7|T|antisepsia
+control_vectores|Control de vectores (mosquitos, pulgas, piojos)|8|T|epidemiologia,pesticidas_sinteticos
+fortificacion_alimentos|Alimentos fortificados (yodo, hierro, vitaminas)|8|T|vitaminas
+terapia_rehidratacion_oral|Terapia de rehidratación oral|9|T|epidemiologia,vitaminas
+cuidados_paliativos|Cuidados paliativos|9|G|anestesicos_locales,hospital_moderno
+## +SOC|SAL
+### Higiene y beneficencia
+jabon_higiene|Jabón e higiene personal|2|T|herbolaria
+banos_publicos|Baños públicos|3|T|jabon_higiene,acueducto
+hospicios_beneficencia|Hospicios y casas de beneficencia|4|G|hospitales_religiosos
+seguro_enfermedad_obrero|Seguro de enfermedad del obrero|7|G|cooperativas,hospital_moderno
+### Salud para todos
+inocuidad_alimentaria|Inspección e inocuidad de los alimentos|8|G|pasteurizacion,sanidad_urbana
+agua_clorada|Cloración del agua|8|T|agua_potable_servicio,teoria_germenes
+saneamiento_rural|Saneamiento rural (letrinas y pozos)|8|G|sanidad_urbana,agua_potable_servicio
+salud_escolar|Salud escolar (revisión médica y comedor)|8|G|educacion_publica,pediatria
+calendario_vacunacion_infantil|Calendario de vacunación infantil|9|G|vacunacion_masiva,vacunas_modernas
+atencion_primaria_salud|Atención primaria de salud|9|G|sistema_nacional_salud,oms_cooperacion_sanitaria
+## +CIE|AGR
+### Del barbecho al polder
+rotacion_bienal|Barbecho y rotación bienal|3|T|arado_tirado,abonos_organicos
+polders_drenaje|Polders y drenaje de tierras|5|T|riego_canales,drenaje_urbano
+rotacion_cuatro_hojas|Rotación de cuatro hojas (Norfolk)|6|T|rotacion_trienal,cultivos_nuevo_mundo
+### El campo organizado
+credito_agrario|Crédito agrario y cajas rurales|7|G|cooperativas,agricultura_cientifica
+escuelas_agricolas|Escuelas de agricultura|7|T|agricultura_cientifica,educacion_publica
+cadena_de_frio|Cadena de frío (barcos y vagones refrigerados)|7|T|refrigeracion_mecanica
+extension_agricola|Extensión agrícola (técnicos al campo)|8|G|agricultura_cientifica,educacion_publica
+maiz_hibrido|Maíz híbrido y semillas selectas|8|T|genetica_mendeliana,seleccion_cria
+bancos_germoplasma|Bancos de semillas|8|K|genetica_mendeliana,seleccion_cria
+manejo_integrado_plagas|Manejo integrado de plagas|9|T|pesticidas_sinteticos,ecologia
+riego_por_goteo|Riego por goteo|9|T|riego_mecanizado
+## +SOC|EDU
+### Pedagogía y escuela obligatoria
+pedagogia_cientifica|Pedagogía como ciencia|6|K|escuelas_primeras_letras,filosofia_ilustracion
+escolaridad_obligatoria|Escolaridad obligatoria|6|G|escuelas_primeras_letras,estado_nacion
+escuelas_de_caridad|Escuelas de caridad y dominicales|6|G|escuelas_primeras_letras,hospicios_beneficencia
+jardin_de_infantes|Jardín de infantes|7|T|pedagogia_cientifica
+educacion_de_ninas|Educación de las niñas|7|G|escolaridad_obligatoria,educacion_publica
+### Escuela para todos
+educacion_especial|Educación especial|8|G|braille,educacion_publica
+examenes_estandarizados|Exámenes estandarizados|8|K|psicologia_experimental,orientacion_vocacional
+alfabetizacion_adultos|Campañas de alfabetización de adultos|8|G|alfabetizacion_masiva,educacion_publica
+secundaria_masiva|Secundaria para todos|9|G|educacion_universal_gratuita,formacion_profesional
+## +SOC|TER
+### Ciudades sanas
+codigos_construccion|Códigos de construcción y contra incendios|6|G|bomberos,urbanismo_renacentista
+vivienda_higienica|Ley de vivienda higiénica|7|G|urbanizacion_masiva,epidemiologia

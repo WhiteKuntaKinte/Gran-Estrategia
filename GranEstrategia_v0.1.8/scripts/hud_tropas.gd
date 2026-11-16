@@ -617,14 +617,14 @@ func _refrescar_cabecera() -> void:
 	var sold: int = e.soldados_de_pais(pais_tid)
 	var nregs: int = (e.regs_pais.get(pais_tid, []) as Array).size()
 	lbl_pais.text = "%s · %s soldados · %d regimientos" % [nombre_pais, _n(float(sold)), nregs]
-	var ing: float = m.ingreso_diario_local(nombre_pais)
+	var ing: float = m.ingreso_neto_diario_local(nombre_pais)                    # lo que llega a la tesorería: impuestos menos educación, ciencia, obras y sanidad
 	var man: float = m.mantenimiento_diario_local(nombre_pais)
 	var bal := ing - man
 	var t := ""
 	if nombre_pais == m.jugador:
 		var tes: float = m.paises[nombre_pais].tesoreria
 		t = "Tesorería: %s\n" % _dinero(tes)
-	t += "Ingresos %s/día  −  Mantenimiento %s/día  =  %s%s/día" % [_dinero(ing), _dinero(man), "+" if bal >= 0.0 else "−", _dinero(absf(bal))]
+	t += "Ingresos netos %s/día  −  Mantenimiento %s/día  =  %s%s/día" % [_dinero(ing), _dinero(man), "+" if bal >= 0.0 else "−", _dinero(absf(bal))]
 	lbl_fin.text = t
 	lbl_fin.add_theme_color_override("font_color", Tema.TEXTO if bal >= 0.0 else Tema.MAL)
 	var pu: Dictionary = m.precios_unidad_local(nombre_pais)

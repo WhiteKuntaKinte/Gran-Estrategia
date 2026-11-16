@@ -22,6 +22,8 @@ const EdificiosScript := preload("res://scripts/edificios.gd")
 const CoresScript := preload("res://scripts/cores.gd")
 const DiplomaciaScript := preload("res://scripts/diplomacia.gd")
 const EstabilidadScript := preload("res://scripts/estabilidad.gd")
+const DemografiaScript := preload("res://scripts/demografia.gd")
+const EducacionScript := preload("res://scripts/educacion.gd")
 
 ## Cuánto puede bajar lo que produce una provincia con devastación 1,0 (arrasada): -85 %. PROVISIONAL.
 const DEVASTACION_EFECTO := 0.85
@@ -232,6 +234,41 @@ class Pais extends RefCounted:
 	func tiene_tesoreria() -> bool:
 		return bd.tiene("tesoreria", tid)
 
+	## 0.1.8.47 · Partidas del presupuesto: fracción de los IMPUESTOS que el país gasta en cada cosa (el resto llega a la tesorería). Los valores de referencia
+	## (educación 4 %, ciencia 1,5 %, obras 2,5 %, sanidad 2 %) dan efecto ×1 (ver scripts/demografia.gd). Cada una se mueve entre 0 y 30 %, y todas juntas no pasan de 60 %.
+	var gasto_educacion: float:
+		get:
+			return bd.num("gasto_educacion", tid, 0.04)
+		set(v):
+			bd.poner_f("gasto_educacion", tid, clampf(v, 0.0, 0.3))
+
+	var gasto_ciencia: float:
+		get:
+			return bd.num("gasto_ciencia", tid, 0.015)
+		set(v):
+			bd.poner_f("gasto_ciencia", tid, clampf(v, 0.0, 0.3))
+
+	var gasto_obras: float:
+		get:
+			return bd.num("gasto_obras", tid, 0.025)
+		set(v):
+			bd.poner_f("gasto_obras", tid, clampf(v, 0.0, 0.3))
+
+	var gasto_sanidad: float:
+		get:
+			return bd.num("gasto_sanidad", tid, 0.02)
+		set(v):
+			bd.poner_f("gasto_sanidad", tid, clampf(v, 0.0, 0.3))
+
+	## Todas las partidas juntas, como fracción de los impuestos.
+	func gasto_total() -> float:
+		return minf(gasto_educacion + gasto_ciencia + gasto_obras + gasto_sanidad, 0.6)
+
+	## 0.1.8.47 · Cansancio de la gente por la guerra, 0-100 (scripts/demografia.gd).
+	var fatiga_guerra: float:
+		get:
+			return bd.num("fatiga_guerra", tid, 0.0)
+
 
 class Continente extends RefCounted:
 	var bd
@@ -259,7 +296,9 @@ class Mundo extends RefCounted:
 	var cores                           # Cores (0.1.8.40): core nacional y core cultural de cada provincia (null hasta que se llama iniciar_edificios)
 	var diplomacia                      # Diplomacia (0.1.8.43): opinión, alianzas, rivales, infamia y coaliciones (null hasta que se llama iniciar_ejercito)
 	var estabilidad                     # Estabilidad (0.1.8.43): estabilidad social por provincia, revueltas e independencias
-	var modo := "dev"                   # "dev" = mapa mundial, todo permitido · "campana" = solo Europa + Rusia + Turquía, conquista básica
+	var educacion                       # Educación (0.1.8.47): capacidad de investigar, política de investigación, oficios y presupuesto de las IA
+	var demografia                      # Demografía (0.1.8.47): natalidad, mortalidad, edades, urbanización, alfabetización y bienestar por provincia; fatiga de guerra por país
+	var modo := "dev"                  # "dev" = mapa mundial, todo permitido · "campana" = solo Europa + Rusia + Turquía, conquista básica
 	var campana := {}                   # (campaña) nombre de país -> true: los países que juegan
 	var excluidas := {}                 # (campaña) índice de provincia -> true: las que NO existen en la campaña
 	var continentes := {}
@@ -492,6 +531,14 @@ class Mundo extends RefCounted:
 				t += col[provincias[int(pi)].ix]
 		return t
 
+	## 0.1.8.47 · Gente en edad de trabajar o reclutarse en el país (su población × la fracción activa de sus edades). Sin demografía (o sin datos del país) se supone el 50 %.
+	func poblacion_activa_de(pais: String) -> float:
+		if demografia != null and demografia.listo and paises.has(pais):
+			var a: float = demografia.activa_pais(int(paises[pais].tid))
+			if a > 0.0:
+				return a
+		return 0.5 * poblacion_de(pais)
+
 	## Producción anual (ya ajustada por favorabilidad) de todas las provincias que controla el país, en US$.
 	## Se guarda en caché hasta que cambie alguna variable económica de la base.
 	func produccion_anual_usd(pais: String) -> float:
@@ -522,6 +569,12 @@ class Mundo extends RefCounted:
 		var d := divisa_de(pais)
 		return ingreso_diario_usd(pais) * (d.por_usd if d != null else 1.0)
 
+	## 0.1.8.47 · Lo que llega a la tesorería cada día: los impuestos menos las partidas del presupuesto (educación, ciencia, obras, sanidad).
+	func ingreso_neto_diario_local(pais: String) -> float:
+		if not paises.has(pais):
+			return 0.0
+		return ingreso_diario_local(pais) * (1.0 - paises[pais].gasto_total())
+
 	# ───────────── Gasto militar (0.1.7.9.9F-c) ─────────────
 	## Factor de conversión de US$ a la divisa del país.
 	func _por_usd(pais: String) -> float:
@@ -542,7 +595,7 @@ class Mundo extends RefCounted:
 
 	## Ingresos − mantenimiento por día (negativo = el país pierde dinero), en su divisa.
 	func balance_diario_local(pais: String) -> float:
-		return ingreso_diario_local(pais) - mantenimiento_diario_local(pais)
+		return ingreso_neto_diario_local(pais) - mantenimiento_diario_local(pais)
 
 	## Precio por UNIDAD (1.000 soldados) en la divisa del país: {"mant": al año, "recl": pago único}.
 	func precios_unidad_local(pais: String) -> Dictionary:
@@ -807,7 +860,7 @@ class Mundo extends RefCounted:
 	func marcar_balance(pais_tid: int) -> void:
 		_bal_sucios[pais_tid] = true
 
-	## Fila de balance de un país: [ID, fila en la base, nombre, ingreso diario local, mantenimiento diario local POR SOLDADO]; vacía si no existe.
+	## Fila de balance de un país: [ID, fila en la base, nombre, ingreso diario local NETO de partidas, mantenimiento diario local POR SOLDADO]; vacía si no existe.
 	func _fila_balance(nombre: String) -> Array:
 		var e: Pais = paises[nombre]
 		if e.provincias.is_empty():
@@ -818,7 +871,7 @@ class Mundo extends RefCounted:
 		var por_sold := 0.0
 		if ejercito != null:
 			por_sold = ejercito.mantenimiento_diario_usd(e.tid, 1) * _por_usd(nombre)
-		return [e.tid, ix, nombre, ingreso_diario_local(nombre), por_sold]
+		return [e.tid, ix, nombre, ingreso_neto_diario_local(nombre), por_sold]
 
 	func _armar_balances() -> void:
 		_bal = []
@@ -1040,6 +1093,8 @@ class Mundo extends RefCounted:
 			r.append(Callable(diplomacia, "fase_dia").bind(k))   # 0.1.8.43: llamadas de alianza, coaliciones y alianzas que se enfrían
 		if estabilidad != null:
 			r.append(Callable(estabilidad, "fase_dia").bind(k))  # 0.1.8.43: estabilidad social: 1/30 de las provincias por día, por lotes
+		if demografia != null and demografia.listo:
+			r.append(Callable(demografia, "fase_dia").bind(k))   # 0.1.8.47: la gente nace, muere y aprende: 1/30 de las provincias por día, por lotes
 		if ejercito != null:
 			r.append(Callable(ejercito, "avanzar_dia").bind(k))     # las columnas en marcha avanzan k días
 		if edificios != null:
@@ -1069,8 +1124,9 @@ class Mundo extends RefCounted:
 			var raiz: int = bd.id_de("mundo", "mundo")
 			var base: float = bd.num("crecimiento_base_anual", raiz, 0.02)
 			var vel_pais := {}
+			var con_saber: bool = demografia != null and demografia.listo
 			for nombre in paises:
-				vel_pais[paises[nombre].tid] = paises[nombre].velocidad_desarrollo
+				vel_pais[paises[nombre].tid] = paises[nombre].velocidad_desarrollo * (demografia.factor_economia(paises[nombre].tid) if con_saber else 1.0)    # 0.1.8.47: la economía crece según lo que el país sabe
 			var pc: PackedFloat64Array = bd.vars["pib_pc_usd"].col_f
 			var vp: PackedFloat64Array = bd.vars["velocidad_desarrollo"].col_f
 			var dueno: PackedInt32Array = bd.vars["propietario"].col_i
@@ -1109,6 +1165,8 @@ class Mundo extends RefCounted:
 	## 0.1.8.46: empieza «el planeta descubre» (scripts/saber.gd): congela la historia en el año de partida. Se llama al final de la carga, con edificios e IA ya creados.
 	func iniciar_saber() -> void:
 		saber = null
+		demografia = null
+		educacion = null
 		if descubrimientos == null:
 			return
 		if semilla_partida == 0:
@@ -1116,6 +1174,12 @@ class Mundo extends RefCounted:
 		var sb = SaberScript.new()
 		if sb.iniciar(self, semilla_partida):
 			saber = sb
+		var dm = DemografiaScript.new()                          # 0.1.8.47: la gente vive según lo que su país sabe: va después del saber
+		if dm.iniciar(self):
+			demografia = dm
+			var ed = EducacionScript.new()
+			if ed.iniciar(self, dm):
+				educacion = ed
 
 	## 0.1.8.46: salto de fecha del Debug: todos los países reciben la historia de ese año y, si el planeta descubre, se vuelve a congelar ahí.
 	func sincronizar_descubrimientos(anio: int) -> void:
@@ -1124,6 +1188,10 @@ class Mundo extends RefCounted:
 		descubrimientos.sincronizar(anio, true)
 		if saber != null and saber.activo:
 			saber.reiniciar()
+		if demografia != null:
+			demografia.reiniciar()                                   # el saber de los países cambió: la gente se reajusta a él
+		if educacion != null:
+			educacion.reiniciar()
 
 	## ¿El país `pais` (nombre) conoce el descubrimiento `sl` (slug)? Falso si no hay catálogo o el país/descubrimiento no existen.
 	func conoce_descubrimiento(pais: String, sl: String) -> bool:

@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8.41",
+  "version": "0.1.8.47",
   "ayuda": "Catálogo de VARIABLES de la base de datos. Cada variable guarda UN solo valor actual por ID de territorio; los valores anteriores van a las tablas de historial. Para añadir una variable nueva basta con agregar una entrada aquí (id_var nuevo, nunca reutilizar). tipo: numero | texto | id. aplica_a: mundo, continente, pais, estado, provincia, ciudad. historial: cambio (guarda el valor viejo cada vez que cambia) | mensual | anual (foto al cerrar el mes / año) | ninguno. agregacion: como se resume hacia arriba en la cadena (suma, media_ponderada:<variable>, ninguna). afecta_economia: si es true, cambiar esta variable invalida la caché de ingresos de los países.",
   "variables": [
     {
@@ -872,6 +872,220 @@
       "historial": "cambio",
       "agregacion": "ninguna",
       "descripcion": "Cultura a la que pertenece la provincia (id de datos/nombres_cultura.json, p. ej. «espanola»). Se fija al empezar según el país original y no cambia al conquistarla. Sin efectos de juego todavía (0.1.8.40)."
+    },
+    {
+      "id_var": 62,
+      "nombre": "natalidad",
+      "etiqueta": "Natalidad",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "‰ por año",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Nacimientos por cada mil habitantes y año. Baja con la alfabetización, la urbanización y la salud; sube con el bienestar. La calcula scripts/demografia.gd."
+    },
+    {
+      "id_var": 63,
+      "nombre": "mortalidad",
+      "etiqueta": "Mortalidad",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "‰ por año",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Muertes por cada mil habitantes y año, por todas las causas: baja con el saber de medicina y su acceso; sube con el hambre, la guerra, la devastación y el envejecimiento."
+    },
+    {
+      "id_var": 64,
+      "nombre": "edad_joven",
+      "etiqueta": "Niños (0-14)",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "0-1",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Fracción de la población de 0 a 14 años. Sigue a la natalidad con ~35 años de rezago."
+    },
+    {
+      "id_var": 65,
+      "nombre": "edad_mayor",
+      "etiqueta": "Mayores (65+)",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "0-1",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Fracción de la población de 65 años o más. Los adultos (15-64) son lo que queda: 1 − niños − mayores."
+    },
+    {
+      "id_var": 66,
+      "nombre": "urbanizacion",
+      "etiqueta": "Urbanización",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "0-1",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Parte de la población que vive en ciudades. Se acerca despacio a lo que permiten el urbanismo y la ingeniería que se saben y la riqueza."
+    },
+    {
+      "id_var": 67,
+      "nombre": "bienestar",
+      "etiqueta": "Bienestar",
+      "categoria": "demografia",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Satisfacción de las necesidades básicas (comida, vivienda, salud, paz). Entra en la favorabilidad (estabilidad social) y en la natalidad."
+    },
+    {
+      "id_var": 68,
+      "nombre": "alfabetizacion",
+      "etiqueta": "Alfabetización",
+      "categoria": "educacion",
+      "tipo": "numero",
+      "unidad": "0-1",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Parte de la gente que sabe leer y escribir. Sube con lo que el país sabe de educación, las escuelas y el gasto en educación; lo lleva scripts/demografia.gd."
+    },
+    {
+      "id_var": 69,
+      "nombre": "escolaridad_media",
+      "etiqueta": "Escolaridad media",
+      "categoria": "educacion",
+      "tipo": "numero",
+      "unidad": "años",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "media_ponderada:poblacion",
+      "descripcion": "Años de estudio promedio de la gente de la provincia."
+    },
+    {
+      "id_var": 70,
+      "nombre": "instituciones_saber",
+      "etiqueta": "Instituciones de saber",
+      "categoria": "educacion",
+      "tipo": "numero",
+      "unidad": "puntos",
+      "aplica_a": [
+        "provincia"
+      ],
+      "historial": "ninguno",
+      "agregacion": "suma",
+      "descripcion": "Escuelas, universidades, academias y bibliotecas de la provincia (los edificios de la categoría Educación), con más peso las de clases altas."
+    },
+    {
+      "id_var": 71,
+      "nombre": "fatiga_guerra",
+      "etiqueta": "Fatiga de guerra",
+      "categoria": "estabilidad",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Cansancio de la gente por la guerra. Sube cada día en guerra y con las bajas (en proporción a la población), baja despacio en paz. Resta favorabilidad y acerca la paz."
+    },
+    {
+      "id_var": 72,
+      "nombre": "calidad_docentes",
+      "etiqueta": "Calidad de los docentes",
+      "categoria": "educacion",
+      "tipo": "numero",
+      "unidad": "0-100",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "ninguno",
+      "agregacion": "ninguna",
+      "descripcion": "Nivel de maestros, escuelas y universidades del país: lo que sabe de educación, sus instituciones por habitante y el gasto en ciencia."
+    },
+    {
+      "id_var": 73,
+      "nombre": "gasto_educacion",
+      "etiqueta": "Gasto en educación",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "fracción de los impuestos",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Parte de los impuestos que el país gasta en educación (referencia 4 %). Se descuenta de lo que llega a la tesorería y acelera la alfabetización.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 74,
+      "nombre": "gasto_ciencia",
+      "etiqueta": "Gasto en ciencia",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "fracción de los impuestos",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Parte de los impuestos que el país gasta en investigación (referencia 1,5 %). Se descuenta de la tesorería; mejora los docentes y la capacidad de descubrir.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 75,
+      "nombre": "gasto_obras",
+      "etiqueta": "Gasto en obras",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "fracción de los impuestos",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Parte de los impuestos que el país gasta en obras e infraestructura (referencia 2,5 %). Se descuenta de la tesorería.",
+      "afecta_economia": true
+    },
+    {
+      "id_var": 76,
+      "nombre": "gasto_sanidad",
+      "etiqueta": "Gasto en sanidad",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "fracción de los impuestos",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "cambio",
+      "agregacion": "ninguna",
+      "descripcion": "Parte de los impuestos que el país gasta en salud pública (referencia 2 %). Se descuenta de la tesorería y mejora la salud efectiva de sus provincias.",
+      "afecta_economia": true
     }
   ]
 }

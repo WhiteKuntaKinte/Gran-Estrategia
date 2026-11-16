@@ -39,7 +39,7 @@ const MAX_ORDENES := 16               # marchas que da una IA en una decisión
 const MAX_OBJETIVOS := 14             # provincias enemigas que mira por decisión
 const FRAC_GASTO_PAZ := 0.14          # fracción de los ingresos que puede gastar en mantener tropas en paz...
 const FRAC_GASTO_GUERRA := 0.32       # ... y en guerra
-const MAX_POB_EJERCITO := 0.015       # un ejército nunca pasa del 1,5 % de la población del país (además de los topes de arriba)
+const MAX_ACTIVA_EJERCITO := 0.032    # un ejército nunca pasa del 3,2 % de la gente en edad activa del país (~1,5 % de la población; además de los topes de arriba)
 const DIAS_FOTO_ECONOMIA := 10        # los ingresos y la población se recalculan cada tantos días (cambian despacio y calcularlos cuesta)
 const DIAS_FRENTES := 5               # el mapa de control (quién controla cada provincia) se rehace como mucho cada tantos días
 const DIAS_RESERVA_PAZ := 15.0        # reserva de caja en días de ingresos
@@ -54,6 +54,9 @@ const PAZ_INDEMNIZACION := 0.12       # ... y con indemnización
 const PAZ_CAPITULA := -0.20           # puntaje desde el que se rinde
 const PAZ_TABLAS_DIAS := 150          # guerra estancada (|puntaje| < 4 %) tantos días: paz blanca
 const PAZ_LARGA_DIAS := 120           # guerra con ventaja pequeña: se queda con lo que tiene
+const FATIGA_NO_ATACA := 30.0         # 0.1.8.47: con tanto cansancio de guerra (0-100) un país no declara guerras nuevas
+const FATIGA_PIDE_PAZ := 45.0         # ... y con tanto, y al menos PAZ_CANSADA_DIAS de guerra, pide la paz aunque vaya perdiendo (cada uno se queda con lo que ocupa)
+const PAZ_CANSADA_DIAS := 60
 const GRACIA_INICIAL := 120           # 0.1.8.2a: ninguna IA declara guerras en sus primeros 120 días (da tiempo a orientarse)
 const GRACIA_JUGADOR := 240           # ... y al jugador no lo ataca ninguna IA en los primeros 240 días
 const AVISO_PAZ_DIAS := 45            # una IA que quiere la paz con el jugador se lo propone (pop-up) como mucho cada 45 días
@@ -377,10 +380,11 @@ func _decidir(nombre: String, st: Dictionary) -> void:
 func _economia(nombre: String, st: Dictionary, e) -> Dictionary:
 	if dia_n - int(st["foto_dia"]) >= DIAS_FOTO_ECONOMIA or (st["foto"] as Dictionary).is_empty():
 		var pu: Dictionary = mundo.precios_unidad_local(nombre)
-		st["foto"] = {"ing": mundo.ingreso_diario_local(nombre),
+		st["foto"] = {"ing": mundo.ingreso_neto_diario_local(nombre),
 			"mps": float(pu["mant"]) / 365.25 / float(ej.TAM_PELOTON),               # mantenimiento por soldado y por día
 			"cps": float(pu["recl"]) / float(ej.TAM_PELOTON),                        # costo de reclutar un soldado
-			"pob": mundo.poblacion_de(nombre)}
+			"pob": mundo.poblacion_de(nombre),
+			"act": mundo.poblacion_activa_de(nombre)}
 		st["foto_dia"] = dia_n
 	var f: Dictionary = st["foto"]
 	var sold: int = _soldados(int(e.tid))
@@ -388,7 +392,7 @@ func _economia(nombre: String, st: Dictionary, e) -> Dictionary:
 		st["base_sold"] = maxf(float(sold), TASA_EJERCITO_MIN * float(f["pob"]))
 	var tes: float = e.tesoreria if e.tiene_tesoreria() else 0.0
 	var ing: float = f["ing"]
-	return {"ing": ing, "sold": sold, "mps": f["mps"], "cps": f["cps"], "pob": f["pob"], "tes": tes, "mant": float(f["mps"]) * float(sold),
+	return {"ing": ing, "sold": sold, "mps": f["mps"], "cps": f["cps"], "pob": f["pob"], "act": f["act"], "tes": tes, "mant": float(f["mps"]) * float(sold),
 		"dias_caja": tes / maxf(ing, 1.0)}
 
 
@@ -414,7 +418,7 @@ func _reclutar(nombre: String, st: Dictionary, e, tid: int, eco: Dictionary, en_
 	# pasaba de 21 a 115 millones de soldados y ningún ejército se podía vencer.
 	var base: float = maxf(float(st["base_sold"]), 1.0)
 	var tope: float = (TOPE_GUERRA if en_guerra else TOPE_PAZ) * base
-	var sold_max: float = minf(minf(frac * ing / mps, MAX_POB_EJERCITO * float(eco["pob"])), tope)
+	var sold_max: float = minf(minf(frac * ing / mps, MAX_ACTIVA_EJERCITO * float(eco["act"])), tope)
 	var ritmo: float = tope * (CRECE_GUERRA_ANUAL if en_guerra else CRECE_PAZ_ANUAL) / 365.0       # soldados por día que puede reclutar
 	st["cupo"] = minf(float(st.get("cupo", 0.0)) + ritmo * float(maxi(dia_n - int(st["ult_recl"]), 0)), ritmo * float(DIAS_RECLUTA_MAX))
 	st["ult_recl"] = dia_n
@@ -603,6 +607,8 @@ func _valor(pi: int) -> float:
 func _buscar_guerra(nombre: String, st: Dictionary, e, tid: int, eco: Dictionary, rivales: Array, dias_desde := PERIODO) -> void:
 	if dia_n < int(st["no_guerra_hasta"]):
 		return
+	if mundo.bd.num("fatiga_guerra", tid, 0.0) >= FATIGA_NO_ATACA:
+		return                                                       # 0.1.8.47: un país cansado de guerra no abre otra
 	if g.activas.size() >= maxi(2, int(ceilf(float(activas.size()) * FRAC_GUERRAS_GLOBAL))):
 		return                                                       # 0.1.8.3: ya hay demasiadas guerras abiertas en el mundo
 	if float(eco["dias_caja"]) < 25.0 or float(eco["mant"]) > 0.9 * float(eco["ing"]):
@@ -891,6 +897,10 @@ func _paz(nombre: String, st: Dictionary, tid: int, rivales: Array) -> void:
 			t = {"posesion": true}                                # se rinde: cada uno se queda con lo que ocupa
 			quiere = true
 			razon = "capitula"
+		elif dur >= PAZ_CANSADA_DIAS and mundo.bd.num("fatiga_guerra", tid, 0.0) >= FATIGA_PIDE_PAZ:
+			t = {"posesion": true}                                # 0.1.8.47: su gente ya no aguanta más guerra
+			quiere = true
+			razon = "cansancio"
 		elif dur >= 3 * PAZ_TABLAS_DIAS:
 			t = {"posesion": true} if s > 0.0 else {}
 			quiere = true

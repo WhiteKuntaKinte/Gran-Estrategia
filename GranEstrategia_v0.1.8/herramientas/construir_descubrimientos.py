@@ -43,7 +43,7 @@ ANIOS = os.path.join(RAIZ, "herramientas", "descubrimientos", "anios.tsv")
 ENLACES = os.path.join(RAIZ, "herramientas", "descubrimientos", "enlaces.txt")
 ECONOMIA = os.path.join(RAIZ, "datos", "economia.json")
 SALIDA = os.path.join(RAIZ, "datos", "descubrimientos.json")
-VERSION = "0.1.8.46"
+VERSION = "0.1.8.47"
 
 RAMAS = [("MIL", "Militar"), ("CIE", "Científica"), ("SOC", "Sociedad")]
 TIPOS = OrderedDict([

@@ -113,7 +113,9 @@ func t_ia() -> void:
 	st["foto"] = {}
 	st["base_sold"] = -1.0
 	var eco: Dictionary = ia._economia(nombre, st, e)
-	ok(eco.has_all(["ing", "sold", "mps", "cps", "pob", "tes", "mant", "dias_caja"]), "_economia: ing, sold, mps, cps, pob, tes, mant, dias_caja")
+	ok(eco.has_all(["ing", "sold", "mps", "cps", "pob", "act", "tes", "mant", "dias_caja"]), "_economia: ing, sold, mps, cps, pob, act (gente activa), tes, mant, dias_caja")
+	ok(float(eco["act"]) > 0.2 * float(eco["pob"]) and float(eco["act"]) < 0.8 * float(eco["pob"]), "…la gente activa es una parte de la población (%.0f %%)" % (100.0 * float(eco["act"]) / float(eco["pob"])))
+	ok(absf(float(eco["ing"]) - m.ingreso_neto_diario_local(nombre)) < 1e-6 * maxf(float(eco["ing"]), 1.0), "…los ingresos son los NETOS (tras las partidas del presupuesto)")
 	ok(float(eco["ing"]) > 0.0 and int(eco["sold"]) > 0 and float(eco["mps"]) > 0.0 and float(eco["cps"]) > 0.0, "…Francia: ingresos, soldados y costos positivos (ing %.0f, %d soldados)" % [float(eco["ing"]), int(eco["sold"])])
 	ok(absf(float(eco["mant"]) - float(eco["mps"]) * float(eco["sold"])) < 1e-6, "…mantenimiento = costo por soldado × soldados")
 	ok(absf(float(eco["dias_caja"]) - float(eco["tes"]) / maxf(float(eco["ing"]), 1.0)) < 1e-9, "…días de caja = tesorería ÷ ingresos")
@@ -134,6 +136,7 @@ func t_ia() -> void:
 	var eco_r: Dictionary = ia._economia(nombre, st, e)
 	eco_r["ing"] = 1.0e12
 	eco_r["pob"] = 1.0e10
+	eco_r["act"] = 1.0e10
 	eco_r["tes"] = 1.0e16
 	eco_r["mant"] = 0.0
 	eco_r["dias_caja"] = 1000.0
@@ -166,6 +169,22 @@ func t_ia() -> void:
 	var s_g0: int = ej.soldados_de_pais(tid)
 	ia._reclutar(nombre, st, e, tid, eco_r, true)
 	ok(ej.soldados_de_pais(tid) > s_g0, "en guerra el tope es de %.1f × y todavía puede reclutar (+%d)" % [ia.TOPE_GUERRA, ej.soldados_de_pais(tid) - s_g0])
+	# el ejército se limita por la gente en edad activa (0.1.8.47)
+	ia._sold_dia_n = -1
+	var eco_a: Dictionary = eco_r.duplicate()
+	var s_a0: int = ej.soldados_de_pais(tid)
+	eco_a["act"] = float(s_a0) / ia.MAX_ACTIVA_EJERCITO * 0.5            # con esta gente activa el máximo sería la mitad de los soldados que ya hay
+	st["base_sold"] = float(s_a0) / 2.0
+	st["cupo"] = 1.0e9
+	st["ult_recl"] = ia.dia_n - 90
+	ia._reclutar(nombre, st, e, tid, eco_a, true)
+	ok(ej.soldados_de_pais(tid) == s_a0 and float(st["cupo"]) == 0.0, "_reclutar con pocos activos: no recluta por encima del %.1f %% de la gente activa" % (100.0 * ia.MAX_ACTIVA_EJERCITO))
+	ia._sold_dia_n = -1
+	eco_a["act"] = float(s_a0) / ia.MAX_ACTIVA_EJERCITO * 3.0
+	st["cupo"] = 1.0e9
+	st["ult_recl"] = ia.dia_n - 90
+	ia._reclutar(nombre, st, e, tid, eco_a, true)
+	ok(ej.soldados_de_pais(tid) > s_a0 and float(ej.soldados_de_pais(tid)) <= eco_a["act"] * ia.MAX_ACTIVA_EJERCITO + 1.0, "…y con gente de sobra sí recluta, sin pasar de ese tope (%d)" % (ej.soldados_de_pais(tid) - s_a0))
 	# economía en ruina: licencia soldados
 	ia._sold_dia_n = -1
 	var eco_p: Dictionary = ia._economia(nombre, st, e)
@@ -215,6 +234,10 @@ func t_ia() -> void:
 	ok(not g.en_guerra(tid, tid_v), "…con tregua vigente con ese vecino: no lo ataca")
 	ia.tregua.clear()
 	st["no_guerra_hasta"] = 0
+	m.bd.poner_f("fatiga_guerra", tid, ia.FATIGA_NO_ATACA + 5.0)             # 0.1.8.47: la gente está cansada de la guerra
+	ia._buscar_guerra(nombre, st, e, tid, rico, [], 100000)
+	ok(g.activas.size() == n_g0 and not g.en_guerra(tid, tid_v), "…con cansancio de guerra ≥ %.0f: no abre otra guerra" % ia.FATIGA_NO_ATACA)
+	m.bd.poner_f("fatiga_guerra", tid, 0.0)
 	var dec_g0: int = ia.guerras_declaradas
 	var guard_ult: Dictionary = {}
 	ia._buscar_guerra(nombre, st, e, tid, rico, [], 100000)

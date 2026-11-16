@@ -33,7 +33,7 @@ const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 const RegistroScript := preload("res://scripts/registro_fallos.gd")
 
-const VERSION := "0.1.8.46"
+const VERSION := "0.1.8.47"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -4568,6 +4568,8 @@ func _abrir_aviso_paz(av: Dictionary, jt: int) -> void:
 			razon = "Guerra estancada: tras %d días ninguno de los dos avanza. %s propone dejarlo en tablas." % [dur, nv]
 		"capitula":
 			razon = "%s está perdiendo (le ocupas el %.0f %% de su producción) y pide la paz. Puedes quedarte con lo que ocupas." % [nv, pct_jug]
+		"cansancio":
+			razon = "Tras %d días de guerra la gente de %s ya no aguanta más (cansancio de guerra): propone la paz y que cada uno se quede con lo que ocupa." % [dur, nv]
 		_:
 			razon = "Tras %d días de guerra los dos bandos están agotados; %s propone la paz." % [dur, nv]
 	var oc_rival: Array = g.provincias_ocupadas(ia_tid, jt)
@@ -5266,6 +5268,44 @@ func politica_vista() -> Dictionary:
 	if mundo == null or pais == "" or not mundo.paises.has(pais):
 		return {}
 	return {"jefe": mundo.jefe_de_estado(pais, mundo.bd.fecha)}
+
+
+## 0.1.8.47 · Educación, presupuesto y oficios del país elegido, para la pestaña Economía. {} si no hay país o el motor de demografía no corre.
+func pueblo_vista() -> Dictionary:
+	var pais := _pais_de_seleccion()
+	if mundo == null or pais == "" or not mundo.paises.has(pais) or mundo.educacion == null or mundo.demografia == null:
+		return {}
+	var p = mundo.paises[pais]
+	var tid := int(p.tid)
+	var ed = mundo.educacion
+	return {"pais": pais, "tid": tid, "propio": pais == mundo.jugador and mundo.jugador != "", "res": ed.resumen_pais(tid), "oficios": ed.fuerza_laboral(tid),
+		"gastos": [p.gasto_educacion, p.gasto_ciencia, p.gasto_obras, p.gasto_sanidad], "total": p.gasto_total(), "fatiga": p.fatiga_guerra,
+		"bruto": mundo.ingreso_diario_local(pais), "neto": mundo.ingreso_neto_diario_local(pais)}
+
+
+## 0.1.8.47 · El jugador fija una partida del presupuesto de su país (0 = educación, 1 = ciencia, 2 = obras, 3 = sanidad), como fracción de los impuestos.
+func fijar_gasto(pais: String, partida: int, valor: float) -> void:
+	if mundo == null or not mundo.paises.has(pais) or mundo.educacion == null:
+		return
+	var p = mundo.paises[pais]
+	match partida:
+		0:
+			p.gasto_educacion = valor
+		1:
+			p.gasto_ciencia = valor
+		2:
+			p.gasto_obras = valor
+		3:
+			p.gasto_sanidad = valor
+	mundo.educacion.marcar_manual(int(p.tid), true)
+	_actualizar_barra()
+
+
+## 0.1.8.47 · El jugador reparte el esfuerzo de investigación de su país entre las ramas militar, científica y sociedad (se normaliza a suma 1).
+func fijar_investigacion(pais: String, mil: float, cie: float, soc: float) -> void:
+	if mundo == null or not mundo.paises.has(pais) or mundo.educacion == null:
+		return
+	mundo.educacion.fijar_politica(int(mundo.paises[pais].tid), mil, cie, soc, true)
 
 
 ## 0.1.8.3: ¿puede el jugador dar órdenes a las tropas de `pais`? En el modo libre (Debug) las de cualquier país; en la campaña solo las del tuyo

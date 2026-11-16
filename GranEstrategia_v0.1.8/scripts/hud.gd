@@ -22,6 +22,7 @@ signal construir_pedido(pis: Array)   # 0.1.8.40 · botón «Construir…» de l
 
 const Tema := preload("res://scripts/tema_hud.gd")
 const TropasScript := preload("res://scripts/hud_tropas.gd")
+const IndicesSaberRef := preload("res://scripts/indices_saber.gd")
 
 const TAB_RATIO_ACTIVA := 2.4               # la pestaña abierta ocupa 2,4 × el ancho de cada una de las otras (que solo llevan icono)
 const ANCHO_PANEL_MIN := 372.0              # 0.1.8.3: HUD menos invasivo
@@ -1716,6 +1717,7 @@ func _tarjetas_provincia() -> void:
 	var una := (tipo == "provincia" or tipo == "ciudad") and pis.size() == 1 and int(datos.get("multi", 0)) < 2
 	if una:
 		_card_ingreso(int(pis[0]))
+	_card_gente(pis, una)
 	_card_edificios(pis, una)
 	_card_cores(pis, una)
 	if una:
@@ -1795,6 +1797,129 @@ func _card_ingreso(pi: int) -> void:
 			if absf(float(par[1])) >= 0.5 and String(par[0]) != "Base":
 				_nota(se, "   %+d  %s" % [int(roundf(float(par[1]))), String(par[0])])
 		_nota(se, "Por debajo de 15 durante dos meses seguidos la provincia se amotina: se paga a los notables, se reprime con tropas o se concede la independencia (la tierra vuelve a su core nacional). Un imperio demasiado grande para su tamaño pierde estabilidad en todas sus provincias.")
+
+
+# ───────────── 0.1.8.47 · Gente, presupuesto, educación y oficios ─────────────
+## «Gente»: cómo vive lo elegido (una provincia, o todas las de un país, estado o grupo): crecimiento, edades, ciudad, estudios y bienestar.
+func _card_gente(pis: Array, una: bool) -> void:
+	var dm = main.mundo.demografia
+	if dm == null or not dm.listo:
+		return
+	var r: Dictionary = dm.resumen_provincias(pis)
+	if float(r["pob"]) <= 0.0:
+		return
+	var sec := _seccion("Gente")
+	var cr := float(r["crecimiento"]) * 100.0
+	var signo := "+" if cr >= 0.0 else "−"
+	_fila(sec, "i_pob", "Crecimiento", "%s%s %% al año · nacen %s y mueren %s de cada mil" % [signo, ("%.2f" % absf(cr)).replace(".", ","), ("%.1f" % float(r["natalidad"])).replace(".", ","), ("%.1f" % float(r["mortalidad"])).replace(".", ",")])
+	var jov := float(r["joven"])
+	var may := float(r["mayor"])
+	_fila(sec, "i_pob", "Edades", "%d %% niños · %d %% adultos · %d %% mayores de 65" % [roundi(100.0 * jov), roundi(100.0 * (1.0 - jov - may)), roundi(100.0 * may)])
+	_fila(sec, "i_prov", "Ciudad y campo", "%d %% vive en ciudades" % roundi(100.0 * float(r["urbanizacion"])))
+	_fila(sec, "i_info", "Estudios", "%d %% sabe leer y escribir · %s años de escuela" % [roundi(100.0 * float(r["alfabetizacion"])), ("%.1f" % float(r["escolaridad"])).replace(".", ",")])
+	_barra(sec, "Bienestar", float(r["bienestar"]), C_BARRAS[2 % C_BARRAS.size()])
+	_nota(sec, "Cada provincia nace, muere y aprende según lo que su país sabe de medicina, agricultura, educación y urbanismo, y según su renta. El bienestar entra en la estabilidad.%s" % ("" if una else " Medias ponderadas por población."))
+
+
+## Presupuesto, educación, investigación y oficios del país elegido (pestaña Economía).
+func _cards_pueblo() -> void:
+	var v: Dictionary = main.pueblo_vista()
+	if v.is_empty():
+		return
+	var pais := String(v["pais"])
+	var propio := bool(v["propio"])
+	var mon := _moneda(pais)
+	var sim: String = mon[0]
+	var por: float = mon[1]
+	var res: Dictionary = v["res"]
+	# ── presupuesto ──
+	var sp := _seccion("Presupuesto")
+	var bruto: float = float(v["bruto"])
+	var neto: float = float(v["neto"])
+	_fila(sp, "i_eco", "Impuestos por día", main.fmt_dinero(bruto, sim))
+	_fila(sp, "i_eco", "Llega a la tesorería", "%s por día  (las partidas se llevan el %d %%)" % [main.fmt_dinero(neto, sim), roundi(100.0 * float(v["total"]))])
+	var nombres := ["Educación", "Ciencia", "Obras", "Sanidad"]
+	var gastos: Array = v["gastos"]
+	for k in 4:
+		var g := float(gastos[k])
+		if propio:
+			_slider_porcentaje(sp, String(nombres[k]), g, 0.0, 0.2, func(x: float): main.fijar_gasto(pais, k, x))
+		else:
+			_linea(sp, String(nombres[k]), "%s %% de los impuestos" % ("%.1f" % (100.0 * g)).replace(".", ","), Tema.ORO)
+	_nota(sp, "Cada partida es una parte de los impuestos que se descuenta antes de llegar a la tesorería. Con las partidas de referencia (educación 4 %, ciencia 1,5 %, obras 2,5 %, sanidad 2 %) todo rinde ×1; más gasto acelera la alfabetización, la investigación y la salud, menos la frena. Cuesta dinero y tarda años en notarse.")
+	if float(v["fatiga"]) >= 1.0:
+		_fila(sp, "i_devast", "Cansancio de guerra", "%d de 100: baja la estabilidad y las ganas de seguir peleando" % roundi(float(v["fatiga"])))
+	# ── educación e investigación ──
+	var se := _seccion("Educación e investigación")
+	_fila(se, "i_info", "Alfabetización", "%d %% · %s años de escuela" % [roundi(100.0 * float(res["alfab"])), ("%.1f" % float(res["esc"])).replace(".", ",")])
+	_fila(se, "i_info", "Estudios", "%s %% con estudios superiores · %s %% con secundaria" % [("%.1f" % (100.0 * float(res["superiores"]))).replace(".", ","), ("%.1f" % (100.0 * float(res["secundaria"]))).replace(".", ",")])
+	_fila(se, "i_estrella", "Investigadores", "%s (calidad de los docentes: %d de 100)" % [fmt_num(roundf(float(res["investigadores"]))), roundi(float(res["calidad"]))])
+	_fila(se, "i_estrella", "Peso en los descubrimientos", "×%s  ·  se entera de lo nuevo ×%s más rápido" % [("%.2f" % float(res["f_cap"])).replace(".", ","), ("%.2f" % float(res["f_dif"])).replace(".", ",")])
+	var pol: PackedFloat32Array = res["politica"]
+	se.add_child(_lbl("POLÍTICA DE INVESTIGACIÓN", 10, Tema.TENUE))
+	if propio:
+		var vals := [100.0 * float(pol[0]), 100.0 * float(pol[1]), 100.0 * float(pol[2])]
+		var sls := []
+		for k in 3:
+			sls.append(_slider_porcentaje(se, String(["Militar", "Científica", "Sociedad"][k]), float(vals[k]) / 100.0, 0.0, 1.0, func(_x: float): pass, true))
+		for k in 3:
+			var sl: HSlider = sls[k]
+			sl.drag_ended.connect(func(_c: bool): main.fijar_investigacion(pais, (sls[0] as HSlider).value, (sls[1] as HSlider).value, (sls[2] as HSlider).value))
+	else:
+		for k in 3:
+			_barra(se, String(["Militar", "Científica", "Sociedad"][k]), 100.0 * float(pol[k]), C_BARRAS[k % C_BARRAS.size()])
+	_nota(se, "El esfuerzo se reparte entre las tres ramas del árbol de descubrimientos: más esfuerzo en una rama = más probabilidad de que este país sea quien descubra cosas de ella. Los investigadores (gente con estudios superiores) y el gasto en ciencia deciden cuánto pesa el país en cada sorteo.")
+	# ── saber social: lo que el país sabe de lo que decide cómo vive su gente ──
+	var ssab := _seccion("Saber social")
+	var saber: PackedFloat32Array = res["saber"]
+	for k in IndicesSaberRef.N_IDX:
+		_barra(ssab, String(IndicesSaberRef.NOMBRES[k]), 100.0 * float(saber[k]), C_BARRAS[k % C_BARRAS.size()])
+	_nota(ssab, "La parte del catálogo de descubrimientos de cada campo que el país ya conoce. De ahí salen su mortalidad, sus cosechas, su escuela y sus ciudades: descubrir más lo cambia todo.")
+	# ── oficios ──
+	var so := _seccion("Oficios")
+	var ofs: Array = (v["oficios"] as Array).duplicate()
+	ofs.sort_custom(func(a, b): return float(a["n"]) > float(b["n"]))
+	var caja := VBoxContainer.new()
+	caja.add_theme_constant_override("separation", 2)
+	so.add_child(caja)
+	var mostrados := 0
+	for o in ofs:
+		if float(o["n"]) < 1.0 or mostrados >= 10:
+			continue
+		_linea(caja, String(o["nombre"]), fmt_pob(float(o["n"])), Tema.ORO)
+		mostrados += 1
+	_nota(so, "La gente en edad de trabajar repartida en 40 oficios según sus estudios y lo que el país sabe: sin cirugía no hay cirujanos y sin computación no hay programadores.")
+
+
+## Una fila «nombre · deslizador · valor» de un porcentaje. Aplica el valor al SOLTAR (arrastrando solo se actualiza el número: así el panel no se rehace a medio gesto).
+func _slider_porcentaje(padre: Node, nombre: String, valor: float, mn: float, mx: float, al_soltar: Callable, entero := false) -> HSlider:
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 8)
+	var l := _lbl(nombre, 12, Tema.TEXTO)
+	l.custom_minimum_size = Vector2(88.0, 0.0)
+	hb.add_child(l)
+	var sl := HSlider.new()
+	sl.min_value = mn
+	sl.max_value = mx
+	sl.step = (mx - mn) / 200.0
+	sl.value = clampf(valor, mn, mx)
+	sl.custom_minimum_size = Vector2(120.0, 18.0)
+	sl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	sl.focus_mode = Control.FOCUS_NONE
+	hb.add_child(sl)
+	var vl := _lbl("", 12, Tema.ORO)
+	vl.custom_minimum_size = Vector2(52.0, 0.0)
+	vl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	hb.add_child(vl)
+	var pintar := func(x: float): vl.text = ("%d %%" % roundi(100.0 * x)) if entero else ("%s %%" % ("%.1f" % (100.0 * x)).replace(".", ","))
+	pintar.call(sl.value)
+	sl.value_changed.connect(pintar)
+	sl.drag_ended.connect(func(cambio: bool):
+		if cambio:
+			al_soltar.call(sl.value))
+	padre.add_child(hb)
+	return sl
 
 
 func _card_edificios(pis: Array, una: bool) -> void:
@@ -1931,6 +2056,8 @@ static func produccion_principal(e: Dictionary) -> Dictionary:
 
 
 func _tab_economia() -> void:
+	if String(datos.get("tipo", "")) == "pais":
+		_cards_pueblo()
 	var fin: Array = datos.get("fin", [])
 	if fin.size() > 0:
 		var sf := _seccion("Finanzas")

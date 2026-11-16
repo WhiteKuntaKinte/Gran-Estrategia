@@ -193,7 +193,7 @@ func t_epoca(anio: int) -> void:
 	ok(sin_ejercito <= 5, "%d: casi toda nación tiene ejército (%d sin)" % [anio, sin_ejercito])
 	ok(m.descubrimientos != null and m.descubrimientos.anio_actual == anio, "%d: los descubrimientos están en el año %d" % [anio, anio])
 	var cuenta: int = m.descubrimientos.cuenta_f if m.descubrimientos != null else 0
-	ok(cuenta > 100 and cuenta < 1771, "%d: la historia conoce %d descubrimientos" % [anio, cuenta])
+	ok(cuenta > 100 and cuenta < 1814, "%d: la historia conoce %d descubrimientos" % [anio, cuenta])
 	if main.pinturas != null and main.pinturas.listo:
 		var sin_pint := 0
 		for n in esp["naciones"]:

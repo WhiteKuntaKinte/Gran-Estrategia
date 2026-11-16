@@ -1,0 +1,419 @@
+{
+ "version": "0.1.8.47",
+ "grupos": [
+  "agro",
+  "produccion",
+  "comercio",
+  "ingenieria",
+  "salud",
+  "docencia",
+  "investigacion",
+  "tecnologia",
+  "gobierno",
+  "justicia",
+  "militar",
+  "cultura"
+ ],
+ "carreras": [
+  {
+   "id": "agricultor",
+   "nombre": "Agricultor",
+   "nivel": 0,
+   "campo": "AGR",
+   "desde": 0.0,
+   "peso": 100,
+   "grupo": "agro",
+   "desc": "Siembra y cosecha. En todo país antiguo es la mayor parte de la gente."
+  },
+  {
+   "id": "pastor",
+   "nombre": "Pastor y ganadero",
+   "nivel": 0,
+   "campo": "AGR",
+   "desde": 0.0,
+   "peso": 22,
+   "grupo": "agro",
+   "desc": "Cuida rebaños: leche, lana, cuero y carne."
+  },
+  {
+   "id": "pescador",
+   "nombre": "Pescador",
+   "nivel": 0,
+   "campo": "TIE",
+   "desde": 0.0,
+   "peso": 10,
+   "grupo": "agro",
+   "desc": "Vive del mar y de los ríos."
+  },
+  {
+   "id": "minero",
+   "nombre": "Minero",
+   "nivel": 1,
+   "campo": "REC",
+   "desde": 0.02,
+   "peso": 5,
+   "grupo": "produccion",
+   "desc": "Saca piedra, sal, metal y carbón."
+  },
+  {
+   "id": "artesano",
+   "nombre": "Artesano",
+   "nivel": 1,
+   "campo": "BAS",
+   "desde": 0.0,
+   "peso": 70,
+   "grupo": "produccion",
+   "desc": "Alfarero, carpintero, curtidor: lo hace todo a mano."
+  },
+  {
+   "id": "constructor",
+   "nombre": "Albañil y constructor",
+   "nivel": 1,
+   "campo": "ING",
+   "desde": 0.02,
+   "peso": 35,
+   "grupo": "ingenieria",
+   "desc": "Levanta casas, murallas, acueductos y puentes."
+  },
+  {
+   "id": "herrero",
+   "nombre": "Herrero y metalúrgico",
+   "nivel": 1,
+   "campo": "QUI",
+   "desde": 0.02,
+   "peso": 15,
+   "grupo": "produccion",
+   "desc": "Fragua herramientas y armas."
+  },
+  {
+   "id": "tejedor",
+   "nombre": "Tejedor y sastre",
+   "nivel": 1,
+   "campo": "MAN",
+   "desde": 0.0,
+   "peso": 25,
+   "grupo": "produccion",
+   "desc": "Hila, teje y confecciona."
+  },
+  {
+   "id": "marinero",
+   "nombre": "Marinero y transportista",
+   "nivel": 1,
+   "campo": "TRA",
+   "desde": 0.0,
+   "peso": 40,
+   "grupo": "comercio",
+   "desc": "Lleva barcos y cargas por mar y por tierra, de la carreta al camión."
+  },
+  {
+   "id": "comerciante",
+   "nombre": "Comerciante",
+   "nivel": 1,
+   "campo": "ECO",
+   "desde": 0.0,
+   "peso": 70,
+   "grupo": "comercio",
+   "desc": "Compra, vende y viaja entre mercados."
+  },
+  {
+   "id": "soldado",
+   "nombre": "Soldado profesional",
+   "nivel": 1,
+   "campo": "TRO",
+   "desde": 0.0,
+   "peso": 8,
+   "grupo": "militar",
+   "desc": "Vive de las armas. En guerra su número crece."
+  },
+  {
+   "id": "guardia",
+   "nombre": "Guardia y policía",
+   "nivel": 1,
+   "campo": "LEY",
+   "desde": 0.02,
+   "peso": 8,
+   "grupo": "justicia",
+   "desc": "Mantiene el orden y cobra los castigos."
+  },
+  {
+   "id": "obrero",
+   "nombre": "Obrero industrial",
+   "nivel": 1,
+   "campo": "MAN",
+   "desde": 0.25,
+   "peso": 90,
+   "grupo": "produccion",
+   "desc": "Trabaja en talleres y fábricas."
+  },
+  {
+   "id": "operario_energia",
+   "nombre": "Operario de energía",
+   "nivel": 1,
+   "campo": "ENE",
+   "desde": 0.2,
+   "peso": 10,
+   "grupo": "produccion",
+   "desc": "Mantiene molinos, calderas, centrales y redes eléctricas."
+  },
+  {
+   "id": "escriba",
+   "nombre": "Escriba y copista",
+   "nivel": 2,
+   "campo": "SOC.COM",
+   "desde": 0.0,
+   "peso": 10,
+   "grupo": "cultura",
+   "desc": "Guarda la memoria por escrito: cartas, cuentas, libros."
+  },
+  {
+   "id": "maestro",
+   "nombre": "Maestro",
+   "nivel": 2,
+   "campo": "EDU",
+   "desde": 0.02,
+   "peso": 30,
+   "grupo": "docencia",
+   "desc": "Enseña a leer, contar y oficios. Sin escuelas casi no hay maestros."
+  },
+  {
+   "id": "enfermero",
+   "nombre": "Enfermero y partera",
+   "nivel": 2,
+   "campo": "MED",
+   "desde": 0.02,
+   "peso": 35,
+   "grupo": "salud",
+   "desc": "Cuida a enfermos y trae a los niños al mundo."
+  },
+  {
+   "id": "contable",
+   "nombre": "Funcionario y diplomático",
+   "nivel": 2,
+   "campo": "LEY",
+   "desde": 0.03,
+   "peso": 30,
+   "grupo": "gobierno",
+   "desc": "Lleva los impuestos, los registros, la burocracia y las embajadas."
+  },
+  {
+   "id": "oficial",
+   "nombre": "Oficial militar",
+   "nivel": 2,
+   "campo": "TAC",
+   "desde": 0.02,
+   "peso": 5,
+   "grupo": "militar",
+   "desc": "Manda tropas y planea campañas."
+  },
+  {
+   "id": "tecnico",
+   "nombre": "Capataz y técnico",
+   "nivel": 2,
+   "campo": "ING",
+   "desde": 0.08,
+   "peso": 30,
+   "grupo": "ingenieria",
+   "desc": "Dirige obras y talleres con oficio de ingeniero."
+  },
+  {
+   "id": "clero",
+   "nombre": "Sacerdote y religioso",
+   "nivel": 2,
+   "campo": "REL",
+   "desde": 0.0,
+   "peso": 15,
+   "grupo": "cultura",
+   "desc": "Guía las creencias, los ritos y buena parte de la enseñanza antigua."
+  },
+  {
+   "id": "artista",
+   "nombre": "Artista y músico",
+   "nivel": 2,
+   "campo": "REL",
+   "desde": 0.02,
+   "peso": 15,
+   "grupo": "cultura",
+   "desc": "Pinta, esculpe, compone y entretiene."
+  },
+  {
+   "id": "jurista",
+   "nombre": "Jurista y juez",
+   "nivel": 2,
+   "campo": "LEY",
+   "desde": 0.05,
+   "peso": 10,
+   "grupo": "justicia",
+   "desc": "Escribe y aplica las leyes."
+  },
+  {
+   "id": "banquero",
+   "nombre": "Banquero y financiero",
+   "nivel": 2,
+   "campo": "ECO",
+   "desde": 0.15,
+   "peso": 15,
+   "grupo": "comercio",
+   "desc": "Presta, cambia moneda y mueve capital."
+  },
+  {
+   "id": "periodista",
+   "nombre": "Periodista y editor",
+   "nivel": 2,
+   "campo": "SOC.COM",
+   "desde": 0.15,
+   "peso": 5,
+   "grupo": "cultura",
+   "desc": "Informa, imprime y forma la opinión pública."
+  },
+  {
+   "id": "empleado",
+   "nombre": "Empleado de servicios y oficina",
+   "nivel": 2,
+   "campo": "ECO",
+   "desde": 0.15,
+   "peso": 150,
+   "grupo": "comercio",
+   "desc": "Atiende, registra y gestiona: el oficio más común de una economía de servicios."
+  },
+  {
+   "id": "medico",
+   "nombre": "Médico",
+   "nivel": 3,
+   "campo": "MED",
+   "desde": 0.05,
+   "peso": 10,
+   "grupo": "salud",
+   "desc": "Diagnostica y trata. Su número baja la mortalidad."
+  },
+  {
+   "id": "cirujano",
+   "nombre": "Cirujano",
+   "nivel": 3,
+   "campo": "MED",
+   "desde": 0.3,
+   "peso": 3,
+   "grupo": "salud",
+   "desc": "Opera: cuando existe, salva vidas que antes se perdían."
+  },
+  {
+   "id": "farmaceutico",
+   "nombre": "Farmacéutico y químico",
+   "nivel": 3,
+   "campo": "QUI",
+   "desde": 0.15,
+   "peso": 5,
+   "grupo": "salud",
+   "desc": "Prepara remedios y estudia materiales."
+  },
+  {
+   "id": "ing_civil",
+   "nombre": "Ingeniero civil",
+   "nivel": 3,
+   "campo": "ING",
+   "desde": 0.15,
+   "peso": 10,
+   "grupo": "ingenieria",
+   "desc": "Calcula puentes, presas, canales y rascacielos."
+  },
+  {
+   "id": "ing_industrial",
+   "nombre": "Ingeniero mecánico y eléctrico",
+   "nivel": 3,
+   "campo": "ENE",
+   "desde": 0.2,
+   "peso": 10,
+   "grupo": "ingenieria",
+   "desc": "Máquinas, motores y redes de energía."
+  },
+  {
+   "id": "matematico",
+   "nombre": "Matemático",
+   "nivel": 3,
+   "campo": "MAT",
+   "desde": 0.06,
+   "peso": 3,
+   "grupo": "investigacion",
+   "desc": "Investiga números, formas y lógica: la base de todo lo demás."
+  },
+  {
+   "id": "fisico",
+   "nombre": "Físico y astrónomo",
+   "nivel": 3,
+   "campo": "FIS",
+   "desde": 0.1,
+   "peso": 4,
+   "grupo": "investigacion",
+   "desc": "Investiga la materia, la energía, la luz y el cielo."
+  },
+  {
+   "id": "biologo",
+   "nombre": "Biólogo y agrónomo",
+   "nivel": 3,
+   "campo": "BIO",
+   "desde": 0.1,
+   "peso": 5,
+   "grupo": "investigacion",
+   "desc": "Estudia la vida y mejora cultivos y razas."
+  },
+  {
+   "id": "filosofo",
+   "nombre": "Filósofo e historiador",
+   "nivel": 3,
+   "campo": "HUM",
+   "desde": 0.03,
+   "peso": 8,
+   "grupo": "investigacion",
+   "desc": "Piensa y estudia al ser humano y su pasado."
+  },
+  {
+   "id": "profesor",
+   "nombre": "Profesor universitario",
+   "nivel": 3,
+   "campo": "EDU",
+   "desde": 0.15,
+   "peso": 15,
+   "grupo": "docencia",
+   "desc": "Forma a los demás profesionales y sostiene la ciencia del país."
+  },
+  {
+   "id": "programador",
+   "nombre": "Programador e informático",
+   "nivel": 3,
+   "campo": "CIE.COM",
+   "desde": 0.2,
+   "peso": 30,
+   "grupo": "tecnologia",
+   "desc": "Escribe los programas que mueven la economía moderna."
+  },
+  {
+   "id": "ing_telecom",
+   "nombre": "Ingeniero de telecomunicaciones",
+   "nivel": 3,
+   "campo": "ELE",
+   "desde": 0.2,
+   "peso": 8,
+   "grupo": "tecnologia",
+   "desc": "Diseña telégrafos, radios, chips y redes móviles."
+  },
+  {
+   "id": "ing_armas",
+   "nombre": "Ingeniero de armamento",
+   "nivel": 3,
+   "campo": "FUE",
+   "desde": 0.1,
+   "peso": 3,
+   "grupo": "militar",
+   "desc": "Diseña armas, blindajes y sistemas de guerra."
+  },
+  {
+   "id": "gerente",
+   "nombre": "Directivo y profesional de empresa",
+   "nivel": 3,
+   "campo": "ECO",
+   "desde": 0.2,
+   "peso": 150,
+   "grupo": "gobierno",
+   "desc": "Dirige empresas, oficinas y administraciones; antes de la economía moderna, notables y grandes propietarios."
+  }
+ ]
+}

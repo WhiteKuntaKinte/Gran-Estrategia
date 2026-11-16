@@ -4,7 +4,7 @@ Guía corta del sistema: dónde viven los datos, cómo se enlazan con el reloj y
 
 ## 1. Dónde viven y por qué
 - **No están en `base_datos.gd`.** Esa base guarda *un valor por territorio y por fecha* (población, dueño, etc.). Un descubrimiento no pertenece a un territorio: es un dato **fijo** del juego (nombre, era, prerrequisitos, año) que no cambia durante la partida.
-- Catálogo fijo: **`datos/descubrimientos.json`** (1.771 descubrimientos, 40 secciones, 158 subsecciones, 206 KB). Lo carga `scripts/descubrimientos.gd` y lo cuelga de `Mundo.descubrimientos`.
+- Catálogo fijo: **`datos/descubrimientos.json`** (1.814 descubrimientos, 40 secciones, 158 subsecciones, 206 KB). Lo carga `scripts/descubrimientos.gd` y lo cuelga de `Mundo.descubrimientos`.
 - Lo que sí cambia por país (qué conoce cada uno) es un estado aparte y muy barato (ver §3).
 
 ## 2. El enlace con el reloj: cada descubrimiento tiene un año

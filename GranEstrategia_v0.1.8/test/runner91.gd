@@ -1,7 +1,7 @@
 extends Node
 ## 0.1.8.43 · PRUEBAS DE LA PANTALLA COMPLETA DE DESCUBRIMIENTOS: hub de secciones, el árbol de cada una de las 40 secciones (crece hacia arriba; todo el catálogo se ve, en
 ## cualquier época), colores (bloqueado negro, lejano gris, conocido verde, disponible dorado), globo, trazos hacia otras secciones y «T», abanico circular (no cuadrícula), estados en 1 d. C. y en 2026, ficha (requiere / abre),
-## buscador, filtros, tecla T, botón de la barra y Esc, y la lista COMPLETA del Debug (los 1.771 y la fila de la frontera).
+## buscador, filtros, tecla T, botón de la barra y Esc, y la lista COMPLETA del Debug (los 1.814 y la fila de la frontera).
 var main
 var fallos := 0
 var n_ok := 0
@@ -60,7 +60,7 @@ func run() -> void:
 func t_catalogo() -> void:
 	print("[T] ── Catálogo: dependientes y búsqueda")
 	var d = main.mundo.descubrimientos
-	ok(d != null and d.n == 1771, "el catálogo tiene 1.771 descubrimientos (%d)" % d.n)
+	ok(d != null and d.n == 1814, "el catálogo tiene 1.814 descubrimientos (%d)" % d.n)
 	var malos := 0
 	var aristas := 0
 	for i in d.n:
@@ -132,7 +132,7 @@ func t_hub() -> void:
 			suma += (m["nodos"] as PackedInt32Array).size()
 			ok((m["p"] as PackedVector2Array).size() == (m["nodos"] as PackedInt32Array).size(), "tarjeta %d: un punto por descubrimiento" % int(t["s"]))
 		ok(p.fondo.rama == r, "rama %d: el fondo cambia de ambiente" % r)
-	ok(total_tarjetas == 40 and suma == 1771, "entre las tres ramas: 40 tarjetas y 1.771 puntos (%d / %d)" % [total_tarjetas, suma])
+	ok(total_tarjetas == 40 and suma == 1814, "entre las tres ramas: 40 tarjetas y 1.814 puntos (%d / %d)" % [total_tarjetas, suma])
 	ok(fuera == 0, "ninguna tarjeta se sale del ancho del hub (%d)" % fuera)
 	var d0: int = p.hub.dibujos
 	p.hub.queue_redraw()
@@ -155,7 +155,7 @@ func t_hub() -> void:
 	for i in d.n:
 		if int(d.seccion[i]) == med:
 			cuenta += 1
-	ok(int(p.hub.totales[med]) == cuenta and cuenta == 102, "el hub cuenta los 102 de Medicina y salud (%d)" % int(p.hub.totales[med]))
+	ok(int(p.hub.totales[med]) == cuenta and cuenta == 113, "el hub cuenta los 113 de Medicina y salud (%d)" % int(p.hub.totales[med]))
 
 
 func t_secciones() -> void:
@@ -208,7 +208,7 @@ func t_secciones() -> void:
 		if g.nodos.size() != p.totales[s]:
 			sin_pos += 1
 	var ms := float(Time.get_ticks_usec() - t0) / 1000.0
-	ok(total == 1771, "entre las 40 secciones salen los 1.771 descubrimientos (%d)" % total)
+	ok(total == 1814, "entre las 40 secciones salen los 1.814 descubrimientos (%d)" % total)
 	ok(sin_pos == 0, "todos los nodos tienen posición y radio (%d sin)" % sin_pos)
 	ok(hacia_abajo == 0, "ninguna línea vuelve hacia la raíz: cada uno queda MÁS LEJOS que lo que necesita (%d)" % hacia_abajo)
 	ok(raiz_arriba == 0, "cada nivel es un anillo (o hasta 3 sub-anillos si está lleno) alrededor de la raíz, las raíces en el más cercano y todo por encima de ella (%d fuera)" % raiz_arriba)
@@ -243,7 +243,7 @@ func t_secciones() -> void:
 	var mayor := 0
 	for s in d.secciones.size():
 		mayor = maxi(mayor, p.totales[s])
-	ok(mayor == 102, "la sección más grande (Medicina y salud) tiene 102 (%d)" % mayor)
+	ok(mayor == 113, "la sección más grande (Medicina y salud) tiene 113 (%d)" % mayor)
 	# el árbol se dibuja: contador de dibujos y nodos dentro de la vista
 	p._entrar_seccion(19)
 	g.ajustar()
@@ -392,14 +392,14 @@ func t_epocas() -> void:
 					conocidos += 1
 				elif e == g.E_LEJANO:
 					lejanos += 1
-		ok(cuenta_vista == 1771, "año %d: se pueden VER los 1.771 (%d)" % [int(fecha[0]), cuenta_vista])
+		ok(cuenta_vista == 1814, "año %d: se pueden VER los 1.814 (%d)" % [int(fecha[0]), cuenta_vista])
 		ok(conocidos == d.cuenta_f, "año %d: los conocidos son los de la historia (%d = %d)" % [int(fecha[0]), conocidos, d.cuenta_f])
 		if int(fecha[0]) == 1:
 			ok(conocidos < 700 and lejanos > 700, "año 1: quedan muchos por llegar y se ven (%d conocidos, %d lejanos)" % [conocidos, lejanos])
 			ok(d.n - d.cuenta_f > 1000, "año 1: la lista llega mucho más allá (%d por llegar)" % (d.n - d.cuenta_f))
 		else:
 			ok(conocidos > 1500, "2026: casi todo conocido (%d)" % conocidos)
-			ok(d.n - d.cuenta_f > 0 and cuenta_vista == 1771, "2026: también se ven los descubrimientos hipotéticos del futuro (%d)" % (d.n - d.cuenta_f))
+			ok(d.n - d.cuenta_f > 0 and cuenta_vista == 1814, "2026: también se ven los descubrimientos hipotéticos del futuro (%d)" % (d.n - d.cuenta_f))
 		var texto: String = p._lbl_info.text
 		ok(texto.contains(str(d.anio_actual)) or texto.contains("Año del reloj"), "la línea de resumen se actualiza")
 		# el hub cuenta lo mismo que el árbol

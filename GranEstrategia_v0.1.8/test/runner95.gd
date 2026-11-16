@@ -397,6 +397,18 @@ func t_ia() -> void:
 	ok(not m.guerra.en_guerra(a, rv), "La IA con ventaja cobra la paz")
 	ok(int(st["no_guerra_hasta"]) >= dia0 + 30 + m.ia.CONSOLIDA_DIAS_PROV, "Tras quedarse provincias descansa para digerirlas (hasta el día +%d)" % (int(st["no_guerra_hasta"]) - dia0))
 	limpiar()
+	# 0.1.8.47 · cansancio de guerra: una guerra estancada de más de PAZ_CANSADA_DIAS días se cierra si la gente ya no aguanta (aunque el puntaje sea de tablas)
+	fijar_soldados(sold)
+	m.guerra.declarar(a, rv, "Prueba")
+	st["ini"][rv] = m.ia.dia_n - (m.ia.PAZ_CANSADA_DIAS + 10)
+	m.bd.poner_f("fatiga_guerra", a, m.ia.FATIGA_PIDE_PAZ - 10.0)
+	m.ia._paz(nom(a), st, a, m.guerra.rivales_de(a))
+	ok(m.guerra.en_guerra(a, rv), "Con poco cansancio y la guerra estancada (menos de %d días) sigue peleando" % m.ia.PAZ_TABLAS_DIAS)
+	m.bd.poner_f("fatiga_guerra", a, m.ia.FATIGA_PIDE_PAZ + 5.0)
+	m.ia._paz(nom(a), st, a, m.guerra.rivales_de(a))
+	ok(not m.guerra.en_guerra(a, rv), "Con el cansancio de guerra por encima de %.0f pide la paz y se firma" % m.ia.FATIGA_PIDE_PAZ)
+	m.bd.poner_f("fatiga_guerra", a, 0.0)
+	limpiar()
 
 
 func t_relaciones_ia() -> void:

@@ -1,5 +1,5 @@
 extends Node
-## 0.1.8.46 · PRUEBAS DE LOS CIMIENTOS DEL SABER: catálogo ampliado (41 descubrimientos nuevos y 49 enlaces entre ramas), recetas (edificios y materias que ayudan)
+## 0.1.8.46 · PRUEBAS DE LOS CIMIENTOS DEL SABER: catálogo ampliado (41 descubrimientos nuevos y 49 enlaces entre ramas en la 0.1.8.46; +43 y +16 en la 0.1.8.47), recetas (edificios y materias que ayudan)
 ## con su validador, y el azar sin estado (scripts/azar.gd).
 const AzarScript := preload("res://scripts/azar.gd")
 const DescubrimientosScript := preload("res://scripts/descubrimientos.gd")
@@ -44,11 +44,15 @@ func run() -> void:
 
 func t_catalogo() -> void:
 	print("[T] ── Catálogo ampliado")
-	ok(d.n == 1771 and d.secciones.size() == 40, "1.771 descubrimientos en 40 secciones (%d / %d)" % [d.n, d.secciones.size()])
+	ok(d.n == 1814 and d.secciones.size() == 40, "1.814 descubrimientos en 40 secciones (%d / %d)" % [d.n, d.secciones.size()])
 	var nuevos := ["archivos_estatales", "posta_imperial", "censo_periodico", "presupuesto_nacional", "registro_parroquial", "estadisticas_vitales", "tablas_de_mortalidad",
 		"escuelas_primeras_letras", "aprendizaje_gremial", "formacion_de_maestros", "correspondencia_erudita", "bibliotecas_publicas", "enciclopedias", "congresos_cientificos",
 		"oficio_herrero", "oficio_medico", "oficio_arquitecto", "oficio_navegante", "ensayo_de_metales", "normalizacion_industrial", "prospeccion_minera", "caminos_de_peaje",
-		"red_telegrafica_nacional", "transicion_demografica", "demografia_cientifica", "doctorado_investigacion"]
+		"red_telegrafica_nacional", "transicion_demografica", "demografia_cientifica", "doctorado_investigacion",
+		# 0.1.8.47: gente, escuela y campo
+		"obstetricia_cientifica", "pediatria", "atencion_prenatal", "control_vectores", "fortificacion_alimentos", "terapia_rehidratacion_oral", "jabon_higiene", "banos_publicos",
+		"hospicios_beneficencia", "agua_clorada", "saneamiento_rural", "calendario_vacunacion_infantil", "atencion_primaria_salud", "rotacion_cuatro_hojas", "cadena_de_frio",
+		"extension_agricola", "maiz_hibrido", "riego_por_goteo", "pedagogia_cientifica", "escolaridad_obligatoria", "educacion_de_ninas", "secundaria_masiva", "codigos_construccion"]
 	var faltan := []
 	for s in nuevos:
 		if d.indice(s) < 0:
@@ -74,7 +78,9 @@ func t_enlaces() -> void:
 	print("[T] ── Enlaces entre ramas (enlaces.txt)")
 	var pares := [["registro_civil", "registro_parroquial"], ["estadistica_oficial", "estadisticas_vitales"], ["burocracia_moderna", "contabilidad_publica"],
 		["pensiones", "tablas_de_mortalidad"], ["alfabetizacion_masiva", "formacion_de_maestros"], ["brujula", "oficio_navegante"], ["rec_petroleo", "prospeccion_minera"],
-		["espada_acero", "oficio_herrero"], ["acero_crisol", "ensayo_de_metales"], ["revistas_cientificas", "correspondencia_erudita"]]
+		["espada_acero", "oficio_herrero"], ["acero_crisol", "ensayo_de_metales"], ["revistas_cientificas", "correspondencia_erudita"],
+		["revolucion_verde", "maiz_hibrido"], ["revolucion_verde", "extension_agricola"], ["sistema_nacional_salud", "atencion_prenatal"], ["educacion_universal_gratuita", "escolaridad_obligatoria"],
+		["megaciudades", "cadena_de_frio"], ["planificacion_familiar", "educacion_de_ninas"], ["seguro_salud_universal", "seguro_enfermedad_obrero"], ["oms_cooperacion_sanitaria", "control_vectores"]]
 	var malos := []
 	var sin_porque := []
 	for p in pares:
@@ -208,7 +214,7 @@ func t_generador() -> void:
 	var gen := raiz.path_join("herramientas/construir_descubrimientos.py")
 	var s1 := []
 	var c1 := OS.execute(cmd, ["-I", gen, "--solo-comprobar"], s1, true)
-	ok(c1 == 0 and String(s1[0]).contains("1771 descubrimientos"), "el generador comprueba el catálogo entero sin errores")
+	ok(c1 == 0 and String(s1[0]).contains("1814 descubrimientos"), "el generador comprueba el catálogo entero sin errores")
 	var tmp := OS.get_user_data_dir().path_join("enlaces_malos.txt")
 	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	f.store_string("bronce|sextante|un enlace con un año imposible\n")

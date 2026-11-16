@@ -242,7 +242,7 @@ func _descubrir(i: int) -> void:
 		var tid: int = activos[k]
 		if not d.requisitos_cumplidos(tid, i):
 			continue
-		var w: float = float(_cap.get(tid, 0.0)) * (0.6 + AzarScript.u(semilla, 4, tid, sec)) * _factor_mat(_nombre[tid], i)
+		var w: float = float(_cap.get(tid, 0.0)) * (0.6 + AzarScript.u(semilla, 4, tid, sec)) * _factor_mat(_nombre[tid], i) * (mundo.educacion.factor_seccion(tid, sec) if mundo.educacion != null else 1.0)
 		pesos[k] = w
 		total += w
 	if total <= 0.0:
@@ -331,7 +331,8 @@ func _programar(tid: int, i: int, contacto: float, desde: int) -> void:
 	if _pend.has(clave):
 		return
 	var l: float = L_ERA[mini(int(d.era[i]), L_ERA.size() - 1)]
-	var meses := maxi(1, roundi(l * (0.3 + AzarScript.expo(semilla, 3, clave, desde)) / contacto))
+	var fd: float = mundo.educacion.factor_difusion(tid) if mundo.educacion != null else 1.0         # 0.1.8.47: un pueblo alfabetizado se entera antes
+	var meses := maxi(1, roundi(l * (0.3 + AzarScript.expo(semilla, 3, clave, desde)) / (contacto * fd)))
 	_pend[clave] = true
 	var m := mes_n + meses
 	if _cola.has(m):
@@ -414,7 +415,7 @@ func _recalcular_cap(tid: int) -> void:
 	for pi in p.provincias:
 		pob += col[mundo.provincias[int(pi)].ix]
 	var ratio := clampf(float(_conocidos_n.get(tid, 0)) / float(maxi(d.cuenta_f, 1)), 0.0, 1.0)
-	_cap[tid] = pow(pob / 1.0e6 + 0.02, CAP_EXPONENTE) * (0.4 + 0.6 * ratio)
+	_cap[tid] = pow(pob / 1.0e6 + 0.02, CAP_EXPONENTE) * (0.4 + 0.6 * ratio) * (mundo.educacion.factor_capacidad(tid) if mundo.educacion != null else 1.0)
 
 
 ## Los edificios de una provincia se guardan como texto «slug:cantidad;slug:cantidad» y solo los que tienen más de 0. El motor busca ahí directamente: no arma el

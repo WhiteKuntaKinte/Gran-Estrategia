@@ -308,7 +308,7 @@ func t_reloj_mapa() -> void:
 	main.reloj.ocupado = false
 	var d1: int = ia.dia_n
 	main._on_dia_diferido(true, true, 2)
-	ok(main._fases.size() == 3 + 9 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 9 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
+	ok(main._fases.size() == 3 + 10 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 10 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
 	var n0: int = main._fases.size()
 	main._correr_fases(0)
 	ok((main._fases.size() < n0 or m._mes_en_curso) and main._fases.size() >= n0 - 3, "_correr_fases(presupuesto 0): corre al menos una fase o un trozo del mes (%d → %d, mes a medias: %s)" % [n0, main._fases.size(), str(m._mes_en_curso)])
@@ -316,7 +316,7 @@ func t_reloj_mapa() -> void:
 	ok(main._fases.is_empty() and not main.reloj.ocupado, "_vaciar_fases: termina lo pendiente y libera al reloj")
 	ok(ia.dia_n == d1 + 2, "…y el día quedó simulado entero (2 días)")
 	main._on_dia_diferido(false, false, 1)
-	ok(main._fases.size() == 9, "sin cambio de mes: solo las 9 fases del día")
+	ok(main._fases.size() == 10, "sin cambio de mes: solo las 10 fases del día")
 	var d2: int = ia.dia_n
 	main._on_dia(false, false, 1)                       # un día nuevo termina primero el que estaba a medias
 	ok(main._fases.is_empty() and not main.reloj.ocupado and ia.dia_n == d2 + 2, "_on_dia termina antes el día que estaba a medias: 1 + 1 = 2 días (IA +%d)" % (ia.dia_n - d2))

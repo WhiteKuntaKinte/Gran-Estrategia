@@ -50,3 +50,17 @@ rec_litio|prospeccion_minera|El litio se busca con prospección
 hierro_forja|ensayo_de_metales|Para forjar hierro hay que saber ensayarlo
 moneda_acunada|ensayo_de_metales|Acuñar exige ley de metal comprobada
 acero_crisol|ensayo_de_metales|El acero de crisol exige ensayo de la aleación
+# ── 0.1.8.47: gente, escuela y campo ──
+revolucion_verde|maiz_hibrido,extension_agricola|La revolución verde llevó semillas mejoradas y técnicos al campo
+sistema_nacional_salud|atencion_prenatal|Los sistemas nacionales de salud empezaron cuidando a madres y recién nacidos
+educacion_universal_gratuita|escolaridad_obligatoria,educacion_de_ninas|La escuela de todos exige la obligación de ir y a las niñas en el aula
+alfabetizacion_masiva|escolaridad_obligatoria|No se alfabetiza a un pueblo sin obligar a ir a la escuela
+megaciudades|cadena_de_frio|Una megaciudad se alimenta con comida conservada y transportada desde lejos
+transicion_demografica|atencion_prenatal,fortificacion_alimentos|La transición demográfica empieza cuando sobreviven las madres y los niños
+planificacion_familiar|educacion_de_ninas|Las familias se planifican donde las niñas estudian
+seguro_salud_universal|seguro_enfermedad_obrero|Del seguro del obrero al seguro de todos
+pensiones|seguro_enfermedad_obrero|La salud del obrero se aseguró antes que su vejez
+hospital_moderno|hospicios_beneficencia|El hospital moderno hereda las casas de caridad
+educacion_publica|pedagogia_cientifica|La escuela pública necesita un método de enseñanza
+formacion_de_maestros|pedagogia_cientifica|Enseñar a enseñar es una ciencia
+oms_cooperacion_sanitaria|control_vectores|La OMS nace de las campañas contra el paludismo y el tifus
