@@ -1959,9 +1959,18 @@ func _card_edificios(pis: Array, una: bool) -> void:
 			_linea(ob_caja, String(ed.nombre[int(o["e"])]), "%d %% · faltan %d d" % [int(roundf(float(o["pct"]))), int(o["falta"])], Tema.TENUE, "edificios/" + String(ed.slug[int(o["e"])]))
 		if filas.size() > 6:
 			_nota(ob_caja, "… y %d obras más." % (filas.size() - 6))
+	if una and ed.efectos_listos:
+		var efs: PackedStringArray = ed.resumen_efectos(int(pis[0]))
+		if not efs.is_empty():
+			var caja_ef := VBoxContainer.new()
+			caja_ef.add_theme_constant_override("separation", 2)
+			sec.add_child(caja_ef)
+			caja_ef.add_child(_lbl("EFECTOS", 10, Tema.TENUE))
+			for t in efs:
+				_nota(caja_ef, t)
 	var b := _boton(sec, "Construir…", func(): construir_pedido.emit(pis.duplicate()))
-	b.tooltip_text = "Construir\nAbre la ventana Construir: los edificios que conoces, su costo en dinero y sus días de obra."
-	_nota(sec, "Cuestan dinero de la tesorería y tardan días. Todavía no tienen efectos en el juego.")
+	b.tooltip_text = "Construir\nAbre la ventana Construir: los edificios que conoces, lo que hace cada uno, su costo en dinero y sus días de obra."
+	_nota(sec, "Se pagan primero del fondo de obras (la partida de obras de tus impuestos) y luego de la tesorería, y tardan días." if ed.efectos_listos else "Cuestan dinero de la tesorería y tardan días. Todavía no tienen efectos en el juego.")
 
 
 func _card_cores(pis: Array, una: bool) -> void:

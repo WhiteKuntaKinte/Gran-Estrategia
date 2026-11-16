@@ -33,7 +33,7 @@ const FichasScript := preload("res://scripts/fichas.gd")
 const GrabadorScript := preload("res://scripts/grabador_rendimiento.gd")
 const RegistroScript := preload("res://scripts/registro_fallos.gd")
 
-const VERSION := "0.1.8.47"
+const VERSION := "0.1.8.48"
 const ANCHO_MAPA := 2400.0
 const ZOOM_MIN := 0.55
 const ZOOM_MAX := 32.0
@@ -1240,7 +1240,7 @@ func _cargar_info() -> void:
 			mundo.cargar_economia(dv, info.get("prov", []), economia, HudScript.produccion_principal)
 		mundo.iniciar_ejercito(_leer_json_opcional("res://datos/ejercito.json"), _leer_json_opcional("res://datos/nombres_cultura.json"),
 			_leer_json_opcional("res://datos/vecinos_prov.json"))
-		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"), epoca)            # 0.1.8.40: edificios y cores (van después de las culturas); 0.1.8.42: con los edificios de partida de la época
+		mundo.iniciar_edificios(_leer_json_opcional("res://datos/edificios.json"), epoca, _leer_json_opcional("res://datos/edificios_efectos.json"))            # 0.1.8.40: edificios y cores (van después de las culturas); 0.1.8.42: con los edificios de partida de la época
 		mundo.iniciar_saber()                                                                       # 0.1.8.46: la historia se congela en el año de partida y el planeta descubre lo que viene
 		pinturas = PinturasScript.new()                                                             # 0.1.8.41: pinturas por país, región y continente (pinturas/creditos.json)
 		pinturas.iniciar(self)

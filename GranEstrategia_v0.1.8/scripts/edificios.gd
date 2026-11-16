@@ -7,7 +7,9 @@ extends RefCounted
 ##   · `edificios` (texto, provincia)  «slug:cantidad;slug:cantidad»          lo ya construido.
 ##   · `obras` (texto, provincia)      «slug@día_inicio@día_fin@pago_usd;...» lo que está en obra (los días son del reloj propio `dia_n`).
 ##   · `num_edificios` (número, provincia)  cuántos hay construidos (se suma hacia país, estado y continente).
-## SIN EFECTOS de juego todavía (decisión de diseño): los edificios solo existen, se cuentan y se muestran; el resto del juego los ignora.
+## EFECTOS (0.1.8.48, datos/edificios_efectos.json): 7 clases de efecto (salud, comida, vivienda, producción, orden, defensa, movilidad); ver docs/EDIFICIOS_EFECTOS.md.
+##   Los edificios de PARTIDA ya están en los datos de la época (renta, población, esperanza de vida): salud / comida / vivienda / producción solo cuentan lo que se
+##   construye DESPUÉS; orden, defensa y movilidad cuentan todo (los datos reales no los traen). Producción: al terminar una obra sube el producto por habitante.
 ##
 ## Costo = fracción de la producción anual de la provincia según la CLASE de obra (A..F), con un piso por habitante (así vale igual en el año 1
 ## que en 2026). Días de obra = los de la clase. Cancelar una obra devuelve REEMBOLSO_CANCELAR del pago.
@@ -33,14 +35,40 @@ var desc_idx := PackedInt32Array()       # índice del descubrimiento que lo hab
 var idx_de_slug := {}
 var categorias: Array = []               # [{cod, nombre, icono}]
 var clases := {}                         # clase -> {nombre, fraccion, dias}
+var _frac := PackedFloat32Array()        # por edificio: fracción de la producción anual de la provincia que cuesta (la de su clase)
 
 var dia_n := 0                           # días de juego pasados (reloj de las obras)
 var terminadas := 0                      # obras terminadas desde que empezó la partida (para pruebas y Debug)
+var producidas := 0                      # ... y cuántas de esas obras subieron la producción de su provincia
 var version := 0                         # sube con cualquier cambio de edificios u obras (la interfaz sabe si debe redibujar)
 var _obras := {}                         # índice de provincia -> Array de [e, ini, fin, pago_usd]
 var _prox_fin := SIN_FIN
 var _cache := {}                         # tid de provincia -> [texto, Dictionary slug->cantidad]
 var _pc_cache := {}                      # país -> [versión económica de la base, producción anual por habitante en US$]
+var cache_tolerante := false             # true = los costos usan la producción por habitante ya guardada aunque la economía haya cambiado (la IA lo enciende un momento: recalcularla recorre el país entero)
+
+# ───────────── efectos (0.1.8.48) ─────────────
+const EF_SAL := 0                        # salud: suma a la salud efectiva (0-1)
+const EF_COM := 1                        # comida segura: puntos de bienestar
+const EF_URB := 2                        # vivienda y ciudad: suma a la meta de urbanización (0-1)
+const EF_REN := 3                        # producción: fracción que sube el producto por habitante al terminar la obra
+const EF_ORD := 4                        # orden y cohesión: puntos de estabilidad
+const EF_DEF := 5                        # defensa: × que suma al poder de los defensores
+const EF_MOV := 6                        # movilidad: fracción del castigo de la distancia a la capital que se quita
+const N_EF := 7
+const EF_CLAVES := ["sal", "com", "urb", "ren", "ord", "def", "mov"]
+var _cero3 := PackedFloat32Array([0.0, 0.0, 0.0])      # lo que devuelve `efectos_nuevos` cuando no hay nada (compartido: no se modifica)
+
+var efectos_listos := false
+var ef_tipos: Array = []                 # por clase de efecto: {nombre, por_habitante, tope, unidad, texto}
+var ef_solo_saber := PackedStringArray() # edificios sin efecto propio a propósito (ya cuentan como instituciones de saber)
+var _ef_tope := PackedFloat32Array()
+var _ef_hab := PackedByteArray()         # 1 = el efecto depende de cuánta gente atiende el edificio
+var _ef_de: Array = []                   # por edificio: Array de [clase, peso, habitantes que atiende cada unidad]
+var _base := {}                          # tid de provincia -> texto de edificios con el que empezó la partida
+var _nuevos := {}                        # tid -> true: la provincia tiene más de lo que tenía al empezar
+var _s_abs := {}                         # tid -> PackedFloat32Array(2 · N_EF) con TODO lo construido: [habitantes·peso ×N_EF, peso ×N_EF]
+var _s_nue := {}                         # tid -> lo mismo, solo con lo construido después de empezar la partida
 
 
 ## Carga el catálogo (datos/edificios.json). Devuelve false si falta o está mal.
@@ -62,7 +90,40 @@ func cargar(js: Dictionary) -> bool:
 		seccion.append(String(e.get("seccion", "")))
 		desc.append(String(e.get("desc", "")))
 		idx_de_slug[slug[slug.size() - 1]] = slug.size() - 1
+		_frac.append(float(clases.get(String(e["clase"]), {}).get("fraccion", 0.01)))
 	listo = true
+	return true
+
+
+## Carga datos/edificios_efectos.json (va DESPUÉS de `cargar`). Devuelve false si falta o no cuadra con el catálogo; sin efectos los edificios solo existen.
+func cargar_efectos(js: Dictionary) -> bool:
+	efectos_listos = false
+	var tipos: Dictionary = js.get("tipos", {})
+	var ef: Dictionary = js.get("efectos", {})
+	if n <= 0 or tipos.is_empty() or ef.is_empty():
+		return false
+	_ef_tope.resize(N_EF)
+	_ef_hab.resize(N_EF)
+	ef_tipos = []
+	for k in N_EF:
+		var t: Dictionary = tipos.get(EF_CLAVES[k], {})
+		if t.is_empty():
+			return false
+		_ef_tope[k] = float(t.get("tope", 1.0))
+		_ef_hab[k] = 1 if bool(t.get("por_habitante", false)) else 0
+		ef_tipos.append(t)
+	_ef_de = []
+	_ef_de.resize(n)
+	for i in n:
+		var lista := []
+		for par in ef.get(slug[i], []):
+			var k: int = EF_CLAVES.find(String(par[0]))
+			if k < 0:
+				return false
+			lista.append([k, float(par[1]), float(par[2])])
+		_ef_de[i] = lista
+	ef_solo_saber = PackedStringArray(js.get("solo_saber", []))
+	efectos_listos = true
 	return true
 
 
@@ -75,13 +136,23 @@ func iniciar(m) -> void:
 		desc_idx[i] = m.descubrimientos.indice(slug[i]) if m.descubrimientos != null else -1
 	dia_n = 0
 	terminadas = 0
+	producidas = 0
 	_obras.clear()
 	_cache.clear()
+	_base.clear()
+	_nuevos.clear()
+	_s_abs.clear()
+	_s_nue.clear()
 	_prox_fin = SIN_FIN
 	for pr in m.provincias:                                  # obras que ya trajera la base (por ejemplo, de Debug o de una época con datos propios)
 		var t: String = bd.txt("obras", pr.tid, "")
 		if t != "":
 			_obras[pr.idx] = _leer_obras(t)
+		var te: String = bd.txt("edificios", pr.tid, "")
+		if te != "":                                         # lo que ya había es la partida de la época: sus efectos ya están en los datos
+			_base[pr.tid] = te
+			if efectos_listos:
+				_s_abs[pr.tid] = _sumas(_dict_de_texto(te), null)
 	_recalcular_prox()
 
 
@@ -159,8 +230,12 @@ func sembrar_iniciales(anio_epoca: int) -> int:
 				partes.append(prefijo[e] + str(c))
 				suma += c
 		if suma > 0:
-			bd.inicial_s("edificios", pr.tid, ";".join(partes))     # valores de partida: sin historial ni avisos de cambio
+			var texto := ";".join(partes)
+			bd.inicial_s("edificios", pr.tid, texto)                # valores de partida: sin historial ni avisos de cambio
 			bd.inicial_f("num_edificios", pr.tid, float(suma))
+			_base[pr.tid] = texto
+			if efectos_listos:
+				_s_abs[pr.tid] = _sumas(_dict_de_texto(texto), null)
 			total += suma
 	version += 1
 	return total
@@ -220,6 +295,7 @@ func _guardar(pi: int, d: Dictionary, motivo := "") -> void:
 	bd.poner_s("edificios", tid, t, motivo)
 	bd.poner_f("num_edificios", tid, float(total))
 	_cache[tid] = [t, d]
+	_refrescar_efectos(tid, d)
 	version += 1
 
 
@@ -302,7 +378,7 @@ func _prod_base_usd(pi: int) -> float:
 ## Producción anual por habitante del país (US$), guardada hasta que cambie la economía de la base (recorrer sus provincias en cada consulta era O(n²) en las órdenes de grupo).
 func _prod_por_hab(pais: String) -> float:
 	var c = _pc_cache.get(pais)
-	if c != null and int(c[0]) == bd.version_eco:
+	if c != null and (int(c[0]) == bd.version_eco or cache_tolerante):
 		return float(c[1])
 	var pc := 0.0
 	if mundo.paises.has(pais):
@@ -313,7 +389,17 @@ func _prod_por_hab(pais: String) -> float:
 
 ## Costo en US$ de construir `e` en la provincia `pi`.
 func costo_usd(pi: int, e: int) -> float:
-	return float(clases.get(clase[e], {}).get("fraccion", 0.01)) * _prod_base_usd(pi)
+	return _frac[e] * _prod_base_usd(pi)
+
+
+## Fracción de la producción anual de una provincia que cuesta construir `e` (la de su clase).
+func fraccion_de(e: int) -> float:
+	return _frac[e]
+
+
+## ¿Este edificio hace algo propio (salud, comida, vivienda, producción, orden, defensa, movilidad)? Los de saber no: ya cuentan como instituciones.
+func con_efecto(e: int) -> bool:
+	return efectos_listos and e >= 0 and e < n and not (_ef_de[e] as Array).is_empty()
 
 
 ## Costo en la divisa del dueño de la provincia.
@@ -360,7 +446,7 @@ func puede(pais: String, pi: int, e: int) -> Dictionary:
 			if cantidad(pi, e) >= tope[e] else "Ya hay una obra de este tipo en curso."}
 	var costo := costo_local(pi, e)
 	var p = mundo.paises[pais]
-	if costo > 0.0 and p.tiene_tesoreria() and p.tesoreria < costo:
+	if costo > 0.0 and p.tiene_tesoreria() and p.tesoreria + p.fondo_obras < costo:
 		return {"ok": false, "motivo": "No alcanza la tesorería."}
 	return {"ok": true, "motivo": ""}
 
@@ -373,13 +459,16 @@ func construir(pais: String, pi: int, e: int) -> Dictionary:
 	var costo_u := costo_usd(pi, e)
 	var costo_l := costo_u * _por_usd(pais)
 	var p = mundo.paises[pais]
+	var del_fondo := minf(float(p.fondo_obras), costo_l)           # 0.1.8.48: primero se gasta el fondo de obras públicas, luego la tesorería
+	if del_fondo > 0.0:
+		p.fondo_obras = p.fondo_obras - del_fondo
 	if p.tiene_tesoreria():
-		p.tesoreria = p.tesoreria - costo_l
+		p.tesoreria = p.tesoreria - (costo_l - del_fondo)
 	var lista: Array = _obras.get(pi, [])
 	lista.append([e, dia_n, dia_n + dias_de(e), costo_u])
 	_obras[pi] = lista
 	_escribir_obras(pi)
-	return {"ok": true, "msg": "Obra empezada: %s (%d días)." % [nombre[e], dias_de(e)], "costo": costo_l}
+	return {"ok": true, "msg": "Obra empezada: %s (%d días)." % [nombre[e], dias_de(e)], "costo": costo_l, "fondo": del_fondo}
 
 
 ## La misma obra en varias provincias (órdenes de grupo). Para al quedarse sin dinero.
@@ -461,15 +550,24 @@ func _terminar_vencidas() -> void:
 		var quedan := []
 		var d: Dictionary = de_provincia(pi).duplicate()
 		var pais: String = mundo.provincias[pi].pais
+		var pob: float = mundo.provincias[pi].poblacion
+		var ren_antes: float = efecto_nuevo(pi, EF_REN, pob)
 		for o in lista:
 			if int(o[2]) <= dia_n:
 				d[slug[int(o[0])]] = int(d.get(slug[int(o[0])], 0)) + 1
 				terminadas += 1
-				if mundo.paises.has(pais):
+				if mundo.paises.has(pais) and (pais == mundo.jugador or not mundo.tiene_ia(pais)):          # las obras de las IA no llenan el registro de sucesos
 					mundo.evento(int(mundo.paises[pais].tid), "Obra terminada: %s en %s." % [nombre[int(o[0])], mundo.provincias[pi].nombre])
 			else:
 				quedan.append(o)
 		_guardar(pi, d, "Obra terminada")
+		var boost: float = efecto_nuevo(pi, EF_REN, pob) - ren_antes
+		if boost > 1.0e-6:                                         # 0.1.8.48: la provincia se vuelve más productiva (sube su producto por habitante)
+			var pcol: PackedFloat64Array = bd.vars["pib_pc_usd"].col_f      # escribe directo en la columna (como el desarrollo mensual): la caché de ingresos lo recoge al cerrar el mes
+			var kx: int = mundo.provincias[pi].ix
+			if not is_nan(pcol[kx]):
+				pcol[kx] *= 1.0 + boost
+				producidas += 1
 		_obras[pi] = quedan
 		_escribir_obras(pi)
 
@@ -485,6 +583,210 @@ func completar_obras(pi: int) -> int:
 	_prox_fin = dia_n
 	_terminar_vencidas()
 	return c
+
+
+# ───────────── efectos: cálculo (0.1.8.48) ─────────────
+## {slug: cantidad} de un texto «slug:cantidad;slug:cantidad».
+func _dict_de_texto(t: String) -> Dictionary:
+	var d := {}
+	if t != "":
+		for par in t.split(";", false):
+			var p := par.split(":")
+			if p.size() == 2 and idx_de_slug.has(p[0]):
+				d[p[0]] = int(p[1])
+	return d
+
+
+## Sumas de efectos de `d` ({slug: cantidad}); con `base` (otro diccionario) solo cuenta lo que pasa de ella. Devuelve 2·N_EF valores:
+## [habitantes que atiende × peso, de cada clase ... , peso de cada clase ...].
+func _sumas(d: Dictionary, base) -> PackedFloat32Array:
+	var r := PackedFloat32Array()
+	r.resize(2 * N_EF)
+	if not efectos_listos:
+		return r
+	for sl in d:
+		var e: int = int(idx_de_slug.get(sl, -1))
+		if e < 0:
+			continue
+		var c: int = int(d[sl])
+		if base != null:
+			c -= int(base.get(sl, 0))
+		if c <= 0:
+			continue
+		for x in (_ef_de[e] as Array):
+			var k: int = x[0]
+			r[k] += float(c) * float(x[1]) * float(x[2])
+			r[N_EF + k] += float(c) * float(x[1])
+	return r
+
+
+## Rehace las sumas de efectos de la provincia `tid` tras un cambio de sus edificios (`d` = lo que tiene ahora).
+func _refrescar_efectos(tid: int, d: Dictionary) -> void:
+	if not efectos_listos:
+		return
+	var base: Dictionary = _dict_de_texto(String(_base.get(tid, "")))
+	_s_abs[tid] = _sumas(d, null)
+	var hay := false
+	for sl in d:
+		if int(d[sl]) > int(base.get(sl, 0)):
+			hay = true
+			break
+	if hay:
+		_nuevos[tid] = true
+		_s_nue[tid] = _sumas(d, base)
+	else:
+		_nuevos.erase(tid)
+		_s_nue.erase(tid)
+
+
+## Efecto de la clase `k` con las sumas `S` (habitantes·peso) y `W` (peso) para una provincia de `pop` habitantes. Con efecto por habitante, lo que atienden los
+## edificios se diluye si la provincia tiene mucha más gente (no puede dar más que su peso); y todo satura: más edificios dan cada vez menos (tope por clase).
+func _valor_ws(sum_hab: float, sum_peso: float, k: int, pop: float) -> float:
+	if sum_peso <= 0.0:
+		return 0.0
+	var tope: float = _ef_tope[k]
+	var x := sum_peso
+	if _ef_hab[k] == 1:
+		x = minf(sum_peso, sum_hab / maxf(pop, 5000.0))
+	return tope * (1.0 - exp(-x / tope))
+
+
+func _valor(s: PackedFloat32Array, k: int, pop: float) -> float:
+	return _valor_ws(s[k], s[N_EF + k], k, pop)
+
+
+## Efectos de lo construido DESPUÉS de empezar la partida en la provincia `pi` (de `pop` habitantes): [salud, comida, vivienda]. Casi siempre ceros
+## (arreglo compartido: no se modifica).
+func efectos_nuevos(pi: int, pop: float) -> PackedFloat32Array:
+	if _nuevos.is_empty():
+		return _cero3
+	var s = _s_nue.get(mundo.provincias[pi].tid)
+	if s == null:
+		return _cero3
+	var r := PackedFloat32Array()
+	r.resize(3)
+	r[0] = _valor(s, EF_SAL, pop)
+	r[1] = _valor(s, EF_COM, pop)
+	r[2] = _valor(s, EF_URB, pop)
+	return r
+
+
+## Efecto de la clase `k` (EF_*) de lo construido después de empezar la partida.
+func efecto_nuevo(pi: int, k: int, pop: float) -> float:
+	var s = _s_nue.get(mundo.provincias[pi].tid)
+	return 0.0 if s == null else _valor(s, k, pop)
+
+
+## Efecto de la clase `k` (EF_ORD, EF_DEF, EF_MOV) de TODO lo construido en la provincia (también lo de partida): los datos reales no lo traen.
+func efecto_abs(pi: int, k: int, pop := 0.0) -> float:
+	var s = _s_abs.get(mundo.provincias[pi].tid)
+	return 0.0 if s == null else _valor(s, k, pop)
+
+
+## Lo que sumaría construir una unidad más de `e` en la provincia `pi` (de `pop` habitantes), por clase de efecto (N_EF valores): para elegir qué construir.
+func ganancias(pi: int, e: int, pop: float) -> PackedFloat32Array:
+	var r := PackedFloat32Array()
+	r.resize(N_EF)
+	if not efectos_listos:
+		return r
+	var tid: int = mundo.provincias[pi].tid
+	var s_n = _s_nue.get(tid)
+	var s_a = _s_abs.get(tid)
+	for x in (_ef_de[e] as Array):
+		var k: int = x[0]
+		var s = s_a if k >= EF_ORD else s_n
+		var sh := 0.0
+		var sp := 0.0
+		if s != null:
+			sh = s[k]
+			sp = s[N_EF + k]
+		var dh: float = float(x[1]) * float(x[2])
+		r[k] = _valor_ws(sh + dh, sp + float(x[1]), k, pop) - _valor_ws(sh, sp, k, pop)
+	return r
+
+
+## Los efectos de un edificio en líneas legibles: [«Salud +8 puntos (atiende ~150.000 habitantes)», ...] (vacío si no tiene efecto propio).
+func lineas_efectos(e: int) -> PackedStringArray:
+	var r := PackedStringArray()
+	if not efectos_listos or e < 0 or e >= n:
+		return r
+	for x in (_ef_de[e] as Array):
+		var k: int = x[0]
+		var w: float = x[1]
+		var cob: float = x[2]
+		var t := ""
+		match k:
+			EF_SAL:
+				t = "Salud +%s puntos de salud efectiva (baja la mortalidad)" % _num1(w * 100.0)
+			EF_COM:
+				t = "Comida segura +%s puntos de bienestar" % _num1(w)
+			EF_URB:
+				t = "Vivienda y ciudad +%s puntos de urbanización" % _num1(w * 100.0)
+			EF_REN:
+				t = "Producción +%s %% al terminar la obra" % _num1(w * 100.0)
+			EF_ORD:
+				t = "Orden y cohesión +%s puntos de estabilidad" % _num1(w)
+			EF_DEF:
+				t = "Defensa +%s %% al poder de los defensores" % _num1(w * 100.0)
+			EF_MOV:
+				t = "Movilidad: quita el %s %% del castigo de la distancia" % _num1(w * 100.0)
+		if cob > 0.0:
+			t += " (atiende ~%s habitantes)" % _miles(cob)
+		r.append(t)
+	return r
+
+
+## Lo que hacen HOY los edificios de la provincia `pi`, en líneas para la interfaz: orden, defensa y movilidad (de todo lo construido) y salud, comida, vivienda y producción
+## de lo construido desde que empezó la partida (lo de partida ya está en los datos de la época). Vacío si no hay nada que mostrar.
+func resumen_efectos(pi: int) -> PackedStringArray:
+	var r := PackedStringArray()
+	if not efectos_listos or pi < 0 or pi >= mundo.provincias.size():
+		return r
+	var pob: float = mundo.provincias[pi].poblacion
+	var o := efecto_abs(pi, EF_ORD, pob)
+	if o >= 0.05:
+		r.append("Orden y cohesión +%s puntos de estabilidad" % _num1(o))
+	var df := efecto_abs(pi, EF_DEF)
+	if df >= 0.005:
+		r.append("Defensa +%s %% al poder de los defensores" % _num1(df * 100.0))
+	var mv := efecto_abs(pi, EF_MOV)
+	if mv >= 0.005:
+		r.append("Movilidad: quita el %s %% del castigo de la distancia" % _num1(mv * 100.0))
+	var nu := efectos_nuevos(pi, pob)
+	if nu[0] >= 0.005:
+		r.append("Salud +%s puntos (obras de la partida)" % _num1(nu[0] * 100.0))
+	if nu[1] >= 0.05:
+		r.append("Comida segura +%s puntos de bienestar (obras de la partida)" % _num1(nu[1]))
+	if nu[2] >= 0.005:
+		r.append("Vivienda +%s puntos de urbanización (obras de la partida)" % _num1(nu[2] * 100.0))
+	var rn := efecto_nuevo(pi, EF_REN, pob)
+	if rn >= 0.001:
+		r.append("Producción +%s %% (obras de la partida)" % _num1(rn * 100.0))
+	return r
+
+
+## Todos los efectos de un edificio en una sola línea para la interfaz («Producción +2 % … · Orden +1 punto…»); vacío si no tiene; los de saber lo dicen aparte.
+func texto_efectos(e: int) -> String:
+	if not efectos_listos or e < 0 or e >= n:
+		return ""
+	var lineas := lineas_efectos(e)
+	if lineas.is_empty():
+		return "Cuenta como institución de saber: sube la alfabetización y los docentes." if ef_solo_saber.has(slug[e]) else ""
+	return "Efectos: " + " · ".join(lineas)
+
+
+func _num1(v: float) -> String:
+	return ("%.1f" % v).replace(".", ",")
+
+
+func _miles(v: float) -> String:
+	var t := str(int(round(v)))
+	var out := ""
+	for i in t.length():
+		if i > 0 and (t.length() - i) % 3 == 0:
+			out += "."
+		out += t[i]
+	return out
 
 
 # ───────────── totales ─────────────

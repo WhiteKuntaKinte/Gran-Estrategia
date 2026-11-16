@@ -216,7 +216,7 @@ func t_mundo() -> void:
 	ok(m.rival_por_entrar(jt, 999999 % m.provincias.size()) >= -1, "rival_por_entrar con una provincia cualquiera no se rompe")
 	# fases_dias / avanzar_dias
 	var fs: Array = m.fases_dias(3)
-	ok(fs.size() == 10, "fases_dias: economía + IA + diplomacia + estabilidad + demografía + ejército + obras + llegadas + batallas + ocupaciones = 10 (hay %d)" % fs.size())
+	ok(fs.size() == 11, "fases_dias: economía + IA + diplomacia + estabilidad + demografía + ejército + obras + obras públicas de la IA + llegadas + batallas + ocupaciones = 11 (hay %d)" % fs.size())
 	var todas_validas := true
 	for f in fs:
 		todas_validas = todas_validas and (f as Callable).is_valid()

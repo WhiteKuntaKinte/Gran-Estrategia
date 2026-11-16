@@ -24,6 +24,7 @@ const DiplomaciaScript := preload("res://scripts/diplomacia.gd")
 const EstabilidadScript := preload("res://scripts/estabilidad.gd")
 const DemografiaScript := preload("res://scripts/demografia.gd")
 const EducacionScript := preload("res://scripts/educacion.gd")
+const ObrasPublicasScript := preload("res://scripts/obras_publicas.gd")
 
 ## Cuánto puede bajar lo que produce una provincia con devastación 1,0 (arrasada): -85 %. PROVISIONAL.
 const DEVASTACION_EFECTO := 0.85
@@ -205,6 +206,13 @@ class Pais extends RefCounted:
 		set(v):
 			bd.poner_f("tesoreria", tid, v)
 
+	## 0.1.8.48 · Dinero apartado para obras, en SU divisa: la partida «gasto_obras» de los impuestos entra aquí; construir gasta primero de este fondo.
+	var fondo_obras: float:
+		get:
+			return bd.num("fondo_obras", tid, 0.0)
+		set(v):
+			bd.poner_f("fondo_obras", tid, maxf(v, 0.0))
+
 	var tasa_fiscal: float:
 		get:
 			return bd.num("tasa_fiscal", tid, 0.25)
@@ -264,6 +272,11 @@ class Pais extends RefCounted:
 	func gasto_total() -> float:
 		return minf(gasto_educacion + gasto_ciencia + gasto_obras + gasto_sanidad, 0.6)
 
+	## 0.1.8.48 · Parte de los impuestos que entra al fondo de obras (la partida de obras; si todas juntas pasan del tope de 60 %, se recorta en proporción).
+	func fraccion_obras() -> float:
+		var t := gasto_educacion + gasto_ciencia + gasto_obras + gasto_sanidad
+		return gasto_obras * (0.6 / t if t > 0.6 else 1.0)
+
 	## 0.1.8.47 · Cansancio de la gente por la guerra, 0-100 (scripts/demografia.gd).
 	var fatiga_guerra: float:
 		get:
@@ -283,6 +296,8 @@ class Continente extends RefCounted:
 class Mundo extends RefCounted:
 	const DIAS_TESORERIA_INICIAL := 60.0     # todos los países arrancan con 60 días de ingresos en caja
 	const DESERCION_DIARIA := 0.004          # fracción de los soldados que se va cada día mientras la tesorería esté en rojo (PROVISIONAL)
+	const FONDO_DIAS_TOPE := 1095.0          # 0.1.8.48: el fondo de obras guarda como máximo 3 años de aportes; lo que pase vuelve a la tesorería
+	const FONDO_DIAS_INICIAL := 180.0        # ... y cada país arranca con 6 meses de aportes
 	const MAX_EVENTOS := 300
 	var bd                              # BaseDatos
 	var historia                        # Historia: entidades políticas históricas, nombres, banderas y gobernantes con fechas
@@ -295,6 +310,7 @@ class Mundo extends RefCounted:
 	var semilla_partida := 0            # 0.1.8.46: semilla de esta partida (azar sin estado: misma semilla = mismos descubrimientos). Se fija sola; las pruebas usan Engine.set_meta("semilla_partida", n)
 	var materias_pais := {}             # 0.1.8.46: nombre de país -> PackedStringArray de materias primas de economia.json (ayudan a descubrir; datos de 2026)
 	var edificios                       # Edificios (0.1.8.40): catálogo de 109 edificios, obras y construcción por provincia (null si falta datos/edificios.json)
+	var obras_publicas                  # ObrasPublicas (0.1.8.48): las IA gastan su fondo de obras en edificios que les sirven (null sin catálogo de efectos)
 	var cores                           # Cores (0.1.8.40): core nacional y core cultural de cada provincia (null hasta que se llama iniciar_edificios)
 	var diplomacia                      # Diplomacia (0.1.8.43): opinión, alianzas, rivales, infamia y coaliciones (null hasta que se llama iniciar_ejercito)
 	var estabilidad                     # Estabilidad (0.1.8.43): estabilidad social por provincia, revueltas e independencias
@@ -796,17 +812,24 @@ class Mundo extends RefCounted:
 
 	## 0.1.8.40: arma los edificios (catálogo, obras) y los cores de las provincias. Va DESPUÉS de `iniciar_ejercito` (que carga las culturas).
 	## Sin catálogo (js_edificios no es un diccionario) no hay edificios, pero los cores sí existen. `anio_epoca` != 0: se reparten los edificios de partida de esa época.
-	func iniciar_edificios(js_edificios, anio_epoca := 0) -> void:
+	## `js_efectos` (0.1.8.48: datos/edificios_efectos.json): qué hace cada edificio; sin él (o si no cuadra con el catálogo) los edificios solo existen, como antes.
+	func iniciar_edificios(js_edificios, anio_epoca := 0, js_efectos = null) -> void:
 		cores = CoresScript.new()
 		cores.iniciar(self)
 		edificios = null
+		obras_publicas = null
 		if js_edificios is Dictionary:
 			var ed = EdificiosScript.new()
 			if ed.cargar(js_edificios):
+				if js_efectos is Dictionary:
+					ed.cargar_efectos(js_efectos)
 				ed.iniciar(self)
 				edificios = ed
 				if anio_epoca != 0:
 					ed.sembrar_iniciales(anio_epoca)                          # 0.1.8.42: cada época empieza con los edificios que ya habría
+				if ed.efectos_listos:
+					obras_publicas = ObrasPublicasScript.new()                # 0.1.8.48: las IA construyen con su fondo de obras
+					obras_publicas.iniciar(self)
 
 	## Nombre real del jefe de Estado de un país en una fecha (de Historia), o "" si no se conoce.
 	func jefe_de_estado(pais: String, fecha: int) -> String:
@@ -875,7 +898,7 @@ class Mundo extends RefCounted:
 	func marcar_balance(pais_tid: int) -> void:
 		_bal_sucios[pais_tid] = true
 
-	## Fila de balance de un país: [ID, fila en la base, nombre, ingreso diario local NETO de partidas, mantenimiento diario local POR SOLDADO]; vacía si no existe.
+	## Fila de balance de un país: [ID, fila en la base, nombre, ingreso diario local NETO de partidas, mantenimiento diario local POR SOLDADO, aporte diario al fondo de obras]; vacía si no existe.
 	func _fila_balance(nombre: String) -> Array:
 		var e: Pais = paises[nombre]
 		if e.provincias.is_empty():
@@ -886,7 +909,8 @@ class Mundo extends RefCounted:
 		var por_sold := 0.0
 		if ejercito != null:
 			por_sold = ejercito.mantenimiento_diario_usd(e.tid, 1) * _por_usd(nombre)
-		return [e.tid, ix, nombre, ingreso_neto_diario_local(nombre), por_sold]
+		var ing := ingreso_diario_local(nombre)
+		return [e.tid, ix, nombre, ing * (1.0 - e.gasto_total()), por_sold, ing * e.fraccion_obras()]
 
 	func _armar_balances() -> void:
 		_bal = []
@@ -937,6 +961,10 @@ class Mundo extends RefCounted:
 		elif not _bal_sucios.is_empty():
 			_actualizar_balances_sucios()
 		var col: PackedFloat64Array = v.col_f
+		var vf = bd.vars.get("fondo_obras")                                  # 0.1.8.48: la partida de obras entra a su fondo (sin él, como antes: se pierde)
+		var colf := PackedFloat64Array()
+		if vf != null:
+			colf = vf.col_f
 		var sold: Dictionary = ejercito.soldados_por_pais() if ejercito != null else {}
 		_sold_ult = sold
 		var rojos := {}
@@ -947,6 +975,14 @@ class Mundo extends RefCounted:
 				col[ix] = float(f[3]) * DIAS_TESORERIA_INICIAL
 				v.desde[ix] = bd.fecha
 			col[ix] += (float(f[3]) - float(sold.get(tid, 0)) * float(f[4])) * float(k)     # k días de golpe (0.1.8.3)
+			if not colf.is_empty() and f.size() > 5:
+				var aporte: float = float(f[5]) * float(k)
+				var nuevo: float = (float(f[5]) * FONDO_DIAS_INICIAL if is_nan(colf[ix]) else colf[ix]) + aporte
+				var tope_f: float = float(f[5]) * FONDO_DIAS_TOPE
+				if nuevo > tope_f:                                           # un fondo que pasa de 3 años de aportes devuelve lo que sobra a la tesorería
+					col[ix] += nuevo - tope_f
+					nuevo = tope_f
+				colf[ix] = nuevo
 			if col[ix] < 0.0:
 				rojos[tid] = true
 				if not _en_rojo.has(tid):
@@ -1115,6 +1151,8 @@ class Mundo extends RefCounted:
 			r.append(Callable(ejercito, "avanzar_dia").bind(k))     # las columnas en marcha avanzan k días
 		if edificios != null:
 			r.append(Callable(edificios, "fase_obras").bind(k))       # 0.1.8.40: las obras avanzan k días (casi siempre solo una comparación)
+		if obras_publicas != null:
+			r.append(Callable(obras_publicas, "fase_dia").bind(k))    # 0.1.8.48: 2 países con IA al día deciden qué construir con su fondo de obras
 		if guerra != null:
 			r.append(Callable(guerra, "fase_llegadas"))             # llegadas
 			r.append(Callable(guerra, "fase_batallas").bind(k))     # batallas, por lotes

@@ -1,8 +1,22 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.47 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.48 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.48 — LOS EDIFICIOS POR FIN HACEN ALGO, EL DINERO DE OBRAS TIENE DUEÑO Y LA IA CONSTRUYE CON CRITERIO
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.48.md y docs/EDIFICIOS_EFECTOS.md. Sale de tus mensajes del 16 de noviembre: "haz las bases más fuertes… sobre todo creación de contenido y ensamblamiento al juego".)
+- 97 DE LOS 109 EDIFICIOS TIENEN EFECTOS REALES (los otros 12 ya cuentan como instituciones de saber). Siete clases: SALUD (baja la mortalidad), COMIDA SEGURA (más bienestar), VIVIENDA Y CIUDAD (más urbanización), PRODUCCIÓN (sube el
+  producto por habitante cuando termina la obra), ORDEN Y COHESIÓN (suma a la meta de estabilidad de la provincia, con su línea en el desglose), DEFENSA (los defensores de la provincia pesan más en la guerra) y MOVILIDAD (la lejanía de la capital resta menos estabilidad).
+- RENDIMIENTOS DECRECIENTES Y GENTE: cada edificio atiende a cierta cantidad de habitantes y lo que da se SATURA (el décimo hospital rinde menos que el primero). En una provincia enorme un solo edificio casi no se nota, a propósito: hay que construir donde hace falta.
+- REGLA DE PARTIDA: los edificios con los que empieza cada escenario ya están dentro de los datos de la época (la renta, la población y la esperanza de vida que causaron), así que salud / comida / vivienda / producción solo cuentan lo que construyas DESPUÉS. Orden, defensa y movilidad cuentan todo.
+- FONDO DE OBRAS: la partida «obras» del presupuesto ya no se pierde: va cada día a un fondo del país (tope de 3 años de aporte, 6 meses de arranque; el exceso vuelve a la tesorería). Construir paga primero del fondo y luego de la tesorería. Se ve en la cabecera de la ventana Construir.
+- LA IA CONSTRUYE CON CRITERIO: una vez al año cada país con IA revisa 2 provincias, evalúa los edificios que conoce y puede pagar SOLO con su fondo, y construye lo que más gana por su costo según lo que la provincia necesita (descontento, mortalidad, hambre, guerra). Nunca toca la tesorería ni al jugador.
+- INTERFAZ: línea «Efectos» en cada fila de Construir, sección EFECTOS en la tarjeta Edificios del HUD de provincia, Debug > Edificios con los contadores de las obras públicas de la IA y los efectos de cada ficha.
+- OPTIMIZACIÓN: la cuenta de soldados por país recorría 21.000–41.000 pelotones cada vez que algo cambiaba (~2,7 ms, cerca de una cuarta parte del día de juego en 2026). Ahora es INCREMENTAL (74 µs); una pasada completa de repaso cada 120 cuentas vigila que nada se escape (Debug > Ejército muestra «correcciones»: debe ser 0).
+- COSTE: ver NOTAS_TECNICAS_0.1.8.48.md §4 (el día con todas las IA baja ~0,7 ms en 2026, de 13,4 a 12,7 ms, y sube ~0,4 ms en 1500 medido a régimen; el mapa y el zoom no cambian).
+- LO QUE NO ENTRÓ A PROPÓSITO: mantenimiento de edificios, ruinas por guerra o desastre, edificios que consuman materias primas, y que los oficios pesen en la economía. Los pesos y topes son PROVISIONALES: si las IA construyen muy poco o algo rinde demasiado, mándame el F9 y la fecha y se ajusta un número.
+- PARA PROBAR (F9): año 1 con todas las IA a x6, y una partida normal de 2026; abre Debug > Edificios y dime si las obras públicas de la IA te parecen pocas o muchas. Mándame el resumen F9 y las notas de la prueba.
 
 NUEVO EN 0.1.8.47 — GENTE: LA POBLACIÓN VIVE, ESTUDIA Y PESA (Fase 1, parte B)
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.47.md y docs/DEMOGRAFIA.md. Sale de tus mensajes del 16 de noviembre: "sigue desarrollándolo… haz las bases más fuertes".)

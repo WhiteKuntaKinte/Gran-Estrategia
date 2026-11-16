@@ -308,7 +308,7 @@ func t_reloj_mapa() -> void:
 	main.reloj.ocupado = false
 	var d1: int = ia.dia_n
 	main._on_dia_diferido(true, true, 2)
-	ok(main._fases.size() == 3 + 10 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 10 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
+	ok(main._fases.size() == 3 + 11 and main.reloj.ocupado, "_on_dia_diferido(mes y año nuevo, k = 2): 3 fases mensuales + 11 del día, y el reloj queda ocupado (%d fases)" % main._fases.size())
 	var n0: int = main._fases.size()
 	main._correr_fases(0)
 	ok((main._fases.size() < n0 or m._mes_en_curso) and main._fases.size() >= n0 - 3, "_correr_fases(presupuesto 0): corre al menos una fase o un trozo del mes (%d → %d, mes a medias: %s)" % [n0, main._fases.size(), str(m._mes_en_curso)])
@@ -316,7 +316,7 @@ func t_reloj_mapa() -> void:
 	ok(main._fases.is_empty() and not main.reloj.ocupado, "_vaciar_fases: termina lo pendiente y libera al reloj")
 	ok(ia.dia_n == d1 + 2, "…y el día quedó simulado entero (2 días)")
 	main._on_dia_diferido(false, false, 1)
-	ok(main._fases.size() == 10, "sin cambio de mes: solo las 10 fases del día")
+	ok(main._fases.size() == 11, "sin cambio de mes: solo las 11 fases del día")
 	var d2: int = ia.dia_n
 	main._on_dia(false, false, 1)                       # un día nuevo termina primero el que estaba a medias
 	ok(main._fases.is_empty() and not main.reloj.ocupado and ia.dia_n == d2 + 2, "_on_dia termina antes el día que estaba a medias: 1 + 1 = 2 días (IA +%d)" % (ia.dia_n - d2))
@@ -370,7 +370,7 @@ func t_economia() -> void:
 			con_provs += 1
 	ok(m._bal.size() == con_provs and con_provs > 40, "_armar_balances: una fila por país con provincias (%d)" % m._bal.size())
 	var f0: Array = m._bal[0]
-	ok(f0.size() == 5 and f0[2] is String and float(f0[4]) >= 0.0, "…cada fila: [ID, fila en la base, nombre, ingreso, mantenimiento por soldado]")
+	ok(f0.size() == 6 and f0[2] is String and float(f0[4]) >= 0.0 and float(f0[5]) >= 0.0, "…cada fila: [ID, fila en la base, nombre, ingreso, mantenimiento por soldado, aporte diario al fondo de obras]")
 	ok(m._bal_ver_eco == m.bd.version_eco and m._bal_ver_prop == m.bd.version_propietario and m._bal_mes == m._mes_n, "…y anota las versiones con las que se armó")
 	# caché de balances: con `ahorro` solo se rehacen cada 3 meses (los dueños sí rehacen siempre)
 	var guard_ahorro: bool = m.ahorro

@@ -200,6 +200,11 @@ func _armar_filas() -> void:
 		var d := vf.lbl_rol(String(ed.desc[e]), 11, "nota")
 		d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		col.add_child(d)
+		var txt_ef: String = ed.texto_efectos(e)                                          # 0.1.8.48: qué hace en el juego (salud, producción, orden, defensa…)
+		if txt_ef != "":
+			var lbl_ef := vf.lbl_rol(txt_ef, 11, "ok")
+			lbl_ef.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			col.add_child(lbl_ef)
 		var lbl_costo := vf.lbl_rol("", 12, "texto")
 		lbl_costo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		col.add_child(lbl_costo)
@@ -245,18 +250,20 @@ func refrescar(forzar := false) -> void:
 	var m = main.mundo
 	var ed = _ed()
 	var tes := 0.0
+	var fondo := 0.0
 	var con_tes := false
 	if m.paises.has(pais):
 		con_tes = m.paises[pais].tiene_tesoreria()
 		tes = m.paises[pais].tesoreria
+		fondo = m.paises[pais].fondo_obras
 	# cabecera
 	if validas.is_empty():
 		_lbl_dest.text = "Elige una provincia en el mapa"
 		_lbl_info.text = "Después abre aquí lo que puedes construir. Con Ctrl+clic eliges varias a la vez."
 	else:
 		_lbl_dest.text = _texto_destino()
-		_lbl_info.text = "Tesorería: %s · %s edificios construidos · %d obras en curso" % [
-			_dinero(tes) if con_tes else "sin caja", main.hud.fmt_num(float(ed.total_en(validas))), ed.obras_en(validas)]
+		_lbl_info.text = "Tesorería: %s · Fondo de obras: %s · %s edificios construidos · %d obras en curso" % [
+			_dinero(tes) if con_tes else "sin caja", _dinero(fondo) if con_tes else "—", main.hud.fmt_num(float(ed.total_en(validas))), ed.obras_en(validas)]
 	var sin := validas.size() < pis.size()
 	_lbl_sin.visible = sin or (not validas.is_empty() and not puede_ordenar())
 	if not puede_ordenar() and not validas.is_empty():
@@ -275,7 +282,7 @@ func refrescar(forzar := false) -> void:
 		if not ver:
 			continue
 		visibles += 1
-		_poner_fila(fl, e, conoce, ordena, tes, con_tes)
+		_poner_fila(fl, e, conoce, ordena, tes + fondo, con_tes)                     # se paga primero del fondo de obras y luego de la tesorería
 	filas_visibles = visibles
 
 
@@ -342,9 +349,9 @@ func _poner_fila(fl: Dictionary, e: int, conoce: bool, ordena: bool, tes: float,
 	elif ok_n == 0:
 		btn.tooltip_text = primer_motivo if primer_motivo != "" else "No se puede construir ahora."
 	elif n == 1:
-		btn.tooltip_text = "Empezar la obra: %s y %d días.\nSe cobra de la tesorería ahora." % [_dinero(uno), dias]
+		btn.tooltip_text = "Empezar la obra: %s y %d días.\nSe paga ahora: primero del fondo de obras y, si no alcanza, de la tesorería." % [_dinero(uno), dias]
 	else:
-		btn.tooltip_text = "Empezar la obra en %d provincias.\nCosto total ≈ %s, se cobra ahora.\nLas que no puedan (sin dinero, ya construido…) se saltan." % [ok_n, _dinero(costo_ok)]
+		btn.tooltip_text = "Empezar la obra en %d provincias.\nCosto total ≈ %s, se paga ahora (primero del fondo de obras, luego de la tesorería).\nLas que no puedan (sin dinero, ya construido…) se saltan." % [ok_n, _dinero(costo_ok)]
 
 
 ## Obras en curso del grupo: una fila por obra con avance, días que faltan y botón de cancelar.

@@ -154,9 +154,10 @@ static func mayor_objetivo(nat: float) -> float:
 	return 0.03 + 0.28 / (1.0 + exp((nat - 13.0) / 4.5))
 
 
-static func urbanizacion_objetivo(saber_urb: float, acc: float, dens: float) -> float:
+## `obras`: lo que suman los edificios construidos durante la partida (0.1.8.48, scripts/edificios.gd).
+static func urbanizacion_objetivo(saber_urb: float, acc: float, dens: float, obras := 0.0) -> float:
 	var extra := 0.06 * clampf(log(dens + 1.0) / log(10.0) - 1.0, 0.0, 2.0)
-	return clampf(0.02 + 0.80 * saber_urb * saber_urb * (0.25 + 0.75 * acc) + extra, 0.0, 0.97)
+	return clampf(0.02 + 0.80 * saber_urb * saber_urb * (0.25 + 0.75 * acc) + extra + obras, 0.0, 0.97)
 
 
 static func alfabetizacion_objetivo(saber_edu: float, acc: float, f_edu: float, ef_inst: float) -> float:
@@ -168,8 +169,9 @@ static func escolaridad_objetivo(alfab: float, acc: float) -> float:
 	return 12.5 * pow(alfab, 1.3) * (0.5 + 0.5 * acc)
 
 
-static func bienestar_objetivo(agri: float, acc: float, sal_ef: float, dev: float, ocupada: bool, en_guerra: bool, presion: float) -> float:
-	var b := 36.0 + 14.0 * agri + 26.0 * acc + 8.0 * sal_ef - 70.0 * dev
+## `obras`: puntos que suman los almacenes, riegos y abastos construidos durante la partida (0.1.8.48).
+static func bienestar_objetivo(agri: float, acc: float, sal_ef: float, dev: float, ocupada: bool, en_guerra: bool, presion: float, obras := 0.0) -> float:
+	var b := 36.0 + 14.0 * agri + 26.0 * acc + 8.0 * sal_ef - 70.0 * dev + obras
 	if ocupada:
 		b -= 22.0
 	if en_guerra:
@@ -324,6 +326,12 @@ static func efecto_instituciones(inst: float, pop: float) -> float:
 	return 1.0 + 0.2 * tanh(por_100k)
 
 
+## Lo que suman los edificios construidos DESPUÉS de empezar la partida en la provincia `pi`: [salud, comida segura, vivienda]. Casi siempre ceros (0.1.8.48).
+func _efectos_obras(pi: int, pop: float) -> PackedFloat32Array:
+	var ed = mundo.edificios
+	return ed.efectos_nuevos(pi, pop) if ed != null else PackedFloat32Array([0.0, 0.0, 0.0])
+
+
 func _densidad(ix: int, pop: float) -> float:
 	var a := _are[ix]
 	return pop / a if (not is_nan(a) and a > 0.0) else 0.0
@@ -335,7 +343,8 @@ func _estado_inicial(pi: int, ix: int, due: int) -> void:
 	var pop := _pob[ix]
 	var pc := _pcm[ix]
 	var acc := acceso(pc if not is_nan(pc) else 300.0)
-	var sal := salud_efectiva(c[0], acc, c[5])
+	var efn := _efectos_obras(pi, pop)
+	var sal := clampf(salud_efectiva(c[0], acc, c[5]) + efn[0], 0.0, 1.0)
 	var dev := _dev[ix] if not is_nan(_dev[ix]) else 0.0
 	var ocup: bool = _ocu[ix] >= 0 and _ocu[ix] != due
 	var ix_p: int = bd.idx(due)
@@ -343,10 +352,10 @@ func _estado_inicial(pi: int, ix: int, due: int) -> void:
 	var dens := _densidad(ix, pop)
 	var inst := _contar_instituciones(pi, ix)
 	_ins[ix] = inst
-	var urb := urbanizacion_objetivo(c[3], acc, dens)
+	var urb := urbanizacion_objetivo(c[3], acc, dens, efn[2])
 	var alf := alfabetizacion_objetivo(c[2], acc, c[4], efecto_instituciones(inst, pop))
 	var pres := presion_tierra(dens, urb, c[1])
-	var bie := bienestar_objetivo(c[1], acc, sal, dev, ocup, guerra, pres)
+	var bie := bienestar_objetivo(c[1], acc, sal, dev, ocup, guerra, pres, efn[1])
 	var nat := natalidad_de(sal, alf, urb, acc, bie, dev)
 	var may := mayor_objetivo(nat)
 	var mor := mortalidad_de(sal, may, bie, dev, ocup, pres, c[1])
@@ -433,7 +442,8 @@ func _revisar(pi: int, d: int) -> void:
 	var anios := dias / DIAS_ANIO
 	var pc := _pcm[ix]
 	var acc := acceso(pc if not is_nan(pc) else 300.0)
-	var sal := salud_efectiva(c[0], acc, c[5])
+	var efn := _efectos_obras(pi, pop)
+	var sal := clampf(salud_efectiva(c[0], acc, c[5]) + efn[0], 0.0, 1.0)
 	var dev := _dev[ix] if not is_nan(_dev[ix]) else 0.0
 	var ocup: bool = _ocu[ix] >= 0 and _ocu[ix] != due
 	var ix_p: int = bd.idx(due)
@@ -443,12 +453,12 @@ func _revisar(pi: int, d: int) -> void:
 	_ins[ix] = inst
 	if anios > 0.0:
 		# estados lentos: se acercan a su meta
-		var urb := acercar(_urb[ix], urbanizacion_objetivo(c[3], acc, dens), anios, TAU_URB)
+		var urb := acercar(_urb[ix], urbanizacion_objetivo(c[3], acc, dens, efn[2]), anios, TAU_URB)
 		var f_vel: float = 0.4 + 0.6 * float(c[4])                                       # más gasto en educación = convergencia más rápida
 		var alf_meta := alfabetizacion_objetivo(c[2], acc, c[4], efecto_instituciones(inst, pop))
 		var alf := acercar(_alf[ix], alf_meta, anios * f_vel, TAU_ALFAB)
 		var pres := presion_tierra(dens, urb, c[1])
-		var bie := acercar(_bie[ix], bienestar_objetivo(c[1], acc, sal, dev, ocup, guerra, pres), anios, TAU_BIENESTAR)
+		var bie := acercar(_bie[ix], bienestar_objetivo(c[1], acc, sal, dev, ocup, guerra, pres, efn[1]), anios, TAU_BIENESTAR)
 		var nat := natalidad_de(sal, alf, urb, acc, bie, dev)
 		var jov := acercar(_jov[ix], joven_objetivo(nat), anios, TAU_EDAD)
 		var may := acercar(_may[ix], mayor_objetivo(nat), anios, TAU_EDAD)

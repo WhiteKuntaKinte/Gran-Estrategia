@@ -1816,6 +1816,7 @@ func _refrescar_ejercito_pagina() -> void:
 	var ej = m.ejercito
 	var c := _ej_ctx()
 	var t := "Mundo: %s soldados en %d pelotones.\n" % [main.fmt_n(float(ej.soldados_totales())), ej.cuenta_pelotones()]
+	t += "Cuenta por país: %d incrementales, %d completas, %d correcciones.\n" % [ej.sold_pasadas_incrementales, ej.sold_pasadas_completas, ej.sold_correcciones]
 	var pais := String(c["pais"])
 	if pais != "" and m.paises.has(pais):
 		var r: Dictionary = ej.resumen(ej.de_pais(int(m.paises[pais].tid)))
@@ -2101,7 +2102,10 @@ func _refrescar_edif() -> void:
 		lista_edif.clear()
 		return
 	var pis := _edif_pis()
-	var t := "Mundo: %s edificios construidos · %d provincias con obras · %s obras terminadas desde que empezó la partida" % [_miles(ed.total_mundo()), ed.provincias_en_obra(), _miles(ed.terminadas)]
+	var t := "Mundo: %s edificios construidos · %d provincias con obras · %s obras terminadas desde que empezó la partida (%s subieron la producción)" % [_miles(ed.total_mundo()), ed.provincias_en_obra(), _miles(ed.terminadas), _miles(ed.producidas)]
+	if m.obras_publicas != null:
+		var op = m.obras_publicas
+		t += "\nObras públicas de las IA: %s empezadas (≈ US$ %s) en %s revisiones (%d edificios evaluados por revisión) · %.3f ms por día (pico %.2f ms)" % [_miles(op.obras_hechas), _miles(op.gastado_usd), _miles(op.revisiones), int(float(op.evaluaciones) / maxf(float(op.revisiones), 1.0)), float(op.usec_total) / 1000.0 / maxf(float(op._dia), 1.0), op.ms_max]
 	if pis.is_empty():
 		t += "\nElige una provincia, un país o un grupo en el mapa (o una provincia en la sección Provincia)."
 	else:
@@ -2112,6 +2116,10 @@ func _refrescar_edif() -> void:
 		if pis.size() == 1:
 			var pr = m.provincias[int(pis[0])]
 			t += "\n%s · core nacional: %s · core cultural: %s" % [pr.nombre, m.cores.nacional(int(pis[0])) if m.cores.nacional(int(pis[0])) != "" else "ninguno", m.cores.etiqueta_cultural(int(pis[0]))]
+			if m.paises.has(pr.pais):
+				t += "\nFondo de obras de %s: %s (su divisa)" % [pr.pais, _miles(m.paises[pr.pais].fondo_obras)]
+			var efs: PackedStringArray = ed.resumen_efectos(int(pis[0]))
+			t += "\nEfectos: " + (" · ".join(efs) if not efs.is_empty() else "ninguno todavía")
 	lbl_edif_res.text = t
 	var antes := edif_sel
 	lista_edif.clear()
@@ -2143,6 +2151,9 @@ func _refrescar_ficha_edif() -> void:
 	var e := edif_sel
 	lbl_edif_ficha.text = "%s\n%s\nClase %s · máximo %d por provincia · %d días de obra · aparece en el %s\n%s" % [String(ed.nombre[e]), String(ed.desc[e]), ed.nombre_clase(e), ed.tope[e], ed.dias_de(e),
 		("año %d" % ed.anio[e]) if ed.anio[e] >= 0 else ("%d a. C." % -ed.anio[e]), String(ed.seccion[e])]
+	var tx: String = ed.texto_efectos(e)                                                 # 0.1.8.48
+	if tx != "":
+		lbl_edif_ficha.text += "\n" + tx
 
 
 func _edif_dar(dar: bool) -> void:

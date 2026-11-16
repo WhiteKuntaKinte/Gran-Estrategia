@@ -74,6 +74,18 @@ var _cache_pilas := []
 var _cache_pilas_ver := -1
 var _cache_sold_pais := {}
 var _cache_sold_ver := -1
+# 0.1.8.48 · Cuenta de soldados por país INCREMENTAL: cada pelotón que cambia se anota (`_sold_sucios`) y solo se corrige la diferencia en el ejército de su país; la pasada
+# completa (21.000-41.000 pelotones, ~3 ms) queda para la primera vez y para repasar cada SOLD_REPASO_CADA cuentas (por si algún cambio se escapó).
+const SOLD_REPASO_CADA := 120
+var _sold_listo := false                 # ya hay una cuenta completa de la que partir
+var _sold_prev := PackedFloat64Array()   # por índice de la base: lo que cada pelotón aportó a la cuenta la última vez (0 si no estaba vivo)
+var _sold_acum := PackedFloat64Array()   # por ejército: soldados contados
+var _sold_pais_de_ej := PackedInt32Array()   # por ejército: ID del país
+var _sold_sucios := PackedInt32Array()   # pelotones cuyos soldados cambiaron desde la última cuenta (puede repetir)
+var _sold_desde_repaso := 0
+var sold_pasadas_completas := 0          # cuántas veces se contó todo (pruebas y Debug)
+var sold_pasadas_incrementales := 0
+var sold_correcciones := 0               # repasos completos que encontraron la cuenta incremental DISTINTA (debería quedarse en 0: si sube, algún cambio de soldados no se anota)
 
 
 # ─────────────────────────────────────────────────────────────
@@ -115,10 +127,98 @@ func regimientos_quietos() -> Array:
 
 
 ## Soldados de cada país (todos sus pelotones, también los que van por el camino): {ID país: soldados}. Guardado por versión.
-## Una sola pasada por las columnas (activo, ejército padre, soldados): sin buscar ID por ID en diccionarios (0.1.8.2: de ~15 ms a ~3 ms con 41.000 pelotones).
+## 0.1.8.48: incremental (ver `_sold_sucios`); la pasada completa de siempre es `_sold_recuento_completo` (y `soldados_por_pais_completo`, que no toca nada: para pruebas).
 func soldados_por_pais() -> Dictionary:
 	if _cache_sold_ver == version_pilas:
 		return _cache_sold_pais
+	if not _sold_listo or _sold_desde_repaso >= SOLD_REPASO_CADA:
+		_sold_recuento_completo()
+	else:
+		_sold_aplicar_sucios()
+		_sold_desde_repaso += 1
+	var r := {}
+	for e2 in _sold_acum.size():
+		if _sold_pais_de_ej[e2] >= 0 and por_pais.has(_sold_pais_de_ej[e2]):
+			r[_sold_pais_de_ej[e2]] = int(_sold_acum[e2])
+	_cache_sold_pais = r
+	_cache_sold_ver = version_pilas
+	return r
+
+
+## Anota que los soldados del pelotón `ix` (índice de la base) cambiaron, o que nació o desapareció.
+func _marcar_sold(ix: int) -> void:
+	if _sold_listo:
+		_sold_sucios.append(ix)
+
+
+## Una pasada por las columnas (activo, ejército padre, soldados): sin buscar ID por ID en diccionarios (0.1.8.2: de ~15 ms a ~3 ms con 41.000 pelotones).
+func _sold_recuento_completo() -> void:
+	var acum_antes := PackedFloat64Array()
+	if _sold_listo:
+		_sold_aplicar_sucios()                                          # lo anotado cuenta: solo lo NO anotado puede dar diferencia
+		acum_antes = _sold_acum.duplicate()
+	var n_ej := 0
+	for pa in ej_de_pais:
+		n_ej = maxi(n_ej, int(ej_de_pais[pa]) - BASE_EJERCITO + 1)
+	_sold_pais_de_ej.resize(n_ej)
+	_sold_pais_de_ej.fill(-1)
+	for pa in ej_de_pais:
+		_sold_pais_de_ej[int(ej_de_pais[pa]) - BASE_EJERCITO] = int(pa)
+	_sold_acum.resize(n_ej)
+	_sold_acum.fill(0.0)
+	var col_s: PackedFloat64Array = bd.vars["soldados"].col_f
+	var activo: PackedByteArray = bd.t_activo
+	var padre: PackedInt32Array = bd.t_padre
+	var tope := col_s.size()
+	_sold_prev.resize(tope)
+	_sold_prev.fill(0.0)
+	for ix in _ix_todos:
+		if ix >= tope or activo[ix] != 1:
+			continue
+		var e: int = padre[ix] - BASE_EJERCITO
+		if e < 0 or e >= n_ej:
+			continue
+		var x: float = col_s[ix]
+		if x == x:                                                      # descarta NaN
+			_sold_acum[e] += x
+			_sold_prev[ix] = x
+	_sold_sucios.clear()
+	if _sold_listo and acum_antes != _sold_acum:                        # repaso: lo que llevábamos no era lo real
+		sold_correcciones += 1
+	_sold_listo = true
+	_sold_desde_repaso = 0
+	sold_pasadas_completas += 1
+
+
+## Corrige la cuenta con los pelotones anotados (su aporte nuevo menos el que tenían).
+func _sold_aplicar_sucios() -> void:
+	var col_s: PackedFloat64Array = bd.vars["soldados"].col_f
+	var activo: PackedByteArray = bd.t_activo
+	var padre: PackedInt32Array = bd.t_padre
+	var tope := col_s.size()
+	var n_ej := _sold_acum.size()
+	if _sold_prev.size() < tope:
+		_sold_prev.resize(tope)                                         # los nuevos empiezan en 0
+	for ix in _sold_sucios:
+		if ix >= tope:
+			continue
+		var x := 0.0
+		if activo[ix] == 1:
+			x = col_s[ix]
+			if x != x:
+				x = 0.0
+		var d: float = x - _sold_prev[ix]
+		if d != 0.0:
+			var e: int = padre[ix] - BASE_EJERCITO
+			if e >= 0 and e < n_ej:
+				_sold_acum[e] += d
+		_sold_prev[ix] = x
+	_sold_sucios.clear()
+	sold_pasadas_incrementales += 1
+
+
+## La cuenta de siempre (una pasada completa), sin tocar el estado incremental: la prueba la compara con `soldados_por_pais`.
+func soldados_por_pais_completo() -> Dictionary:
 	var n_ej := 0
 	for pa in ej_de_pais:
 		n_ej = maxi(n_ej, int(ej_de_pais[pa]) - BASE_EJERCITO + 1)
@@ -140,14 +240,12 @@ func soldados_por_pais() -> Dictionary:
 		if e < 0 or e >= n_ej:
 			continue
 		var x: float = col_s[ix]
-		if x == x:                                                      # descarta NaN
+		if x == x:
 			acum[e] += x
 	var r := {}
 	for e2 in n_ej:
 		if pais_de_ej[e2] >= 0 and por_pais.has(pais_de_ej[e2]):
 			r[pais_de_ej[e2]] = int(acum[e2])
-	_cache_sold_pais = r
-	_cache_sold_ver = version_pilas
 	return r
 
 
@@ -307,6 +405,7 @@ func _escribir_inicial(ix: int, prov: int, sold: int, edad: float, exp_: float, 
 	var v: Dictionary = bd.vars
 	v["soldados"].col_f[ix] = float(sold)
 	v["soldados"].desde[ix] = f
+	_marcar_sold(ix)
 	v["edad_media"].col_f[ix] = edad
 	v["experiencia"].col_f[ix] = exp_
 	v["familiaridad"].col_f[ix] = fam
@@ -519,6 +618,7 @@ func aplicar_bajas(id: int, n: int, motivo := "Bajas") -> int:
 	n = mini(n, antes)
 	var c := float(n) / float(antes)
 	bd.poner_f("soldados", id, float(antes - n), motivo)
+	_marcar_sold(ix)
 	var tot: PackedFloat64Array = bd.vars["bajas_total"].col_f
 	tot[ix] += n
 	var bm: PackedFloat64Array = bd.vars["bajas_mes"].col_f
@@ -553,6 +653,7 @@ func reforzar(id: int, n: int, motivo := "Refuerzo") -> int:
 	fa[ix] = fa[ix] * antes / nuevo                                 # ni familiaridad
 	fi[ix] = fisico_de_edad(ed[ix])
 	bd.poner_f("soldados", id, nuevo, motivo)
+	_marcar_sold(ix)
 	_cambio()
 	return entra
 
@@ -632,6 +733,7 @@ func disolver(id: int) -> void:
 	reg_de_pel.erase(id)
 	if rid >= 0 and pel_de_reg.has(rid):
 		pel_de_reg[rid].erase(id)
+	_marcar_sold(bd.idx(id))
 	bd.desactivar(id)
 	if rid >= 0:
 		_limpiar_reg(rid)
@@ -686,6 +788,7 @@ func dividir(id: int, n: int, motivo := "División") -> int:
 	var fam: float = bd.num("familiaridad", id)
 	var nuevo := _nuevo_pel(reg_de(id), prov, n, edad, exp_, fam)    # queda en el MISMO regimiento
 	bd.poner_f("soldados", id, float(total - n), motivo)
+	_marcar_sold(bd.idx(id))
 	_cambio()
 	return nuevo
 
@@ -710,6 +813,7 @@ func _fusionar(destino: int, origen: int) -> void:
 	bt[ixd] += bd.num("bajas_total", origen)
 	bd.poner_f("soldados", destino, t, "Fusión")
 	bd.poner_f("soldados", origen, 0.0, "Fusión")
+	_marcar_sold(ixd)
 	disolver(origen)
 
 
@@ -844,6 +948,7 @@ func desertar_pais(pais_tid: int, frac: float, motivo := "Deserción por impago"
 			disolver(int(id))
 		else:
 			bd.poner_f("soldados", int(id), float(s - n), motivo)
+			_marcar_sold(bd.idx(int(id)))
 	if total > 0:
 		_cambio()
 	return total

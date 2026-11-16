@@ -1,0 +1,995 @@
+{
+ "version": "0.1.8.48",
+ "ayuda": "Efectos de los edificios (0.1.8.48). No se edita a mano: lo genera herramientas/construir_efectos_edificios.py. Cada efecto es [tipo, peso, habitantes que atiende cada unidad (0 si es plano)].",
+ "tipos": {
+  "sal": {
+   "nombre": "Salud",
+   "por_habitante": true,
+   "tope": 0.25,
+   "unidad": "puntos de salud efectiva (0-1)",
+   "texto": "Baja la mortalidad de la provincia"
+  },
+  "com": {
+   "nombre": "Comida segura",
+   "por_habitante": true,
+   "tope": 14.0,
+   "unidad": "puntos de bienestar",
+   "texto": "Sube el bienestar de la gente (almacenes, riego, abastos)"
+  },
+  "urb": {
+   "nombre": "Vivienda y ciudad",
+   "por_habitante": true,
+   "tope": 0.12,
+   "unidad": "fracción urbana",
+   "texto": "Sube la urbanización de la provincia"
+  },
+  "ren": {
+   "nombre": "Producción",
+   "por_habitante": true,
+   "tope": 0.35,
+   "unidad": "fracción de la producción",
+   "texto": "Sube lo que produce la provincia (mercados, puertos, fábricas, redes)"
+  },
+  "ord": {
+   "nombre": "Orden y cohesión",
+   "por_habitante": true,
+   "tope": 8.0,
+   "unidad": "puntos de estabilidad",
+   "texto": "Sube la estabilidad de la provincia"
+  },
+  "def": {
+   "nombre": "Defensa",
+   "por_habitante": false,
+   "tope": 1.2,
+   "unidad": "× al poder de los defensores",
+   "texto": "Los defensores de la provincia pelean más fuerte"
+  },
+  "mov": {
+   "nombre": "Movilidad",
+   "por_habitante": false,
+   "tope": 0.6,
+   "unidad": "fracción del castigo de la distancia",
+   "texto": "La provincia se siente menos lejos de la capital"
+  }
+ },
+ "solo_saber": [
+  "escuelas_escribas",
+  "academias_filosoficas",
+  "biblioteca",
+  "observatorios_astronomicos",
+  "casa_de_traduccion",
+  "madrasas_escuelas",
+  "universidades_medievales",
+  "escuelas_traduccion",
+  "academias_ciencias",
+  "academias_lengua",
+  "universidades_investigacion",
+  "estacion_espacial"
+ ],
+ "efectos": {
+  "cabana_madera": [
+   [
+    "urb",
+    0.004,
+    3000
+   ]
+  ],
+  "campamento_estacional": [
+   [
+    "urb",
+    0.002,
+    2000
+   ]
+  ],
+  "adobe_barro": [
+   [
+    "urb",
+    0.004,
+    4000
+   ]
+  ],
+  "aldea_permanente": [
+   [
+    "urb",
+    0.01,
+    10000
+   ],
+   [
+    "com",
+    1.0,
+    8000
+   ]
+  ],
+  "empalizada": [
+   [
+    "def",
+    0.05,
+    0
+   ]
+  ],
+  "construccion_piedra": [
+   [
+    "urb",
+    0.01,
+    20000
+   ],
+   [
+    "sal",
+    0.01,
+    30000
+   ]
+  ],
+  "zanja_foso": [
+   [
+    "def",
+    0.04,
+    0
+   ]
+  ],
+  "ciudad_primitiva": [
+   [
+    "urb",
+    0.05,
+    40000
+   ],
+   [
+    "ren",
+    0.02,
+    40000
+   ],
+   [
+    "ord",
+    1.0,
+    40000
+   ]
+  ],
+  "mercados_locales": [
+   [
+    "com",
+    3.0,
+    40000
+   ],
+   [
+    "ren",
+    0.02,
+    40000
+   ]
+  ],
+  "murallas_urbanas": [
+   [
+    "def",
+    0.25,
+    0
+   ]
+  ],
+  "puente_madera": [
+   [
+    "mov",
+    0.04,
+    0
+   ],
+   [
+    "ren",
+    0.01,
+    60000
+   ]
+  ],
+  "templos_monumentales": [
+   [
+    "ord",
+    2.5,
+    150000
+   ]
+  ],
+  "fortaleza_colina": [
+   [
+    "def",
+    0.3,
+    0
+   ]
+  ],
+  "muralla_piedra": [
+   [
+    "def",
+    0.25,
+    0
+   ]
+  ],
+  "drenaje_urbano": [
+   [
+    "sal",
+    0.05,
+    80000
+   ]
+  ],
+  "almacenes_suministro": [
+   [
+    "com",
+    6.0,
+    60000
+   ],
+   [
+    "ren",
+    0.01,
+    60000
+   ]
+  ],
+  "fortin_torre_vigia": [
+   [
+    "def",
+    0.06,
+    0
+   ]
+  ],
+  "puerto_piedra": [
+   [
+    "ren",
+    0.05,
+    250000
+   ],
+   [
+    "mov",
+    0.05,
+    0
+   ],
+   [
+    "com",
+    3.0,
+    200000
+   ]
+  ],
+  "torres_y_almenas": [
+   [
+    "def",
+    0.1,
+    0
+   ]
+  ],
+  "presas_gravedad": [
+   [
+    "com",
+    5.0,
+    200000
+   ],
+   [
+    "ren",
+    0.01,
+    200000
+   ]
+  ],
+  "alcantarillado": [
+   [
+    "sal",
+    0.08,
+    150000
+   ]
+  ],
+  "arco_boveda": [
+   [
+    "ord",
+    0.5,
+    100000
+   ],
+   [
+    "ren",
+    0.005,
+    100000
+   ]
+  ],
+  "puente_piedra_arco": [
+   [
+    "mov",
+    0.08,
+    0
+   ],
+   [
+    "ren",
+    0.02,
+    150000
+   ]
+  ],
+  "foro_agora": [
+   [
+    "ord",
+    2.0,
+    100000
+   ],
+   [
+    "urb",
+    0.02,
+    100000
+   ]
+  ],
+  "acueducto": [
+   [
+    "sal",
+    0.07,
+    200000
+   ],
+   [
+    "com",
+    2.0,
+    200000
+   ],
+   [
+    "urb",
+    0.02,
+    200000
+   ]
+  ],
+  "calzadas_militares": [
+   [
+    "mov",
+    0.15,
+    0
+   ],
+   [
+    "def",
+    0.05,
+    0
+   ]
+  ],
+  "calzada_pavimentada": [
+   [
+    "mov",
+    0.15,
+    0
+   ],
+   [
+    "ren",
+    0.03,
+    200000
+   ]
+  ],
+  "red_viaria_imperial": [
+   [
+    "mov",
+    0.3,
+    0
+   ],
+   [
+    "ren",
+    0.06,
+    1000000
+   ]
+  ],
+  "faro": [
+   [
+    "mov",
+    0.03,
+    0
+   ],
+   [
+    "ren",
+    0.01,
+    300000
+   ]
+  ],
+  "limes_fronteras_fortificadas": [
+   [
+    "def",
+    0.5,
+    0
+   ]
+  ],
+  "ciudades_romanas_servicios": [
+   [
+    "sal",
+    0.08,
+    250000
+   ],
+   [
+    "urb",
+    0.03,
+    250000
+   ],
+   [
+    "ord",
+    1.0,
+    250000
+   ]
+  ],
+  "monasterios_copistas": [
+   [
+    "ord",
+    1.0,
+    100000
+   ]
+  ],
+  "cupula": [
+   [
+    "ord",
+    1.5,
+    200000
+   ]
+  ],
+  "escuelas_monasticas": [
+   [
+    "ord",
+    0.5,
+    100000
+   ]
+  ],
+  "burgos_fortificados": [
+   [
+    "urb",
+    0.04,
+    40000
+   ],
+   [
+    "def",
+    0.2,
+    0
+   ],
+   [
+    "ren",
+    0.015,
+    40000
+   ]
+  ],
+  "castillo_motte": [
+   [
+    "def",
+    0.35,
+    0
+   ]
+  ],
+  "hospitales_religiosos": [
+   [
+    "sal",
+    0.06,
+    50000
+   ],
+   [
+    "ord",
+    0.5,
+    50000
+   ]
+  ],
+  "puertas_fortificadas": [
+   [
+    "def",
+    0.1,
+    0
+   ]
+  ],
+  "escuelas_medicina": [
+   [
+    "sal",
+    0.05,
+    400000
+   ]
+  ],
+  "castillo_piedra": [
+   [
+    "def",
+    0.5,
+    0
+   ]
+  ],
+  "catedral_gotica": [
+   [
+    "ord",
+    3.0,
+    250000
+   ]
+  ],
+  "feria_comercial": [
+   [
+    "ren",
+    0.03,
+    250000
+   ],
+   [
+    "com",
+    3.0,
+    250000
+   ]
+  ],
+  "plazas_mercado_urbano": [
+   [
+    "com",
+    3.0,
+    60000
+   ],
+   [
+    "ren",
+    0.02,
+    60000
+   ],
+   [
+    "urb",
+    0.01,
+    60000
+   ]
+  ],
+  "castillo_concentrico": [
+   [
+    "def",
+    0.7,
+    0
+   ]
+  ],
+  "lazaretos": [
+   [
+    "sal",
+    0.05,
+    120000
+   ]
+  ],
+  "esclusas_canales": [
+   [
+    "ren",
+    0.05,
+    500000
+   ],
+   [
+    "com",
+    4.0,
+    400000
+   ],
+   [
+    "mov",
+    0.1,
+    0
+   ]
+  ],
+  "reclamacion_tierras_mar": [
+   [
+    "com",
+    8.0,
+    300000
+   ],
+   [
+    "ren",
+    0.03,
+    300000
+   ]
+  ],
+  "arsenal_fundicion": [
+   [
+    "ren",
+    0.03,
+    400000
+   ],
+   [
+    "def",
+    0.1,
+    0
+   ]
+  ],
+  "fortificacion_abaluartada": [
+   [
+    "def",
+    0.9,
+    0
+   ]
+  ],
+  "tunel_excavacion": [
+   [
+    "mov",
+    0.05,
+    0
+   ],
+   [
+    "ren",
+    0.01,
+    200000
+   ]
+  ],
+  "fortaleza_estrella": [
+   [
+    "def",
+    0.9,
+    0
+   ]
+  ],
+  "fortificaciones_permanentes": [
+   [
+    "def",
+    0.9,
+    0
+   ]
+  ],
+  "fuertes_costeros": [
+   [
+    "def",
+    0.2,
+    0
+   ]
+  ],
+  "escuelas_militares": [
+   [
+    "def",
+    0.1,
+    0
+   ]
+  ],
+  "puentes_hierro": [
+   [
+    "mov",
+    0.08,
+    0
+   ],
+   [
+    "ren",
+    0.02,
+    300000
+   ]
+  ],
+  "fabrica_textil": [
+   [
+    "ren",
+    0.05,
+    300000
+   ]
+  ],
+  "puentes_colgantes": [
+   [
+    "mov",
+    0.08,
+    0
+   ],
+   [
+    "ren",
+    0.02,
+    400000
+   ]
+  ],
+  "museos_publicos": [
+   [
+    "ord",
+    1.0,
+    400000
+   ]
+  ],
+  "barrios_obreros": [
+   [
+    "urb",
+    0.03,
+    150000
+   ],
+   [
+    "ord",
+    1.0,
+    150000
+   ],
+   [
+    "sal",
+    0.01,
+    150000
+   ]
+  ],
+  "parques_publicos": [
+   [
+    "sal",
+    0.02,
+    100000
+   ],
+   [
+    "ord",
+    1.5,
+    100000
+   ]
+  ],
+  "academia_militar_moderna": [
+   [
+    "def",
+    0.15,
+    0
+   ]
+  ],
+  "escuelas_tecnicas_ingenieria": [
+   [
+    "ren",
+    0.02,
+    800000
+   ]
+  ],
+  "grandes_almacenes": [
+   [
+    "ren",
+    0.04,
+    400000
+   ],
+   [
+    "com",
+    3.0,
+    400000
+   ]
+  ],
+  "hospital_moderno": [
+   [
+    "sal",
+    0.15,
+    400000
+   ]
+  ],
+  "metro_subterraneo": [
+   [
+    "ren",
+    0.04,
+    1500000
+   ],
+   [
+    "urb",
+    0.05,
+    1500000
+   ]
+  ],
+  "tunel_ferroviario": [
+   [
+    "mov",
+    0.15,
+    0
+   ],
+   [
+    "ren",
+    0.03,
+    600000
+   ]
+  ],
+  "canal_interoceanico": [
+   [
+    "ren",
+    0.06,
+    3000000
+   ],
+   [
+    "mov",
+    0.1,
+    0
+   ]
+  ],
+  "transporte_urbano_masivo": [
+   [
+    "ren",
+    0.03,
+    800000
+   ],
+   [
+    "urb",
+    0.04,
+    800000
+   ]
+  ],
+  "central_termoelectrica": [
+   [
+    "ren",
+    0.06,
+    1500000
+   ]
+  ],
+  "rascacielos": [
+   [
+    "urb",
+    0.06,
+    500000
+   ],
+   [
+    "ren",
+    0.03,
+    500000
+   ]
+  ],
+  "red_electrica": [
+   [
+    "ren",
+    0.05,
+    800000
+   ],
+   [
+    "sal",
+    0.02,
+    800000
+   ]
+  ],
+  "fortificacion_hormigon": [
+   [
+    "def",
+    0.8,
+    0
+   ]
+  ],
+  "fuertes_acorazados": [
+   [
+    "def",
+    1.0,
+    0
+   ]
+  ],
+  "laboratorios_industriales": [
+   [
+    "ren",
+    0.05,
+    600000
+   ]
+  ],
+  "central_hidroelectrica": [
+   [
+    "ren",
+    0.07,
+    2000000
+   ]
+  ],
+  "presas_arco_hormigon": [
+   [
+    "com",
+    7.0,
+    600000
+   ],
+   [
+    "ren",
+    0.03,
+    600000
+   ]
+  ],
+  "red_alta_tension": [
+   [
+    "ren",
+    0.04,
+    2000000
+   ]
+  ],
+  "casamatas_hormigon": [
+   [
+    "def",
+    0.5,
+    0
+   ]
+  ],
+  "planta_depuradora": [
+   [
+    "sal",
+    0.08,
+    500000
+   ]
+  ],
+  "sistema_trincheras": [
+   [
+    "def",
+    0.4,
+    0
+   ]
+  ],
+  "aeropuerto": [
+   [
+    "mov",
+    0.2,
+    0
+   ],
+   [
+    "ren",
+    0.04,
+    1500000
+   ]
+  ],
+  "gas_natural": [
+   [
+    "ren",
+    0.05,
+    2000000
+   ]
+  ],
+  "linea_defensiva_permanente": [
+   [
+    "def",
+    1.0,
+    0
+   ]
+  ],
+  "autopista": [
+   [
+    "mov",
+    0.25,
+    0
+   ],
+   [
+    "ren",
+    0.04,
+    1000000
+   ]
+  ],
+  "bunker_antiaereo": [
+   [
+    "def",
+    0.2,
+    0
+   ]
+  ],
+  "bunker_nuclear": [
+   [
+    "def",
+    0.5,
+    0
+   ]
+  ],
+  "central_nuclear": [
+   [
+    "ren",
+    0.08,
+    4000000
+   ]
+  ],
+  "puente_atirantado": [
+   [
+    "mov",
+    0.08,
+    0
+   ],
+   [
+    "ren",
+    0.02,
+    500000
+   ]
+  ],
+  "defensa_aerea_integrada": [
+   [
+    "def",
+    0.5,
+    0
+   ]
+  ],
+  "silo_misil": [
+   [
+    "def",
+    0.3,
+    0
+   ]
+  ],
+  "base_subterranea_montana": [
+   [
+    "def",
+    0.8,
+    0
+   ]
+  ],
+  "defensa_costera_misiles": [
+   [
+    "def",
+    0.3,
+    0
+   ]
+  ],
+  "tunel_submarino": [
+   [
+    "mov",
+    0.1,
+    0
+   ],
+   [
+    "ren",
+    0.03,
+    2000000
+   ]
+  ],
+  "parque_eolico": [
+   [
+    "ren",
+    0.04,
+    1500000
+   ]
+  ],
+  "escudo_antimisiles": [
+   [
+    "def",
+    0.4,
+    0
+   ]
+  ],
+  "energia_solar_comercial": [
+   [
+    "ren",
+    0.04,
+    1500000
+   ]
+  ],
+  "centro_operaciones_ciberneticas": [
+   [
+    "def",
+    0.15,
+    0
+   ]
+  ]
+ }
+}

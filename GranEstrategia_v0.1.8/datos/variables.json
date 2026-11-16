@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8.47",
+  "version": "0.1.8.48",
   "ayuda": "Catálogo de VARIABLES de la base de datos. Cada variable guarda UN solo valor actual por ID de territorio; los valores anteriores van a las tablas de historial. Para añadir una variable nueva basta con agregar una entrada aquí (id_var nuevo, nunca reutilizar). tipo: numero | texto | id. aplica_a: mundo, continente, pais, estado, provincia, ciudad. historial: cambio (guarda el valor viejo cada vez que cambia) | mensual | anual (foto al cerrar el mes / año) | ninguno. agregacion: como se resume hacia arriba en la cadena (suma, media_ponderada:<variable>, ninguna). afecta_economia: si es true, cambiar esta variable invalida la caché de ingresos de los países.",
   "variables": [
     {
@@ -1086,6 +1086,20 @@
       "agregacion": "ninguna",
       "descripcion": "Parte de los impuestos que el país gasta en salud pública (referencia 2 %). Se descuenta de la tesorería y mejora la salud efectiva de sus provincias.",
       "afecta_economia": true
+    },
+    {
+      "id_var": 77,
+      "nombre": "fondo_obras",
+      "etiqueta": "Fondo de obras públicas",
+      "categoria": "economia",
+      "tipo": "numero",
+      "unidad": "moneda del país",
+      "aplica_a": [
+        "pais"
+      ],
+      "historial": "mensual",
+      "agregacion": "ninguna",
+      "descripcion": "Dinero apartado para obras: la partida «Gasto en obras» de los impuestos va aquí en vez de perderse. Se gasta primero al construir (edificios) y, si pasa de tres años de aportes, lo que sobra vuelve a la tesorería. Todos los países con provincias lo tienen (0.1.8.48)."
     }
   ]
 }

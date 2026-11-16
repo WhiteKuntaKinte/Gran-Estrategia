@@ -191,7 +191,8 @@ func _poder(lista: Array, pais: int, prov: int) -> float:
 		t += s * q
 	var pr = ej.provincia_por_tid(prov)
 	if pr != null and ej.dueno_de_provincia(int(pr.idx)) == pais:
-		t *= BONO_LOCAL
+		var ed = mundo.edificios
+		t *= BONO_LOCAL + (ed.efecto_abs(int(pr.idx), ed.EF_DEF) if ed != null and ed.efectos_listos else 0.0)       # 0.1.8.48: murallas, castillos, fortalezas y búnkeres
 	return t
 
 

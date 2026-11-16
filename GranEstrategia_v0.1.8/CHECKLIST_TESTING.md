@@ -1,9 +1,19 @@
-# Checklist de testing — Gran Estrategia 0.1.8.47
+# Checklist de testing — Gran Estrategia 0.1.8.48
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.48 — Edificios con efectos reales, fondo de obras, obras públicas de la IA y cuenta de soldados incremental
+- ✅ `runner106` — efectos de los edificios: datos puros (97 con efecto + 12 «solo saber» = 109; 7 clases, topes, sin NaN), fondo de obras (arranque de 180 días, aporte diario, tope de 3 años, el exceso vuelve a la tesorería, construir paga primero del fondo, `puede`), modelo (saturación, dilución por habitantes, regla de partida «solo cuenta lo construido después» en salud / comida / vivienda / producción), producción (el producto por habitante sube al terminar la obra, no al guardar), IA (construye solo con fondo, nunca con la tesorería, no toca al jugador, respeta topes y obras en curso, coste por día) e interfaz (línea «Efectos» en Construir, fondo en su cabecera, sección EFECTOS del HUD, Debug > Edificios) (98 comprobaciones).
+- ✅ `runner107` — cuenta de soldados incremental: 360 operaciones al azar (reclutar, bajas, reforzar, dividir, compactar, disolver pelotón y regimiento, desertar) comparando con la cuenta completa tras CADA una (0 diferencias); 120 días de 2026 y 90 de 1500 con todas las IA; un cambio no anotado se corrige en el repaso; coste 74 µs contra 2.681 µs (27 comprobaciones).
+- ✅ Ajustadas: runner71 y runner72 (el día tiene 11 fases; la fila de balance trae el aporte al fondo de obras), runner83 (vacía el fondo antes de comprobar «se cobra la suma de las tres»).
+- ✅ Regresión completa runner71–107 (salvo los bancos 89, 90 y 101 extendido; runner74 con ventana virtual, 221 comprobaciones): **0 fallos** en todas.
+- ✅ Auditoría de variables: 1.690 funciones, **0 funciones repetidas y 0 variables repetidas**, nada nuevo sin uso (revisado a mano); `datos/variables.json` cambió a propósito (+`fondo_obras`, id 77).
+- ✅ Revisión de rendimiento: ver NOTAS_TECNICAS_0.1.8.48.md §4 (un día con todas las IA, media de 3 pares contra la 0.1.8.47: 2026 13,4 → 12,7 ms; 1500 4,6 → 5,6 ms en el banco corto y +0,4 ms a régimen; el mapa y el zoom no cambian: 6,9 ms por fotograma).
+- ⬜ Nada de esta versión se ha visto en tu pantalla (la línea «Efectos» de Construir y la sección EFECTOS del HUD se probaron por código, sin GPU).
+- ⬜ **Pedirte:** F9 con el año 1 y todas las IA a x6 (mira Debug > Edificios: contadores de obras públicas y cuenta por país) y una partida normal de 2026; y que me digas si las IA construyen poco o mucho.
 
 ### 0.1.8.47 — Gente: demografía viva, educación, presupuesto y oficios
 - ✅ `runner104` — la demografía: el modelo en funciones puras (acceso al saber, natalidad, mortalidad, edades, alfabetización, bienestar, la economía según el saber), calibración por época (año 1: 254 M, 39,8 / 39,2 ‰, +0,06 %/año; 1096: 367 M; 1500: 468 M, −0,03 %/año; 2026: 8.349 M, 15,7 / 8,1 ‰, +0,76 %/año, 64 % urbano, 87 % alfabetizado), invariantes (4 años sin NaN ni valores fuera de rango en 7.650 provincias), coste de la fase (~0,9 ms por día en 2026), consultas y fatiga de guerra (75 comprobaciones).

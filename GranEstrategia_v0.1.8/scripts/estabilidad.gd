@@ -7,7 +7,8 @@ extends RefCounted
 ##   · core nacional: +5 si es tierra propia de su dueño, −6 si es core de otro país, −2 si no tiene core
 ##   · cultura distinta a la de su dueño: −8
 ##   · conquista reciente: hasta −20, se disipa en 5 años
-##   · distancia a la capital: hasta −10 (la capital misma: +10)
+##   · distancia a la capital: hasta −10 (la capital misma: +10); las calzadas, puentes y puertos (0.1.8.48, scripts/edificios.gd) le quitan hasta el 60 % de ese castigo
+##   · ORDEN de los edificios (0.1.8.48): templos, foros, catedrales, barrios, parques… suman hasta +8 según la gente que atienden (cuenta TODO lo construido)
 ##   · país en guerra: −4; provincia ocupada por el enemigo: −18; devastación: hasta −20
 ##   · BIENESTAR de la gente (0.1.8.47, scripts/demografia.gd): de −8 (hambre y sin salud) a +5 (vive bien); neutro en 58
 ##   · FATIGA DE GUERRA del país (0.1.8.47): hasta −12; sube cada día en guerra y con las bajas, y baja despacio en paz
@@ -167,9 +168,19 @@ func _meta(pi: int, ix: int, due: int, d: int, det = null) -> float:
 		var dx: float = fposmod(centros[pi].x - centros[cap].x + 1200.0, 2400.0) - 1200.0
 		var dy: float = centros[pi].y - centros[cap].y
 		x = -minf(10.0, sqrt(dx * dx + dy * dy) / 9.0)
+		var ed = mundo.edificios
+		if ed != null and ed.efectos_listos and x < 0.0:                       # 0.1.8.48: calzadas, puentes y puertos acortan la distancia
+			x *= 1.0 - ed.efecto_abs(pi, ed.EF_MOV)
 		m += x
 		if det != null and x < -0.5:
 			det.append(["Lejos de la capital", x])
+	var edi = mundo.edificios
+	if edi != null and edi.efectos_listos:                                       # 0.1.8.48: los edificios que dan orden y cohesión
+		x = edi.efecto_abs(pi, edi.EF_ORD, float(mundo.provincias[pi].poblacion))
+		if x > 0.0:
+			m += x
+			if det != null and x > 0.4:
+				det.append(["Edificios de orden y cohesión", x])
 	var ix_p: int = int(f["ix"])
 	if ix_p >= 0 and _c_gu[ix_p] > 0.0:
 		m -= 4.0
