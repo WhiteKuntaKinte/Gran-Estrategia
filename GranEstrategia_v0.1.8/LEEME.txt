@@ -1,8 +1,21 @@
-GRAN ESTRATEGIA — VERSION 0.1.8.49 (DESARROLLO)
+GRAN ESTRATEGIA — VERSION 0.1.8.50 (DESARROLLO)
 Abre la carpeta en Godot 4 (Compatibility) y pulsa F5.
 Controles: rueda = zoom · botón derecho/central arrastrar = mover · clic = seleccionar · doble clic en un país = pop-out
 con sus provincias · con el país enfocado, doble clic en una provincia = sus subdivisiones · Ctrl + clic = elegir varias provincias, varios países o varios cuadros de tropas · V = alternar Tradicional / Relieve (o el botón de lentes VISTA) · Esc = pausa · Espacio = pausar/reanudar el tiempo · 1 a 6 = velocidad ·
 B = ventana Construir · T = pantalla Descubrimientos · F1 = menú Debug (overlay) · Retroceso (o el botón ↩) = atrás · W A S D (o flechas) = mover la cámara (Shift = más rápido) · R = Ranking (campaña) · F9 = grabar el rendimiento (otra vez F9 = parar) · F8 = poner una marca mientras graba.
+
+NUEVO EN 0.1.8.50 — TEJIDO DEL SABER II: 36 DESCUBRIMIENTOS Y 41 ENLACES ENTRE RAMAS
+(Detalle técnico en NOTAS_TECNICAS_0.1.8.50.md. Sale de tu mensaje del 16 de noviembre: "añade más descubrimientos y dependencias, haz las bases más fuertes".)
+- 36 DESCUBRIMIENTOS NUEVOS, AHORA 1.882, cada uno con año histórico y requisitos de OTRAS ramas:
+  ENERGÍA: central eléctrica pública, oleoductos y gasoductos, red eléctrica nacional, electrificación rural, centrales nucleares civiles, eficiencia energética y mercado eléctrico.
+  ELECTRÓNICA Y COMPUTACIÓN: telefonía automática, televisión en color, navegación satelital civil, hoja de cálculo, software libre, firma digital y cibernética.
+  TRANSPORTE Y FÁBRICA: ferrocarril transcontinental, señalización ferroviaria, vuelo supersónico, carga aérea exprés, transporte por plataforma y fábrica electrificada.
+  ECONOMÍA, GOBIERNO Y DERECHO: proteccionismo arancelario, regulación bancaria, descentralización, referéndum, derecho del mar, aéreo y espacial, marcas y diseño industrial, derecho de quiebras.
+  DIPLOMACIA, CULTURA Y MANDO: pasaportes y fronteras, extradición, asilo y refugiados, censura previa, cine sonoro, parques nacionales y servicios topográficos militares.
+- 41 ENLACES EXTRA ENTRE RAMAS (ya son 106) con su porqué, que se lee en el globo de cada descubrimiento: p. ej. el comercio electrónico pide el cifrado web; las cadenas de suministro globales piden el contenedor marítimo; la banca electrónica pide la computadora digital.
+- LA POBLACIÓN NO CAMBIA: los nuevos están fuera de los índices de saber (254 M en el año 1, 468 M en 1500, 8.349 M en 2026).
+- COSTE: ver NOTAS_TECNICAS_0.1.8.50.md §3 (son datos: 2026 12,7 → 12,6 ms y 1500 6,0 → 6,3 ms por día, dentro del ruido).
+- PARA PROBAR: abre Descubrimientos (tecla T) en Energía, Computación, Transporte y Derecho; el F9 de la 0.1.8.48 (año 1 con todas las IA a x6 y una partida de 2026) sigue pendiente.
 
 NUEVO EN 0.1.8.49 — 32 EDIFICIOS NUEVOS: ECONOMÍA, ORDEN Y CULTO, MANDO Y DEFENSA
 (Detalle técnico en NOTAS_TECNICAS_0.1.8.49.md. Sale de tus mensajes del 16 de noviembre: "añade más contenido y ensámblalo al juego".)

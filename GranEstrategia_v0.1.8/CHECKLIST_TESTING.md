@@ -1,9 +1,19 @@
-# Checklist de testing — Gran Estrategia 0.1.8.49
+# Checklist de testing — Gran Estrategia 0.1.8.50
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.50 — Tejido del saber II: 36 descubrimientos y 41 enlaces entre ramas
+- ✅ Catálogo: **1.882 descubrimientos** (año 1: 371; 2026: 1.851) y 106 enlaces extra entre ramas con su porqué (65 + 41); el generador valida requisitos, ciclos, años y eras.
+- ✅ Pruebas nuevas en runner102 (`t_tejido_050`): los 36 existen, los 41 enlaces están en los prerrequisitos y ninguno pide algo posterior, cada uno trae su porqué: 39 OK, 0 FALLOS.
+- ✅ Ajustados a los conteos nuevos: runner77, runner91 y runner102.
+- ✅ Calibración demográfica intacta (runner104: 75 comprobaciones sin cambios): ningún descubrimiento nuevo cae en las secciones de los índices de saber.
+- ✅ Regresión completa runner71–107 (runner74 con ventana virtual): **0 fallos** en todas.
+- ✅ Auditoría de variables: 1.693 funciones, 0 funciones repetidas, 0 variables repetidas (no hay código nuevo en `scripts/`); `datos/variables.json` no cambió.
+- ✅ Revisión de rendimiento (datos, sin código nuevo): 2026 12,7 → 12,6 ms y 1500 6,0 → 6,3 ms por día (runner89, promedio de 3 pares); runner101 sin cambios (0,93 / 0,45 ms por mes).
+- ⬜ **Pedirte:** abre la pantalla de Descubrimientos (T) en Energía, Computación, Transporte y Derecho y mira que los saberes nuevos y sus líneas se ven bien; y sigue pendiente el F9 de la 0.1.8.48 (año 1 con todas las IA a x6 y una partida normal de 2026).
 
 ### 0.1.8.49 — 32 edificios nuevos (economía, orden y culto, mando y defensa)
 - ✅ Catálogo: 141 edificios (129 con efecto + 12 «solo saber»), 1.846 descubrimientos (año 1: 371; 2026: 1.815), 141 iconos distintos (los 32 nuevos dibujados por código y revisados en una hoja de contacto).
