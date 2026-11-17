@@ -20,7 +20,7 @@ var raiz: Control
 var caja: PanelContainer
 var cuerpo: VBoxContainer
 var abierto := false
-var tipo := ""                         # "guerra" | "paz" | "revuelta" | "alianza" | "llamado" | ""
+var tipo := ""                         # "guerra" | "batalla" | "paz" | "revuelta" | "alianza" | "llamado" | ""
 var aviso: Dictionary = {}
 
 # negociación
@@ -174,6 +174,31 @@ func mostrar_guerra(d: Dictionary) -> void:
 	cuerpo.add_child(bs)
 	bs.add_child(_boton("REANUDAR (velocidad 1)", func(): cerrar("reanudar"), Tema.OK))
 	bs.add_child(_boton("SEGUIR EN PAUSA", func(): cerrar("pausa")))
+
+
+# ───────────── 1b. Una batalla grande: ¿la dirigirás tú en el tablero? (0.1.8.51) ─────────────
+## `d` = {"bid", "provincia", "rival" (nombre), "sold_jug", "sold_rival", "terreno" (texto), "atacas" (true si atacas tú), "local" (true si peleas en casa), "dias" (cuánto espera)}
+func mostrar_batalla(d: Dictionary) -> void:
+	_limpiar()
+	tipo = "batalla"
+	aviso = d
+	abierto = true
+	capa.visible = true
+	var riv: String = String(d["rival"])
+	_cabecera(riv, "BATALLA DE %s" % String(d["provincia"]).to_upper(), "%s contra %s" % [("Atacas a" if bool(d["atacas"]) else "Te ataca"), main._nombre_vis(riv)], Tema.ORO)
+	cuerpo.add_child(_linea())
+	var sj: int = int(d["sold_jug"])
+	var sr: int = int(d["sold_rival"])
+	cuerpo.add_child(_lbl("Fuerzas: tú %s soldados · %s %s soldados." % [main.hud.fmt_num(float(sj)), main._nombre_vis(riv), main.hud.fmt_num(float(sr))], 14, Tema.TEXTO))
+	cuerpo.add_child(_lbl("%s%s" % [String(d["terreno"]), " · peleas en casa" if bool(d["local"]) else ""], 14, Tema.TENUE))
+	cuerpo.add_child(_lbl("Puedes dirigirla tú: elegir la formación, colocar tus tropas en el tablero y ver la batalla ronda a ronda. Si prefieres no hacerlo, se resuelve sola. "
+		+ "Si no respondes, se resuelve sola en %d días." % int(d["dias"]), 13, Tema.TENUE))
+	cuerpo.add_child(_linea())
+	var bs := HBoxContainer.new()
+	bs.add_theme_constant_override("separation", 10)
+	cuerpo.add_child(bs)
+	bs.add_child(_boton("DESPLEGAR EN EL TABLERO", func(): cerrar("tablero"), Tema.OK))
+	bs.add_child(_boton("QUE SE RESUELVA SOLA", func(): cerrar("sola")))
 
 
 # ───────────── 2. Fin de la guerra: negociar con provincias y dinero ─────────────

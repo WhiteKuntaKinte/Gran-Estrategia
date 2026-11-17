@@ -21,6 +21,7 @@ const TemaHud := preload("res://scripts/tema_hud.gd")
 const RankingScript := preload("res://scripts/ranking.gd")
 const ConstruirScript := preload("res://scripts/ventana_construir.gd")
 const DescubrimientosPantalla := preload("res://scripts/pantalla_descubrimientos.gd")
+const CombatePantalla := preload("res://scripts/pantalla_combate.gd")
 const BANDERAS_HD_MAX := 12                     # banderas HD (256 px) en memoria a la vez: el panel y el aviso de guerra piden una cada vez
 const PinturasScript := preload("res://scripts/pinturas.gd")
 const MateriasScript := preload("res://scripts/materias.gd")
@@ -629,6 +630,9 @@ var campana_zoom_min := 0.55
 var panel_ranking                     # RankingScript (ventana, mientras está abierta)
 var panel_construir                   # ConstruirScript (0.1.8.40): la ventana Construir, mientras está abierta
 var panel_descubrimientos             # DescubrimientosPantalla (0.1.8.43): la pantalla completa de Descubrimientos (tecla T), mientras está abierta
+var panel_combate                     # CombatePantalla (0.1.8.51): el tablero de una batalla (la ofrece `Guerra` al jugador; también Debug > Combate), mientras está abierto
+var _mapa_oculto_cmb := false          # el mapa se oculta mientras está abierto el tablero
+var _vel_cmb := 0                      # velocidad del reloj al abrir el tablero (se reanuda al cerrarlo; 0 = estaba en pausa)
 var _mapa_oculto_desc := false         # 0.1.8.44: mientras la pantalla de Descubrimientos está abierta el mapa NO se dibuja (la pantalla es opaca: dibujarlo era gasto puro de GPU)
 var pinturas                          # PinturasScript (0.1.8.41): la pintura clásica de cada país, arriba de su panel
 var materias                          # MateriasScript (0.1.8.41): iconos de materias primas, sectores y monedas
@@ -4368,7 +4372,7 @@ func _tid_jug() -> int:
 
 ## Saca el primer aviso de la cola (si no hay otro pop-up abierto), pausa el reloj y lo muestra. Los avisos viejos (la guerra ya no existe) se descartan.
 func _procesar_avisos() -> void:
-	if mundo == null or en_menu or en_pausa or _aviso_abierto():
+	if mundo == null or en_menu or en_pausa or _aviso_abierto() or (panel_combate != null and is_instance_valid(panel_combate)):
 		return
 	var jt := _tid_jug()
 	var g = mundo.guerra
@@ -4383,6 +4387,11 @@ func _procesar_avisos() -> void:
 		if tipo == "paz" and g.en_guerra(int(av["ia"]), jt):
 			_abrir_aviso_paz(av, jt)
 			return
+		if tipo == "batalla" and int(av["jugador"]) == jt and int(g.pend_tactica.get(int(av["bid"]), -1)) >= 0:       # 0.1.8.51: ¿diriges la batalla en el tablero?
+			if _abrir_aviso_batalla(av):
+				return
+			g.resolver_sola(int(av["bid"]))
+			continue
 		if tipo == "coalicion" and int(av["objetivo"]) == jt:
 			aviso(String(av["texto"]), "mal")                                  # 0.1.8.43: no pausa; es un aviso para que lo sepas (y para que busques aliados)
 			continue
@@ -4422,6 +4431,15 @@ func _al_cerrar_aviso(accion: String) -> void:
 			_poner_velocidad(1)
 		"firmada", "seguir_guerra", "revuelta", "alianza", "llamado":
 			_poner_velocidad(_vel_aviso)
+		"sola":                                                                 # 0.1.8.51: la batalla sigue con el modelo diario
+			if mundo != null and mundo.guerra != null and popup_guerra != null:
+				mundo.guerra.resolver_sola(int(popup_guerra.aviso.get("bid", -1)))
+			_poner_velocidad(_vel_aviso)
+		"tablero":                                                              # 0.1.8.51: el tablero toma el relevo (al cerrarlo se reanuda el tiempo)
+			if abrir_combate_batalla(int(popup_guerra.aviso.get("bid", -1))):
+				_vel_cmb = _vel_aviso
+			else:
+				_poner_velocidad(_vel_aviso)
 	if mundo != null and not mundo.avisos.is_empty():
 		_procesar_avisos.call_deferred()
 
@@ -4534,6 +4552,98 @@ func _abrir_aviso_guerra(av: Dictionary, jt: int) -> void:
 
 
 ## 0.1.8.43 · Una provincia del jugador se amotina: pausa y pregunta qué hacer (pagar, reprimir, conceder o ignorar).
+## 0.1.8.51 · Ofrece al jugador dirigir la batalla en el tablero. Devuelve false si no se puede (sin datos del tablero o las tropas ya no están).
+func _abrir_aviso_batalla(av: Dictionary) -> bool:
+	var g = mundo.guerra
+	var dt: Dictionary = g.datos_tactica(int(av["bid"]))
+	if dt.is_empty():
+		return false
+	var jt := _tid_jug()
+	var atacas: bool = int(dt["atacante"]) == jt
+	var l := 0 if atacas else 1
+	var rival: String = mundo.bd.nombre_de(int(dt["defensor"]) if atacas else int(dt["atacante"]))
+	var pr = mundo.ejercito.provincia_por_tid(int(dt["prov"]))
+	_asegurar_popup()
+	_pausar_por_aviso()
+	popup_guerra.mostrar_batalla({"bid": int(av["bid"]), "provincia": pr.nombre if pr != null else "?", "rival": rival, "sold_jug": int(dt["soldados"][l]), "sold_rival": int(dt["soldados"][1 - l]),
+		"terreno": String(mundo.combate.terrenos[int(dt["terreno"])]["nombre"]), "atacas": atacas, "local": int(dt["local"]) == jt, "dias": g.ESPERA_TACTICA_DIAS})
+	return true
+
+
+## 0.1.8.51 · Abre el tablero de la batalla `bid` con las tropas que hay ahora en la provincia. Devuelve false si no se pudo (entonces la batalla se resuelve sola).
+func abrir_combate_batalla(bid: int) -> bool:
+	var g = mundo.guerra if mundo != null else null
+	if g == null or mundo.combate == null or en_menu:
+		return false
+	var dt: Dictionary = g.datos_tactica(bid)
+	var jt := _tid_jug()
+	if dt.is_empty() or jt < 0 or (int(dt["atacante"]) != jt and int(dt["defensor"]) != jt):
+		if g != null:
+			g.resolver_sola(bid)
+		return false
+	var a: int = int(dt["atacante"])
+	var d: int = int(dt["defensor"])
+	var na: String = mundo.bd.nombre_de(a)
+	var nd: String = mundo.bd.nombre_de(d)
+	var pr = mundo.ejercito.provincia_por_tid(int(dt["prov"]))
+	var ca = mundo.capacidad_militar(a, true)
+	var cd = mundo.capacidad_militar(d, true)
+	if ca == null or cd == null:
+		g.resolver_sola(bid)
+		return false
+	_asegurar_combate()
+	panel_combate.abrir({"modo": "guerra", "bid": bid, "nombres": [na, nd], "banderas": [_bandera_pais(na), _bandera_pais(nd)], "cap": [ca, cd], "sold": dt["soldados"], "cal": dt["cal"],
+		"terreno": int(dt["terreno"]), "local": [int(dt["local"]) == a, int(dt["local"]) == d], "bono_def": float(dt["bono_def"]), "lado": 0 if a == jt else 1,
+		"titulo": "Batalla de %s" % (pr.nombre if pr != null else "?"), "semilla": (bid * 7919 + int(mundo.bd.fecha)) & 0x7fffffff})
+	return true
+
+
+## 0.1.8.51 · Tablero de práctica (Debug > Combate): tu país contra otro, en el terreno y con los soldados que elijas. No toca la partida.
+func abrir_combate_prueba() -> bool:
+	if mundo == null or mundo.combate == null or mundo.descubrimientos == null or en_menu:
+		return false
+	var nombres := []
+	for n in mundo.paises:
+		if mundo.paises[n].provincias.size() > 0:
+			nombres.append(String(n))
+	nombres.sort()
+	if nombres.size() < 2:
+		return false
+	var pa: String = mundo.jugador if mundo.jugador != "" and mundo.paises.has(mundo.jugador) else String(nombres[0])
+	var pd: String = String(nombres[1]) if String(nombres[0]) == pa else String(nombres[0])
+	_vel_cmb = reloj.velocidad if reloj.velocidad > 0 else 0
+	_poner_velocidad(0)
+	_asegurar_combate()
+	panel_combate.abrir(CombatePantalla.datos_prueba(self, pa, pd, 0, 8000.0))
+	return true
+
+
+func _asegurar_combate() -> void:
+	if panel_combate != null and is_instance_valid(panel_combate):
+		return
+	panel_combate = CombatePantalla.new()
+	add_child(panel_combate)
+	panel_combate.construir(self, fuente_ui)
+	panel_combate.cerrada.connect(_cerrar_combate)
+	if visible:
+		visible = false
+		_mapa_oculto_cmb = true
+
+
+func _cerrar_combate(_aplicado: bool) -> void:
+	if _mapa_oculto_cmb:
+		visible = true
+		_mapa_oculto_cmb = false
+	if panel_combate != null and is_instance_valid(panel_combate):
+		panel_combate.queue_free()
+	panel_combate = null
+	if _vel_cmb > 0:
+		_poner_velocidad(_vel_cmb)
+	_vel_cmb = 0
+	if mundo != null and not mundo.avisos.is_empty():
+		_procesar_avisos.call_deferred()
+
+
 func _abrir_aviso_revuelta(av: Dictionary) -> void:
 	_asegurar_popup()
 	_pausar_por_aviso()

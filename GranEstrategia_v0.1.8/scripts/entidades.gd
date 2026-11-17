@@ -22,6 +22,7 @@ const EdificiosScript := preload("res://scripts/edificios.gd")
 const CoresScript := preload("res://scripts/cores.gd")
 const DiplomaciaScript := preload("res://scripts/diplomacia.gd")
 const EstabilidadScript := preload("res://scripts/estabilidad.gd")
+const CombateScript := preload("res://scripts/combate.gd")
 const DemografiaScript := preload("res://scripts/demografia.gd")
 const EducacionScript := preload("res://scripts/educacion.gd")
 const ObrasPublicasScript := preload("res://scripts/obras_publicas.gd")
@@ -314,6 +315,8 @@ class Mundo extends RefCounted:
 	var cores                           # Cores (0.1.8.40): core nacional y core cultural de cada provincia (null hasta que se llama iniciar_edificios)
 	var diplomacia                      # Diplomacia (0.1.8.43): opinión, alianzas, rivales, infamia y coaliciones (null hasta que se llama iniciar_ejercito)
 	var estabilidad                     # Estabilidad (0.1.8.43): estabilidad social por provincia, revueltas e independencias
+	var combate                         # Combate (0.1.8.51): formaciones y batalla táctica en el tablero; sin datos/combate.json queda en null y las batallas son solo estratégicas
+	var _cap_mil := {}                  # ID de país -> [mes, capacidad militar]: lo que el país puede poner en el campo (ver `capacidad_militar`)
 	var educacion                       # Educación (0.1.8.47): capacidad de investigar, política de investigación, oficios y presupuesto de las IA
 	var demografia                      # Demografía (0.1.8.47): natalidad, mortalidad, edades, urbanización, alfabetización y bienestar por provincia; fatiga de guerra por país
 	var modo := "dev"                  # "dev" = mapa mundial, todo permitido · "campana" = solo Europa + Rusia + Turquía, conquista básica
@@ -808,6 +811,10 @@ class Mundo extends RefCounted:
 		diplomacia.iniciar(self)
 		estabilidad = EstabilidadScript.new()
 		estabilidad.iniciar(self)
+		combate = CombateScript.new()
+		if not combate.iniciar():
+			combate = null
+		_cap_mil.clear()
 		iniciar_tesorerias()
 
 	## 0.1.8.40: arma los edificios (catálogo, obras) y los cores de las provincias. Va DESPUÉS de `iniciar_ejercito` (que carga las culturas).
@@ -1246,6 +1253,30 @@ class Mundo extends RefCounted:
 			demografia.reiniciar()                                   # el saber de los países cambió: la gente se reajusta a él
 		if educacion != null:
 			educacion.reiniciar()
+
+	## 0.1.8.51: lo que el país `tid` puede poner en el campo (clases de tropa con su nivel, mejoras y formaciones; ver `Combate.capacidad`). Se guarda un mes (los
+	## descubrimientos cambian despacio); `fresco` lo recalcula (la pantalla de combate lo pide). Sin catálogo de descubrimientos o sin combate: null.
+	func capacidad_militar(tid: int, fresco := false):
+		if combate == null or descubrimientos == null:
+			return null
+		var mes := int(bd.fecha) / 30
+		var c = _cap_mil.get(tid)
+		if c != null and not fresco and int(c[0]) == mes:
+			return c[1]
+		var cap: Dictionary = combate.capacidad(descubrimientos, tid)
+		_cap_mil[tid] = [mes, cap]
+		return cap
+
+	## 0.1.8.51: lo que multiplica el poder de combate diario de `guerra.gd` por el nivel de las tropas del país (1,0 sin datos).
+	func factor_militar(tid: int) -> float:
+		var cap = capacidad_militar(tid)
+		return 1.0 if cap == null else combate.factor_estrategico(cap)
+
+	## 0.1.8.51: terreno (índice de `combate.terrenos`) de una provincia (ID de territorio): sale de su bioma y su altitud.
+	func terreno_de_provincia(prov_tid: int) -> int:
+		if combate == null:
+			return 0
+		return combate.terreno_de(bd.txt("bioma_principal", prov_tid), bd.num("altitud_media_m", prov_tid, 0.0))
 
 	## ¿El país `pais` (nombre) conoce el descubrimiento `sl` (slug)? Falso si no hay catálogo o el país/descubrimiento no existen.
 	func conoce_descubrimiento(pais: String, sl: String) -> bool:

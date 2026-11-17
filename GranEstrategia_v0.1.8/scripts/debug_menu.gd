@@ -36,6 +36,7 @@ const SECCIONES := [
 	["historia", "Historia", "i_desc", "Viaja a una fecha: qué estados existían y quién gobernaba."],
 	["ejercito", "Ejército", "i_ejercito", "Reclutar, causar bajas, mover pelotones y devastar."],
 	["edif", "Edificios", "i_prov", "Da o quita edificios, termina obras y cambia los cores de lo elegido."],
+	["combate", "Combate", "i_ejercito", "Tablero de práctica con formaciones, ajustes de las batallas tácticas y lo que sabe cada país."],
 	["desc", "Descub.", "i_estrella", "Busca descubrimientos y concede o quita los de cada fecha."],
 	["gente", "Gente", "i_pob", "Demografía, estudios, presupuesto y oficios de un país; apaga las guías de la IA."],
 	["rend", "Rend.", "i_dens", "Tu equipo, los FPS y qué capas apagar para ir más ligero."],
@@ -52,6 +53,8 @@ var caja_migas: HBoxContainer             # «Menú Debug › Sección» (con el
 var _tarjetas: Dictionary = {}            # clave de sección -> botón-tarjeta de la cuadrícula
 var lbl_msg: Label
 var chk_seguir: CheckBox
+var lbl_cmb: Label                         # 0.1.8.51: Debug > Combate
+var chk_tactico: CheckBox
 
 # Jugador
 var sel_jugador := {}
@@ -235,6 +238,7 @@ func construir(m: Node, f: Font) -> void:
 	_pagina_descubrimientos()
 	_pagina_gente()
 	_pagina_edificios()
+	_pagina_combate()
 	_pagina_rendimiento()
 	_ir_menu()
 	if main.mundo.jugador != "":
@@ -454,6 +458,8 @@ func _ir_a(clave: String) -> void:
 			_refrescar_gente()
 		"edif":
 			_refrescar_edif()
+		"combate":
+			_refrescar_combate()
 		"rend":
 			_refrescar_rend()
 
@@ -2011,6 +2017,59 @@ func _prueba_zoom() -> void:
 
 
 # ───────────── 0.1.8.40 · Edificios y cores ─────────────
+## 0.1.8.51 · Debug > Combate: el tablero de práctica, el ajuste de las batallas tácticas del jugador y un resumen de lo que sabe el país elegido.
+func _pagina_combate() -> void:
+	var pg := _nueva_pagina("combate")
+	pg.add_child(_lbl("Combate táctico: formaciones y tablero", 13, C_ORO))
+	var nota := _lbl("Una batalla grande en la que participes se te ofrece en un tablero de 8 × 5: eliges la formación, colocas las tropas y ves cómo se resuelve. Aquí puedes practicar sin tocar la partida.", 11, C_TENUE)
+	nota.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(nota)
+	pg.add_child(HSeparator.new())
+	var b := _boton("Abrir el tablero de práctica", func():
+		if not main.abrir_combate_prueba():
+			_decir("No se pudo abrir el tablero (faltan datos/combate.json o los descubrimientos).", false))
+	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pg.add_child(b)
+	chk_tactico = CheckBox.new()
+	chk_tactico.text = "Ofrecerme las batallas grandes en el tablero"
+	chk_tactico.focus_mode = Control.FOCUS_NONE
+	chk_tactico.toggled.connect(func(v: bool):
+		if main.mundo != null and main.mundo.guerra != null:
+			main.mundo.guerra.tactico_jugador = v)
+	pg.add_child(chk_tactico)
+	pg.add_child(HSeparator.new())
+	lbl_cmb = _lbl("", 12, C_TEXTO)
+	lbl_cmb.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	pg.add_child(lbl_cmb)
+
+
+func _refrescar_combate() -> void:
+	if lbl_cmb == null or main.mundo == null:
+		return
+	var m = main.mundo
+	var c = m.combate
+	if c == null or m.guerra == null:
+		lbl_cmb.text = "Sin datos de combate (datos/combate.json)."
+		return
+	chk_tactico.set_pressed_no_signal(m.guerra.tactico_jugador)
+	var t := "Datos: %d clases de tropa · %d tropas · %d terrenos · %d formaciones.\nBatallas resueltas en el tablero en esta partida: %d." % [c.n_armas, c.tropas.size(), c.terrenos.size(), c.formaciones.size(), m.guerra.tacticas]
+	var jt: int = int(m.paises[m.jugador].tid) if m.jugador != "" and m.paises.has(m.jugador) else -1
+	if jt >= 0:
+		var cap = m.capacidad_militar(jt, true)
+		if cap != null:
+			var niv: PackedFloat32Array = cap["nivel"]
+			var partes := []
+			for a in c.n_armas:
+				if float(niv[a]) > 0.0:
+					partes.append("%s %.1f" % [String(c.armas[a]["nombre"]), float(niv[a])])
+			t += "\n\nTu país (%s): nivel del ejército %.2f (poder diario ×%.2f).\nClases y nivel: %s.\nFormaciones conocidas (%d): " % [m.jugador, c.nivel_ejercito(cap), c.factor_estrategico(cap), ", ".join(partes), (cap["formaciones"] as PackedInt32Array).size()]
+			var nf := []
+			for fi in cap["formaciones"]:
+				nf.append(String(c.formaciones[int(fi)]["nombre"]))
+			t += ", ".join(nf) + "."
+	lbl_cmb.text = t
+
+
 func _pagina_edificios() -> void:
 	var pg := _nueva_pagina("edif")
 	lbl_edif_res = _lbl("", 12, C_TEXTO)

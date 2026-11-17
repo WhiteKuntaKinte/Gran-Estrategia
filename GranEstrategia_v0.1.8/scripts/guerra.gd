@@ -50,6 +50,9 @@ const PARCIAL_MIN_CELDAS := 6           # 0.1.8.43: una provincia de menos celda
 const PARCIAL_DECISIVO := 0.5           # con un puntaje de guerra de esto o más el vencedor se queda la provincia entera
 const PARCIAL_BASE := 0.4               # fracción mínima de una provincia grande que se queda un vencedor poco claro (sube con el puntaje)
 const DIAS_ESCANEO := 7                 # cada cuántos días corre la red de seguridad de ocupaciones
+const ESPERA_TACTICA_DIAS := 3          # 0.1.8.51: días que espera una batalla a que el jugador despliegue sus tropas en el tablero (luego se resuelve sola)
+const CALIDAD_NORMAL := 0.65            # 0.1.8.51: la calidad de combate (la de `_poder`) de un pelotón corriente: equivale a 1,0 en el tablero
+const TACTICO_MIN_SOLDADOS := 2000      # 0.1.8.51: solo se ofrece el tablero si tu bando tiene al menos esto (el otro, la mitad): las escaramuzas se resuelven solas
 
 var mundo
 var bd
@@ -71,6 +74,9 @@ var _bat_curso = null                    # clave de la batalla que está combati
 var _bat_resto := 0                      # días de combate que le faltan a `_bat_curso` en este paso
 var parciales := 0                       # 0.1.8.43: cuántas conquistas parciales (la provincia cambió de forma) ha habido
 var _cache_part := {}                    # "por|de" -> [versión de la economía, fracción ocupada] (ver `participacion_ocupada`)
+var tactico_jugador := true              # 0.1.8.51: ¿las batallas grandes del jugador se despliegan en el tablero? (Opciones > Juego; falso = todo se resuelve solo)
+var pend_tactica := {}                   # 0.1.8.51: ID de batalla -> día en que se ofreció el tablero al jugador (−1 = ya decidido: se resuelve sola)
+var tacticas := 0                        # 0.1.8.51: cuántas batallas se han resuelto en el tablero
 
 
 func iniciar(m) -> void:
@@ -193,7 +199,7 @@ func _poder(lista: Array, pais: int, prov: int) -> float:
 	if pr != null and ej.dueno_de_provincia(int(pr.idx)) == pais:
 		var ed = mundo.edificios
 		t *= BONO_LOCAL + (ed.efecto_abs(int(pr.idx), ed.EF_DEF) if ed != null and ed.efectos_listos else 0.0)       # 0.1.8.48: murallas, castillos, fortalezas y búnkeres
-	return t
+	return t * mundo.factor_militar(pais)                         # 0.1.8.51: mejores tropas (nivel de sus clases) pelean mejor
 
 
 ## Provincias donde hoy coinciden tropas de los dos países: empieza la batalla (el agresor de la guerra es el atacante).
@@ -295,6 +301,8 @@ func _sub_ronda(bid: int, dias: int) -> bool:
 		_terminar(bid, "")
 		_p("terminar", t_r)
 		return true
+	if _espera_tactica(bid, a, d, pa, pd):
+		return false
 	t_r = Time.get_ticks_usec()
 	var fa := _poder(pa, a, prov)
 	var fd := _poder(pd, d, prov)
@@ -332,6 +340,112 @@ func _sub_ronda(bid: int, dias: int) -> bool:
 			_p("terminar", t_r)
 			return true
 	return false
+
+
+## 0.1.8.51 · ¿La batalla `bid` espera a que el jugador despliegue en el tablero? La primera vez que se pelea una batalla grande del jugador se le ofrece (aviso con
+## ventana) y la batalla queda en suspenso hasta `ESPERA_TACTICA_DIAS` días; si decide «resolver sola» (o no responde) sigue con el modelo diario de siempre.
+func _espera_tactica(bid: int, a: int, d: int, pa: Array, pd: Array) -> bool:
+	if not tactico_jugador or mundo.combate == null or mundo.jugador == "" or not mundo.paises.has(mundo.jugador):
+		return false
+	var ya = pend_tactica.get(bid)
+	if ya != null:
+		var fecha := int(ya)
+		if fecha < 0:
+			return false
+		if int(bd.fecha) - fecha >= ESPERA_TACTICA_DIAS:
+			pend_tactica[bid] = -1
+			return false
+		return true
+	pend_tactica[bid] = -1
+	if bd.num("bat_dias", bid) > 0.0:
+		return false
+	var jt: int = int(mundo.paises[mundo.jugador].tid)
+	if jt != a and jt != d:
+		return false
+	var mio := _soldados(pa) if jt == a else _soldados(pd)
+	var otro := _soldados(pd) if jt == a else _soldados(pa)
+	if mio < TACTICO_MIN_SOLDADOS or otro * 2 < TACTICO_MIN_SOLDADOS or mundo.capacidad_militar(jt) == null:
+		return false
+	pend_tactica[bid] = int(bd.fecha)
+	mundo.avisos.append({"tipo": "batalla", "bid": bid, "jugador": jt, "fecha": bd.fecha})
+	return true
+
+
+## 0.1.8.51 · El jugador prefiere que la batalla se resuelva sola (o no despliega): sigue con el modelo diario.
+func resolver_sola(bid: int) -> void:
+	if pend_tactica.has(bid):
+		pend_tactica[bid] = -1
+
+
+## 0.1.8.51 · Datos para armar el tablero de la batalla `bid` con las tropas que hay AHORA en la provincia:
+## {atacante, defensor, soldados: [a, d], cal: [a, d] (calidad media de las tropas), terreno, local: ID del país que defiende en casa (o -1), bono_def}.
+func datos_tactica(bid: int) -> Dictionary:
+	if bd.idx(bid) < 0 or mundo.combate == null:
+		return {}
+	var prov: int = int(bd.ref("bat_provincia", bid))
+	var a: int = int(bd.ref("bat_atacante", bid))
+	var d: int = int(bd.ref("bat_defensor", bid))
+	var pa := pelotones_en(prov, a)
+	var pd := pelotones_en(prov, d)
+	if pa.is_empty() or pd.is_empty():
+		return {}
+	var pr = ej.provincia_por_tid(prov)
+	var dueno := -1
+	var bono := 0.0
+	if pr != null:
+		var dn: int = ej.dueno_de_provincia(int(pr.idx))
+		dueno = dn if dn == a or dn == d else -1
+		var ed = mundo.edificios
+		if ed != null and ed.efectos_listos:
+			bono = ed.efecto_abs(int(pr.idx), ed.EF_DEF)
+	return {"bid": bid, "prov": prov, "atacante": a, "defensor": d, "soldados": [float(_soldados(pa)), float(_soldados(pd))],
+		"cal": [_calidad(pa), _calidad(pd)], "terreno": mundo.terreno_de_provincia(prov), "local": dueno, "bono_def": bono}
+
+
+## Calidad media (1,0 = normal, entre 0,6 y 1,4) de un grupo de pelotones, ponderada por soldados: sale de la experiencia, la forma física y la familiaridad.
+func _calidad(lista: Array) -> float:
+	var t := 0.0
+	var n := 0.0
+	for id in lista:
+		var s := float(ej.soldados_de(int(id)))
+		var q: float = (0.6 + 0.004 * bd.num("experiencia", int(id))) * (0.7 + 0.003 * bd.num("forma_fisica", int(id))) * (0.8 + 0.002 * bd.num("familiaridad", int(id)))
+		t += s * q
+		n += s
+	return clampf(t / n / CALIDAD_NORMAL, 0.6, 1.4) if n > 0.0 else 1.0
+
+
+## 0.1.8.51 · Mete el resultado de una batalla del tablero (`Combate.simular`) en las tropas del mapa: cada bando pierde la fracción de sus soldados que dice el
+## resultado, el que perdió se retira (si el tablero no decidió, la batalla sigue con el modelo diario) y la batalla se cierra. Devuelve false si ya no se podía aplicar.
+func aplicar_tactico(bid: int, res: Dictionary) -> bool:
+	if bd.idx(bid) < 0 or float(bd.num("bat_fin", bid)) != 0.0:
+		return false
+	var prov: int = int(bd.ref("bat_provincia", bid))
+	var a: int = int(bd.ref("bat_atacante", bid))
+	var d: int = int(bd.ref("bat_defensor", bid))
+	var pa := pelotones_en(prov, a)
+	var pd := pelotones_en(prov, d)
+	if pa.is_empty() or pd.is_empty():
+		_terminar(bid, "")
+		return false
+	var fb: Array = res["frac_bajas"]
+	var motivo: String = bd.nombre_de(bid)
+	var ba := _aplicar(pa, clampf(float(fb[0]), 0.0, 0.97), motivo)
+	var bdd := _aplicar(pd, clampf(float(fb[1]), 0.0, 0.97), motivo)
+	if mundo.demografia != null:
+		mundo.demografia.registrar_bajas(a, ba)
+		mundo.demografia.registrar_bajas(d, bdd)
+	bd.poner_f("bat_dias", bid, bd.num("bat_dias", bid) + maxf(1.0, ceilf(float(res["rondas"]) / 3.0)), motivo)
+	bd.poner_f("bat_bajas_atac", bid, bd.num("bat_bajas_atac", bid) + float(ba), motivo)
+	bd.poner_f("bat_bajas_def", bid, bd.num("bat_bajas_def", bid) + float(bdd), motivo)
+	pend_tactica[bid] = -1
+	tacticas += 1
+	version += 1
+	var g: int = int(res["ganador"])
+	if g >= 0:
+		var fuera := _retirar(prov, d if g == 0 else a)
+		if fuera:
+			_terminar(bid, "retirada")
+	return true
 
 
 ## Fracción de sus soldados que pierden ([atacante, defensor]) en `dias` días de combate entre fuerzas `fa` y `fd`:
@@ -394,6 +508,7 @@ func _terminar(bid: int, resultado: String) -> void:
 	bd.poner_i("bat_ganador", bid, ganador, motivo)
 	bd.poner_s("bat_resultado", bid, res, motivo)
 	batallas_activas.erase(_clave_bat(prov, a, d))
+	pend_tactica.erase(bid)
 	version += 1
 	if ganador >= 0:
 		_revisar_ocupacion(prov, ganador)                    # el que se quedó solo en la provincia empieza a ocuparla
