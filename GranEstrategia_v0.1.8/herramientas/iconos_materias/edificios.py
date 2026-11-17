@@ -1,4 +1,4 @@
-"""Iconos de los 141 edificios del juego (0.1.8.41), uno por `slug` de datos/edificios.json -> iconos/edificios/<slug>.png (128 px).
+"""Iconos de los 178 edificios del juego (0.1.8.41), uno por `slug` de datos/edificios.json -> iconos/edificios/<slug>.png (128 px).
 Se dibujan con las mismas piezas (muros, torres, techos, arcos, columnas...) para que todo el catálogo tenga un aire común. Los que comparten
 forma (los castillos, los puentes, las academias) cambian de color, de detalle o de tamaño. Sin imágenes de terceros."""
 import math
@@ -2378,6 +2378,671 @@ def centro_mando_control(c):
     c.cuerpo(spline([(76, 22), (84, 8), (108, 4), (120, 14), (108, 22), (90, 26)]), hexa('e4e8f2'), sombra=0.25, luz=0.3, d=2.4)
     c.linea([(98, 14), (98, 26)], 1.8, GRIS2)
     c.punto(98, 12, 2, ROJO)
+
+
+# ───────────── 0.1.8.51 · maravillas (únicas en el mundo) y edificios corrientes nuevos ─────────────
+BRONCE_E = hexa('b8793a')
+ARENA_E = hexa('e2b96a')
+ARENA_O = hexa('b9894a')
+ROJO_PALACIO = hexa('b8423a')
+DORADO_TEJA = hexa('e8b838')
+
+
+def _cielo(c, col=hexa('8ec9f0'), col2=None):
+    c.rect(0, 0, 128, 128, col)
+    if col2 is not None:
+        c.poly([(0, 70), (128, 54), (128, 128), (0, 128)], col2)
+
+
+def _sol(c, x=100, y=26, r=11, col=hexa('ffd45e')):
+    c.punto(x, y, r + 5, (255, 236, 160, 120))
+    c.cuerpo_elip(x, y, r, col=col, sombra=0.15, luz=0.3, d=1.6)
+
+
+def _nube(c, x, y, s=1.0, col=hexa('f6f9ff')):
+    for dx, dy, r in ((0, 0, 9), (10, 3, 7), (-10, 3, 7), (4, -5, 8)):
+        c.elip(x + dx * s, y + dy * s, r * s, r * 0.8 * s, col)
+
+
+def _arco_herradura(c, x0, x1, yb, alto, col):
+    r = (x1 - x0) / 2
+    cx = (x0 + x1) / 2
+    pts = [(x0 + 2, yb)] + [(cx - r * math.cos(math.radians(a)), yb - alto + r - r * 1.02 * math.sin(math.radians(a))) for a in range(-12, 193, 12)] + [(x1 - 2, yb)]
+    c.poly(pts, col)
+
+
+def _flama(c, x, y, s=1.0):
+    c.poly([(x - 5 * s, y), (x, y - 16 * s), (x + 5 * s, y)], hexa('ff9a30'))
+    c.poly([(x - 2.6 * s, y), (x, y - 9 * s), (x + 2.6 * s, y)], hexa('ffe27a'))
+
+
+def _caja(c, x0, y0, x1, y1, col, **kw):
+    return cuadro(c, x0, y0, x1, y1, col, **kw)
+
+
+# ── Maravillas del mundo antiguo ──
+def piramides_giza(c):
+    _cielo(c, hexa('f8e2ac'))
+    _sol(c, 100, 26)
+    c.cuerpo([(0, 108), (128, 108), (128, 128), (0, 128)], hexa('d9b46a'), d=2.4)
+    c.cuerpo([(72, 108), (94, 72), (116, 108)], hexa('c99a55'), d=2.0)
+    c.cuerpo([(6, 108), (28, 78), (50, 108)], hexa('c99a55'), d=2.0)
+    c.cuerpo([(28, 108), (64, 34), (100, 108)], ARENA_E, sombra=0.3, luz=0.2, d=3.0)
+    c.poly([(64, 34), (100, 108), (80, 108), (64, 62)], ARENA_O)
+    for k in range(1, 7):
+        y = 34 + k * 11
+        h = (y - 34) * 0.55
+        c.linea([(64 - h, y), (64 + h * 0.3, y)], 1.1, oscuro(ARENA_E, 0.22))
+    c.cuerpo([(52, 108), (64, 96), (76, 108)], hexa('3a2e22'), sombra=0, luz=0)
+
+
+def jardines_colgantes(c):
+    _cielo(c)
+    _nube(c, 100, 22, 0.9)
+    niveles = [(10, 118, 98), (22, 106, 78), (34, 94, 58), (46, 82, 38)]
+    for i, (x0, x1, y) in enumerate(niveles):
+        cuadro(c, x0, y, x1, y + 20, hexa('d9cdb0') if i % 2 == 0 else hexa('c9bd9c'))
+        c.rect(x0 - 3, y - 5, x1 + 3, y + 2, CESPED_O, r=2)
+        for x in range(int(x0) + 6, int(x1) - 2, 16):
+            arbol(c, x, y - 2, r=6, col=CESPED if i % 2 else CESPED_O)
+    c.linea([(98, 98), (98, 118)], 4, AGUA)
+    c.linea([(40, 60), (40, 78)], 3, AGUA_C)
+    c.cuerpo([(0, 118), (128, 118), (128, 128), (0, 128)], AGUA, d=1.6)
+
+
+def partenon(c):
+    _cielo(c)
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('c8b784'), d=2.4)
+    cuadro(c, 8, 104, 120, 114, hexa('e8e0cc'))
+    cuadro(c, 12, 96, 116, 104, hexa('efe9d6'))
+    for i in range(8):
+        columna(c, 18 + i * 12, 54, 96, w=8)
+    cuadro(c, 10, 44, 118, 55, hexa('efe9d6'))
+    c.cuerpo([(8, 44), (64, 20), (120, 44)], hexa('efe9d6'), sombra=0.2, luz=0.25, d=2.4)
+    c.poly([(26, 42), (64, 26), (102, 42)], hexa('7fb3d8'))
+    for x in (46, 64, 82):
+        c.punto(x, 38, 3, hexa('efe9d6'))
+
+
+def coloso_rodas(c):
+    _cielo(c)
+    olas(c, 110, 0, 128, AGUA, 8)
+    cuadro(c, 6, 80, 36, 112, PIEDRA)
+    cuadro(c, 92, 80, 122, 112, PIEDRA)
+    c.cuerpo([(24, 82), (52, 44), (66, 44), (38, 82)], BRONCE_E, d=2.4)
+    c.cuerpo([(104, 82), (76, 44), (62, 44), (90, 82)], BRONCE_E, d=2.4)
+    c.cuerpo([(50, 46), (78, 46), (74, 20), (54, 20)], BRONCE_E, d=2.6)
+    c.cuerpo_elip(64, 14, 7, 7.5, col=BRONCE_E, d=1.8)
+    c.linea([(76, 24), (92, 12), (94, 6)], 4.5, BRONCE_E)
+    _flama(c, 94, 8, 0.8)
+    c.linea([(52, 24), (40, 34)], 4.5, BRONCE_E)
+    olas(c, 116, 0, 128, claro(AGUA, 0.2), 8)
+
+
+def gran_biblioteca_alejandria(c):
+    _cielo(c, hexa('9fd8f0'))
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('d9c9a2'), d=2.4)
+    cuadro(c, 12, 56, 116, 106, hexa('efe6cf'))
+    c.cuerpo([(8, 56), (64, 30), (120, 56)], hexa('d2c4a0'), sombra=0.2, luz=0.25, d=2.4)
+    for i in range(6):
+        columna(c, 16 + i * 18, 62, 106, w=8)
+    for x in (30, 64, 98):
+        _arco_herradura(c, x - 7, x + 7, 100, 28, hexa('3e3a4c'))
+    c.cuerpo_elip(64, 92, 19, 7.5, col=hexa('f6ecc8'), d=1.8)
+    c.linea([(48, 92), (80, 92)], 1.2, oscuro(hexa('f6ecc8'), 0.3))
+    c.cuerpo_elip(46, 92, 4, 7.5, col=hexa('e6d6a0'), d=1.2)
+    c.cuerpo_elip(82, 92, 4, 7.5, col=hexa('e6d6a0'), d=1.2)
+
+
+def coliseo(c):
+    _cielo(c, hexa('f6dca4'))
+    c.cuerpo([(0, 110), (128, 110), (128, 128), (0, 128)], hexa('d8be86'), d=2.4)
+    c.cuerpo_elip(64, 44, 56, 16, col=hexa('d9c9a2'), d=2.0)
+    c.elip(64, 44, 42, 10, hexa('b8a37a'))
+    cuadro(c, 8, 44, 120, 108, hexa('d9c9a2'))
+    for y_base in (62, 80, 98):
+        _arcada(c, 12, 116, y_base, 12, 11, col=hexa('4a3f38'))
+        c.rect(8, y_base - 14, 120, y_base - 12, hexa('c2b088'))
+    c.cuerpo_elip(64, 108, 56, 7, col=hexa('d9c9a2'), d=1.6)
+
+
+# ── Maravillas medievales ──
+def santa_sofia(c):
+    _cielo(c)
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('c9c3b6'), d=2.4)
+    for x in (9, 119):
+        cuadro(c, x - 3.5, 44, x + 3.5, 112, hexa('f1ede2'))
+        c.cuerpo([(x - 5, 44), (x, 26), (x + 5, 44)], hexa('6a7690'), d=1.6)
+        c.rect(x - 5, 58, x + 5, 61, hexa('c9c3b6'))
+    cuadro(c, 22, 72, 106, 112, hexa('e8d6b0'))
+    c.cuerpo_elip(30, 78, 12, 14, col=hexa('a6b3cb'), d=2.0)
+    c.cuerpo_elip(98, 78, 12, 14, col=hexa('a6b3cb'), d=2.0)
+    c.cuerpo(spline([(30, 74), (32, 46), (48, 28), (64, 24), (80, 28), (96, 46), (98, 74)]), hexa('9aa8c2'), sombra=0.26, luz=0.3, d=3.2)
+    c.linea([(64, 24), (64, 12)], 2.4, ORO2)
+    c.punto(64, 11, 3, ORO)
+    for x in range(36, 96, 10):
+        c.rect(x, 54, x + 5, 62, AMARILLO_V, r=1.2)
+    for i in range(5):
+        _arco_herradura(c, 28 + i * 14, 38 + i * 14, 112, 20, hexa('4a4458'))
+
+
+def mezquita_cordoba(c):
+    c.rect(0, 0, 128, 128, hexa('3d3340'))
+    for i in range(4):
+        x0 = 6 + i * 30
+        _arco_herradura(c, x0, x0 + 28, 112, 80, hexa('f2ece0'))
+        _arco_herradura(c, x0 + 3, x0 + 25, 112, 76, hexa('c4503b'))
+        _arco_herradura(c, x0 + 6, x0 + 22, 112, 72, hexa('f2ece0'))
+        _arco_herradura(c, x0 + 9, x0 + 19, 112, 66, hexa('3d3340'))
+    for i in range(5):
+        cuadro(c, 1 + i * 30, 56, 7 + i * 30, 112, hexa('d6c8a6'), sombra=0.22, luz=0.2, d=1.6)
+    c.rect(0, 108, 128, 128, hexa('c8b88c'))
+    c.linea([(0, 38), (128, 38)], 2.0, ORO2)
+
+
+def borobudur(c):
+    _cielo(c, hexa('a6dcc0'))
+    c.cuerpo([(0, 100), (128, 100), (128, 128), (0, 128)], hexa('4f9a58'), d=2.4)
+    for i, (x0, x1, y) in enumerate([(8, 120, 92), (18, 110, 78), (28, 100, 64), (38, 90, 50)]):
+        cuadro(c, x0, y, x1, y + 14, hexa('9e9788') if i % 2 else hexa('b3ab9a'))
+        for x in range(int(x0) + 8, int(x1) - 4, 14):
+            c.cuerpo_elip(x, y + 6, 4.2, 5, col=hexa('c9c1ae'), d=1.2)
+    cuadro(c, 48, 36, 80, 50, hexa('b3ab9a'))
+    c.cuerpo(spline([(50, 40), (52, 24), (64, 16), (76, 24), (78, 40)]), hexa('c9c1ae'), d=2.2)
+    c.linea([(64, 16), (64, 6)], 2.2, ORO2)
+
+
+def angkor_wat(c):
+    _cielo(c, hexa('f6c98a'))
+    _sol(c, 100, 24, 9, hexa('ffe08a'))
+    cuadro(c, 8, 84, 120, 100, hexa('a89a82'))
+    cuadro(c, 22, 72, 106, 84, hexa('b3a68e'))
+    for cx, h in ((64, 52), (36, 36), (92, 36), (16, 24), (112, 24)):
+        base = 72 if h > 30 else 84
+        cuadro(c, cx - 7, base - h * 0.45, cx + 7, base, hexa('b8ab92'))
+        c.cuerpo([(cx - 8, base - h * 0.45), (cx - 4, base - h * 0.75), (cx - 2, base - h), (cx, base - h - 6), (cx + 2, base - h), (cx + 4, base - h * 0.75), (cx + 8, base - h * 0.45)], hexa('c4b79c'), d=1.8)
+    c.rect(56, 62, 72, 72, hexa('4a4034'), r=1)
+    c.cuerpo([(0, 100), (128, 100), (128, 128), (0, 128)], AGUA, sombra=0.1, luz=0.2, d=1.8)
+    c.poly([(30, 106), (98, 106), (92, 112), (36, 112)], (255, 255, 255, 60))
+    for x in (14, 40, 88, 112):
+        c.punto(x, 114, 3.5, hexa('f48fb1'))
+
+
+def alhambra(c):
+    _cielo(c, hexa('a3d4f0'))
+    c.cuerpo(spline([(0, 100), (14, 76), (44, 70), (84, 74), (114, 66), (128, 80), (128, 128), (0, 128)]), hexa('76b05c'), d=2.6)
+    cuadro(c, 14, 64, 114, 108, hexa('d5a47c'))
+    almenas(c, 14, 114, 64, hexa('d5a47c'), 7, 7)
+    torre(c, 20, 108, 20, 52, hexa('c4906a'), n=2)
+    torre(c, 108, 108, 20, 56, hexa('c4906a'), n=2)
+    cuadro(c, 44, 40, 84, 80, hexa('e0b890'))
+    c.cuerpo(spline([(46, 42), (52, 28), (64, 22), (76, 28), (82, 42)]), hexa('5ca0a8'), sombra=0.26, luz=0.3, d=2.4)
+    _arco_herradura(c, 54, 74, 108, 30, hexa('4a3a34'))
+    for x in (34, 94):
+        ventana(c, x, 76, 6, 9, hexa('4a3a34'))
+    c.rect(60, 38, 68, 46, AMARILLO_V, r=1)
+
+
+def machu_picchu(c):
+    _cielo(c, hexa('b2dcf0'))
+    _nube(c, 96, 20, 0.9)
+    c.cuerpo([(40, 90), (64, 16), (88, 90)], hexa('5fa05a'), sombra=0.3, luz=0.2, d=3.0)
+    c.poly([(64, 16), (88, 90), (74, 90), (64, 44)], hexa('3f7d46'))
+    c.cuerpo([(0, 128), (0, 74), (36, 92), (96, 88), (128, 70), (128, 128)], hexa('76b05c'), d=2.6)
+    for i in range(5):
+        y = 90 + i * 8
+        c.cuerpo([(6 + i * 3, y), (122 - i * 3, y), (122 - i * 3, y + 6), (6 + i * 3, y + 6)], hexa('9a9484') if i % 2 else hexa('b0a998'), sombra=0.2, luz=0.2, d=1.4)
+        c.rect(6 + i * 3, y - 2, 122 - i * 3, y + 1, hexa('6fb060'))
+    for x in (30, 52, 84):
+        casa(c, x, x + 14, 92, 9, hexa('b0a998'), PAJA, pico=7, puerta_=False)
+
+
+# ── Maravillas modernas, palacios y obras ──
+def taj_mahal(c):
+    _cielo(c, hexa('f2d3a8'))
+    _sol(c, 104, 22, 8, hexa('ffe08a'))
+    for x in (10, 118):
+        cuadro(c, x - 3, 36, x + 3, 100, hexa('f6f2ea'))
+        c.cuerpo_elip(x, 34, 4, 4, col=hexa('f6f2ea'), d=1.2)
+        c.rect(x - 4, 52, x + 4, 54, hexa('d8d2c4'))
+    cuadro(c, 24, 66, 104, 100, hexa('f6f2ea'))
+    c.cuerpo(spline([(40, 66), (40, 46), (50, 26), (64, 20), (78, 26), (88, 46), (88, 66)]), hexa('f6f2ea'), sombra=0.18, luz=0.1, d=3.2)
+    c.linea([(64, 20), (64, 8)], 2.0, ORO2)
+    for x in (30, 98):
+        c.cuerpo(spline([(x - 6, 66), (x - 5, 56), (x, 50), (x + 5, 56), (x + 6, 66)]), hexa('f6f2ea'), d=1.6)
+    _arco_herradura(c, 54, 74, 100, 30, hexa('4a5a8a'))
+    c.cuerpo([(0, 100), (128, 100), (128, 128), (0, 128)], hexa('8ec0e0'), sombra=0.1, luz=0.2, d=1.6)
+    c.poly([(30, 104), (98, 104), (92, 112), (36, 112)], (246, 242, 234, 110))
+
+
+def cristo_redentor(c):
+    _cielo(c, hexa('9ed2f0'))
+    _nube(c, 24, 28, 0.9)
+    _nube(c, 104, 46, 0.7)
+    c.cuerpo([(0, 128), (0, 92), (36, 80), (64, 84), (96, 78), (128, 92), (128, 128)], hexa('4f9a58'), d=2.6)
+    cuadro(c, 50, 78, 78, 92, hexa('b8b2a4'))
+    cuadro(c, 54, 66, 74, 80, hexa('c9c3b6'))
+    c.cuerpo([(56, 68), (72, 68), (74, 34), (54, 34)], hexa('f2efe6'), sombra=0.2, luz=0.1, d=2.4)
+    c.cuerpo([(8, 34), (120, 34), (118, 40), (74, 44), (54, 44), (10, 40)], hexa('f2efe6'), sombra=0.2, luz=0.1, d=2.2)
+    c.cuerpo_elip(64, 26, 6.5, 7.5, col=hexa('f2efe6'), d=1.6)
+
+
+def megatorre_record(c):
+    _cielo(c, hexa('7fb8e8'))
+    _nube(c, 28, 40, 0.8)
+    _nube(c, 100, 70, 0.8)
+    c.cuerpo([(0, 118), (128, 118), (128, 128), (0, 128)], hexa('7c8497'), d=2.0)
+    for (x0, x1, y0, col_) in ((6, 28, 84, hexa('8aa6d6')), (100, 122, 76, hexa('8aa6d6'))):
+        cuadro(c, x0, y0, x1, 118, col_)
+    for (x0, x1, y0) in ((46, 82, 70), (52, 76, 48), (57, 71, 28), (61, 67, 12)):
+        cuadro(c, x0, y0, x1, 118, hexa('b6d0f2'), d=2.4)
+    c.linea([(64, 12), (64, 1)], 2.0, ACERO)
+    for k in range(10):
+        for i in range(3):
+            c.rect(50 + i * 10, 74 + k * 4.2, 56 + i * 10, 76.5 + k * 4.2, hexa('e8f2ff') if (i + k) % 3 else AMARILLO_V, r=0.6)
+    c.rect(60, 100, 68, 118, hexa('2a3550'), r=1)
+
+
+def ciudad_prohibida(c):
+    _cielo(c, hexa('f2d2a0'))
+    cuadro(c, 6, 86, 122, 112, ROJO_PALACIO)
+    c.rect(2, 108, 126, 118, hexa('e9e0cc'), r=1.5)
+    for cx, y, a, col_ in ((64, 40, 40, DORADO_TEJA), (64, 62, 52, DORADO_TEJA)):
+        c.cuerpo([(cx - a - 6, y + 10), (cx - a + 6, y), (cx + a - 6, y), (cx + a + 6, y + 10)], col_, sombra=0.24, luz=0.26, d=2.4)
+    cuadro(c, 30, 62, 98, 90, ROJO_PALACIO)
+    cuadro(c, 40, 50, 88, 62, hexa('9a2f2c'))
+    for x in range(36, 96, 10):
+        c.rect(x, 66, x + 5, 90, hexa('6e1d1d'))
+    c.cuerpo([(50, 40), (64, 28), (78, 40)], DORADO_TEJA, d=2.0)
+    c.rect(56, 92, 72, 108, hexa('2c1a14'), r=1)
+    torre(c, 14, 112, 18, 38, ROJO_PALACIO, techo=DORADO_TEJA)
+    torre(c, 114, 112, 18, 38, ROJO_PALACIO, techo=DORADO_TEJA)
+
+
+def versalles(c):
+    _cielo(c, hexa('a3d4f0'))
+    c.cuerpo([(0, 96), (128, 96), (128, 128), (0, 128)], hexa('6dbf62'), d=2.4)
+    cuadro(c, 8, 54, 120, 92, hexa('efe3c8'))
+    for (x0, x1) in ((4, 36), (92, 124)):
+        cuadro(c, x0, 46, x1, 92, hexa('e8dabc'))
+        c.cuerpo([(x0 - 2, 46), (x0 + 6, 34), (x1 - 6, 34), (x1 + 2, 46)], hexa('6a7a96'), sombra=0.24, luz=0.2, d=2.2)
+    cuadro(c, 44, 40, 84, 92, hexa('f4e9cf'))
+    c.cuerpo([(42, 40), (50, 26), (78, 26), (86, 40)], hexa('6a7a96'), d=2.2)
+    c.linea([(64, 26), (64, 16)], 2, ORO2)
+    for y in (58, 72):
+        for x in range(12, 118, 11):
+            if 44 < x < 84:
+                continue
+            ventana(c, x, y, 6, 9, hexa('7fa3d0'))
+    for x in range(50, 80, 10):
+        ventana(c, x, 52, 6, 14, hexa('7fa3d0'))
+    for i in range(6):
+        c.cuerpo_elip(14 + i * 20, 106, 8, 4, col=hexa('3f8f46'), d=1.4)
+    c.poly([(54, 96), (74, 96), (96, 128), (32, 128)], hexa('c8b784'))
+    c.cuerpo_elip(64, 112, 9, 4, col=AGUA_C, d=1.2)
+
+
+def gran_muralla(c):
+    _cielo(c, hexa('b4dcf0'))
+    c.cuerpo([(0, 128), (0, 80), (24, 56), (52, 70), (80, 40), (110, 58), (128, 44), (128, 128)], hexa('7da060'), sombra=0.28, luz=0.2, d=3.0)
+    c.cuerpo([(0, 128), (0, 100), (30, 84), (60, 96), (90, 70), (128, 82), (128, 128)], hexa('5f8a52'), sombra=0.28, luz=0.2, d=3.0)
+    pts = [(-4, 98), (26, 88), (56, 98), (88, 74), (132, 84)]
+    c.linea(pts, 9, hexa('a69c88'))
+    c.linea([(p[0], p[1] - 4) for p in pts], 3, hexa('c4baa4'))
+    for (x, y) in ((30, 88), (88, 74), (112, 79)):
+        cuadro(c, x - 9, y - 22, x + 9, y + 2, hexa('b3a98f'))
+        almenas(c, x - 10, x + 10, y - 22, hexa('b3a98f'), 3, 6)
+        c.rect(x - 2.5, y - 16, x + 2.5, y - 8, hexa('3d3a46'), r=1)
+    for k in range(7):
+        c.linea([(8 + k * 18, 108 + (k % 2) * 4), (14 + k * 18, 104 + (k % 2) * 4)], 1.2, hexa('3f7d46'))
+
+
+def torre_eiffel(c):
+    _cielo(c, hexa('f0b9a0'), hexa('e8a090'))
+    _sol(c, 106, 30, 8, hexa('fff0b0'))
+    c.cuerpo([(0, 114), (128, 114), (128, 128), (0, 128)], hexa('6b8a52'), d=2.0)
+    fe = hexa('7b5a44')
+    fe2 = hexa('4d3a2e')
+    c.poly([(30, 114), (50, 74), (56, 74), (48, 114)], fe)
+    c.poly([(98, 114), (78, 74), (72, 74), (80, 114)], fe)
+    c.poly([(46, 74), (82, 74), (80, 66), (48, 66)], fe)
+    c.cuerpo([(50, 66), (78, 66), (70, 34), (58, 34)], fe, sombra=0.3, luz=0.15, d=2.4)
+    c.cuerpo([(58, 34), (70, 34), (65, 10), (63, 10)], fe, d=1.6)
+    c.linea([(64, 10), (64, 2)], 1.6, fe2)
+    c.poly([(54, 114), (74, 114), (70, 90), (58, 90)], hexa('f0b9a0'))
+    c.rect(28, 112, 100, 116, fe2)
+    for (xa, ya, xb, yb) in ((52, 74, 76, 66), (76, 74, 52, 66), (58, 66, 70, 52), (70, 66, 58, 52), (60, 52, 68, 38), (68, 52, 60, 38), (38, 100, 52, 76), (90, 100, 76, 76)):
+        c.linea([(xa, ya), (xb, yb)], 1.2, fe2)
+
+
+def presa_tres_gargantas(c):
+    _cielo(c, hexa('a6d4ec'))
+    c.cuerpo([(0, 70), (24, 50), (28, 128), (0, 128)], hexa('6f9a58'), d=2.4)
+    c.cuerpo([(128, 70), (104, 50), (100, 128), (128, 128)], hexa('6f9a58'), d=2.4)
+    c.cuerpo([(20, 56), (108, 56), (116, 108), (12, 108)], HORMIGON, sombra=0.24, luz=0.26, d=3.0)
+    c.rect(20, 52, 108, 58, hexa('d0d4da'), r=1.2)
+    for i in range(7):
+        x = 24 + i * 12.5
+        c.rect(x, 62, x + 6, 74, hexa('5a6478'), r=1)
+        c.poly([(x, 74), (x + 6, 74), (x + 8, 108), (x - 2, 108)], hexa('cfe8f8'))
+    c.rect(0, 106, 128, 128, AGUA)
+    c.poly([(12, 108), (116, 108), (122, 116), (6, 116)], hexa('e8f6ff'))
+    c.rect(18, 36, 30, 52, hexa('8e96a4'), r=1)
+    c.linea([(24, 36), (24, 26)], 2, ACERO)
+    c.rect(98, 36, 110, 52, hexa('8e96a4'), r=1)
+
+
+def cosmodromo(c):
+    _cielo(c, hexa('16203c'))
+    for (x, y) in ((14, 14), (40, 30), (98, 16), (116, 40), (24, 56), (108, 66)):
+        c.punto(x, y, 1.4, hexa('fff4c0'))
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('6e7480'), d=2.0)
+    cuadro(c, 70, 24, 80, 112, hexa('c24a3a'), sombra=0.2, luz=0.2, d=1.6)
+    for y in range(32, 108, 12):
+        c.linea([(70, y), (80, y + 10)], 1, hexa('7a2f26'))
+    c.linea([(70, 54), (62, 54)], 3, hexa('c24a3a'))
+    c.linea([(70, 78), (62, 78)], 3, hexa('c24a3a'))
+    c.cuerpo([(48, 108), (48, 50), (55, 28), (62, 50), (62, 108)], hexa('eef1f6'), sombra=0.24, luz=0.1, d=2.4)
+    c.cuerpo([(48, 92), (38, 108), (48, 108)], hexa('e0605a'), d=1.4)
+    c.cuerpo([(62, 92), (72, 108), (62, 108)], hexa('e0605a'), d=1.4)
+    c.punto(55, 62, 4, hexa('4a78c8'))
+    c.poly([(46, 112), (64, 112), (60, 124), (50, 124)], (255, 150, 50, 200))
+    _flama(c, 55, 124, 1.0)
+    c.poly([(8, 112), (30, 112), (24, 104), (14, 104)], hexa('9aa3b4'))
+
+
+def colisionador_particulas(c):
+    c.rect(0, 0, 128, 128, hexa('1c2340'))
+    c.elip(64, 66, 54, 44, hexa('5a6a9a'))
+    c.elip(64, 66, 46, 36, hexa('1c2340'))
+    c.elip(64, 66, 50, 40, hexa('8ea2d8'))
+    c.elip(64, 66, 47, 37, hexa('1c2340'))
+    c.elip(64, 66, 42, 32, hexa('4f7ad8'))
+    c.elip(64, 66, 39, 29, hexa('1c2340'))
+    for k in range(8):
+        a = math.radians(k * 45 + 20)
+        c.cuerpo_elip(64 + 48 * math.cos(a), 66 + 38 * math.sin(a), 4, 3.4, col=hexa('e0605a'), d=1.2)
+    c.punto(64, 66, 14, (110, 170, 255, 120))
+    c.punto(64, 66, 7, hexa('cfe4ff'))
+    for k in range(10):
+        a = math.radians(k * 36)
+        c.linea([(64, 66), (64 + 26 * math.cos(a), 66 + 20 * math.sin(a))], 1.6, hexa('ffd45e'))
+    c.cuerpo_elip(64, 108, 18, 6, col=hexa('9aa3b4'), d=1.6)
+
+
+# ── Edificios corrientes ──
+def minas_subterraneas(c):
+    _cielo(c, hexa('a6d0ea'))
+    c.cuerpo([(0, 128), (0, 66), (34, 44), (64, 34), (96, 46), (128, 66), (128, 128)], hexa('8a7a68'), sombra=0.28, luz=0.2, d=3.0)
+    c.poly([(40, 50), (64, 34), (88, 50), (96, 62), (30, 62)], hexa('9a8a76'))
+    c.cuerpo([(42, 112), (46, 72), (82, 72), (86, 112)], hexa('2a1f18'))
+    c.linea([(40, 112), (44, 70)], 5, MADERA)
+    c.linea([(88, 112), (84, 70)], 5, MADERA)
+    c.linea([(40, 71), (88, 71)], 5, MADERA_O)
+    c.linea([(0, 118), (128, 118)], 2.2, ACERO_O)
+    for x in range(6, 124, 12):
+        c.linea([(x, 112), (x, 124)], 2.4, MADERA_O)
+    c.cuerpo([(56, 106), (86, 106), (82, 116), (60, 116)], hexa('7d8aa0'), d=1.8)
+    c.cuerpo_elip(71, 102, 14, 5, col=hexa('c78a4a'), d=1.4)
+    c.punto(62, 118, 3.2, OSCURO_V)
+    c.punto(82, 118, 3.2, OSCURO_V)
+    c.linea([(104, 98), (118, 84)], 2.6, MADERA)
+    c.cuerpo([(112, 80), (124, 82), (120, 88)], ACERO, d=1.2)
+
+
+def canales_riego(c):
+    _cielo(c, hexa('bfe3f0'))
+    c.rect(0, 52, 128, 128, hexa('7fb45a'))
+    for i in range(6):
+        y = 60 + i * 11
+        c.poly([(0, y), (128, y - 4), (128, y + 3), (0, y + 7)], hexa('5fa04a') if i % 2 else hexa('8cc064'))
+    c.poly([(54, 52), (74, 52), (86, 128), (42, 128)], AGUA)
+    c.poly([(60, 52), (68, 52), (73, 128), (55, 128)], AGUA_C)
+    c.linea([(0, 82), (128, 76)], 5, AGUA)
+    c.linea([(0, 104), (128, 100)], 5, AGUA)
+    c.cuerpo([(0, 52), (128, 52), (128, 60), (0, 60)], hexa('8a6a42'), d=1.6)
+    for x in (16, 104):
+        arbol(c, x, 52, r=8)
+    _sol(c, 104, 20, 9)
+
+
+def aduana_puesto_fronterizo(c):
+    _cielo(c, hexa('a8d6ee'))
+    c.cuerpo([(0, 96), (128, 96), (128, 128), (0, 128)], hexa('b8a88a'), d=2.2)
+    c.rect(0, 100, 128, 112, hexa('8a8f9a'))
+    c.linea([(0, 106), (128, 106)], 1.4, hexa('f2f5ff'))
+    casa(c, 80, 118, 96, 36, hexa('e0d6bc'), TEJA, pico=14)
+    c.linea([(18, 100), (18, 64)], 4, hexa('6e7480'))
+    c.linea([(18, 76), (74, 70)], 6, hexa('f2f5ff'))
+    for x in range(26, 74, 16):
+        c.linea([(x, 75 - (x - 26) * 0.1), (x + 8, 74 - (x - 26) * 0.1)], 6, ROJO)
+    bandera_asta(c, 100, 56, 30, hexa('3a7ad8'), 18)
+
+
+def termas_publicas(c):
+    _cielo(c, hexa('d6ecf6'))
+    cuadro(c, 6, 50, 122, 112, hexa('e8dcc2'))
+    c.cuerpo(spline([(26, 50), (28, 30), (64, 16), (100, 30), (102, 50)]), hexa('d4c4a2'), d=2.6)
+    for i in range(5):
+        _arco_herradura(c, 12 + i * 22, 28 + i * 22, 82, 24, hexa('58a8e6'))
+    c.rect(6, 82, 122, 112, hexa('58a8e6'))
+    c.rect(6, 82, 122, 86, hexa('9fd4f6'))
+    for x in range(14, 120, 22):
+        columna(c, x, 56, 84, w=6)
+    for x in (30, 62, 94):
+        for dy in (0, 1, 2):
+            c.linea(spline([(x, 46 - dy * 8), (x + 4, 40 - dy * 8), (x - 3, 34 - dy * 8)], cerrada=False), 2.2, (255, 255, 255, 190))
+    olas(c, 100, 8, 120, hexa('9fd4f6'), 6)
+
+
+def casa_de_moneda(c):
+    _cielo(c, hexa('d7e4f0'))
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('9a9484'), d=2.0)
+    cuadro(c, 8, 62, 120, 112, hexa('d8ccae'))
+    c.cuerpo([(4, 62), (64, 36), (124, 62)], hexa('b8a888'), d=2.4)
+    for x in (16, 100):
+        columna(c, x, 66, 108, w=8)
+    c.cuerpo_elip(64, 80, 22, 22, col=ORO, sombra=0.3, luz=0.4, d=2.6)
+    c.elip(64, 80, 16, 16, ORO2)
+    c.elip(64, 80, 13, 13, ORO)
+    c.linea([(64, 68), (64, 92)], 3.2, ORO2)
+    c.linea([(56, 74), (72, 74)], 3.0, ORO2)
+    c.linea([(56, 86), (72, 86)], 3.0, ORO2)
+    c.cuerpo([(30, 106), (50, 106), (48, 112), (32, 112)], ACERO_O, d=1.4)
+
+
+def puerto_pesquero(c):
+    _cielo(c, hexa('b4dcf0'))
+    c.rect(0, 78, 128, 128, AGUA)
+    olas(c, 92, 0, 128, claro(AGUA, 0.3), 8)
+    olas(c, 112, 0, 128, hexa('3f8fd0'), 8)
+    c.cuerpo([(34, 78), (96, 78), (88, 96), (42, 96)], hexa('c0553f'), sombra=0.26, luz=0.2, d=2.6)
+    c.rect(34, 80, 96, 83, hexa('f2f5ff'))
+    c.linea([(66, 78), (66, 30)], 3, MADERA_O)
+    c.cuerpo([(68, 34), (68, 74), (100, 74)], hexa('f4ecd6'), d=2.0)
+    c.cuerpo([(64, 40), (64, 74), (42, 74)], hexa('e8dcbc'), d=2.0)
+    c.cuerpo([(0, 70), (24, 70), (24, 128), (0, 128)], hexa('8a6a42'))
+    for y in (74, 94, 114):
+        c.linea([(0, y), (24, y)], 2.0, MADERA_O)
+    c.cuerpo_elip(104, 108, 11, 5, col=hexa('c9d4e8'), d=1.2)
+    c.poly([(115, 108), (124, 102), (124, 114)], hexa('c9d4e8'))
+    c.punto(98, 106, 1.5, OSCURO_V)
+
+
+def campo_adiestramiento(c):
+    _cielo(c, hexa('b4dcf0'))
+    c.cuerpo([(0, 78), (128, 70), (128, 128), (0, 128)], hexa('7fb45a'), d=2.4)
+    for (x, y, s) in ((26, 92, 1.0), (64, 86, 0.8), (98, 94, 1.1)):
+        c.cuerpo([(x - 22 * s, y), (x, y - 30 * s), (x + 22 * s, y)], hexa('d8cfae'), sombra=0.26, luz=0.2, d=2.4)
+        c.poly([(x - 5 * s, y), (x, y - 14 * s), (x + 5 * s, y)], hexa('4a3f34'))
+    bandera_asta(c, 64, 82, 38, ROJO, 20)
+    c.punto(14, 112, 8, hexa('f2f5ff'))
+    c.punto(14, 112, 5.2, ROJO)
+    c.punto(14, 112, 2.2, hexa('f2f5ff'))
+    c.linea([(14, 120), (14, 128)], 2.4, MADERA_O)
+    for k in range(4):
+        c.rect(46 + k * 12, 108, 51 + k * 12, 120, hexa('4a5a3a'), r=2)
+        c.punto(48.5 + k * 12, 105, 3.2, hexa('d8a878'))
+
+
+def base_naval(c):
+    _cielo(c, hexa('b4dcf0'))
+    c.rect(0, 84, 128, 128, hexa('3f8fd0'))
+    olas(c, 96, 0, 128, claro(AGUA, 0.15), 8)
+    c.cuerpo([(8, 92), (120, 92), (108, 106), (20, 106)], hexa('7b8497'), sombra=0.26, luz=0.2, d=2.6)
+    cuadro(c, 40, 76, 78, 92, hexa('9aa3b4'))
+    cuadro(c, 52, 64, 70, 76, hexa('b4bccb'))
+    c.linea([(60, 64), (60, 48)], 2.4, hexa('6e7480'))
+    c.linea([(54, 54), (68, 54)], 2, hexa('6e7480'))
+    c.linea([(80, 80), (104, 74)], 3.4, hexa('5a6478'))
+    c.linea([(18, 86), (36, 82)], 3.4, hexa('5a6478'))
+    c.rect(0, 100, 20, 128, hexa('9a9484'))
+    c.linea([(8, 100), (8, 60)], 4, hexa('c24a3a'))
+    c.linea([(8, 62), (30, 62)], 3.4, hexa('c24a3a'))
+    c.linea([(28, 62), (28, 74)], 1.2, hexa('4a4a4a'))
+    c.cuerpo([(100, 100), (126, 100), (126, 128), (100, 128)], hexa('9a9484'))
+    c.linea([(113, 104), (113, 122)], 2.4, hexa('3d3a46'))
+    c.elip(113, 118, 7, 5, hexa('3d3a46'))
+
+
+def refineria_petroleo(c):
+    _cielo(c, hexa('c8d4e0'))
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('6a6f7a'), d=2.0)
+    for x, h, w in ((20, 70, 14), (44, 88, 12), (66, 60, 16)):
+        c.cuerpo([(x - w / 2, 112), (x - w / 2, 112 - h), (x + w / 2, 112 - h), (x + w / 2, 112)], hexa('b4bccb'), sombra=0.26, luz=0.3, d=2.4)
+        for yy in range(int(112 - h + 10), 108, 14):
+            c.linea([(x - w / 2, yy), (x + w / 2, yy)], 1.4, hexa('7b8497'))
+    c.linea([(20, 44), (44, 24), (66, 52)], 2.4, hexa('7b8497'))
+    c.linea([(20, 100), (66, 90), (100, 98)], 2.4, hexa('c24a3a'))
+    c.cuerpo([(92, 112), (92, 36), (100, 36), (100, 112)], hexa('9aa3b4'), d=2.0)
+    _flama(c, 96, 36, 1.0)
+    c.cuerpo_elip(112, 100, 10, 12, col=hexa('d86a2a'), d=1.8)
+    c.rect(102, 94, 122, 98, hexa('3d3a46'))
+    c.rect(102, 104, 122, 108, hexa('3d3a46'))
+    c.punto(96, 22, 4, (80, 80, 90, 140))
+    c.punto(104, 14, 5, (80, 80, 90, 110))
+
+
+def fabrica_automoviles(c):
+    _cielo(c, hexa('bcd8ee'))
+    c.cuerpo([(0, 108), (128, 108), (128, 128), (0, 128)], hexa('6a6f7a'), d=2.0)
+    cuadro(c, 6, 60, 122, 108, hexa('c8826a'))
+    for i in range(4):
+        x = 6 + i * 29
+        c.poly([(x, 60), (x + 29, 60), (x + 29, 44)], hexa('8a99b0'))
+        c.cuerpo([(x, 60), (x, 44), (x + 29, 60)], hexa('7b8aa2'), d=1.4)
+    c.rect(10, 70, 118, 82, hexa('bfe0f4'))
+    c.linea([(40, 70), (40, 82)], 1.2, hexa('7b8497'))
+    c.linea([(78, 70), (78, 82)], 1.2, hexa('7b8497'))
+    cuadro(c, 100, 22, 110, 60, hexa('9a5a48'))
+    humo(c, 104, 20, 3)
+    c.cuerpo([(30, 108), (34, 98), (46, 92), (68, 92), (80, 98), (98, 100), (100, 108)], hexa('d8453a'), sombra=0.26, luz=0.3, d=2.4)
+    c.poly([(46, 98), (50, 94), (66, 94), (74, 98)], hexa('bfe0f4'))
+    c.punto(44, 108, 7, hexa('2a2f42'))
+    c.punto(44, 108, 3, hexa('b4bccb'))
+    c.punto(86, 108, 7, hexa('2a2f42'))
+    c.punto(86, 108, 3, hexa('b4bccb'))
+
+
+def base_aerea(c):
+    _cielo(c, hexa('9ed2f0'))
+    _nube(c, 26, 26, 0.9)
+    c.cuerpo([(0, 72), (128, 72), (128, 128), (0, 128)], hexa('7a8f6a'), d=2.4)
+    c.poly([(54, 72), (74, 72), (112, 128), (16, 128)], hexa('5a6070'))
+    for k in range(5):
+        y = 80 + k * 10
+        h = 1.2 + k * 0.5
+        c.rect(64 - h, y, 64 + h, y + 4 + k, hexa('f2f5ff'))
+    c.cuerpo([(8, 74), (8, 60), (34, 52), (34, 74)], hexa('9aa3b4'), sombra=0.26, luz=0.2, d=2.2)
+    c.poly([(8, 60), (34, 52), (34, 56), (8, 66)], hexa('7b8497'))
+    c.cuerpo([(70, 40), (112, 38), (122, 42), (112, 46), (70, 46)], hexa('9aa3b4'), d=1.8)
+    c.cuerpo([(92, 42), (82, 22), (88, 22), (104, 40)], hexa('7b8aa0'), d=1.4)
+    c.cuerpo([(92, 46), (82, 62), (88, 62), (104, 46)], hexa('7b8aa0'), d=1.4)
+    c.cuerpo([(74, 40), (68, 30), (72, 30), (80, 40)], hexa('7b8aa0'), d=1.2)
+    c.punto(120, 42, 2.4, ROJO)
+
+
+def planta_quimica(c):
+    _cielo(c, hexa('cfdce8'))
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('6a6f7a'), d=2.0)
+    c.cuerpo_elip(32, 84, 22, 22, col=hexa('b8c4d8'), sombra=0.26, luz=0.3, d=2.6)
+    c.cuerpo_elip(32, 84, 15, 15, col=hexa('9fb0cc'), d=1.8)
+    cuadro(c, 24, 100, 40, 112, hexa('7b8497'))
+    cuadro(c, 58, 52, 80, 112, hexa('d8b44a'), sombra=0.26, luz=0.25, d=2.4)
+    c.cuerpo_elip(69, 52, 11, 5, col=hexa('e8c86a'), d=1.2)
+    for yy in (68, 84, 98):
+        c.linea([(58, yy), (80, yy)], 1.4, hexa('9a7a24'))
+    cuadro(c, 94, 40, 110, 112, hexa('b4bccb'), d=2.2)
+    c.linea([(32, 62), (32, 50), (69, 50)], 2.6, hexa('c24a3a'))
+    c.linea([(80, 70), (94, 70)], 2.6, hexa('4a8a50'))
+    c.linea([(46, 92), (58, 92)], 2.6, hexa('4a78c8'))
+    c.cuerpo([(102, 40), (104, 28), (108, 28), (110, 40)], hexa('9aa3b4'), d=1.2)
+    humo(c, 106, 26, 3)
+    c.cuerpo([(8, 112), (8, 100), (16, 100), (18, 90), (26, 90), (28, 100), (36, 100), (36, 112)], (160, 220, 180, 170), sombra=0, luz=0)
+
+
+def viviendas_publicas(c):
+    _cielo(c, hexa('a6d0ee'))
+    c.cuerpo([(0, 112), (128, 112), (128, 128), (0, 128)], hexa('76a86a'), d=2.0)
+    for (x0, x1, y0, col_) in ((4, 44, 44, hexa('d8ccb4')), (48, 82, 28, hexa('cfc4aa')), (86, 124, 56, hexa('d8ccb4'))):
+        cuadro(c, x0, y0, x1, 112, col_, d=2.8)
+        c.rect(x0 - 1.5, y0 - 3, x1 + 1.5, y0, hexa('9a948a'))
+        for k in range(int((112 - y0 - 8) // 12)):
+            for x in range(int(x0) + 5, int(x1) - 7, 11):
+                c.rect(x, y0 + 7 + k * 12, x + 6, y0 + 14 + k * 12, hexa('8aa6c8') if (x + k) % 3 else AMARILLO_V, r=0.8)
+        c.rect((x0 + x1) / 2 - 4, 98, (x0 + x1) / 2 + 4, 112, hexa('5a4a3a'), r=1)
+    for x in (18, 62, 106):
+        arbol(c, x, 120, r=7, col=CESPED)
+
+
+def fabrica_semiconductores(c):
+    c.rect(0, 0, 128, 128, hexa('d8e4f2'))
+    c.cuerpo([(16, 20), (112, 20), (112, 108), (16, 108)], hexa('2f3a58'), sombra=0.26, luz=0.2, d=3.0)
+    for k in range(9):
+        y = 28 + k * 9
+        c.rect(6, y, 16, y + 4, hexa('c8cdd8'))
+        c.rect(112, y, 122, y + 4, hexa('c8cdd8'))
+        x = 24 + k * 9.6
+        c.rect(x, 10, x + 4, 20, hexa('c8cdd8'))
+        c.rect(x, 108, x + 4, 118, hexa('c8cdd8'))
+    c.cuerpo([(30, 34), (98, 34), (98, 94), (30, 94)], hexa('46557e'), d=2.0)
+    for k in range(5):
+        c.linea([(36, 44 + k * 10), (92, 44 + k * 10)], 1.4, hexa('7fa0e8'))
+        c.linea([(44 + k * 11, 38), (44 + k * 11, 90)], 1.4, hexa('7fa0e8'))
+    c.cuerpo([(52, 52), (76, 52), (76, 76), (52, 76)], hexa('1e263c'), d=1.8)
+    c.rect(58, 58, 70, 70, hexa('f2c94c'), r=1.5)
+    c.punto(28, 28, 2.4, hexa('f2c94c'))
+
+
+def centro_datos(c):
+    c.rect(0, 0, 128, 128, hexa('c8d4e6'))
+    for i in range(3):
+        x = 8 + i * 40
+        c.cuerpo([(x, 22), (x + 34, 22), (x + 34, 112), (x, 112)], hexa('3a4466'), sombra=0.26, luz=0.2, d=2.6)
+        for k in range(9):
+            y = 28 + k * 9.6
+            c.rect(x + 4, y, x + 30, y + 6.6, hexa('2a3250'), r=1)
+            c.punto(x + 8, y + 3.3, 1.7, hexa('6fe08a') if (i + k) % 3 else hexa('ffb347'))
+            c.rect(x + 16, y + 2, x + 28, y + 4.6, hexa('59658c'))
+    c.rect(0, 112, 128, 128, hexa('8a93a8'))
+    c.linea([(0, 118), (128, 118)], 2, hexa('f2c94c'))
+    c.poly([(40, 14), (88, 14), (84, 6), (44, 6)], hexa('7aa8f0'))
+
+
+# Las maravillas llevan una estrella dorada en la esquina: se distinguen de los edificios corrientes en cualquier lista.
+def _con_estrella(f):
+    def g(c):
+        f(c)
+        c.punto(106, 22, 15, (24, 28, 48, 210))
+        c.cuerpo(estrella(106, 22, 13, 5.6, 5), ORO, sombra=0.25, luz=0.4, d=1.4)
+        c.elip(106, 22, 2.4, 2.4, ORO2)
+    return g
+
+
+for _n in ("piramides_giza", "jardines_colgantes", "partenon", "coloso_rodas", "gran_biblioteca_alejandria", "coliseo", "santa_sofia", "mezquita_cordoba", "borobudur",
+		"angkor_wat", "alhambra", "machu_picchu", "taj_mahal", "cristo_redentor", "megatorre_record", "ciudad_prohibida", "versalles", "gran_muralla", "torre_eiffel",
+		"presa_tres_gargantas", "cosmodromo", "colisionador_particulas"):
+    globals()[_n] = _con_estrella(globals()[_n])
 
 
 # ───────────── registro ─────────────

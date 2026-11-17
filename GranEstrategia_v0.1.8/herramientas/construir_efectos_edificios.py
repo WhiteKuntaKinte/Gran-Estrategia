@@ -20,7 +20,7 @@ de vida), así que sal / com / urb / ren solo cuentan lo construido DESPUÉS. de
 import json, os, sys
 
 RAIZ = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
-VERSION = "0.1.8.49"
+VERSION = "0.1.8.51"
 
 TIPOS = {
     "sal": {"nombre": "Salud", "por_habitante": True, "tope": 0.25, "unidad": "puntos de salud efectiva (0-1)",
@@ -181,6 +181,44 @@ EFECTOS = {
     "cuartel_estado_mayor": [("def", 0.20, 0)],
     "estacion_radar": [("def", 0.30, 0)],
     "centro_mando_control": [("def", 0.25, 0)],
+    # 0.1.8.51
+    "piramides_giza": [("ord", 4, 400 * K), ("ren", 0.040, 400 * K)],
+    "jardines_colgantes": [("com", 4, 400 * K), ("ord", 2, 400 * K), ("urb", 0.020, 400 * K)],
+    "partenon": [("ord", 5, 400 * K), ("ren", 0.030, 400 * K)],
+    "coloso_rodas": [("ord", 2, 300 * K), ("def", 0.15, 0), ("ren", 0.040, 300 * K)],
+    "gran_biblioteca_alejandria": [("ord", 3, 400 * K), ("ren", 0.040, 400 * K)],
+    "coliseo": [("ord", 5, 500 * K), ("ren", 0.030, 500 * K)],
+    "santa_sofia": [("ord", 6, 500 * K)],
+    "mezquita_cordoba": [("ord", 5, 400 * K), ("ren", 0.020, 400 * K)],
+    "borobudur": [("ord", 4, 400 * K), ("com", 2, 400 * K)],
+    "angkor_wat": [("ord", 4, 500 * K), ("com", 3, 500 * K)],
+    "alhambra": [("ord", 3, 400 * K), ("def", 0.20, 0), ("ren", 0.020, 400 * K)],
+    "machu_picchu": [("com", 3, 200 * K), ("def", 0.25, 0), ("ord", 2, 200 * K)],
+    "taj_mahal": [("ord", 5, 600 * K), ("ren", 0.040, 600 * K)],
+    "cristo_redentor": [("ord", 4, 800 * K), ("ren", 0.030, 800 * K)],
+    "megatorre_record": [("ren", 0.10, 3 * M), ("urb", 0.030, 3 * M)],
+    "ciudad_prohibida": [("ord", 4, 800 * K), ("def", 0.30, 0)],
+    "versalles": [("ord", 4, 800 * K), ("ren", 0.040, 800 * K)],
+    "gran_muralla": [("def", 0.60, 0), ("ord", 2, 500 * K)],
+    "torre_eiffel": [("ren", 0.080, 2 * M), ("ord", 2, 2 * M)],
+    "presa_tres_gargantas": [("ren", 0.15, 6 * M), ("mov", 0.050, 0)],
+    "cosmodromo": [("ord", 3, 1 * M), ("ren", 0.060, 2 * M)],
+    "colisionador_particulas": [("ren", 0.040, 3 * M), ("ord", 2, 3 * M)],
+    "minas_subterraneas": [("ren", 0.030, 100 * K)],
+    "canales_riego": [("com", 3, 80 * K), ("ren", 0.020, 80 * K)],
+    "aduana_puesto_fronterizo": [("ren", 0.030, 200 * K), ("def", 0.050, 0)],
+    "termas_publicas": [("sal", 0.050, 100 * K), ("ord", 1, 100 * K)],
+    "casa_de_moneda": [("ren", 0.030, 200 * K), ("ord", 0.50, 200 * K)],
+    "puerto_pesquero": [("com", 3, 60 * K), ("ren", 0.020, 60 * K)],
+    "campo_adiestramiento": [("def", 0.12, 0)],
+    "base_naval": [("def", 0.30, 0), ("mov", 0.050, 0)],
+    "refineria_petroleo": [("ren", 0.070, 2 * M)],
+    "fabrica_automoviles": [("ren", 0.080, 2 * M)],
+    "base_aerea": [("def", 0.25, 0), ("mov", 0.050, 0)],
+    "planta_quimica": [("ren", 0.060, 1500 * K)],
+    "viviendas_publicas": [("urb", 0.040, 500 * K), ("ord", 1.5, 500 * K)],
+    "fabrica_semiconductores": [("ren", 0.10, 4 * M)],
+    "centro_datos": [("ren", 0.060, 3 * M)],
 }
 # edificios sin efecto propio a propósito (su efecto ya está en otra parte del modelo)
 SOLO_SABER = ["escuelas_escribas", "academias_filosoficas", "biblioteca", "observatorios_astronomicos", "casa_de_traduccion", "madrasas_escuelas",

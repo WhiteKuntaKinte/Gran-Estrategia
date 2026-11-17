@@ -24,6 +24,7 @@ CATEGORIAS = [
     ("sal", "Salud", "edificios/hospital_moderno"),
     ("def", "Defensa fija", "edificios/murallas_urbanas"),
     ("mil", "Mando y formación militar", "edificios/escuelas_militares"),
+    ("mar", "Maravillas del mundo", "edificios/piramides_giza"),
 ]
 
 # clase -> (fracción de la producción anual de la provincia, días de obra)
@@ -180,6 +181,44 @@ E = {
     "cuartel_estado_mayor": ("mil", "D", 1, "Mapas, planes y despachos: donde se prepara la campaña."),
     "estacion_radar": ("mil", "E", 2, "Antenas que ven llegar a los aviones antes de que lleguen."),
     "centro_mando_control": ("mil", "E", 1, "Salas con pantallas y enlaces que coordinan a todas las fuerzas."),
+    # 0.1.8.51
+    "piramides_giza": ("mar", "E", 1, "Tumbas de piedra colosales: miles de obreros durante generaciones para que un rey fuera eterno."),
+    "jardines_colgantes": ("mar", "E", 1, "Terrazas de árboles y flores regadas con bombas desde el río: un monte verde en medio del desierto."),
+    "partenon": ("mar", "E", 1, "El templo de mármol sobre la colina de la ciudad: la mejor arquitectura y escultura de su tiempo."),
+    "coloso_rodas": ("mar", "E", 1, "Una estatua de bronce de treinta metros junto al puerto: orgullo de la ciudad y aviso para el enemigo."),
+    "gran_biblioteca_alejandria": ("mar", "E", 1, "Medio millón de rollos reunidos de todo el mundo conocido, con sabios pagados por el rey."),
+    "coliseo": ("mar", "E", 1, "Un anfiteatro para cincuenta mil espectadores: el pan y circo que mantiene tranquila a la capital."),
+    "santa_sofia": ("mar", "E", 1, "Una cúpula que parece flotar sobre la mayor iglesia del mundo."),
+    "mezquita_cordoba": ("mar", "E", 1, "Un bosque de columnas y arcos de dos colores: la capital de un califato culto."),
+    "borobudur": ("mar", "E", 1, "Un monte de piedra en forma de mandala con miles de relieves que cuentan la vida del Buda."),
+    "angkor_wat": ("mar", "E", 1, "El mayor templo del mundo, rodeado de fosos y embalses que alimentaban a una ciudad de un millón."),
+    "alhambra": ("mar", "E", 1, "Palacio-fortaleza con patios, fuentes y yeserías sobre una colina que domina la vega."),
+    "machu_picchu": ("mar", "E", 1, "Una ciudad de piedra sin argamasa colgada entre dos cumbres, con terrazas que alimentan a todos."),
+    "taj_mahal": ("mar", "E", 1, "Un mausoleo de mármol blanco que cambia de color con la luz: el amor convertido en arquitectura."),
+    "cristo_redentor": ("mar", "E", 1, "Una estatua de hormigón y piedra jabonosa con los brazos abiertos sobre la bahía."),
+    "megatorre_record": ("mar", "F", 1, "La torre más alta jamás levantada: acero, hormigón y un símbolo de dinero y ambición."),
+    "ciudad_prohibida": ("mar", "E", 1, "Casi mil salas tras muros rojos: el corazón de un imperio donde nadie entra sin permiso."),
+    "versalles": ("mar", "E", 1, "Un palacio inmenso con jardines geométricos donde la nobleza vive a la vista del rey."),
+    "gran_muralla": ("mar", "E", 1, "Miles de kilómetros de muro y torres de señales contra los jinetes de la estepa."),
+    "torre_eiffel": ("mar", "E", 1, "Trescientos metros de hierro forjado: la prueba de lo que la industria puede construir."),
+    "presa_tres_gargantas": ("mar", "F", 1, "Un muro de más de dos kilómetros que embalsa un río entero y alimenta a millones de hogares."),
+    "cosmodromo": ("mar", "F", 1, "Rampas, hangares y torres de control desde donde parten los cohetes hacia la órbita."),
+    "colisionador_particulas": ("mar", "F", 1, "Un anillo de 27 km bajo tierra donde chocan partículas casi a la velocidad de la luz."),
+    "minas_subterraneas": ("eco", "C", 3, "Pozos y galerías que sacan piedra, cobre y hierro de debajo de la tierra."),
+    "canales_riego": ("agu", "C", 3, "Acequias que reparten el agua del río por los campos."),
+    "aduana_puesto_fronterizo": ("eco", "B", 3, "Garitas donde se cuenta la mercancía y se cobra el paso."),
+    "termas_publicas": ("ciu", "C", 2, "Baños de agua caliente, gimnasio y biblioteca: la ciudad se lava, se cura y conversa."),
+    "casa_de_moneda": ("eco", "C", 1, "Talleres del Estado que funden y acuñan monedas con su sello."),
+    "puerto_pesquero": ("tra", "B", 3, "Lonjas, salazones y astilleros pequeños: el mar da de comer a toda la costa."),
+    "campo_adiestramiento": ("mil", "C", 2, "Explanadas donde los reclutas aprenden a marchar, formar y disparar a la vez."),
+    "base_naval": ("mil", "E", 2, "Diques, arsenales y carboneras que mantienen la flota lista para zarpar."),
+    "refineria_petroleo": ("eco", "E", 2, "Torres de destilación que separan el crudo en queroseno, gasolina y gasóleo."),
+    "fabrica_automoviles": ("eco", "E", 2, "Cadenas de montaje donde cada obrero hace una pieza y sale un coche cada pocos minutos."),
+    "base_aerea": ("mil", "D", 2, "Pistas, hangares y depósitos de combustible para los escuadrones de combate."),
+    "planta_quimica": ("eco", "E", 2, "Reactores y tuberías que fabrican abonos, plásticos y colorantes por toneladas."),
+    "viviendas_publicas": ("ciu", "D", 3, "Bloques de vivienda digna construidos por el Estado para las familias trabajadoras."),
+    "fabrica_semiconductores": ("eco", "F", 1, "Salas blancas donde se graban millones de transistores en una oblea de silicio."),
+    "centro_datos": ("eco", "E", 2, "Naves con miles de servidores refrigerados: la nube tiene dirección física."),
 }
 
 
@@ -197,11 +236,11 @@ def main():
     for f in filas:
         cat, cl, mx, desc = E[f['slug']]
         lista.append({"slug": f['slug'], "nombre": f['nombre'], "cat": cat, "clase": cl, "max": mx, "era": f['era'], "anio": f['anio'],
-                      "seccion": secs[f['seccion']]['nombre'], "desc": desc})
+                      "seccion": secs[f['seccion']]['nombre'], "desc": desc, "unica": cat == "mar"})
     lista.sort(key=lambda e: (e['anio'], e['nombre']))
     sal = {
-        "version": "0.1.8.40",
-        "ayuda": "Catálogo de EDIFICIOS construibles por provincia (109, los descubrimientos de tipo B). No se edita a mano: lo genera herramientas/construir_edificios.py. "
+        "version": "0.1.8.51",
+        "ayuda": "Catálogo de EDIFICIOS construibles por provincia (los descubrimientos de tipo B; los de la categoría «mar» son MARAVILLAS: solo puede haber una en todo el mundo). No se edita a mano: lo genera herramientas/construir_edificios.py. "
                  "costo = fracción de la producción anual de la provincia según la clase (con un piso por habitante); dias = días de obra de la clase. "
                  "Sin efectos de juego todavía: construirlos cuesta dinero y tarda días, se guardan por provincia.",
         "categorias": [{"cod": c, "nombre": n, "icono": i} for c, n, i in CATEGORIAS],

@@ -1,5 +1,5 @@
 {
- "version": "0.1.8.49",
+ "version": "0.1.8.51",
  "ayuda": "Efectos de los edificios (0.1.8.48). No se edita a mano: lo genera herramientas/construir_efectos_edificios.py. Cada efecto es [tipo, peso, habitantes que atiende cada unidad (0 si es plano)].",
  "tipos": {
   "sal": {
@@ -155,6 +155,13 @@
     40000
    ]
   ],
+  "minas_subterraneas": [
+   [
+    "ren",
+    0.03,
+    100000
+   ]
+  ],
   "murallas_urbanas": [
    [
     "def",
@@ -179,6 +186,18 @@
     "ord",
     2.5,
     150000
+   ]
+  ],
+  "canales_riego": [
+   [
+    "com",
+    3,
+    80000
+   ],
+   [
+    "ren",
+    0.02,
+    80000
    ]
   ],
   "fortaleza_colina": [
@@ -207,6 +226,18 @@
     "sal",
     0.05,
     80000
+   ]
+  ],
+  "piramides_giza": [
+   [
+    "ord",
+    4,
+    400000
+   ],
+   [
+    "ren",
+    0.04,
+    400000
    ]
   ],
   "almacenes_suministro": [
@@ -252,6 +283,18 @@
     300000
    ]
   ],
+  "puerto_pesquero": [
+   [
+    "com",
+    3,
+    60000
+   ],
+   [
+    "ren",
+    0.02,
+    60000
+   ]
+  ],
   "torres_y_almenas": [
    [
     "def",
@@ -290,6 +333,35 @@
     100000
    ]
   ],
+  "casa_de_moneda": [
+   [
+    "ren",
+    0.03,
+    200000
+   ],
+   [
+    "ord",
+    0.5,
+    200000
+   ]
+  ],
+  "jardines_colgantes": [
+   [
+    "com",
+    4,
+    400000
+   ],
+   [
+    "ord",
+    2,
+    400000
+   ],
+   [
+    "urb",
+    0.02,
+    400000
+   ]
+  ],
   "puente_piedra_arco": [
    [
     "mov",
@@ -326,6 +398,18 @@
     "ord",
     2,
     200000
+   ]
+  ],
+  "partenon": [
+   [
+    "ord",
+    5,
+    400000
+   ],
+   [
+    "ren",
+    0.03,
+    400000
    ]
   ],
   "acueducto": [
@@ -388,6 +472,35 @@
     1000000
    ]
   ],
+  "gran_biblioteca_alejandria": [
+   [
+    "ord",
+    3,
+    400000
+   ],
+   [
+    "ren",
+    0.04,
+    400000
+   ]
+  ],
+  "coloso_rodas": [
+   [
+    "ord",
+    2,
+    300000
+   ],
+   [
+    "def",
+    0.15,
+    0
+   ],
+   [
+    "ren",
+    0.04,
+    300000
+   ]
+  ],
   "faro": [
    [
     "mov",
@@ -412,6 +525,18 @@
     "def",
     0.5,
     0
+   ]
+  ],
+  "gran_muralla": [
+   [
+    "def",
+    0.6,
+    0
+   ],
+   [
+    "ord",
+    2,
+    500000
    ]
   ],
   "caravasar_posada": [
@@ -443,6 +568,30 @@
     250000
    ]
   ],
+  "aduana_puesto_fronterizo": [
+   [
+    "ren",
+    0.03,
+    200000
+   ],
+   [
+    "def",
+    0.05,
+    0
+   ]
+  ],
+  "termas_publicas": [
+   [
+    "sal",
+    0.05,
+    100000
+   ],
+   [
+    "ord",
+    1,
+    100000
+   ]
+  ],
   "molinos_hidraulicos": [
    [
     "ren",
@@ -453,6 +602,18 @@
     "com",
     2,
     150000
+   ]
+  ],
+  "coliseo": [
+   [
+    "ord",
+    5,
+    500000
+   ],
+   [
+    "ren",
+    0.03,
+    500000
    ]
   ],
   "iglesia_parroquial": [
@@ -476,6 +637,13 @@
     200000
    ]
   ],
+  "santa_sofia": [
+   [
+    "ord",
+    6,
+    500000
+   ]
+  ],
   "mezquita_aljama": [
    [
     "ord",
@@ -483,11 +651,35 @@
     100000
    ]
   ],
+  "mezquita_cordoba": [
+   [
+    "ord",
+    5,
+    400000
+   ],
+   [
+    "ren",
+    0.02,
+    400000
+   ]
+  ],
   "escuelas_monasticas": [
    [
     "ord",
     0.5,
     100000
+   ]
+  ],
+  "borobudur": [
+   [
+    "ord",
+    4,
+    400000
+   ],
+   [
+    "com",
+    2,
+    400000
    ]
   ],
   "burgos_fortificados": [
@@ -566,6 +758,18 @@
     250000
    ]
   ],
+  "angkor_wat": [
+   [
+    "ord",
+    4,
+    500000
+   ],
+   [
+    "com",
+    3,
+    500000
+   ]
+  ],
   "molinos_viento": [
    [
     "ren",
@@ -607,6 +811,23 @@
     60000
    ]
   ],
+  "alhambra": [
+   [
+    "ord",
+    3,
+    400000
+   ],
+   [
+    "def",
+    0.2,
+    0
+   ],
+   [
+    "ren",
+    0.02,
+    400000
+   ]
+  ],
   "casa_consistorial": [
    [
     "ord",
@@ -640,11 +861,40 @@
     300000
    ]
   ],
+  "ciudad_prohibida": [
+   [
+    "ord",
+    4,
+    800000
+   ],
+   [
+    "def",
+    0.3,
+    0
+   ]
+  ],
   "lazaretos": [
    [
     "sal",
     0.05,
     120000
+   ]
+  ],
+  "machu_picchu": [
+   [
+    "com",
+    3,
+    200000
+   ],
+   [
+    "def",
+    0.25,
+    0
+   ],
+   [
+    "ord",
+    2,
+    200000
    ]
   ],
   "altos_hornos": [
@@ -735,11 +985,35 @@
     600000
    ]
   ],
+  "taj_mahal": [
+   [
+    "ord",
+    5,
+    600000
+   ],
+   [
+    "ren",
+    0.04,
+    600000
+   ]
+  ],
   "fortificaciones_permanentes": [
    [
     "def",
     0.9,
     0
+   ]
+  ],
+  "versalles": [
+   [
+    "ord",
+    4,
+    800000
+   ],
+   [
+    "ren",
+    0.04,
+    800000
    ]
   ],
   "parlamento_edificio": [
@@ -839,6 +1113,13 @@
     150000
    ]
   ],
+  "campo_adiestramiento": [
+   [
+    "def",
+    0.12,
+    0
+   ]
+  ],
   "comisaria_policia": [
    [
     "ord",
@@ -903,6 +1184,18 @@
     1500000
    ]
   ],
+  "base_naval": [
+   [
+    "def",
+    0.3,
+    0
+   ],
+   [
+    "mov",
+    0.05,
+    0
+   ]
+  ],
   "hospital_moderno": [
    [
     "sal",
@@ -944,6 +1237,13 @@
     "mov",
     0.1,
     0
+   ]
+  ],
+  "refineria_petroleo": [
+   [
+    "ren",
+    0.07,
+    2000000
    ]
   ],
   "casa_del_pueblo": [
@@ -1010,6 +1310,18 @@
     0
    ]
   ],
+  "torre_eiffel": [
+   [
+    "ren",
+    0.08,
+    2000000
+   ],
+   [
+    "ord",
+    2,
+    2000000
+   ]
+  ],
   "estadio": [
    [
     "ord",
@@ -1050,6 +1362,13 @@
     2000000
    ]
   ],
+  "fabrica_automoviles": [
+   [
+    "ren",
+    0.08,
+    2000000
+   ]
+  ],
   "casamatas_hormigon": [
    [
     "def",
@@ -1083,6 +1402,25 @@
     1500000
    ]
   ],
+  "base_aerea": [
+   [
+    "def",
+    0.25,
+    0
+   ],
+   [
+    "mov",
+    0.05,
+    0
+   ]
+  ],
+  "planta_quimica": [
+   [
+    "ren",
+    0.06,
+    1500000
+   ]
+  ],
   "gas_natural": [
    [
     "ren",
@@ -1095,6 +1433,18 @@
     "def",
     1.0,
     0
+   ]
+  ],
+  "cristo_redentor": [
+   [
+    "ord",
+    4,
+    800000
+   ],
+   [
+    "ren",
+    0.03,
+    800000
    ]
   ],
   "autopista": [
@@ -1121,6 +1471,18 @@
     "def",
     0.3,
     0
+   ]
+  ],
+  "viviendas_publicas": [
+   [
+    "urb",
+    0.04,
+    500000
+   ],
+   [
+    "ord",
+    1.5,
+    500000
    ]
   ],
   "bunker_nuclear": [
@@ -1201,6 +1563,18 @@
     0
    ]
   ],
+  "cosmodromo": [
+   [
+    "ord",
+    3,
+    1000000
+   ],
+   [
+    "ren",
+    0.06,
+    2000000
+   ]
+  ],
   "defensa_costera_misiles": [
    [
     "def",
@@ -1218,6 +1592,13 @@
     "ren",
     0.03,
     2000000
+   ]
+  ],
+  "fabrica_semiconductores": [
+   [
+    "ren",
+    0.1,
+    4000000
    ]
   ],
   "centro_mando_control": [
@@ -1248,11 +1629,54 @@
     1500000
    ]
   ],
+  "centro_datos": [
+   [
+    "ren",
+    0.06,
+    3000000
+   ]
+  ],
+  "presa_tres_gargantas": [
+   [
+    "ren",
+    0.15,
+    6000000
+   ],
+   [
+    "mov",
+    0.05,
+    0
+   ]
+  ],
+  "colisionador_particulas": [
+   [
+    "ren",
+    0.04,
+    3000000
+   ],
+   [
+    "ord",
+    2,
+    3000000
+   ]
+  ],
   "centro_operaciones_ciberneticas": [
    [
     "def",
     0.15,
     0
+   ]
+  ],
+  "megatorre_record": [
+   [
+    "ren",
+    0.1,
+    3000000
+   ],
+   [
+    "urb",
+    0.03,
+    3000000
    ]
   ]
  }

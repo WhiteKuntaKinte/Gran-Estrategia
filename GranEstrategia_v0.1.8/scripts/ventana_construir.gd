@@ -200,6 +200,10 @@ func _armar_filas() -> void:
 		var d := vf.lbl_rol(String(ed.desc[e]), 11, "nota")
 		d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		col.add_child(d)
+		if ed.unica[e] == 1:                                                              # 0.1.8.51: maravilla = una sola en todo el mundo
+			var lbl_mar := vf.lbl_rol("★ MARAVILLA ÚNICA · solo una en todo el mundo; se ve en el mapa con su estrella", 11, "oro")
+			lbl_mar.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			col.add_child(lbl_mar)
 		var txt_ef: String = ed.texto_efectos(e)                                          # 0.1.8.48: qué hace en el juego (salud, producción, orden, defensa…)
 		if txt_ef != "":
 			var lbl_ef := vf.lbl_rol(txt_ef, 11, "ok")
@@ -322,6 +326,9 @@ func _poner_fila(fl: Dictionary, e: int, conoce: bool, ordena: bool, tes: float,
 				costo_ok += cst
 			elif primer_motivo == "":
 				primer_motivo = String(r["motivo"])
+	if ed.unica[e] == 1 and ok_n > 1:                                   # una maravilla solo se puede levantar en UNA provincia: con un grupo se ofrece la primera
+		costo_ok = costo_ok / float(ok_n)
+		ok_n = 1
 	var dias: int = ed.dias_de(e)
 	if not conoce:
 		lbl_costo.text = "Requiere el descubrimiento «%s»" % (main.mundo.descubrimientos.nombre[ed.desc_idx[e]] if main.mundo.descubrimientos != null and ed.desc_idx[e] >= 0 else ed.nombre[e])

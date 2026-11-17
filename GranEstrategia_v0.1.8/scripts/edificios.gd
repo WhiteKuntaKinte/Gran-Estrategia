@@ -27,6 +27,9 @@ var nombre := PackedStringArray()
 var cat := PackedStringArray()
 var clase := PackedStringArray()
 var tope := PackedInt32Array()           # máximo por provincia (construidos + en obra)
+var unica := PackedByteArray()          # 1 = MARAVILLA: solo puede haber una en todo el mundo (categoría «mar»; construida o en obra)
+var _unica_pi := {}                      # edificio único -> índice de la provincia que lo tiene o lo está construyendo
+var _lista_unicas := PackedInt32Array()  # índices de los edificios únicos (para no recorrer los 178)
 var era := PackedInt32Array()
 var anio := PackedInt32Array()
 var seccion := PackedStringArray()
@@ -86,6 +89,9 @@ func cargar(js: Dictionary) -> bool:
 		cat.append(String(e["cat"]))
 		clase.append(String(e["clase"]))
 		tope.append(int(e.get("max", 1)))
+		unica.append(1 if bool(e.get("unica", false)) else 0)
+		if unica[unica.size() - 1] == 1:
+			_lista_unicas.append(unica.size() - 1)
 		era.append(int(e.get("era", 0)))
 		anio.append(int(e.get("anio", 0)))
 		seccion.append(String(e.get("seccion", "")))
@@ -152,6 +158,7 @@ func iniciar(m) -> void:
 	_nuevos.clear()
 	_s_abs.clear()
 	_s_nue.clear()
+	_unica_pi.clear()
 	_prox_fin = SIN_FIN
 	for pr in m.provincias:                                  # obras que ya trajera la base (por ejemplo, de Debug o de una época con datos propios)
 		var t: String = bd.txt("obras", pr.tid, "")
@@ -160,6 +167,13 @@ func iniciar(m) -> void:
 		var te: String = bd.txt("edificios", pr.tid, "")
 		if te != "":                                         # lo que ya había es la partida de la época: sus efectos ya están en los datos
 			_base[pr.tid] = te                                # sus sumas de efectos se calculan al primer uso (`_abs_de`)
+			for eu in _lista_unicas:                         # una maravilla que ya traiga la base cuenta como existente
+				if te.contains(slug[eu] + ":"):
+					_unica_pi[eu] = pr.idx
+	for pi_o in _obras:
+		for o in _obras[pi_o]:
+			if unica[int(o[0])] == 1:
+				_unica_pi[int(o[0])] = pi_o
 	_recalcular_prox()
 
 
@@ -207,7 +221,7 @@ func sembrar_iniciales(anio_epoca: int) -> int:
 		var edad := float(anio_epoca - anio[e])
 		var tc: float = float(TIEMPO_CLASE.get(clase[e], 400.0))
 		difusion[e] = 1.0 - exp(-edad / tc) if edad > 0.0 else 0.0
-		if difusion[e] > 0.004:
+		if difusion[e] > 0.004 and unica[e] == 0:                     # las maravillas no se reparten al empezar: hay que construirlas
 			activos.append(e)
 	var pib_ref: float = PIB_REF_MODERNO if anio_epoca >= 1900 else PIB_REF_ANTIGUO
 	var lg_pob := log(1.0 + POB_REF / 3000.0)
@@ -312,6 +326,7 @@ func _guardar(pi: int, d: Dictionary, motivo := "") -> void:
 	bd.poner_f("num_edificios", tid, float(total))
 	_cache[tid] = [t, d]
 	_refrescar_efectos(tid, d)
+	_actualizar_unicas(pi, d)
 	version += 1
 
 
@@ -324,6 +339,50 @@ func dar(pi: int, e: int, cant := 1) -> void:
 
 func quitar(pi: int, e: int, cant := 1) -> void:
 	dar(pi, e, -cant)
+
+
+# ───────────── maravillas (0.1.8.51): una sola en el mundo ─────────────
+## Mantiene `_unica_pi` cuando cambian los edificios (`d` = lo construido, o null para leerlo) o las obras de la provincia `pi`.
+func _actualizar_unicas(pi: int, d) -> void:
+	if _lista_unicas.is_empty():
+		return
+	var tiene: Dictionary = d if d != null else de_provincia(pi)
+	var lista: Array = _obras.get(pi, [])
+	for e in _lista_unicas:
+		var aqui: bool = int(tiene.get(slug[e], 0)) > 0
+		if not aqui:
+			for o in lista:
+				if int(o[0]) == e:
+					aqui = true
+					break
+		if aqui:
+			_unica_pi[e] = pi
+		elif int(_unica_pi.get(e, -1)) == pi:
+			_unica_pi.erase(e)
+
+
+## Provincia que tiene (o está construyendo) la maravilla `e`; -1 si nadie.
+func donde_unica(e: int) -> int:
+	return int(_unica_pi.get(e, -1))
+
+
+## Maravillas ya CONSTRUIDAS en la provincia `pi` (índices de edificio).
+func maravillas_de(pi: int) -> PackedInt32Array:
+	var r := PackedInt32Array()
+	for e in _lista_unicas:
+		if int(_unica_pi.get(e, -1)) == pi and cantidad(pi, e) > 0:
+			r.append(e)
+	return r
+
+
+## Todas las maravillas construidas en el mundo: {edificio: provincia}.
+func maravillas_del_mundo() -> Dictionary:
+	var r := {}
+	for e in _lista_unicas:
+		var pi: int = int(_unica_pi.get(e, -1))
+		if pi >= 0 and cantidad(pi, e) > 0:
+			r[e] = pi
+	return r
 
 
 # ───────────── obras ─────────────
@@ -347,6 +406,7 @@ func _escribir_obras(pi: int) -> void:
 		_obras.erase(pi)
 	else:
 		_obras[pi] = lista
+	_actualizar_unicas(pi, null)
 	_recalcular_prox()
 	version += 1
 
@@ -471,6 +531,12 @@ func puede_con_costo(pais: String, pi: int, e: int, costo: float) -> Dictionary:
 	if cantidad(pi, e) + en_obra(pi, e) >= tope[e]:
 		return {"ok": false, "motivo": ("Ya está construido." if tope[e] == 1 else "Ya tiene el máximo (%d) en esta provincia." % tope[e])
 			if cantidad(pi, e) >= tope[e] else "Ya hay una obra de este tipo en curso."}
+	if unica[e] == 1:
+		var otra: int = int(_unica_pi.get(e, -1))
+		if otra >= 0 and otra != pi:
+			var pr2 = mundo.provincias[otra]
+			var hecha: bool = cantidad(otra, e) > 0
+			return {"ok": false, "motivo": "%s ya %s en %s (%s): solo hay una en todo el mundo." % [nombre[e], "existe" if hecha else "se está construyendo", pr2.nombre, pr2.pais]}
 	if costo < 0.0:
 		costo = costo_local(pi, e)
 	var p = mundo.paises[pais]
@@ -510,6 +576,8 @@ func construir_varias(pais: String, pis: Array, e: int) -> Dictionary:
 		if bool(r["ok"]):
 			hechas += 1
 			total += float(r["costo"])
+			if unica[e] == 1:                                       # una maravilla se levanta en una sola provincia
+				break
 		else:
 			fallos.append({"pi": int(pi), "motivo": String(r["msg"])})
 	return {"hechas": hechas, "costo": total, "fallos": fallos}

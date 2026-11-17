@@ -59,7 +59,7 @@ func iniciar(m) -> void:
 		_techo[e] = t / maxf(ed.fraccion_de(e), 1.0e-6)
 	var lista := []
 	for e in ed.n:
-		if ed.con_efecto(e):
+		if ed.con_efecto(e) and ed.unica[e] == 0:                 # 0.1.8.51: las maravillas las construye el jugador
 			lista.append(e)
 	lista.sort_custom(func(a, b): return _techo[a] > _techo[b])
 	_orden = PackedInt32Array(lista)

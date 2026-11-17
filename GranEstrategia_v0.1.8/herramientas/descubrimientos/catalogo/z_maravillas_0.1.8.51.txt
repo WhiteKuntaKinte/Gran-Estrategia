@@ -1,0 +1,74 @@
+## +SOC|REL
+### Maravillas del mundo antiguo
+piramides_giza|Grandes pirámides de Guiza|2|B|templos_monumentales,escultura_monumental,plano_inclinado_rampa
+jardines_colgantes|Jardines colgantes de Babilonia|3|B|terrazas_cultivo,riego_canales,arco_boveda
+partenon|Partenón y la Acrópolis|3|B|templos_monumentales,escultura_monumental,teatro_drama
+coloso_rodas|Coloso de Rodas|3|B|escultura_monumental,bronce,puerto_piedra
+gran_biblioteca_alejandria|Gran Biblioteca de Alejandría|3|B|biblioteca,escritura_alfabetica,escuelas_escribas
+coliseo|Coliseo romano|3|B|teatro_anfiteatro,hormigon_romano,arco_boveda
+### Maravillas medievales
+santa_sofia|Santa Sofía|4|B|cupula,arco_boveda,construccion_piedra
+mezquita_cordoba|Gran Mezquita de Córdoba|4|B|mezquita_aljama,arco_boveda
+borobudur|Borobudur|4|B|templo_pagoda,construccion_piedra
+angkor_wat|Angkor Wat|4|B|templo_pagoda,riego_canales,construccion_piedra
+alhambra|La Alhambra|4|B|palacio_gobierno,mezquita_aljama,arco_boveda
+machu_picchu|Machu Picchu|5|B|terrazas_cultivo,construccion_piedra,calendario_solar
+### Maravillas modernas
+taj_mahal|Taj Mahal|6|B|cupula,mezquita_aljama,escultura_monumental
+cristo_redentor|Cristo Redentor|8|B|hormigon_armado,escultura_monumental
+megatorre_record|Megatorre de récord|10|B|rascacielos,acero_pretensado,ascensor_seguridad
+## +SOC|GOB
+### Palacios y capitales imperiales
+ciudad_prohibida|Ciudad Prohibida|4|B|palacio_gobierno,imperio_universal,muralla_piedra
+versalles|Palacio de Versalles|6|B|palacio_gobierno,monarquia_absoluta
+## +MIL|FOR
+### Murallas y fronteras
+gran_muralla|Gran Muralla|3|B|muralla_piedra,limes_fronteras_fortificadas,torres_y_almenas
+## +CIE|MAN
+### Fábricas y máquinas
+torre_eiffel|Torre Eiffel|7|B|puentes_hierro,acero_bessemer
+fabrica_automoviles|Fábricas de automóviles|8|B|fordismo,produccion_en_serie
+### Fundición y acero
+planta_quimica|Plantas químicas|8|B|industria_quimica_masiva,petroquimica
+## +CIE|ENE
+### Grandes obras de energía
+presa_tres_gargantas|Presa de las Tres Gargantas|10|B|presas_arco_hormigon,central_hidroelectrica,red_alta_tension
+### Petróleo y gas
+refineria_petroleo|Refinerías de petróleo|7|B|refinacion_petroleo
+## +CIE|AST
+### Grandes centros de exploración
+cosmodromo|Gran cosmódromo|9|B|cohete_liquido,vuelo_espacial_tripulado
+## +CIE|FIS
+### Grandes instrumentos
+colisionador_particulas|Gran colisionador de partículas|10|B|aceleradores_particulas,fisica_particulas,supercomputacion
+## +CIE|REC
+### Minas y canteras
+minas_subterraneas|Minas subterráneas|2|B|mineria_subterranea
+## +SOC|ECO
+### Abastos y almacenes
+canales_riego|Canales de riego|2|B|riego_canales
+aduana_puesto_fronterizo|Aduanas y puestos fronterizos|3|B|limes_fronteras_fortificadas,posta_imperial
+### Dinero, bancos y bolsa
+casa_de_moneda|Casas de moneda|3|B|moneda_acunada,bronce
+## +SOC|CIV
+### Vida pública y bienestar
+termas_publicas|Termas públicas|3|B|banos_publicos,acueducto,hormigon_romano
+viviendas_publicas|Viviendas públicas|8|B|vivienda_social,hormigon_armado
+## +CIE|TRA
+### Puertos, astilleros y estaciones
+puerto_pesquero|Puertos pesqueros|3|B|puerto_piedra,barco_mercante
+## +MIL|TAC
+### Escuelas y campos de instrucción
+campo_adiestramiento|Campos de adiestramiento|7|B|juegos_de_guerra,escuelas_militares
+## +MIL|NAV
+### Bases y arsenales de la flota
+base_naval|Bases navales|7|B|monitor_torre_giratoria,puerto_piedra
+## +MIL|AIR
+### Bases y campos de aviación
+base_aerea|Bases aéreas|8|B|aeropuerto,avion_monoplano_metalico
+## +CIE|ELE
+### Chips y memorias
+fabrica_semiconductores|Fábricas de semiconductores|9|B|semiconductores_silicio,memoria_semiconductores
+## +CIE|COM
+### Redes y servidores
+centro_datos|Centros de datos|10|B|computacion_nube,base_datos

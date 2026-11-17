@@ -1959,6 +1959,13 @@ func _card_edificios(pis: Array, una: bool) -> void:
 			_linea(ob_caja, String(ed.nombre[int(o["e"])]), "%d %% · faltan %d d" % [int(roundf(float(o["pct"]))), int(o["falta"])], Tema.TENUE, "edificios/" + String(ed.slug[int(o["e"])]))
 		if filas.size() > 6:
 			_nota(ob_caja, "… y %d obras más." % (filas.size() - 6))
+	var maravs_aqui := []                                              # 0.1.8.51: maravillas construidas (una sola de cada en el mundo)
+	var mm: Dictionary = ed.maravillas_del_mundo()
+	for e_m in mm:
+		if pis.has(int(mm[e_m])):
+			maravs_aqui.append(String(ed.nombre[int(e_m)]))
+	if not maravs_aqui.is_empty():
+		_fila(sec, "i_estrella", "Maravillas", "★ " + ", ".join(PackedStringArray(maravs_aqui)))
 	if ed.efectos_listos and main.capa_obras != null:                  # 0.1.8.51: la fortificación y las obras también se ven en el mapa (capa_obras.gd)
 		var CO = main.capa_obras
 		if una:

@@ -4,6 +4,7 @@ extends Node2D
 ##     es el de la que termina antes. Solo en las provincias que ves por dentro (las tuyas, las de tus aliados y vasallos; el observador, todas).
 ##   · FORTIFICACIÓN: una silueta según la defensa que dan los edificios de la provincia (`Edificios.efecto_abs(pi, EF_DEF)`): empalizada, muralla, castillo, fortaleza o plaza
 ##     fuerte, con puntitos que cuentan el nivel. Se ve en lo tuyo y también en las provincias que ves en tu campo de visión de guerra (reconocer antes de atacar).
+##   · MARAVILLA (0.1.8.51): una estrella dorada sobre la provincia que tiene una maravilla construida (hay una sola de cada en el mundo); se ve en cualquier provincia a la vista, también en las ajenas.
 ## Todo tiene tamaño fijo en píxeles (como los cuadros de tropas) y NO se dibuja lejos (obras desde zoom 2,5; defensas desde 7, o desde 3 en la provincia elegida). Respeta la regla del zoom: nada se
 ## reconstruye por paso de la rueda; mientras gira la capa se desvanece y se rehace UNA vez cuando para (la ráfaga la detecta `capa_tropas`). La insignia se coloca arriba a
 ## la izquierda de la provincia (defensa) y arriba a la derecha (obra), por encima del cuadro de tropas, que va en una capa superior.
@@ -27,6 +28,7 @@ var n_dibujos := 0                         # cuántas veces se ha dibujado (para
 var n_marcas := 0                          # marcas del último dibujo: [obras, defensas]
 var n_obras := 0
 var n_defensas := 0
+var n_maravillas := 0
 var ms_dibujo := 0.0
 var dibujadas: Array = []                  # [{pi, pos, nivel, obras, prog}] del último dibujo (pruebas)
 var _sig: Array = []
@@ -55,7 +57,7 @@ static func nivel_de(d: float) -> int:
 func marca_de(pi: int) -> Dictionary:
 	var ed = main.mundo.edificios
 	if ed == null or not ed.efectos_listos:
-		return {"nivel": 0, "defensa": 0.0, "obras": 0, "prog": 0.0, "falta": 0}
+		return {"nivel": 0, "defensa": 0.0, "obras": 0, "prog": 0.0, "falta": 0, "maravillas": 0}
 	var df: float = ed.efecto_abs(pi, ed.EF_DEF)
 	var ob: Array = ed.obras_de(pi)
 	var prog := 0.0
@@ -64,7 +66,7 @@ func marca_de(pi: int) -> Dictionary:
 		if int(o["falta"]) < falta:
 			falta = int(o["falta"])
 			prog = float(o["pct"]) / 100.0
-	return {"nivel": nivel_de(df), "defensa": df, "obras": ob.size(), "prog": prog, "falta": falta if not ob.is_empty() else 0}
+	return {"nivel": nivel_de(df), "defensa": df, "obras": ob.size(), "prog": prog, "falta": falta if not ob.is_empty() else 0, "maravillas": ed.maravillas_de(pi).size()}
 
 
 func _process(d: float) -> void:
@@ -122,6 +124,7 @@ func _candidatas(vr: Rect2, fs: float, foco: String) -> Dictionary:
 	var m = main.mundo
 	var red = m.ejercito.red
 	var r := {}
+	var maravs: Dictionary = m.edificios.maravillas_del_mundo()
 	if m.ve_todo():                                              # observador: todo lo que cae a la vista
 		var anchas: bool = vr.size.x > ANCHO * 0.9
 		for pi in red.centros.size():
@@ -130,6 +133,11 @@ func _candidatas(vr: Rect2, fs: float, foco: String) -> Dictionary:
 				c = _vista_pt(c, fs)
 			if anchas or vr.has_point(c) or vr.has_point(c + Vector2(ANCHO, 0.0)) or vr.has_point(c - Vector2(ANCHO, 0.0)):
 				r[pi] = 3
+		for e_m in maravs:
+			var pm: int = int(maravs[e_m])
+			if not r.has(pm):
+				r[pm] = 0
+			r[pm] = int(r[pm]) | 4
 		return r
 	for nombre in m.paises_visibles():
 		for pi in m.paises[nombre].provincias:
@@ -139,6 +147,9 @@ func _candidatas(vr: Rect2, fs: float, foco: String) -> Dictionary:
 		for pi in tr._vision:                                    # lo que ves de los países en guerra contigo
 			if not r.has(int(pi)):
 				r[int(pi)] = 1
+	for e_m in maravs:                                           # las maravillas se ven en todas partes (son famosas)
+		var pm2: int = int(maravs[e_m])
+		r[pm2] = int(r.get(pm2, 0)) | 4
 	return r
 
 
@@ -159,6 +170,7 @@ func _draw() -> void:
 	dibujadas = []
 	n_obras = 0
 	n_defensas = 0
+	n_maravillas = 0
 	if main == null or main.mundo == null:
 		return
 	var ed = main.mundo.edificios
@@ -189,7 +201,8 @@ func _draw() -> void:
 		var info := marca_de(int(pi))
 		var con_obra: bool = (que & 2) != 0 and int(info["obras"]) > 0
 		var con_def: bool = (que & 1) != 0 and int(info["nivel"]) > 0 and (zr >= ZOOM_DEF or (zr >= ZOOM_DEF_ELEGIDA and elegidas.has(int(pi))))
-		if not con_obra and not con_def:
+		var con_mar: bool = (que & 4) != 0 and int(info["maravillas"]) > 0
+		if not con_obra and not con_def and not con_mar:
 			continue
 		for dx in copias:
 			var p := Vector2(c.x + float(dx), c.y)
@@ -205,7 +218,11 @@ func _draw() -> void:
 			if con_obra:
 				_dibujar_obra(int(info["obras"]), float(info["prog"]))
 				n_obras += 1
-			dibujadas.append({"pi": int(pi), "pos": p, "nivel": int(info["nivel"]) if con_def else 0, "obras": int(info["obras"]) if con_obra else 0, "prog": float(info["prog"])})
+			if con_mar:
+				_dibujar_maravilla(int(info["maravillas"]))
+				n_maravillas += 1
+			dibujadas.append({"pi": int(pi), "pos": p, "nivel": int(info["nivel"]) if con_def else 0, "obras": int(info["obras"]) if con_obra else 0, "prog": float(info["prog"]),
+				"mar": int(info["maravillas"]) if con_mar else 0})
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	n_marcas = n
 	ms_dibujo = float(Time.get_ticks_usec() - t0) / 1000.0
@@ -231,6 +248,25 @@ func _dibujar_obra(cuantas: int, prog: float) -> void:
 		var b := c + Vector2(11.0, 11.0)
 		draw_circle(b, 7.2, ORO)
 		draw_string(fuente, b + Vector2(-7.0, 4.4), str(mini(cuantas, 9)), HORIZONTAL_ALIGNMENT_CENTER, 14.0, 12, Color(0.08, 0.06, 0.02))
+
+
+## Maravilla: medallón con una estrella dorada, arriba al centro; si hay más de una, su número.
+func _dibujar_maravilla(cuantas: int) -> void:
+	var c := Vector2(0.0, -36.0)
+	draw_circle(c, 15.0, Color(0.0, 0.0, 0.0, 0.5))
+	draw_circle(c, 13.5, FONDO)
+	draw_arc(c, 13.0, 0.0, TAU, 36, ORO, 2.0, true)
+	var pts := PackedVector2Array()
+	for i in 10:
+		var ang := -PI * 0.5 + float(i) * TAU / 10.0
+		var rr := 9.6 if i % 2 == 0 else 4.2
+		pts.append(c + Vector2(cos(ang), sin(ang)) * rr)
+	draw_colored_polygon(pts, ORO)
+	draw_circle(c, 1.8, Color(0.85, 0.6, 0.1))
+	if cuantas > 1 and fuente != null:
+		var b := c + Vector2(11.0, 11.0)
+		draw_circle(b, 6.6, ORO)
+		draw_string(fuente, b + Vector2(-7.0, 4.2), str(mini(cuantas, 9)), HORIZONTAL_ALIGNMENT_CENTER, 14.0, 11, Color(0.08, 0.06, 0.02))
 
 
 ## Fortificación: silueta según el nivel (1 empalizada · 2 muralla · 3 castillo · 4 fortaleza · 5 plaza fuerte), con tantos puntos como nivel. Arriba a la izquierda.
