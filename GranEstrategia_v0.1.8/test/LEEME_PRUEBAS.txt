@@ -1,7 +1,7 @@
-PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.47
+PRUEBAS UNITARIAS — Gran Estrategia 0.1.8.51
 ============================================
 
-Qué son: escenas de Godot (runner71 a runner105) que ejecutan el código del juego y comprueban sus resultados
+Qué son: escenas de Godot (runner71 a runner111) que ejecutan el código del juego y comprueban sus resultados
 (sin tocar el juego ni tus partidas). Cubren las funciones añadidas o cambiadas desde la 0.1.8.2a y el menú de Opciones (0.1.8.31 a 0.1.8.33) y los escenarios (2026, 1500, 1096 y año 1 d. C.).
 
   runner71  lógica: Perfil, Reloj, Mundo, IA, Guerra, reglas del mapa, etiquetas, órdenes de marcha, cierre del periodo por trozos (181 comprobaciones)
@@ -39,12 +39,16 @@ Qué son: escenas de Godot (runner71 a runner105) que ejecutan el código del ju
   runner105 EDUCACIÓN, PRESUPUESTO E IA CON GENTE (0.1.8.47): las 4 partidas y su descuento de los impuestos, capacidad de investigar y política de investigación (su peso en quién descubre y en la difusión), los 40 oficios y su reparto, decisiones mensuales de la IA (guerra, austeridad, holgura), que el presupuesto no rehace los balances ni sube la versión económica, fatiga → la IA no ataca y pide la paz, ejército por gente activa, la tarjeta «Saber social» y Debug > Gente
   runner106 EFECTOS DE LOS EDIFICIOS Y OBRAS PÚBLICAS DE LA IA (0.1.8.48): los datos (97 edificios con efecto + 12 «solo saber», clases, topes), el fondo de obras (arranque de 6 meses, aporte diario, tope de 3 años, el exceso vuelve a la tesorería, se paga primero del fondo), el modelo (saturación, dilución por habitantes, regla de partida: salud / comida / vivienda / producción solo cuentan lo construido después), producción al terminar una obra, estabilidad, defensa y movilidad, las obras públicas de la IA (solo el fondo, nunca la tesorería, no tocan al jugador, topes y obras en curso) y la interfaz (Construir, tarjeta Edificios del HUD, Debug) (98 comprobaciones)
   runner107 CUENTA INCREMENTAL DE SOLDADOS (0.1.8.48): 360 operaciones al azar sobre pelotones (reclutar, bajas, reforzar, dividir, compactar, disolver, desertar) comparando tras cada una la cuenta incremental con la pasada completa de siempre, 120 días de 2026 y 90 de 1500 con todas las IA, el repaso que corrige un cambio no anotado y el coste (74 µs contra 2.681 µs) (25 comprobaciones)
+  runner108 MOTOR DE COMBATE (0.1.8.51): catálogo de 48 formaciones y 15 tácticas, tablero 8 × 5 y capacidad, despliegue, reglas de tiro / caballería / lanceros / terreno / fortificación / formaciones, moral, huida y persecución, determinismo con la misma semilla y rendimiento
+  runner109 COMBATE EN LA GUERRA Y PANTALLA (0.1.8.51): las batallas del jugador de ≥ 2.000 soldados esperan al tablero, «resolver sola», plazo de 3 días, el resultado vuelve a las tropas, las batallas de IA no cambian, la pantalla de combate y Debug > Combate
+  runner110 OBRAS Y FORTIFICACIONES EN EL MAPA (0.1.8.51): insignia de obra con anillo, glifos de fortificación por nivel, estrella de maravilla, umbrales de zoom, ráfaga (se desvanece y se rehace una vez), tope de marcas, selección y filas del HUD (54 comprobaciones)
+  runner111 MARAVILLAS ÚNICAS (0.1.8.51): una sola en todo el mundo, motivo en `puede`, cancelar la libera, conquista, orden de grupo, la IA no las construye, no se siembran al empezar, estrella en el mapa y ventana Construir (42 comprobaciones)
   runner90  (no es una prueba: es el BANCO DE ZOOM; simula la rueda paso a paso con el mundo vacío y con el país más grande enfocado y elegido (y con Relieve) e imprime líneas «[Z]» con el coste de cada paso. Con --headless solo cuentan los scripts; con xvfb incluye el dibujo por software. Desde la 0.1.8.39 incluye también la campaña de Europa con el tiempo corriendo, sin y con Relieve, y el coste de redibujar ciudades y tropas por paso.)
   runner89  (no es una prueba: es el BANCO DE RENDIMIENTO de los escenarios; imprime líneas «[B]» con ms por fotograma, llamadas de dibujo y memoria de los cuatro escenarios (2026, año 1, 1096 y 1500). `-- --epoca=1096` mide solo uno, cada uno en su proceso para no arrastrar memoria. Úsalo para comparar versiones.)
 
 Cómo correrlas:
   1. Abre el proyecto en Godot.
-  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72 a 88 y 91 a 107, salvo 89, 90 y 101, que son bancos de medición).
+  2. En el panel «Sistema de archivos» abre la carpeta test/ y haz doble clic en runner71.tscn (o 72 a 88 y 91 a 111, salvo 89, 90 y 101, que son bancos de medición).
   3. Pulsa F6 (ejecutar escena actual).
   4. Mira el panel «Salida»: cada comprobación imprime «OK» o «FALLO»; al final dice
      «N comprobaciones OK · FALLOS: 0». Si sale algún FALLO, copia esa línea y mándamela.

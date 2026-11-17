@@ -1,9 +1,23 @@
-# Checklist de testing — Gran Estrategia 0.1.8.50
+# Checklist de testing — Gran Estrategia 0.1.8.51
 
 Leyenda: ✅ probado por mí en el servidor (Godot 4.3, sin GPU, con tus datos históricos reales) · 🟡 probado solo parcialmente · ⬜ NO probado (lo pruebas tú en tu PC).
 Todas las pruebas automáticas se ejecutan con clics, arrastres y teclas simulados sobre el juego real, no sobre una copia del código.
 
 ## A. Pruebas automáticas (las hago yo en cada versión)
+
+### 0.1.8.51 — Modo combate (formaciones y tablero), obras y fortificaciones en el mapa, 22 maravillas únicas y 15 edificios nuevos
+- ✅ Catálogo: **1.959 descubrimientos** (año 1: 386; 2026: 1.928), **178 edificios** (166 con efecto + 12 «solo saber», entre ellos 22 maravillas únicas), 122 enlaces entre ramas, 516 descubrimientos con materias que ayudan; 178 iconos (los 37 nuevos revisados en una hoja de contacto).
+- ✅ `runner108` — motor de combate (`combate.gd`): catálogo de 48 formaciones y 15 tácticas, capacidad del tablero 8 × 5, despliegue, reglas de tiro / caballería / lanceros / terreno / fortificación / formaciones, moral y persecución, determinismo con la misma semilla, rendimiento.
+- ✅ `runner109` — integración: las batallas del jugador de ≥ 2.000 soldados esperan al tablero (`pend_tactica`), «resolver sola» y el plazo de 3 días, el resultado vuelve a las tropas del mapa, las batallas de IA no cambian, la pantalla de combate (abre, coloca, ordena, termina) y Debug > Combate.
+- ✅ `runner110` — capa de obras y fortificaciones (54 comprobaciones): insignia de obra con su anillo, glifos de fortificación por nivel, estrella de maravilla, umbrales de zoom, ráfaga de zoom (se desvanece y se rehace una vez), tope de 400 marcas, la selección redibuja, filas del HUD.
+- ✅ `runner111` — maravillas únicas (42 comprobaciones): una sola en todo el mundo (construida u en obra), el motivo en `puede`, cancelar la libera, conquista, orden de grupo en una provincia, la IA no las construye, `sembrar_iniciales` las salta, estrella en el mapa, ventana Construir con la etiqueta.
+- ✅ Ajustadas a lo nuevo: runner71 (las batallas del jugador esperan al tablero: se apaga `tactico_jugador`), runner77 / runner91 / runner102 (1.959), runner83 / runner88 (178 edificios), runner106 (166 + 12).
+- ✅ Calibración demográfica intacta (runner104): los 77 descubrimientos nuevos caen fuera de las secciones de los índices de saber.
+- ✅ Regresión completa runner71–111 (runner74 con ventana virtual, 221 comprobaciones): **0 fallos** y 0 errores de script.
+- ✅ Auditoría de variables: **1.793 funciones, 0 funciones repetidas, 0 variables repetidas**; un ciclo indirecto nuevo de interfaz (selectores del tablero de práctica); de 548 nombres nuevos solo `donde_unica` no tenía uso en el juego y ya lo tiene; `datos/variables.json` no cambió.
+- ✅ Revisión de rendimiento (runner89 contra la 0.1.8.50, 3 pares el día y 2 pasadas el mapa): día 2026 10,9 → 11,4 ms y 1500 5,0 → 5,0 ms; el mapa no cambia (mismas llamadas de dibujo, fotogramas dentro del ruido); la capa de obras en el peor caso (zoom 8, 33 marcas) cuesta 2,0–2,4 ms por redibujo; memoria 445 → 451 MB. Ver NOTAS_TECNICAS_0.1.8.51.md §3.
+- ⬜ **Nada de esto se ha visto en tu pantalla** (obras, fortificaciones, estrellas y el tablero se probaron por código y en capturas sin GPU, no con tu Intel HD 520).
+- ⬜ **Pedirte:** (1) Debug (F1) > Combate > «Abrir el tablero de práctica»: coloca tus tropas, da la orden y mira si el tablero se entiende y se anima bien; (2) una guerra con un ejército grande (≥ 2.000 soldados) para ver el aviso «batalla» y el tablero de verdad; (3) construye algo en una provincia y haz zoom (desde 2,5) para ver la grúa con su anillo; (4) con el país elegido, zoom ≥ 3: ¿se ve la fortificación?; (5) tecla B: construye una maravilla y mira su estrella; (6) F9: año 1 con todas las IA a x6 y una partida normal de 2026 (siguen pendientes los de la 0.1.8.48).
 
 ### 0.1.8.50 — Tejido del saber II: 36 descubrimientos y 41 enlaces entre ramas
 - ✅ Catálogo: **1.882 descubrimientos** (año 1: 371; 2026: 1.851) y 106 enlaces extra entre ramas con su porqué (65 + 41); el generador valida requisitos, ciclos, años y eras.
