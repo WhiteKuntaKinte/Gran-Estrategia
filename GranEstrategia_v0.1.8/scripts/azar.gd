@@ -8,7 +8,7 @@ extends RefCounted
 ## Solo usa enteros de 32 bits (los productos caben en 64 bits sin desbordar), así que da lo mismo en cualquier equipo.
 ##
 ## Temas (el segundo número) en uso: 1 riesgo mensual de un descubrimiento · 2 qué país lo descubre · 3 tardanza de un contacto · 4 vocación de un país por sección ·
-## 5 viajeros lejanos · 6 aceptación por edificios (muestreo con rechazo). Quien añada uno debe sumarlo aquí para no repetir.
+## 5 viajeros lejanos · 6 aceptación por edificios (muestreo con rechazo) · 7 ruido de cada ataque en una batalla (combate.gd). Quien añada uno debe sumarlo aquí para no repetir.
 
 const MASCARA := 0xFFFFFFFF
 const K := 0x45D9F3B

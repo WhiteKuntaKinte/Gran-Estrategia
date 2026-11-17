@@ -1,0 +1,17 @@
+## +MIL|TAC
+### Formaciones y órdenes de batalla
+falange_oblicua|Orden oblicuo tebano|3|T|falange,estrategia_clasica
+cuna_de_caballeria|Cuña de caballería|3|T|caballeria_ligera,ejercito_profesional
+testudo_romana|Testudo|3|T|legion_manipular,escudo_romano_scutum
+cuna_nordica|Cuña nórdica|4|T|formacion_tribal,disciplina_formacion
+tumen_mongol|Tumen y retirada fingida|4|T|jinetes_arqueros_nomadas,keshig_mongol
+caracol_reiters|Caracol de pistoleros|5|T|reiters_pistoleros
+brigada_sueca|Brigada sueca|5|T|tercios_formacion_mixta,canon_bronce
+orden_oblicuo|Orden oblicuo|6|T|tactica_linea,fuego_de_pelotones
+tactica_guerra_montana|Guerra de montaña|7|T|cazadores_montana
+combate_urbano|Combate urbano|8|T|tactica_infiltracion,tropas_asalto_trinchera
+desembarco_anfibio|Desembarco anfibio|8|T|infanteria_anfibia
+cercos_y_bolsas|Cercos y bolsas|8|T|guerra_relampago
+operaciones_profundas|Operaciones en profundidad|8|T|armas_combinadas
+defensa_erizo|Defensa en erizo|8|T|defensa_en_profundidad
+operaciones_conjuntas|Operaciones conjuntas|9|T|doctrina_batalla_aeroterrestre

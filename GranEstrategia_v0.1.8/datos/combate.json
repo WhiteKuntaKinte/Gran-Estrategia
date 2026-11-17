@@ -1,0 +1,2994 @@
+{
+ "version": "0.1.8.51",
+ "ayuda": "Generado por herramientas/construir_combate.py; no se edita a mano. Arma = clase de tropa; la matriz va de atacante (fila) a defensor (columna) en el orden de «armas».",
+ "armas": [
+  {
+   "cod": "P",
+   "slug": "inf_pesada",
+   "nombre": "Infantería pesada",
+   "atq": 1.0,
+   "tiro": 0.0,
+   "def": 1.2,
+   "mov": 1,
+   "alc": 1,
+   "moral": 1.0,
+   "peso": 1.0,
+   "color": "#9aa7c0",
+   "glifo": "▣"
+  },
+  {
+   "cod": "L",
+   "slug": "lanceros",
+   "nombre": "Lanceros y piqueros",
+   "atq": 0.8,
+   "tiro": 0.0,
+   "def": 1.0,
+   "mov": 1,
+   "alc": 1,
+   "moral": 1.0,
+   "peso": 1.0,
+   "color": "#c9b37a",
+   "glifo": "⫿"
+  },
+  {
+   "cod": "I",
+   "slug": "inf_ligera",
+   "nombre": "Infantería ligera",
+   "atq": 0.6,
+   "tiro": 0.5,
+   "def": 0.7,
+   "mov": 2,
+   "alc": 2,
+   "moral": 0.8,
+   "peso": 0.8,
+   "color": "#8fc18a",
+   "glifo": "◇"
+  },
+  {
+   "cod": "T",
+   "slug": "tiradores",
+   "nombre": "Arqueros y ballesteros",
+   "atq": 0.3,
+   "tiro": 1.1,
+   "def": 0.6,
+   "mov": 1,
+   "alc": 3,
+   "moral": 0.8,
+   "peso": 0.9,
+   "color": "#d9a066",
+   "glifo": "➶"
+  },
+  {
+   "cod": "F",
+   "slug": "fusileros",
+   "nombre": "Fusileros y tiradores de fuego",
+   "atq": 0.4,
+   "tiro": 1.3,
+   "def": 0.8,
+   "mov": 1,
+   "alc": 3,
+   "moral": 1.0,
+   "peso": 1.0,
+   "color": "#e2c35a",
+   "glifo": "⁍"
+  },
+  {
+   "cod": "C",
+   "slug": "cab_pesada",
+   "nombre": "Caballería pesada y carros",
+   "atq": 1.5,
+   "tiro": 0.0,
+   "def": 1.1,
+   "mov": 2,
+   "alc": 1,
+   "moral": 1.1,
+   "peso": 0.7,
+   "color": "#d46a6a",
+   "glifo": "♞"
+  },
+  {
+   "cod": "c",
+   "slug": "cab_ligera",
+   "nombre": "Caballería ligera",
+   "atq": 0.9,
+   "tiro": 0.4,
+   "def": 0.8,
+   "mov": 3,
+   "alc": 1,
+   "moral": 0.9,
+   "peso": 0.6,
+   "color": "#e39a9a",
+   "glifo": "♘"
+  },
+  {
+   "cod": "A",
+   "slug": "artilleria",
+   "nombre": "Artillería y asedio",
+   "atq": 0.2,
+   "tiro": 1.8,
+   "def": 0.5,
+   "mov": 1,
+   "alc": 4,
+   "moral": 0.7,
+   "peso": 0.4,
+   "color": "#b08968",
+   "glifo": "✹"
+  },
+  {
+   "cod": "B",
+   "slug": "blindados",
+   "nombre": "Blindados y mecanizados",
+   "atq": 1.8,
+   "tiro": 1.2,
+   "def": 2.0,
+   "mov": 2,
+   "alc": 2,
+   "moral": 1.2,
+   "peso": 0.5,
+   "color": "#7aa6d6",
+   "glifo": "⬢"
+  },
+  {
+   "cod": "V",
+   "slug": "aviacion",
+   "nombre": "Apoyo aéreo",
+   "atq": 0.0,
+   "tiro": 1.6,
+   "def": 0.7,
+   "mov": 4,
+   "alc": 8,
+   "moral": 1.0,
+   "peso": 0.3,
+   "color": "#a58fd6",
+   "glifo": "✈"
+  }
+ ],
+ "matriz": [
+  [
+   1.0,
+   0.9,
+   1.3,
+   1.4,
+   1.2,
+   0.9,
+   1.2,
+   1.5,
+   0.6,
+   0.5
+  ],
+  [
+   0.9,
+   1.0,
+   1.1,
+   1.1,
+   1.0,
+   2.0,
+   1.7,
+   1.2,
+   0.4,
+   0.3
+  ],
+  [
+   0.7,
+   0.8,
+   1.0,
+   1.2,
+   1.0,
+   0.6,
+   0.9,
+   1.3,
+   0.4,
+   0.4
+  ],
+  [
+   1.2,
+   1.3,
+   1.1,
+   1.0,
+   0.9,
+   1.1,
+   1.3,
+   1.2,
+   0.3,
+   0.5
+  ],
+  [
+   1.3,
+   1.3,
+   1.3,
+   1.2,
+   1.0,
+   1.7,
+   1.5,
+   1.3,
+   0.5,
+   0.7
+  ],
+  [
+   1.2,
+   0.5,
+   1.5,
+   1.7,
+   1.1,
+   1.0,
+   1.2,
+   1.9,
+   0.3,
+   0.2
+  ],
+  [
+   0.7,
+   0.6,
+   1.4,
+   1.6,
+   1.2,
+   0.7,
+   1.0,
+   1.7,
+   0.3,
+   0.2
+  ],
+  [
+   1.5,
+   1.5,
+   1.4,
+   1.2,
+   1.3,
+   1.3,
+   1.2,
+   1.3,
+   1.2,
+   0.4
+  ],
+  [
+   2.2,
+   2.2,
+   2.0,
+   1.9,
+   1.5,
+   2.2,
+   2.0,
+   2.0,
+   1.0,
+   0.3
+  ],
+  [
+   1.5,
+   1.5,
+   1.4,
+   1.4,
+   1.4,
+   1.5,
+   1.5,
+   1.8,
+   1.5,
+   0.8
+  ]
+ ],
+ "tropas": [
+  [
+   "milicia_cazadores",
+   "I",
+   0.5
+  ],
+  [
+   "guerreros_tribales",
+   "P",
+   0.55
+  ],
+  [
+   "honderos",
+   "I",
+   0.55
+  ],
+  [
+   "arqueros_tribales",
+   "T",
+   0.55
+  ],
+  [
+   "lanceros",
+   "L",
+   0.7
+  ],
+  [
+   "espadachines_bronce",
+   "P",
+   0.75
+  ],
+  [
+   "jabalineros",
+   "I",
+   0.65
+  ],
+  [
+   "carros_guerra",
+   "C",
+   0.8
+  ],
+  [
+   "guardia_real",
+   "P",
+   0.85
+  ],
+  [
+   "exploradores",
+   "I",
+   0.6
+  ],
+  [
+   "hoplitas",
+   "P",
+   0.95
+  ],
+  [
+   "falangitas",
+   "L",
+   1.05
+  ],
+  [
+   "legionarios",
+   "P",
+   1.15
+  ],
+  [
+   "guardia_pretoriana",
+   "P",
+   1.25
+  ],
+  [
+   "arqueros_montados",
+   "c",
+   1.0
+  ],
+  [
+   "caballeria_ligera",
+   "c",
+   0.95
+  ],
+  [
+   "caballeria_pesada_catafracta",
+   "C",
+   1.1
+  ],
+  [
+   "ballesteros",
+   "T",
+   0.95
+  ],
+  [
+   "elefantes_guerra",
+   "C",
+   1.2
+  ],
+  [
+   "camelleros",
+   "c",
+   0.9
+  ],
+  [
+   "mercenarios",
+   "P",
+   0.9
+  ],
+  [
+   "marines_infanteria_marina",
+   "P",
+   1.0
+  ],
+  [
+   "inmortales_persas",
+   "P",
+   1.1
+  ],
+  [
+   "peltastas",
+   "I",
+   0.9
+  ],
+  [
+   "catapulta_torsion",
+   "A",
+   0.9
+  ],
+  [
+   "balista",
+   "A",
+   0.9
+  ],
+  [
+   "onagro",
+   "A",
+   1.0
+  ],
+  [
+   "caballeros_feudales",
+   "C",
+   1.3
+  ],
+  [
+   "infanteria_pesada_medieval",
+   "P",
+   1.2
+  ],
+  [
+   "arqueros_largos",
+   "T",
+   1.3
+  ],
+  [
+   "ballesteros_profesionales",
+   "T",
+   1.2
+  ],
+  [
+   "jinetes_arqueros_nomadas",
+   "c",
+   1.2
+  ],
+  [
+   "samurai",
+   "P",
+   1.3
+  ],
+  [
+   "ordenes_militares",
+   "C",
+   1.35
+  ],
+  [
+   "huscarls_nordicos",
+   "P",
+   1.25
+  ],
+  [
+   "mamelucos",
+   "C",
+   1.3
+  ],
+  [
+   "keshig_mongol",
+   "c",
+   1.35
+  ],
+  [
+   "guerreros_aguila_jaguar",
+   "P",
+   1.0
+  ],
+  [
+   "huestes_incas",
+   "I",
+   0.95
+  ],
+  [
+   "trabuquete",
+   "A",
+   1.2
+  ],
+  [
+   "piqueros",
+   "L",
+   1.4
+  ],
+  [
+   "arcabuceros",
+   "F",
+   1.35
+  ],
+  [
+   "reiters_pistoleros",
+   "C",
+   1.45
+  ],
+  [
+   "condotieros",
+   "P",
+   1.4
+  ],
+  [
+   "tercios",
+   "L",
+   1.6
+  ],
+  [
+   "jenizaros",
+   "F",
+   1.5
+  ],
+  [
+   "conquistadores",
+   "P",
+   1.5
+  ],
+  [
+   "cosacos",
+   "c",
+   1.4
+  ],
+  [
+   "corsarios",
+   "I",
+   1.2
+  ],
+  [
+   "carro_fortificado_wagenburg",
+   "B",
+   1.3
+  ],
+  [
+   "canon_bombarda",
+   "A",
+   1.5
+  ],
+  [
+   "canon_bronce",
+   "A",
+   1.7
+  ],
+  [
+   "canon_hierro_colado",
+   "A",
+   1.8
+  ],
+  [
+   "mosqueteros",
+   "F",
+   1.7
+  ],
+  [
+   "granaderos",
+   "F",
+   1.85
+  ],
+  [
+   "dragones",
+   "c",
+   1.7
+  ],
+  [
+   "infanteria_linea",
+   "F",
+   1.9
+  ],
+  [
+   "fusileros_rayados",
+   "F",
+   2.1
+  ],
+  [
+   "artilleros",
+   "A",
+   1.9
+  ],
+  [
+   "ingenieros_zapadores",
+   "A",
+   1.7
+  ],
+  [
+   "caballeria_coraceros_husares",
+   "C",
+   1.8
+  ],
+  [
+   "levee_en_masse",
+   "F",
+   1.7
+  ],
+  [
+   "guerrilleros",
+   "I",
+   1.5
+  ],
+  [
+   "marineria_de_linea",
+   "I",
+   1.4
+  ],
+  [
+   "artilleria_campana_ligera",
+   "A",
+   2.0
+  ],
+  [
+   "obus",
+   "A",
+   2.2
+  ],
+  [
+   "infanteria_fusil_percusion",
+   "F",
+   2.4
+  ],
+  [
+   "caballeria_carabina",
+   "c",
+   2.1
+  ],
+  [
+   "ametralladoristas",
+   "F",
+   2.9
+  ],
+  [
+   "ejercito_conscripcion_masiva",
+   "F",
+   2.3
+  ],
+  [
+   "reserva_movilizacion",
+   "F",
+   2.3
+  ],
+  [
+   "policia_militar",
+   "I",
+   1.8
+  ],
+  [
+   "legion_extranjera",
+   "F",
+   2.4
+  ],
+  [
+   "tropas_coloniales",
+   "F",
+   2.3
+  ],
+  [
+   "cazadores_montana",
+   "I",
+   2.3
+  ],
+  [
+   "canon_acero",
+   "A",
+   2.7
+  ],
+  [
+   "canon_rayado_retrocarga",
+   "A",
+   2.8
+  ],
+  [
+   "canon_campana_rapido",
+   "A",
+   3.2
+  ],
+  [
+   "obus_pesado",
+   "A",
+   3.3
+  ],
+  [
+   "tropas_asalto_trinchera",
+   "P",
+   3.2
+  ],
+  [
+   "infanteria_motorizada",
+   "F",
+   3.4
+  ],
+  [
+   "infanteria_mecanizada",
+   "B",
+   3.8
+  ],
+  [
+   "tanquistas",
+   "B",
+   4.2
+  ],
+  [
+   "paracaidistas",
+   "F",
+   3.6
+  ],
+  [
+   "infanteria_planeador",
+   "F",
+   3.4
+  ],
+  [
+   "fuerzas_especiales",
+   "I",
+   3.8
+  ],
+  [
+   "francotiradores",
+   "T",
+   3.0
+  ],
+  [
+   "cazacarros",
+   "F",
+   3.5
+  ],
+  [
+   "infanteria_anfibia",
+   "F",
+   3.6
+  ],
+  [
+   "partisanos",
+   "I",
+   2.8
+  ],
+  [
+   "buzos_combate",
+   "I",
+   3.2
+  ],
+  [
+   "artilleria_autopropulsada",
+   "A",
+   4.0
+  ],
+  [
+   "lanzacohetes_multiple",
+   "A",
+   4.5
+  ],
+  [
+   "automovil_blindado",
+   "B",
+   3.2
+  ],
+  [
+   "tanque_pesado_primera_guerra",
+   "B",
+   3.4
+  ],
+  [
+   "tanque_ligero",
+   "B",
+   3.6
+  ],
+  [
+   "tanque_medio",
+   "B",
+   4.0
+  ],
+  [
+   "tanque_pesado",
+   "B",
+   4.4
+  ],
+  [
+   "caza_biplano",
+   "V",
+   3.4
+  ],
+  [
+   "bombardero_ligero",
+   "V",
+   3.6
+  ],
+  [
+   "caza_monoplano",
+   "V",
+   4.2
+  ],
+  [
+   "bombardero_en_picado",
+   "V",
+   4.4
+  ],
+  [
+   "bombardero_pesado",
+   "V",
+   4.6
+  ],
+  [
+   "infanteria_aerotransportada_helicoptero",
+   "c",
+   5.0
+  ],
+  [
+   "infanteria_moderna_conectada",
+   "F",
+   5.0
+  ],
+  [
+   "cascos_azules",
+   "F",
+   4.0
+  ],
+  [
+   "contratistas_privados",
+   "I",
+   4.2
+  ],
+  [
+   "obus_autopropulsado_moderno",
+   "A",
+   5.2
+  ],
+  [
+   "municion_guiada",
+   "A",
+   6.0
+  ],
+  [
+   "artilleria_cohete_guiada",
+   "A",
+   6.5
+  ],
+  [
+   "vehiculo_combate_infanteria",
+   "B",
+   5.2
+  ],
+  [
+   "tanque_batalla_principal",
+   "B",
+   5.8
+  ],
+  [
+   "caza_reaccion",
+   "V",
+   5.5
+  ],
+  [
+   "bombardero_estrategico_reaccion",
+   "V",
+   5.8
+  ],
+  [
+   "caza_supersonico",
+   "V",
+   6.2
+  ],
+  [
+   "helicoptero_ataque",
+   "V",
+   6.0
+  ],
+  [
+   "operadores_drones",
+   "V",
+   6.0
+  ],
+  [
+   "soldado_digital",
+   "F",
+   6.0
+  ],
+  [
+   "infanteria_robotica",
+   "B",
+   7.0
+  ],
+  [
+   "fuerzas_espaciales",
+   "V",
+   7.0
+  ],
+  [
+   "infanteria_exoesqueleto",
+   "P",
+   6.5
+  ],
+  [
+   "tanque_digital",
+   "B",
+   7.0
+  ],
+  [
+   "vehiculo_terrestre_no_tripulado",
+   "B",
+   7.5
+  ],
+  [
+   "dron_armado",
+   "V",
+   7.0
+  ],
+  [
+   "caza_quinta_generacion",
+   "V",
+   8.0
+  ],
+  [
+   "dron_combate_avanzado",
+   "V",
+   8.5
+  ],
+  [
+   "misil_hipersonico",
+   "V",
+   9.5
+  ],
+  [
+   "canon_electromagnetico",
+   "A",
+   9.0
+  ],
+  [
+   "soldado_biomejorado",
+   "P",
+   8.0
+  ],
+  [
+   "combatiente_cibernetico",
+   "F",
+   9.0
+  ],
+  [
+   "enjambre_autonomo",
+   "V",
+   9.0
+  ],
+  [
+   "legion_androides",
+   "P",
+   10.0
+  ],
+  [
+   "tropas_clonadas",
+   "F",
+   8.0
+  ],
+  [
+   "criaturas_bioingenieria",
+   "C",
+   9.0
+  ],
+  [
+   "nanoenjambre_combate",
+   "V",
+   11.0
+  ],
+  [
+   "tropas_orbitales",
+   "V",
+   10.0
+  ],
+  [
+   "infanteria_espacial",
+   "F",
+   10.0
+  ]
+ ],
+ "mejoras": [
+  {
+   "req": "cazacarros",
+   "arma": "F",
+   "contra": "B",
+   "mult": 2.5,
+   "texto": "Cazacarros de infantería: los fusileros ya pueden con un blindado"
+  },
+  {
+   "req": "bazuca_antitanque",
+   "arma": "F",
+   "contra": "B",
+   "mult": 3.0,
+   "texto": "Bazuca: la infantería rompe blindados"
+  },
+  {
+   "req": "misil_antitanque_guiado",
+   "arma": "F",
+   "contra": "B",
+   "mult": 3.5,
+   "texto": "Misil antitanque guiado"
+  },
+  {
+   "req": "artilleria_antiaerea",
+   "arma": "F",
+   "contra": "V",
+   "mult": 2.0,
+   "texto": "Artillería antiaérea: el fuego de tierra alcanza a los aviones"
+  },
+  {
+   "req": "defensa_aerea_integrada",
+   "arma": "A",
+   "contra": "V",
+   "mult": 3.0,
+   "texto": "Defensa aérea integrada"
+  },
+  {
+   "req": "canon_antitanque",
+   "arma": "A",
+   "contra": "B",
+   "mult": 2.5,
+   "texto": "Cañón antitanque"
+  },
+  {
+   "req": "lanzallamas",
+   "arma": "P",
+   "contra": "B",
+   "mult": 1.6,
+   "texto": "Lanzallamas contra blindados y búnkeres"
+  }
+ ],
+ "terrenos": [
+  {
+   "cod": "llano",
+   "nombre": "Llanura",
+   "defensor": 1.0,
+   "mods": {
+    "C": 1.2,
+    "c": 1.15,
+    "B": 1.15
+   }
+  },
+  {
+   "cod": "bosque",
+   "nombre": "Bosque",
+   "defensor": 1.08,
+   "mods": {
+    "C": 0.7,
+    "c": 0.8,
+    "B": 0.7,
+    "A": 0.8,
+    "I": 1.2,
+    "T": 0.9
+   }
+  },
+  {
+   "cod": "selva",
+   "nombre": "Selva",
+   "defensor": 1.12,
+   "mods": {
+    "C": 0.55,
+    "c": 0.65,
+    "B": 0.55,
+    "A": 0.65,
+    "I": 1.3,
+    "T": 0.85,
+    "P": 0.9,
+    "V": 0.8
+   }
+  },
+  {
+   "cod": "colina",
+   "nombre": "Colinas",
+   "defensor": 1.12,
+   "mods": {
+    "C": 0.85,
+    "c": 0.9,
+    "B": 0.85,
+    "T": 1.1,
+    "A": 1.1
+   }
+  },
+  {
+   "cod": "montana",
+   "nombre": "Montaña",
+   "defensor": 1.25,
+   "mods": {
+    "C": 0.5,
+    "c": 0.6,
+    "B": 0.4,
+    "A": 0.6,
+    "I": 1.3,
+    "V": 0.85
+   }
+  },
+  {
+   "cod": "desierto",
+   "nombre": "Desierto",
+   "defensor": 1.0,
+   "mods": {
+    "C": 1.1,
+    "c": 1.2,
+    "P": 0.95,
+    "L": 0.95,
+    "B": 1.05
+   }
+  },
+  {
+   "cod": "pantano",
+   "nombre": "Pantano o humedal",
+   "defensor": 1.08,
+   "mods": {
+    "C": 0.5,
+    "c": 0.6,
+    "B": 0.5,
+    "A": 0.6,
+    "P": 0.85,
+    "I": 1.1
+   }
+  },
+  {
+   "cod": "urbano",
+   "nombre": "Ciudad",
+   "defensor": 1.2,
+   "mods": {
+    "C": 0.5,
+    "c": 0.5,
+    "B": 0.7,
+    "A": 0.9,
+    "I": 1.2,
+    "F": 1.2,
+    "T": 1.1
+   }
+  },
+  {
+   "cod": "nieve",
+   "nombre": "Nieve y tundra",
+   "defensor": 1.05,
+   "mods": {
+    "C": 0.7,
+    "c": 0.75,
+    "B": 0.7,
+    "A": 0.8,
+    "P": 0.9,
+    "L": 0.9
+   }
+  }
+ ],
+ "biomas": {
+  "NTF": "bosque",
+  "STF": "bosque",
+  "WTF": "bosque",
+  "TDF": "bosque",
+  "COF": "bosque",
+  "TEF": "selva",
+  "DES": "desierto",
+  "SAV": "llano",
+  "TEG": "llano",
+  "MED": "llano",
+  "TMG": "colina",
+  "LAK": "pantano",
+  "MAN": "pantano",
+  "TUN": "nieve",
+  "ICE": "nieve"
+ },
+ "alt_montana": 2500.0,
+ "alt_colina": 900.0,
+ "formaciones": [
+  {
+   "slug": "formacion_libre",
+   "nombre": "Formación libre",
+   "req": "",
+   "perfil": "flexible",
+   "cuadro": [
+    "R.MM",
+    "R.MM",
+    "RSMM",
+    "R.MM",
+    "R.MM"
+   ],
+   "desc": "Sin orden de batalla: tus tropas de choque delante, las de tiro detrás y la caballería en el centro. Sirve a cualquier ejército.",
+   "atq": 1.0,
+   "tiro": 1.0,
+   "dano": 1.0,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 0,
+   "anio": -10000000,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "emboscada",
+   "nombre": "Emboscada y acecho",
+   "req": "emboscada_acecho",
+   "perfil": "ligera",
+   "cuadro": [
+    "I...",
+    "..I.",
+    "I..I",
+    "..I.",
+    "I..."
+   ],
+   "desc": "Cazadores escondidos que saltan juntos sobre el enemigo: devastadores al principio, frágiles después.",
+   "atq": 1.1,
+   "tiro": 1.0,
+   "dano": 1.2,
+   "flanco": 1.0,
+   "flanqueo": 1.3,
+   "moral": 0,
+   "apertura": 1.7,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 0,
+   "anio": -50000,
+   "terreno": {
+    "llano": 0.85,
+    "bosque": 1.25,
+    "selva": 1.3,
+    "colina": 1.15,
+    "montana": 1.25,
+    "desierto": 0.85,
+    "pantano": 1.05,
+    "urbano": 1.2,
+    "nieve": 1.0
+   },
+   "celdas": 6
+  },
+  {
+   "slug": "horda_tribal",
+   "nombre": "Horda tribal",
+   "req": "formacion_tribal",
+   "perfil": "flexible",
+   "cuadro": [
+    "..IP",
+    "I.PP",
+    ".IPP",
+    "I.PP",
+    "..IP"
+   ],
+   "desc": "Una masa sin orden de guerreros que se lanza de golpe. Pega fuerte pero se rompe pronto.",
+   "atq": 1.1,
+   "tiro": 1.0,
+   "dano": 1.15,
+   "flanco": 1.2,
+   "flanqueo": 1.0,
+   "moral": -9,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 1,
+   "anio": -10000,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "linea_de_choque",
+   "nombre": "Línea de choque",
+   "req": "batalla_campal_organizada",
+   "perfil": "flexible",
+   "cuadro": [
+    "..LP",
+    "..LP",
+    ".TLP",
+    "..LP",
+    "..LP"
+   ],
+   "desc": "La primera batalla organizada: una línea de lanzas y mazas con arqueros que apoyan desde atrás.",
+   "atq": 1.05,
+   "tiro": 1.0,
+   "dano": 1.0,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 2,
+   "anio": -2500,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 11
+  },
+  {
+   "slug": "carros_de_guerra",
+   "nombre": "Carga de carros",
+   "req": "carros_guerra",
+   "perfil": "movil",
+   "cuadro": [
+    "T.CP",
+    "..C.",
+    "T.CP",
+    "..C.",
+    "T.CP"
+   ],
+   "desc": "Carros de guerra que revientan la línea enemiga, con arqueros y guerreros a pie detrás.",
+   "atq": 1.3,
+   "tiro": 1.0,
+   "dano": 1.1,
+   "flanco": 1.2,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.35,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 2,
+   "anio": -2000,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 11
+  },
+  {
+   "slug": "falange_hoplita",
+   "nombre": "Falange hoplita",
+   "req": "falange",
+   "perfil": "cerrada",
+   "cuadro": [
+    "...c",
+    "TPPL",
+    "TPPL",
+    "TPPL",
+    "...c"
+   ],
+   "desc": "Escudos y lanzas en bloque macizo: casi imbatible de frente, vulnerable por los flancos.",
+   "atq": 1.15,
+   "tiro": 1.0,
+   "dano": 0.9,
+   "flanco": 1.6,
+   "flanqueo": 1.0,
+   "moral": 6,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -650,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 0.9,
+    "montana": 0.7,
+    "desierto": 1.0,
+    "pantano": 0.75,
+    "urbano": 0.8,
+    "nieve": 0.85
+   },
+   "celdas": 14
+  },
+  {
+   "slug": "pinza_cannas",
+   "nombre": "Doble envolvimiento",
+   "req": "estrategia_clasica",
+   "perfil": "flexible",
+   "cuadro": [
+    "..CC",
+    ".TLP",
+    ".TPP",
+    ".TLP",
+    "..CC"
+   ],
+   "desc": "Un centro que cede y dos alas que rodean: la jugada de Cannas.",
+   "atq": 1.1,
+   "tiro": 1.0,
+   "dano": 1.0,
+   "flanco": 1.3,
+   "flanqueo": 1.45,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -400,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "falange_oblicua",
+   "nombre": "Orden oblicuo tebano",
+   "req": "falange_oblicua",
+   "perfil": "cerrada",
+   "cuadro": [
+    "..LP",
+    ".TPP",
+    "TPPP",
+    ".TLP",
+    "...P"
+   ],
+   "desc": "Se refuerza un ala y se retrasa la otra: el golpe cae donde el enemigo es más débil.",
+   "atq": 1.2,
+   "tiro": 1.0,
+   "dano": 0.95,
+   "flanco": 1.4,
+   "flanqueo": 1.2,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -371,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 0.9,
+    "montana": 0.7,
+    "desierto": 1.0,
+    "pantano": 0.75,
+    "urbano": 0.8,
+    "nieve": 0.85
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "falange_macedonia",
+   "nombre": "Falange macedonia",
+   "req": "falangitas",
+   "perfil": "cerrada",
+   "cuadro": [
+    "..cC",
+    "ILLL",
+    "ILLL",
+    "ILLL",
+    "..cC"
+   ],
+   "desc": "La sarisa clava al enemigo mientras la caballería de los compañeros lo rodea.",
+   "atq": 1.25,
+   "tiro": 1.0,
+   "dano": 0.85,
+   "flanco": 1.7,
+   "flanqueo": 1.2,
+   "moral": 6,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -350,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 0.9,
+    "montana": 0.7,
+    "desierto": 1.0,
+    "pantano": 0.75,
+    "urbano": 0.8,
+    "nieve": 0.85
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "cuna_caballeria",
+   "nombre": "Cuña de caballería",
+   "req": "cuna_de_caballeria",
+   "perfil": "movil",
+   "cuadro": [
+    "I.c.",
+    "..CC",
+    "T.CC",
+    "..CC",
+    "I.c."
+   ],
+   "desc": "Un triángulo de jinetes que rompe la línea en un punto y la abre en dos.",
+   "atq": 1.35,
+   "tiro": 1.0,
+   "dano": 1.05,
+   "flanco": 1.2,
+   "flanqueo": 1.2,
+   "moral": 0,
+   "apertura": 1.3,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -340,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 11
+  },
+  {
+   "slug": "elefantes_en_linea",
+   "nombre": "Línea de elefantes",
+   "req": "elefantes_guerra",
+   "perfil": "movil",
+   "cuadro": [
+    "I.CP",
+    "TLCP",
+    "I.C.",
+    "TLCP",
+    "I.CP"
+   ],
+   "desc": "Elefantes de guerra en el centro: aplastan lo que tocan, pero un pánico los vuelve contra los suyos.",
+   "atq": 1.3,
+   "tiro": 1.0,
+   "dano": 1.0,
+   "flanco": 1.2,
+   "flanqueo": 1.0,
+   "moral": -5,
+   "apertura": 1.2,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -331,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "legion_manipular",
+   "nombre": "Legión manipular",
+   "req": "legion_manipular",
+   "perfil": "flexible",
+   "cuadro": [
+    "P.IP",
+    ".P.P",
+    "P.IP",
+    ".P.P",
+    "P.IP"
+   ],
+   "desc": "Manípulos en tablero que se relevan: Roma pelea en líneas flexibles que se cierran o se abren.",
+   "atq": 1.1,
+   "tiro": 1.0,
+   "dano": 0.9,
+   "flanco": 1.1,
+   "flanqueo": 1.0,
+   "moral": 6,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -315,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "guerrilla",
+   "nombre": "Guerrilla",
+   "req": "tactica_guerrilla",
+   "perfil": "ligera",
+   "cuadro": [
+    "I.I.",
+    ".I.T",
+    "I.I.",
+    ".T.I",
+    "I.I."
+   ],
+   "desc": "Grupos pequeños que golpean y se pierden en el terreno. Muy fuertes en monte, débiles en campo abierto.",
+   "atq": 0.95,
+   "tiro": 1.0,
+   "dano": 0.6,
+   "flanco": 1.0,
+   "flanqueo": 1.2,
+   "moral": 0,
+   "apertura": 1.3,
+   "res": {
+    "F": 0.75,
+    "T": 0.8,
+    "A": 0.7,
+    "V": 0.8
+   },
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -217,
+   "terreno": {
+    "llano": 0.85,
+    "bosque": 1.25,
+    "selva": 1.3,
+    "colina": 1.15,
+    "montana": 1.25,
+    "desierto": 0.85,
+    "pantano": 1.05,
+    "urbano": 1.2,
+    "nieve": 1.0
+   },
+   "celdas": 10
+  },
+  {
+   "slug": "testudo",
+   "nombre": "Testudo",
+   "req": "testudo_romana",
+   "perfil": "defensiva",
+   "cuadro": [
+    "..PP",
+    "TPPP",
+    "TPPP",
+    "TPPP",
+    "..PP"
+   ],
+   "desc": "El caparazón de escudos: casi inmune a las flechas, lento y poco ofensivo.",
+   "atq": 0.8,
+   "tiro": 1.0,
+   "dano": 0.8,
+   "flanco": 1.2,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {
+    "T": 0.45,
+    "F": 0.8,
+    "A": 0.9
+   },
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -200,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "cohortes",
+   "nombre": "Orden de cohortes",
+   "req": "cohortes_legionarias",
+   "perfil": "flexible",
+   "cuadro": [
+    ".A.P",
+    "TPPP",
+    "TPPP",
+    "TPPP",
+    ".A.P"
+   ],
+   "desc": "Cohortes de 480 hombres con balistas: un bloque profesional que aguanta y avanza.",
+   "atq": 1.2,
+   "tiro": 1.0,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 9,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 3,
+   "anio": -107,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "horda_nomada",
+   "nombre": "Táctica nómada",
+   "req": "jinetes_arqueros_nomadas",
+   "perfil": "movil",
+   "cuadro": [
+    "...c",
+    "c.cc",
+    "...c",
+    "c.cc",
+    "...c"
+   ],
+   "desc": "Jinetes arqueros que disparan, se retiran y vuelven: desgastan al enemigo sin dejarse alcanzar.",
+   "atq": 0.9,
+   "tiro": 1.25,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.2,
+   "res": {},
+   "atrinch": false,
+   "mov": 1,
+   "era": 4,
+   "anio": 500,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 9
+  },
+  {
+   "slug": "cuna_nordica",
+   "nombre": "Cuña nórdica",
+   "req": "cuna_nordica",
+   "perfil": "flexible",
+   "cuadro": [
+    "..P.",
+    "T.PP",
+    "..PP",
+    "T.PP",
+    "..P."
+   ],
+   "desc": "El «hocico de cerdo» de los guerreros del norte: una cuña de hachas que se hunde en el centro.",
+   "atq": 1.3,
+   "tiro": 1.0,
+   "dano": 1.0,
+   "flanco": 1.3,
+   "flanqueo": 1.0,
+   "moral": 4,
+   "apertura": 1.2,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 4,
+   "anio": 800,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 10
+  },
+  {
+   "slug": "carga_feudal",
+   "nombre": "Carga de caballería pesada",
+   "req": "carga_caballeria_pesada",
+   "perfil": "movil",
+   "cuadro": [
+    "...c",
+    "TLCC",
+    "..CC",
+    "TLCC",
+    "...c"
+   ],
+   "desc": "Caballeros acorazados en cuña: el primer choque decide la batalla.",
+   "atq": 1.4,
+   "tiro": 1.0,
+   "dano": 1.05,
+   "flanco": 1.2,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.45,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 4,
+   "anio": 1000,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 12
+  },
+  {
+   "slug": "muro_de_escudos",
+   "nombre": "Muro de escudos",
+   "req": "huscarls_nordicos",
+   "perfil": "defensiva",
+   "cuadro": [
+    "T.PP",
+    "T.PP",
+    "T.PP",
+    "T.PP",
+    "T.PP"
+   ],
+   "desc": "Escudo contra escudo, sin huecos: un muro humano que se sostiene hasta que alguien cae.",
+   "atq": 1.0,
+   "tiro": 1.0,
+   "dano": 0.8,
+   "flanco": 1.5,
+   "flanqueo": 1.0,
+   "moral": 10,
+   "apertura": 1.0,
+   "res": {
+    "T": 0.7
+   },
+   "atrinch": false,
+   "mov": 0,
+   "era": 4,
+   "anio": 1016,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "tumen_mongol",
+   "nombre": "Tumen mongol",
+   "req": "tumen_mongol",
+   "perfil": "movil",
+   "cuadro": [
+    "..cc",
+    "c.CC",
+    "..cc",
+    "c.CC",
+    "..cc"
+   ],
+   "desc": "Diez mil jinetes que fingen huir para romper al enemigo cuando se desordena.",
+   "atq": 1.1,
+   "tiro": 1.3,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.4,
+   "moral": 0,
+   "apertura": 1.3,
+   "res": {},
+   "atrinch": false,
+   "mov": 1,
+   "era": 4,
+   "anio": 1206,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 12
+  },
+  {
+   "slug": "arqueros_en_masa",
+   "nombre": "Arqueros en masa",
+   "req": "tactica_arqueros_masa",
+   "perfil": "defensiva",
+   "cuadro": [
+    "TT.L",
+    "TT.P",
+    "TT.L",
+    "TT.P",
+    "TT.L"
+   ],
+   "desc": "Estacas delante y lluvias de flechas desde atrás: el arco largo detiene cargas de caballería.",
+   "atq": 0.8,
+   "tiro": 1.35,
+   "dano": 0.8,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {
+    "C": 0.6,
+    "c": 0.7
+   },
+   "atrinch": true,
+   "mov": 0,
+   "era": 4,
+   "anio": 1346,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "cuadro_piqueros",
+   "nombre": "Cuadro de piqueros",
+   "req": "tactica_cuadro_piqueros",
+   "perfil": "defensiva",
+   "cuadro": [
+    "T.LL",
+    "TLLL",
+    "TLLL",
+    "TLLL",
+    "T.LL"
+   ],
+   "desc": "Un erizo de picas: la caballería no puede con él, pero un cañón sí.",
+   "atq": 0.9,
+   "tiro": 1.0,
+   "dano": 0.9,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {
+    "C": 0.55,
+    "c": 0.6
+   },
+   "atrinch": false,
+   "mov": 0,
+   "era": 5,
+   "anio": 1450,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 18
+  },
+  {
+   "slug": "tercio",
+   "nombre": "Tercio",
+   "req": "tercios_formacion_mixta",
+   "perfil": "defensiva",
+   "cuadro": [
+    "FF.L",
+    "FLLL",
+    "FLLL",
+    "FLLL",
+    "FF.L"
+   ],
+   "desc": "Piqueros en el centro y mangas de arcabuceros en las esquinas: la infantería más temida del siglo XVI.",
+   "atq": 1.0,
+   "tiro": 1.2,
+   "dano": 0.9,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 10,
+   "apertura": 1.0,
+   "res": {
+    "C": 0.55,
+    "c": 0.6
+   },
+   "atrinch": false,
+   "mov": 0,
+   "era": 5,
+   "anio": 1500,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 18
+  },
+  {
+   "slug": "caracol_reiter",
+   "nombre": "Caracol de pistoleros",
+   "req": "caracol_reiters",
+   "perfil": "movil",
+   "cuadro": [
+    "c.CC",
+    "..CC",
+    "c.CC",
+    "..CC",
+    "c.CC"
+   ],
+   "desc": "Filas de jinetes que disparan y dan la vuelta para recargar.",
+   "atq": 1.1,
+   "tiro": 1.2,
+   "dano": 1.0,
+   "flanco": 1.2,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 5,
+   "anio": 1560,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.6,
+    "selva": 0.5,
+    "colina": 0.85,
+    "montana": 0.5,
+    "desierto": 1.2,
+    "pantano": 0.5,
+    "urbano": 0.5,
+    "nieve": 0.8
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "brigada_sueca",
+   "nombre": "Brigada sueca",
+   "req": "brigada_sueca",
+   "perfil": "flexible",
+   "cuadro": [
+    "AF.L",
+    "AFFL",
+    "AFFL",
+    "AFFL",
+    "AF.L"
+   ],
+   "desc": "Brigadas pequeñas y móviles con cañones ligeros: la maniobra de Gustavo Adolfo.",
+   "atq": 1.1,
+   "tiro": 1.3,
+   "dano": 0.95,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 6,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 5,
+   "anio": 1631,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 18
+  },
+  {
+   "slug": "fuego_pelotones",
+   "nombre": "Fuego de pelotones",
+   "req": "fuego_de_pelotones",
+   "perfil": "fuego",
+   "cuadro": [
+    "F.FF",
+    "F.FF",
+    "F.FF",
+    "F.FF",
+    "F.FF"
+   ],
+   "desc": "Pelotones que disparan por turnos: el fuego nunca se interrumpe.",
+   "atq": 0.8,
+   "tiro": 1.45,
+   "dano": 1.0,
+   "flanco": 1.4,
+   "flanqueo": 1.0,
+   "moral": 5,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 6,
+   "anio": 1660,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 1.0,
+    "montana": 0.8,
+    "desierto": 1.05,
+    "pantano": 0.75,
+    "urbano": 0.85,
+    "nieve": 0.85
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "linea_fuego",
+   "nombre": "Línea de fuego",
+   "req": "tactica_linea",
+   "perfil": "fuego",
+   "cuadro": [
+    "c.FF",
+    "..FF",
+    "..FF",
+    "..FF",
+    "c.FF"
+   ],
+   "desc": "Una línea delgada y larga en la que todos disparan a la vez: el siglo de los mosquetes.",
+   "atq": 0.8,
+   "tiro": 1.25,
+   "dano": 1.0,
+   "flanco": 1.5,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 6,
+   "anio": 1660,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 1.0,
+    "montana": 0.8,
+    "desierto": 1.05,
+    "pantano": 0.75,
+    "urbano": 0.85,
+    "nieve": 0.85
+   },
+   "celdas": 12
+  },
+  {
+   "slug": "cuadro_infanteria",
+   "nombre": "Cuadro de infantería",
+   "req": "infanteria_linea",
+   "perfil": "defensiva",
+   "cuadro": [
+    "FFFF",
+    "F..F",
+    "F..F",
+    "F..F",
+    "FFFF"
+   ],
+   "desc": "Un cuadro hueco de fusileros contra la caballería: bayonetas por fuera, oficiales dentro.",
+   "atq": 0.8,
+   "tiro": 1.0,
+   "dano": 0.95,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {
+    "C": 0.5,
+    "c": 0.5
+   },
+   "atrinch": false,
+   "mov": 0,
+   "era": 6,
+   "anio": 1700,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 14
+  },
+  {
+   "slug": "gran_bateria",
+   "nombre": "Gran batería",
+   "req": "artilleros",
+   "perfil": "fuego",
+   "cuadro": [
+    "..FP",
+    "AAAF",
+    "AAAP",
+    "AAAF",
+    "..FP"
+   ],
+   "desc": "Decenas de cañones concentrados que abren un hueco antes de que avance la infantería.",
+   "atq": 0.8,
+   "tiro": 1.5,
+   "dano": 1.1,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 6,
+   "anio": 1700,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 1.0,
+    "montana": 0.8,
+    "desierto": 1.05,
+    "pantano": 0.75,
+    "urbano": 0.85,
+    "nieve": 0.85
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "orden_oblicuo",
+   "nombre": "Orden oblicuo",
+   "req": "orden_oblicuo",
+   "perfil": "fuego",
+   "cuadro": [
+    "F.FF",
+    "F.FP",
+    "FPFP",
+    "F.FP",
+    "F.FF"
+   ],
+   "desc": "Federico de Prusia refuerza un ala y destroza el flanco enemigo mientras el resto sostiene.",
+   "atq": 1.1,
+   "tiro": 1.3,
+   "dano": 0.95,
+   "flanco": 1.3,
+   "flanqueo": 1.35,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 6,
+   "anio": 1757,
+   "terreno": {
+    "llano": 1.15,
+    "bosque": 0.8,
+    "selva": 0.7,
+    "colina": 1.0,
+    "montana": 0.8,
+    "desierto": 1.05,
+    "pantano": 0.75,
+    "urbano": 0.85,
+    "nieve": 0.85
+   },
+   "celdas": 16
+  },
+  {
+   "slug": "columna_ataque",
+   "nombre": "Columna de ataque",
+   "req": "tactica_columna_ataque",
+   "perfil": "flexible",
+   "cuadro": [
+    "PPPI",
+    "....",
+    "PPPI",
+    "....",
+    "PPPI"
+   ],
+   "desc": "Columnas profundas tras una pantalla de tiradores: el golpe de la Revolución y de Napoleón.",
+   "atq": 1.35,
+   "tiro": 0.7,
+   "dano": 1.1,
+   "flanco": 1.3,
+   "flanqueo": 1.0,
+   "moral": 8,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 6,
+   "anio": 1793,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 12
+  },
+  {
+   "slug": "guerra_montana",
+   "nombre": "Guerra de montaña",
+   "req": "tactica_guerra_montana",
+   "perfil": "montana",
+   "cuadro": [
+    "I.IF",
+    ".I.T",
+    "I.IF",
+    ".I.T",
+    "I.IF"
+   ],
+   "desc": "Cazadores de monte que se atrincheran en las alturas y bajan al valle solo para rematar.",
+   "atq": 0.9,
+   "tiro": 1.2,
+   "dano": 0.8,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.15,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 7,
+   "anio": 1880,
+   "terreno": {
+    "llano": 0.9,
+    "bosque": 1.1,
+    "selva": 1.05,
+    "colina": 1.2,
+    "montana": 1.35,
+    "desierto": 0.9,
+    "pantano": 0.9,
+    "urbano": 1.0,
+    "nieve": 1.1
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "orden_disperso",
+   "nombre": "Orden disperso",
+   "req": "tactica_dispersion",
+   "perfil": "ligera",
+   "cuadro": [
+    "I.IF",
+    ".F.I",
+    "I.IF",
+    ".F.I",
+    "I.IF"
+   ],
+   "desc": "Tiradores sueltos que aprovechan cada árbol y cada tapia.",
+   "atq": 0.9,
+   "tiro": 1.2,
+   "dano": 0.75,
+   "flanco": 0.9,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 7,
+   "anio": 1886,
+   "terreno": {
+    "llano": 0.85,
+    "bosque": 1.25,
+    "selva": 1.3,
+    "colina": 1.15,
+    "montana": 1.25,
+    "desierto": 0.85,
+    "pantano": 1.05,
+    "urbano": 1.2,
+    "nieve": 1.0
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "linea_trincheras",
+   "nombre": "Línea de trincheras",
+   "req": "guerra_de_trincheras",
+   "perfil": "defensiva",
+   "cuadro": [
+    ".AFF",
+    ".AFF",
+    ".AFF",
+    ".AFF",
+    ".AFF"
+   ],
+   "desc": "Trincheras, alambre y ametralladoras: casi imposible de tomar de frente.",
+   "atq": 0.7,
+   "tiro": 1.2,
+   "dano": 0.6,
+   "flanco": 0.8,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {
+    "C": 0.5,
+    "c": 0.5
+   },
+   "atrinch": true,
+   "mov": 0,
+   "era": 8,
+   "anio": 1914,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "defensa_profundidad",
+   "nombre": "Defensa en profundidad",
+   "req": "defensa_en_profundidad",
+   "perfil": "defensiva",
+   "cuadro": [
+    "BAIF",
+    ".AIF",
+    "BAIF",
+    ".AIF",
+    "BAIF"
+   ],
+   "desc": "Varias líneas de resistencia y una reserva móvil que contraataca donde el enemigo rompe.",
+   "atq": 0.85,
+   "tiro": 1.0,
+   "dano": 0.7,
+   "flanco": 0.8,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": true,
+   "mov": 0,
+   "era": 8,
+   "anio": 1917,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 18
+  },
+  {
+   "slug": "infiltracion",
+   "nombre": "Infiltración",
+   "req": "tactica_infiltracion",
+   "perfil": "flexible",
+   "cuadro": [
+    "A.PI",
+    "..I.",
+    "A.PI",
+    "..I.",
+    "A.PI"
+   ],
+   "desc": "Grupos de asalto que se cuelan por las grietas de la línea enemiga y atacan por detrás.",
+   "atq": 1.3,
+   "tiro": 1.0,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.4,
+   "moral": 0,
+   "apertura": 1.5,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1917,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 0.95,
+    "selva": 0.85,
+    "colina": 1.0,
+    "montana": 0.9,
+    "desierto": 1.0,
+    "pantano": 0.9,
+    "urbano": 0.95,
+    "nieve": 0.95
+   },
+   "celdas": 11
+  },
+  {
+   "slug": "armas_combinadas",
+   "nombre": "Armas combinadas",
+   "req": "armas_combinadas",
+   "perfil": "mecanizada",
+   "cuadro": [
+    "A.BF",
+    "A.FP",
+    "V.BF",
+    "A.FP",
+    "A.BF"
+   ],
+   "desc": "Infantería, blindados, artillería y aviones que se apoyan: cada arma tapa la debilidad de otra.",
+   "atq": 1.25,
+   "tiro": 1.15,
+   "dano": 0.9,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1936,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.7,
+    "selva": 0.6,
+    "colina": 0.9,
+    "montana": 0.6,
+    "desierto": 1.25,
+    "pantano": 0.55,
+    "urbano": 0.75,
+    "nieve": 0.8
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "operaciones_profundas",
+   "nombre": "Operaciones en profundidad",
+   "req": "operaciones_profundas",
+   "perfil": "mecanizada",
+   "cuadro": [
+    "ABBF",
+    "A.BF",
+    "ABBF",
+    "A.BF",
+    "ABBF"
+   ],
+   "desc": "Oleadas sucesivas de blindados que no dejan al enemigo reorganizarse.",
+   "atq": 1.4,
+   "tiro": 1.2,
+   "dano": 0.95,
+   "flanco": 1.0,
+   "flanqueo": 1.3,
+   "moral": 6,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1936,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.7,
+    "selva": 0.6,
+    "colina": 0.9,
+    "montana": 0.6,
+    "desierto": 1.25,
+    "pantano": 0.55,
+    "urbano": 0.75,
+    "nieve": 0.8
+   },
+   "celdas": 18
+  },
+  {
+   "slug": "guerra_relampago",
+   "nombre": "Guerra relámpago",
+   "req": "guerra_relampago",
+   "perfil": "mecanizada",
+   "cuadro": [
+    "V.BB",
+    "..BF",
+    "V.BB",
+    "..BF",
+    "V.BB"
+   ],
+   "desc": "Blindados y aviones en cuña que rompen por un punto, se adentran y desorganizan la retaguardia.",
+   "atq": 1.45,
+   "tiro": 1.1,
+   "dano": 1.0,
+   "flanco": 1.1,
+   "flanqueo": 1.6,
+   "moral": 0,
+   "apertura": 1.2,
+   "res": {},
+   "atrinch": false,
+   "mov": 1,
+   "era": 8,
+   "anio": 1939,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.7,
+    "selva": 0.6,
+    "colina": 0.9,
+    "montana": 0.6,
+    "desierto": 1.25,
+    "pantano": 0.55,
+    "urbano": 0.75,
+    "nieve": 0.8
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "aerotransportada",
+   "nombre": "Operación aerotransportada",
+   "req": "operaciones_aerotransportadas",
+   "perfil": "universal",
+   "cuadro": [
+    "V.FI",
+    "V.FF",
+    "V.FI",
+    "V.FF",
+    "V.FI"
+   ],
+   "desc": "Paracaidistas que caen detrás de la línea mientras la aviación los cubre.",
+   "atq": 1.1,
+   "tiro": 1.1,
+   "dano": 1.0,
+   "flanco": 0.9,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.5,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1940,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.95,
+    "colina": 1.0,
+    "montana": 0.95,
+    "desierto": 1.05,
+    "pantano": 0.95,
+    "urbano": 1.0,
+    "nieve": 0.95
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "cercos_bolsas",
+   "nombre": "Cercos y bolsas",
+   "req": "cercos_y_bolsas",
+   "perfil": "mecanizada",
+   "cuadro": [
+    "V.BB",
+    "..FB",
+    "V.BB",
+    "..FB",
+    "V.BB"
+   ],
+   "desc": "Dos pinzas blindadas que se cierran detrás del enemigo y lo aíslan.",
+   "atq": 1.3,
+   "tiro": 1.0,
+   "dano": 1.0,
+   "flanco": 1.0,
+   "flanqueo": 1.7,
+   "moral": 0,
+   "apertura": 1.15,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1941,
+   "terreno": {
+    "llano": 1.25,
+    "bosque": 0.7,
+    "selva": 0.6,
+    "colina": 0.9,
+    "montana": 0.6,
+    "desierto": 1.25,
+    "pantano": 0.55,
+    "urbano": 0.75,
+    "nieve": 0.8
+   },
+   "celdas": 13
+  },
+  {
+   "slug": "defensa_erizo",
+   "nombre": "Defensa en erizo",
+   "req": "defensa_erizo",
+   "perfil": "defensiva",
+   "cuadro": [
+    "AFIF",
+    "BFPF",
+    "AFIF",
+    "BFPF",
+    "AFIF"
+   ],
+   "desc": "Puntos fuertes que se cubren entre sí: rodeados, siguen peleando en todas direcciones.",
+   "atq": 0.85,
+   "tiro": 1.0,
+   "dano": 0.7,
+   "flanco": 0.7,
+   "flanqueo": 1.0,
+   "moral": 10,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": true,
+   "mov": 0,
+   "era": 8,
+   "anio": 1941,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.9,
+    "colina": 1.1,
+    "montana": 1.0,
+    "desierto": 1.0,
+    "pantano": 0.85,
+    "urbano": 1.15,
+    "nieve": 0.95
+   },
+   "celdas": 20
+  },
+  {
+   "slug": "combate_urbano",
+   "nombre": "Combate urbano",
+   "req": "combate_urbano",
+   "perfil": "urbana",
+   "cuadro": [
+    "..FI",
+    "A.FI",
+    "..FP",
+    "A.FI",
+    "..FI"
+   ],
+   "desc": "Casa por casa, esquina por esquina: la infantería manda y los blindados sufren.",
+   "atq": 1.0,
+   "tiro": 1.1,
+   "dano": 0.8,
+   "flanco": 0.9,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1942,
+   "terreno": {
+    "llano": 0.9,
+    "bosque": 1.0,
+    "selva": 0.95,
+    "colina": 1.0,
+    "montana": 1.0,
+    "desierto": 0.9,
+    "pantano": 0.95,
+    "urbano": 1.3,
+    "nieve": 0.95
+   },
+   "celdas": 12
+  },
+  {
+   "slug": "desembarco",
+   "nombre": "Desembarco anfibio",
+   "req": "desembarco_anfibio",
+   "perfil": "anfibia",
+   "cuadro": [
+    "V.FP",
+    "A.FP",
+    "V.FP",
+    "A.FP",
+    "V.FP"
+   ],
+   "desc": "Infantería de marina bajo el fuego naval y aéreo: la playa se toma con el primer escalón.",
+   "atq": 1.1,
+   "tiro": 1.1,
+   "dano": 1.05,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.25,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 8,
+   "anio": 1943,
+   "terreno": {
+    "llano": 1.0,
+    "bosque": 0.95,
+    "selva": 0.95,
+    "colina": 0.95,
+    "montana": 0.85,
+    "desierto": 1.0,
+    "pantano": 1.05,
+    "urbano": 0.95,
+    "nieve": 0.9
+   },
+   "celdas": 15
+  },
+  {
+   "slug": "aeroterrestre",
+   "nombre": "Batalla aeroterrestre",
+   "req": "doctrina_batalla_aeroterrestre",
+   "perfil": "universal",
+   "cuadro": [
+    "VABF",
+    "VAFF",
+    "VABF",
+    "VAFF",
+    "VABF"
+   ],
+   "desc": "Helicópteros, aviones, blindados y artillería coordinados al segundo.",
+   "atq": 1.4,
+   "tiro": 1.3,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.2,
+   "moral": 0,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 9,
+   "anio": 1982,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.95,
+    "colina": 1.0,
+    "montana": 0.95,
+    "desierto": 1.05,
+    "pantano": 0.95,
+    "urbano": 1.0,
+    "nieve": 0.95
+   },
+   "celdas": 20
+  },
+  {
+   "slug": "operaciones_conjuntas",
+   "nombre": "Operaciones conjuntas",
+   "req": "operaciones_conjuntas",
+   "perfil": "universal",
+   "cuadro": [
+    "VABF",
+    "VAFR",
+    "VABF",
+    "VAFR",
+    "VABF"
+   ],
+   "desc": "Tierra, aire y mar bajo un solo mando: se asigna cada fuego a cada blanco.",
+   "atq": 1.45,
+   "tiro": 1.35,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.25,
+   "moral": 8,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 9,
+   "anio": 1991,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.95,
+    "colina": 1.0,
+    "montana": 0.95,
+    "desierto": 1.05,
+    "pantano": 0.95,
+    "urbano": 1.0,
+    "nieve": 0.95
+   },
+   "celdas": 20
+  },
+  {
+   "slug": "guerra_red",
+   "nombre": "Guerra centrada en red",
+   "req": "guerra_red_centrica",
+   "perfil": "universal",
+   "cuadro": [
+    "VABF",
+    "V.FI",
+    "VABF",
+    "V.FI",
+    "VABF"
+   ],
+   "desc": "Cada soldado, vehículo y avión conectado en tiempo real: el que ve primero dispara primero.",
+   "atq": 1.5,
+   "tiro": 1.5,
+   "dano": 0.8,
+   "flanco": 1.0,
+   "flanqueo": 1.4,
+   "moral": 10,
+   "apertura": 1.0,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 10,
+   "anio": 2001,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.95,
+    "colina": 1.0,
+    "montana": 0.95,
+    "desierto": 1.05,
+    "pantano": 0.95,
+    "urbano": 1.0,
+    "nieve": 0.95
+   },
+   "celdas": 18
+  },
+  {
+   "slug": "enjambre_drones",
+   "nombre": "Enjambre de drones",
+   "req": "guerra_enjambre_drones",
+   "perfil": "universal",
+   "cuadro": [
+    "VVVV",
+    "VF.F",
+    "VVVV",
+    "VF.F",
+    "VVVV"
+   ],
+   "desc": "Cientos de drones baratos saturan las defensas y destruyen lo que no pueden detener.",
+   "atq": 1.2,
+   "tiro": 1.6,
+   "dano": 0.85,
+   "flanco": 1.0,
+   "flanqueo": 1.0,
+   "moral": 0,
+   "apertura": 1.3,
+   "res": {},
+   "atrinch": false,
+   "mov": 0,
+   "era": 10,
+   "anio": 2018,
+   "terreno": {
+    "llano": 1.05,
+    "bosque": 1.0,
+    "selva": 0.95,
+    "colina": 1.0,
+    "montana": 0.95,
+    "desierto": 1.05,
+    "pantano": 0.95,
+    "urbano": 1.0,
+    "nieve": 0.95
+   },
+   "celdas": 18
+  }
+ ]
+}
