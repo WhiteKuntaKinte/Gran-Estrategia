@@ -13,6 +13,7 @@ const BDScript := preload("res://scripts/base_datos.gd")
 const DebugScript := preload("res://scripts/debug_menu.gd")
 const PersonalizarScript := preload("res://scripts/personalizar_pais.gd")
 const CapaTropasScript := preload("res://scripts/capa_tropas.gd")
+const CapaObrasScript := preload("res://scripts/capa_obras.gd")
 const FusionScript := preload("res://scripts/fusion_mapa.gd")
 const TerritorioScript := preload("res://scripts/territorio.gd")
 const SubprovinciasScript := preload("res://scripts/subprovincias.gd")
@@ -585,6 +586,7 @@ var debug_menu                 # DebugScript (overlay, mientras está abierto)
 var geo_ventanas: Dictionary = {}   # 0.1.8.38: clave de ventana flotante -> [posición, tamaño] de la última vez que se cerró (así vuelve donde la dejaste)
 var panel_pers                 # PersonalizarScript (ventana "Mi país", mientras está abierta)
 var capa_tropas                # CapaTropasScript: cuadritos de tropas y columnas en marcha sobre el mapa (0.1.7.9.9E)
+var capa_obras                 # CapaObrasScript (0.1.8.51): insignias de obras en marcha (con progreso) y fortificaciones sobre el mapa
 var panel_ordenes:                # manejo de tropas (scripts/hud_tropas.gd): vive DENTRO del HUD de país (pestaña Militar); este atajo lo devuelve
 	get:
 		return hud.tropas if hud != null else null
@@ -997,14 +999,14 @@ var ms_sinc_tot := 0.0
 var rend_ocultas := {}                # capas apagadas desde Debug > Rendimiento (clave -> true): sirve para ver qué capa cuesta más en cada PC
 
 
-## Debug > Rendimiento: apaga o enciende una capa del mapa. Claves: relleno, mar, lagos, costa, fronteras, nombres, ciudades, tropas.
+## Debug > Rendimiento: apaga o enciende una capa del mapa. Claves: relleno, mar, lagos, costa, fronteras, nombres, ciudades, tropas, obras.
 func rend_poner_capa(clave: String, visible_: bool) -> void:
 	if visible_:
 		rend_ocultas.erase(clave)
 	else:
 		rend_ocultas[clave] = true
 	# primero se deja todo como lo dejaría el juego normal, y luego se vuelven a apagar las elegidas
-	for n in [capa_pais, capa_mar, capa_tropas]:
+	for n in [capa_pais, capa_mar, capa_tropas, capa_obras]:
 		if n != null:
 			n.visible = true
 	for n in capa_lagos:
@@ -1046,6 +1048,8 @@ func _aplicar_capas_ocultas() -> void:
 		(ciudades_capas[0] as Node2D).visible = false
 	if rend_ocultas.has("tropas") and capa_tropas != null:
 		capa_tropas.visible = false
+	if rend_ocultas.has("obras") and capa_obras != null:
+		capa_obras.visible = false
 
 
 func _process(delta: float) -> void:
@@ -6537,6 +6541,9 @@ func _crear_capa_tropas() -> void:
 	capa_tropas = CapaTropasScript.new()
 	add_child(capa_tropas)
 	capa_tropas.iniciar(self, fuente_ciudad)
+	capa_obras = CapaObrasScript.new()
+	add_child(capa_obras)
+	capa_obras.iniciar(self, fuente_ciudad)
 
 
 ## Muestra el manejo de tropas de una provincia: el HUD de país en Militar > Regimientos (ya no hay ventana flotante).

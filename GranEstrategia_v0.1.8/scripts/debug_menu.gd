@@ -145,7 +145,7 @@ var _ej_bloquea := false
 
 # Rendimiento
 const CAPAS_REND := [["relleno", "Relleno de países"], ["mar", "Mar"], ["lagos", "Lagos"], ["costa", "Costa"], ["fronteras", "Fronteras"],
-	["nombres", "Nombres de países"], ["ciudades", "Ciudades"], ["tropas", "Tropas"]]
+	["nombres", "Nombres de países"], ["ciudades", "Ciudades"], ["tropas", "Tropas"], ["obras", "Obras y defensas"]]
 # 0.1.8.36: pestaña Descubrimientos
 var lbl_desc_res: Label
 var lbl_desc_lista: Label

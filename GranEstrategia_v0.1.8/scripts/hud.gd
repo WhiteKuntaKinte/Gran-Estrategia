@@ -1959,6 +1959,23 @@ func _card_edificios(pis: Array, una: bool) -> void:
 			_linea(ob_caja, String(ed.nombre[int(o["e"])]), "%d %% · faltan %d d" % [int(roundf(float(o["pct"]))), int(o["falta"])], Tema.TENUE, "edificios/" + String(ed.slug[int(o["e"])]))
 		if filas.size() > 6:
 			_nota(ob_caja, "… y %d obras más." % (filas.size() - 6))
+	if ed.efectos_listos and main.capa_obras != null:                  # 0.1.8.51: la fortificación y las obras también se ven en el mapa (capa_obras.gd)
+		var CO = main.capa_obras
+		if una:
+			var mk: Dictionary = CO.marca_de(int(pis[0]))
+			if int(mk["nivel"]) > 0:
+				_fila(sec, "i_ejercito", "Fortificación", "%s · nivel %d de 5 · +%d %% al poder de los defensores" % [String(CO.NOMBRES_NIVEL[int(mk["nivel"])]), int(mk["nivel"]), int(roundf(float(mk["defensa"]) * 100.0))])
+			else:
+				_fila(sec, "i_ejercito", "Fortificación", "Sin defensas: quien ataca no encuentra ventaja del terreno construido")
+		elif pis.size() <= 3000:
+			var por_nivel := [0, 0, 0, 0, 0, 0]
+			for pi_f in pis:
+				por_nivel[int(CO.marca_de(int(pi_f))["nivel"])] += 1
+			var partes_f := []
+			for nv in range(5, 0, -1):
+				if int(por_nivel[nv]) > 0:
+					partes_f.append("%s× %s" % [fmt_num(float(por_nivel[nv])), String(CO.NOMBRES_NIVEL[nv]).to_lower()])
+			_fila(sec, "i_ejercito", "Fortificaciones", ", ".join(PackedStringArray(partes_f)) if not partes_f.is_empty() else "Ninguna provincia está fortificada")
 	if una and ed.efectos_listos:
 		var efs: PackedStringArray = ed.resumen_efectos(int(pis[0]))
 		if not efs.is_empty():
