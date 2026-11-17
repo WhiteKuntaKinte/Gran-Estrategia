@@ -84,7 +84,7 @@ func prov_de(pais: String) -> int:
 func t_datos() -> void:
 	print("[T] ── Catálogo y variables")
 	var js = JSON.parse_string(FileAccess.get_file_as_string("res://datos/edificios.json"))
-	ok(js is Dictionary and js.get("edificios", []).size() == 141, "datos/edificios.json: 141 edificios")
+	ok(js is Dictionary and js.get("edificios", []).size() == 178, "datos/edificios.json: 178 edificios")
 	var cats := {}
 	for c in js["categorias"]:
 		cats[c["cod"]] = true
@@ -99,12 +99,12 @@ func t_datos() -> void:
 	var m = main.mundo
 	ok(m.edificios != null and m.edificios.listo, "Mundo.edificios cargado")
 	ok(m.cores != null and m.cores.listo, "Mundo.cores cargado")
-	ok(m.edificios.n == 141, "141 edificios en el módulo")
+	ok(m.edificios.n == 178, "178 edificios en el módulo")
 	var sin_desc := 0
 	for e in m.edificios.n:
 		if m.edificios.desc_idx[e] < 0:
 			sin_desc += 1
-	ok(sin_desc == 0, "los 141 edificios tienen su descubrimiento (sin descubrimiento: %d)" % sin_desc)
+	ok(sin_desc == 0, "los 178 edificios tienen su descubrimiento (sin descubrimiento: %d)" % sin_desc)
 	for v in ["edificios", "obras", "num_edificios", "core_nacional", "core_cultural"]:
 		ok(m.bd.vars.has(v), "variable «%s» en la base de datos" % v)
 
@@ -428,7 +428,7 @@ func t_ventana() -> void:
 	ok(w.filas_visibles == conocidos and conocidos > 0, "solo se ven los edificios que conoce el país (%d)" % conocidos)
 	w._chk.set_pressed(true)
 	await fotogramas(1)
-	ok(w.filas_visibles == 141, "«mostrar también lo que no conoces»: los 141 (%d)" % w.filas_visibles)
+	ok(w.filas_visibles == 178, "«mostrar también lo que no conoces»: los 178 (%d)" % w.filas_visibles)
 	w._chk.set_pressed(false)
 	# categorías
 	var cat_con := 0
@@ -535,7 +535,7 @@ func t_grupo() -> void:
 	ok(String(w._lbl_dest.text).begins_with("3 provincias"), "cabecera de grupo: «%s»" % w._lbl_dest.text)
 	var e_ok := -1
 	for e in ed.conocidos(pais):
-		if ed.tope[e] >= 1 and bool(ed.puede(pais, pa, e)["ok"]) and bool(ed.puede(pais, pb, e)["ok"]) and bool(ed.puede(pais, pc, e)["ok"]):
+		if ed.unica[e] == 0 and ed.tope[e] >= 1 and bool(ed.puede(pais, pa, e)["ok"]) and bool(ed.puede(pais, pb, e)["ok"]) and bool(ed.puede(pais, pc, e)["ok"]):
 			e_ok = e
 			break
 	ok(e_ok >= 0, "hay un edificio construible en las tres (%s)" % ed.nombre[e_ok])

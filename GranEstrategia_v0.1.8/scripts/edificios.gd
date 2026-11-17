@@ -532,7 +532,7 @@ func puede_con_costo(pais: String, pi: int, e: int, costo: float) -> Dictionary:
 		return {"ok": false, "motivo": ("Ya está construido." if tope[e] == 1 else "Ya tiene el máximo (%d) en esta provincia." % tope[e])
 			if cantidad(pi, e) >= tope[e] else "Ya hay una obra de este tipo en curso."}
 	if unica[e] == 1:
-		var otra: int = int(_unica_pi.get(e, -1))
+		var otra: int = donde_unica(e)
 		if otra >= 0 and otra != pi:
 			var pr2 = mundo.provincias[otra]
 			var hecha: bool = cantidad(otra, e) > 0

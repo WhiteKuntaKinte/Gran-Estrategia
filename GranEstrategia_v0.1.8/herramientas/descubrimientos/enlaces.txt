@@ -106,3 +106,19 @@ union_supranacional|integracion_regional|Las uniones supranacionales crecen de l
 tratado_no_proliferacion|armas_nucleares|Se prohíbe extender lo que ya existe
 acuerdos_climaticos|derecho_ambiental|Los pactos climáticos son derecho ambiental entre Estados
 criptomonedas|criptografia_clave_publica|El dinero digital se firma con clave pública
+telefono_inteligente|camara_digital|El teléfono inteligente lleva dentro una cámara digital
+telefono_inteligente|sensores_mems|Sus sensores de giro y movimiento son microelectromecánicos
+levitacion_magnetica|motor_electrico|Un motor lineal es el que empuja el tren sin tocar el riel
+energia_geotermica|sismografo|Se perfora donde la sismología y la geología revelan el calor de abajo
+biogas_digestion|fertilizantes_quimicos|El residuo de la digestión se aprovecha como abono
+economia_hidrogeno|celda_solar|El hidrógeno limpio sale de electrolizar agua con electricidad solar
+almacenamiento_red_baterias|energia_solar_comercial|Se guarda el sol del día para la noche
+eolica_marina|astillero|Las turbinas se montan y se llevan al mar con barcos y astilleros
+turismo_de_masas|television_difusion|La televisión vende destinos y estilos de vida al gran público
+control_numerico|motor_electrico|Los servomotores mueven la herramienta con precisión
+plasticos_sinteticos|refinacion_petroleo|Los plásticos se hacen con derivados del petróleo y del carbón
+sonda_interplanetaria|navegacion_inercial|Sin guía inercial una sonda no llega al planeta
+no_proliferacion_nuclear|satelite_alerta_temprana|El tratado se vigila con satélites y detección a distancia
+misil_crucero|radar|El misil de crucero sigue el terreno con radar
+metro_subterraneo|ascensor_seguridad|Las estaciones profundas necesitan ascensores seguros
+helicoptero_naval_antisubmarino|sonar|Sin sonar sumergido el helicóptero no encuentra el submarino

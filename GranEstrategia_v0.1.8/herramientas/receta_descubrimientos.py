@@ -57,6 +57,16 @@ MAT_PALABRAS = [
     (("nuclear", "atomic", "uranio", "fision"), ["Uranio"]), (("litio", "bateria"), ["Litio"]), (("aluminio",), ["Bauxita"]),
     (("fosfato", "abono", "fertiliz"), ["Fosfatos"]), (("vidrio", "cuarzo", "silicio", "semiconduct", "chip$"), ["Cuarzo"]),
     (("oro$", "moneda", "acun"), ["Oro", "Plata"]), (("polvora", "salitre"), ["Sal"]),
+    # 0.1.8.51: más materias que ayudan (siempre son ayuda, nunca un bloqueo; solo cuentan los países que de verdad las producen)
+    (("pesca", "pesquer"), ["Pesca"]), (("madera", "carpinter", "aserr", "astillero", "galeon", "carabela", "barco"), ["Madera"]),
+    (("marmol", "escultura", "cantera", "templo", "piramide", "catedral", "partenon", "coliseo"), ["Mármol"]),
+    (("plomo", "tipografia"), ["Plomo"]), (("zinc", "laton", "galvaniz"), ["Zinc"]), (("niquel",), ["Níquel"]), (("platino", "catalitic"), ["Platino"]),
+    (("diamante", "gema", "joyeria"), ["Diamantes", "Gemas"]), (("grafito", "electrodo"), ["Grafito"]), (("imanes", "tierras", "laser$"), ["Tierras raras"]),
+    (("cobalto", "coltan", "superaleacion"), ["Cobalto", "Coltán"]), (("cromo", "inoxidable", "blindaje"), ["Cromo"]), (("manganeso",), ["Manganeso"]),
+    (("potasa",), ["Potasa"]), (("hormigon", "cemento", "mortero", "ladrillo"), ["Arena"]),
+    (("solar", "eolic", "mareomotriz", "renovable", "hidrogeno"), ["Energía renovable"]), (("geotermic", "geotermica"), ["Energía geotérmica"]),
+    (("hidroelectric", "presa", "turbina"), ["Energía hidroeléctrica"]), (("laboratorio", "investigacion", "cientific"), ["Investigación científica"]),
+    (("turismo",), ["Turismo"]),
 ]
 MAT_REC = {                                                                       # prospectar un recurso es más fácil donde el país ya lo produce
     "rec_cobre": ["Cobre"], "rec_estano": ["Estaño"], "rec_oro_plata": ["Oro", "Plata"], "rec_hierro": ["Hierro"], "rec_plomo": ["Plomo"],

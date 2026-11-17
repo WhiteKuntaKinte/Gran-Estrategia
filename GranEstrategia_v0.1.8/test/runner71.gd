@@ -662,6 +662,7 @@ func run() -> void:
 	await esperar(0.6)
 	m = main.mundo
 	g = m.guerra
+	g.tactico_jugador = false   # 0.1.8.51: estas pruebas miden la resolución automática, sin esperar al tablero
 	ia = m.ia
 	ej = m.ejercito
 	main.reloj.velocidad = 0

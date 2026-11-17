@@ -1,0 +1,53 @@
+## +SOC|ECO
+### Dinero, bancos y bolsa
+patentes_inventos|Patentes de invención|5|G|gremios_artesanos,imprenta
+microfinanzas|Microfinanzas|9|G|banca_comercial,banca_electronica
+zonas_francas|Zonas francas|9|G|aduana_puesto_fronterizo,comercio_larga_distancia
+## +CIE|ENE
+### Fuentes nuevas de energía
+energia_geotermica|Energía geotérmica|8|T|generador_electrico,turbina_hidraulica
+biogas_digestion|Biogás|7|T|quimica_organica,alcantarillado
+economia_hidrogeno|Economía del hidrógeno|10|G|hidrogeno_pila,energia_solar_comercial
+almacenamiento_red_baterias|Almacenamiento de red con baterías|10|T|bateria_litio,red_electrica_nacional
+eolica_marina|Energía eólica marina|10|T|parque_eolico,cable_submarino
+## +CIE|TRA
+### Trenes, aviones y barcos nuevos
+levitacion_magnetica|Trenes de levitación magnética|10|V|tren_alta_velocidad,superconductividad
+turborreactor|Motor a reacción|8|T|turbina_gas,aviacion_motor
+ferry_rodado|Transbordadores rodados|9|V|barco_vapor,automovil
+## +CIE|ELE
+### Electrónica de consumo
+telefono_inteligente|Teléfono inteligente|10|T|telefonia_movil,pantalla_tactil,bateria_litio
+## +CIE|COM
+### Redes y seguridad informática
+cifrado_clave_publica|Cifrado de clave pública|9|T|computadora_digital,supercomputacion
+realidad_virtual|Realidad virtual|9|T|simuladores_entrenamiento,cristal_liquido,supercomputacion
+## +CIE|MAN
+### Materiales y control de máquinas
+control_numerico|Control numérico por computadora|9|T|computadora_digital,produccion_en_serie
+materiales_compuestos|Materiales compuestos|9|T|fibra_vidrio,quimica_polimeros_teoria
+## +CIE|QUI
+### Plásticos y fibras sintéticas
+plasticos_sinteticos|Plásticos sintéticos|8|T|quimica_organica,termoquimica
+superconductores_alta_temperatura|Superconductores de alta temperatura|9|K|superconductividad,quimica_computacional
+## +CIE|AST
+### Sondas y exploración del sistema solar
+sonda_interplanetaria|Sondas interplanetarias|9|T|cohete_liquido,satelite_artificial,radioastronomia
+rover_planetario|Vehículos exploradores de otros mundos|9|V|sonda_interplanetaria,motor_electrico
+## +SOC|DIP
+### Armas y tratados
+no_proliferacion_nuclear|Tratado de no proliferación nuclear|9|A|armas_nucleares,bomba_termonuclear
+## +SOC|CIV
+### Vida pública y bienestar
+turismo_de_masas|Turismo de masas|9|T|aviacion_comercial,automovil
+## +MIL|AIR
+### Helicópteros y drones
+## +MIL|ART
+### Misiles
+misil_crucero|Misil de crucero|9|W|cohete_balistico_aleman,navegacion_inercial
+## +MIL|VEH
+### Carros de combate
+carro_combate_principal|Carro de combate principal|9|V|tanque_pesado,canon_acero
+## +MIL|NAV
+### Submarinos y portaaviones
+helicoptero_naval_antisubmarino|Helicóptero antisubmarino|9|V|helicoptero,sonar

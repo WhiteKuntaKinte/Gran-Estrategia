@@ -149,7 +149,7 @@ func t_descubrimientos() -> void:
 				antes_ok = false
 	ok(bien, "los 37 existen en el catálogo de descubrimientos como tipo B")
 	ok(antes_ok, "ninguno pide algo posterior en el tiempo")
-	ok(d.n == 1934, "el catálogo de descubrimientos tiene 1.934 (%d)" % d.n)
+	ok(d.n == 1959, "el catálogo de descubrimientos tiene 1.959 (%d)" % d.n)
 	ok(ed.anio[ed.indice("piramides_giza")] == -2560 and ed.anio[ed.indice("megatorre_record")] == 2010, "los años históricos: pirámides -2560 y megatorre 2010")
 
 

@@ -1,5 +1,5 @@
 extends Node
-## 0.1.8.36 · PRUEBAS DE LOS DESCUBRIMIENTOS: el catálogo de 1.882 descubrimientos enlazado con el reloj (cada uno con su año).
+## 0.1.8.36 · PRUEBAS DE LOS DESCUBRIMIENTOS: el catálogo de 1.959 descubrimientos enlazado con el reloj (cada uno con su año).
 ## Cubre: datos (coherencia año/prerrequisitos/era dentro del motor), la frontera histórica de cualquier año contra una cuenta por fuerza bruta,
 ## avanzar el reloj año a año == empezar directamente en ese año, saltos del Debug hacia atrás y adelante, estado propio de un país (conceder / quitar),
 ## disponibles, textos de año, el escenario 2026 y el año 1 d. C. dentro del juego, el reloj que trae descubrimientos al cruzar de año, y el coste.
@@ -81,7 +81,7 @@ func t_datos() -> void:
 	var t0 := Time.get_ticks_msec()
 	var d = nuevo()
 	var ms := Time.get_ticks_msec() - t0
-	ok(d.n == 1882, "el catálogo trae 1.882 descubrimientos (%d)" % d.n)
+	ok(d.n == 1959, "el catálogo trae 1.959 descubrimientos (%d)" % d.n)
 	ok(d.idx_de_slug.size() == d.n, "los slugs no se repiten")
 	ok(d.eras.size() == 12 and d.ramas.size() == 3 and d.secciones.size() == 40, "12 eras, 3 ramas, 40 secciones")
 	ok(ms < 400, "leer y armar el catálogo tarda %d ms (< 400)" % ms)
@@ -132,9 +132,9 @@ func t_frontera() -> void:
 	print("[T] ── frontera histórica")
 	var d = nuevo()
 	d.iniciar(1)
-	ok(d.anio_actual == 1 and d.cuenta_f == 371, "año 1 d. C.: la historia conoce 371 descubrimientos (%d)" % d.cuenta_f)
+	ok(d.anio_actual == 1 and d.cuenta_f == 386, "año 1 d. C.: la historia conoce 386 descubrimientos (%d)" % d.cuenta_f)
 	d.iniciar(2026)
-	ok(d.cuenta_f == 1851, "año 2026: la historia conoce 1.851 de 1.882 (%d)" % d.cuenta_f)
+	ok(d.cuenta_f == 1928, "año 2026: la historia conoce 1.928 de 1.959 (%d)" % d.cuenta_f)
 	var fallos_b := 0
 	for a in [-3000000, -50000, -10000, -3500, -3300, -1200, -44, 0, 1, 2, 100, 500, 800, 1000, 1066, 1450, 1500, 1650, 1789, 1800, 1900, 1914, 1945, 1969, 1990, 2000, 2010, 2026, 2027, 2030, 2100]:
 		d.iniciar(a)
@@ -172,7 +172,7 @@ func t_tiempo() -> void:
 	var total_nuevos := 0
 	for a in range(2, 2027):
 		total_nuevos += d.avanzar_a(a)
-	ok(total_nuevos == 1851 - 371, "avanzar el reloj del año 1 a 2026 trae 1.480 descubrimientos (%d)" % total_nuevos)
+	ok(total_nuevos == 1928 - 386, "avanzar el reloj del año 1 a 2026 trae 1.542 descubrimientos (%d)" % total_nuevos)
 	var e2 = nuevo()
 	e2.iniciar(2026)
 	ok(d.frontera == e2.frontera and d.cuenta_f == e2.cuenta_f, "avanzar año a año == empezar directamente en 2026")
@@ -182,7 +182,7 @@ func t_tiempo() -> void:
 	d.sincronizar(1)                           # hacia atrás
 	var e1 = nuevo()
 	e1.iniciar(1)
-	ok(d.frontera == e1.frontera and d.cuenta_f == 371 and d.anio_actual == 1, "saltar de 2026 al año 1 deja exactamente la historia del año 1")
+	ok(d.frontera == e1.frontera and d.cuenta_f == 386 and d.anio_actual == 1, "saltar de 2026 al año 1 deja exactamente la historia del año 1")
 	d.sincronizar(1789)                        # hacia adelante
 	var e3 = nuevo()
 	e3.iniciar(1789)
@@ -217,12 +217,12 @@ func t_pais() -> void:
 	var b := 8
 	var pol: int = d.indice("polvora")
 	ok(not d.conoce(a, pol) and not d.conoce(b, pol), "al empezar nadie conoce la pólvora (año 1)")
-	ok(d.estado.is_empty() and d.cantidad(a) == 371, "un país sin tocar no gasta memoria: lee la historia")
+	ok(d.estado.is_empty() and d.cantidad(a) == 386, "un país sin tocar no gasta memoria: lee la historia")
 	ok(not d.disponible(a, pol), "la pólvora no está disponible en el año 1 (le faltan prerrequisitos)")
 	ok(d.conceder(a, pol), "conceder la pólvora al país A")
 	ok(d.conoce(a, pol) and not d.conoce(b, pol), "A la conoce y B no")
 	ok(not d.conceder(a, pol), "conceder dos veces devuelve false")
-	ok(d.cantidad(a) == 372 and d.cantidad(b) == 371, "A conoce 372 y B 371")
+	ok(d.cantidad(a) == 387 and d.cantidad(b) == 386, "A conoce 387 y B 386")
 	ok(d.cantidad_por_era(a)[4] == d.cantidad_por_era(b)[4] + 1, "por era: A tiene 1 más en la Edad Media")
 	d.avanzar_a(1000)
 	ok(d.conoce(a, pol), "A conserva la pólvora al avanzar el reloj")
@@ -322,7 +322,7 @@ func t_juego() -> void:
 	await arrancar(2026)
 	var d = m.descubrimientos
 	ok(d != null, "Mundo trae descubrimientos")
-	ok(d != null and d.n == 1882 and d.anio_actual == 2026 and d.cuenta_f == 1851, "2026: 1.851 descubrimientos conocidos")
+	ok(d != null and d.n == 1959 and d.anio_actual == 2026 and d.cuenta_f == 1928, "2026: 1.928 descubrimientos conocidos")
 	var pais := ""
 	for p in m.paises:
 		if not m.paises[p].inerte and m.paises[p].provincias.size() > 0:
@@ -338,7 +338,7 @@ func t_juego() -> void:
 	main.debug_fijar_fecha(1500, 1, 1)
 	ok(m.conoce_descubrimiento(pais, "imprenta") and not m.conoce_descubrimiento(pais, "maquina_vapor"), "1500: hay imprenta, aún no hay máquina de vapor")
 	main.debug_fijar_fecha(2026, 1, 1)
-	ok(d.cuenta_f == 1851, "volver a 2026 deja 1.851")
+	ok(d.cuenta_f == 1928, "volver a 2026 deja 1.928")
 	# el reloj trae descubrimientos al cruzar de año (modo HISTORIA FIJA; desde la 0.1.8.46 el modo normal es «el planeta descubre», que prueba runner103)
 	ok(m.saber != null and m.saber.activo and d.modo_planeta, "(0.1.8.46) el modo normal es «el planeta descubre»")
 	m.saber.desactivar()
@@ -376,7 +376,7 @@ func t_juego() -> void:
 	if DirAccess.dir_exists_absolute("res://datos/epocas"):
 		await arrancar(1)
 		d = m.descubrimientos
-		ok(d != null and d.anio_actual == 1 and d.cuenta_f == 371, "año 1 d. C.: 371 descubrimientos conocidos")
+		ok(d != null and d.anio_actual == 1 and d.cuenta_f == 386, "año 1 d. C.: 386 descubrimientos conocidos")
 		var pais1 := ""
 		for p2 in m.paises:
 			if not m.paises[p2].inerte and m.paises[p2].provincias.size() > 0:
@@ -393,7 +393,7 @@ func t_juego() -> void:
 	# volver a 2026 recarga lo de 2026
 	await arrancar(2026)
 	d = m.descubrimientos
-	ok(d != null and d.anio_actual == 2026 and d.cuenta_f == 1851, "volver al escenario 2026 recarga 1.851")
+	ok(d != null and d.anio_actual == 2026 and d.cuenta_f == 1928, "volver al escenario 2026 recarga 1.928")
 	# pestaña Debug
 	main._on_jugar()
 	await esperar(0.5)
@@ -421,4 +421,4 @@ func t_juego() -> void:
 		ok(dm.lbl_desc_ficha.text.contains("Año"), "la ficha muestra el año")
 		dm.filtro_desc.text = ""
 		dm._refrescar_desc()
-		ok(dm.lbl_desc_res.text.contains("1.851") or dm.lbl_desc_res.text.contains("1851"), "el resumen cuenta 1.851 conocidos")
+		ok(dm.lbl_desc_res.text.contains("1.928") or dm.lbl_desc_res.text.contains("1928"), "el resumen cuenta 1.928 conocidos")

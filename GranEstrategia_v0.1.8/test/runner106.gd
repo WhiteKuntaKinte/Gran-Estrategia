@@ -139,7 +139,7 @@ func t_datos() -> void:
 					peso_ok = false
 		elif ed.ef_solo_saber.has(ed.slug[e]):
 			solo += 1
-	ok(con == 129 and solo == 12 and con + solo == ed.n, "129 edificios con efecto + 12 de solo saber = los 141 (%d + %d)" % [con, solo])
+	ok(con == 166 and solo == 12 and con + solo == ed.n, "166 edificios con efecto + 12 de solo saber = los 178 (%d + %d)" % [con, solo])
 	ok(peso_ok, "ningún peso es cero ni pasa del tope de su clase")
 	var todas := true
 	for k in EdScript.N_EF:
