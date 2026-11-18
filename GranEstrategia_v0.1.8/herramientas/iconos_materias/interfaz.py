@@ -269,6 +269,38 @@ def moneda(c):
     divisas.moneda(c, 'GEN', '¤', 'oro')
 
 
+def prog(c):
+    """Progreso: tres columnas que suben y una flecha dorada ascendente."""
+    for i, (h, col) in enumerate(((34, hexa('7fd68e')), (56, hexa('4fbf72')), (80, hexa('2f9e57')))):
+        x0 = 14 + i * 34
+        c.cuerpo([(x0, 114 - h), (x0 + 28, 114 - h), (x0 + 28, 114), (x0, 114)], col, sombra=0.3, luz=0.25, d=2.6)
+    c.cuerpo([(8, 56), (50, 28), (62, 40), (104, 8), (112, 8), (112, 40), (100, 40), (100, 28), (62, 62), (50, 50), (20, 72)], ORO, sombra=0.3, luz=0.4, d=2.4)
+    c.poly([(86, 6), (118, 6), (118, 38)], ORO2)
+    c.cuerpo([(86, 6), (118, 6), (118, 38)], ORO, sombra=0.2, luz=0.3, d=2.0)
+
+
+def terr(c):
+    """Territorio: mapa plegado en tres paños con un camino y un alfiler."""
+    c.cuerpo([(8, 40), (44, 28), (44, 108), (8, 120)], hexa('9bd16a'), sombra=0.3, luz=0.25, d=2.4)
+    c.cuerpo([(44, 28), (84, 40), (84, 120), (44, 108)], hexa('e7d29a'), sombra=0.3, luz=0.25, d=2.4)
+    c.cuerpo([(84, 40), (120, 28), (120, 108), (84, 120)], hexa('78c2b4'), sombra=0.3, luz=0.25, d=2.4)
+    c.linea(bezier((14, 96), (36, 70), (58, 100), 14) + bezier((58, 100), (76, 112), (110, 80), 14)[1:], 3.2, hexa('b5532f'))
+    c.cuerpo(gota(64, 34, 14, 26, 180.0), hexa('e0564f'), sombra=0.3, luz=0.4, d=2.4)
+    c.punto(64, 32, 5, hexa('fff3f0'))
+
+
+def cult(c):
+    """Cultura: las dos máscaras del teatro, una dorada y otra azul."""
+    c.cuerpo(spline([(14, 30), (58, 26), (66, 70), (52, 106), (30, 112), (16, 86)]), ORO, sombra=0.3, luz=0.4, d=3.0)
+    c.elip(30, 56, 5, 7, hexa('3a2a10'), -10)
+    c.elip(48, 54, 5, 7, hexa('3a2a10'), 10)
+    c.linea(bezier((26, 86), (38, 100), (52, 84), 10), 3.0, hexa('3a2a10'))
+    c.cuerpo(spline([(66, 40), (112, 36), (118, 84), (104, 114), (82, 118), (68, 94)]), hexa('7aa8f0'), sombra=0.3, luz=0.4, d=3.0)
+    c.elip(82, 66, 5, 7, hexa('1d2f58'), -10)
+    c.elip(100, 64, 5, 7, hexa('1d2f58'), 10)
+    c.linea(bezier((80, 104), (92, 90), (106, 104), 10), 3.0, hexa('1d2f58'))
+
+
 def pais(c):
     c.linea([(30, 120), (30, 12)], 7, hexa('d5dcec'))
     c.punto(30, 11, 6, ORO)
@@ -349,7 +381,7 @@ ICONOS = {
     'i_alt': alt, 'i_area': area, 'i_atras': atras, 'i_carne': carne, 'i_ciudad': ciudad, 'i_cont': cont, 'i_cultivo': cultivo, 'i_debug': debug,
     'i_dens': dens, 'i_desc': desc, 'i_devast': devast, 'i_dipl': dipl, 'i_eco': eco, 'i_editar': editar, 'i_ejercito': ejercito, 'i_estado': estado,
     'i_estrella': estrella_, 'i_etn': etn, 'i_fauna': fauna, 'i_flora': flora, 'i_gob': gob, 'i_info': info, 'i_lentes': lentes, 'i_mineral': mineral,
-    'i_moneda': moneda, 'i_pais': pais, 'i_pausa': pausa, 'i_pob': pob, 'i_prof': prof, 'i_prov': prov, 'i_tpausa': tpausa, 'i_veg': veg,
+    'i_moneda': moneda, 'i_pais': pais, 'i_prog': prog, 'i_terr': terr, 'i_cult': cult, 'i_pausa': pausa, 'i_pob': pob, 'i_prof': prof, 'i_prov': prov, 'i_tpausa': tpausa, 'i_veg': veg,
     'i_vel1': _vel(1), 'i_vel2': _vel(2), 'i_vel3': _vel(3), 'i_vel4': _vel_chevron(4), 'i_vel5': _vel_chevron(5), 'i_vel6': _vel_chevron(6),
     'i_vista': vista,
 }

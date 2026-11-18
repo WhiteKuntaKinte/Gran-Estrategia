@@ -38,12 +38,15 @@ const C_BARRAS := [Color(0.42, 0.62, 1.0), Color(0.30, 0.85, 0.70), Color(1.0, 0
 const C_ACENTO := {"continente": Color(0.42, 0.62, 1.0), "pais": Color(0.30, 0.85, 0.70), "estado": Color(0.80, 0.78, 0.35),
 	"provincia": Color(1.0, 0.62, 0.30), "ciudad": Color(0.93, 0.45, 0.55), "mar": Color(0.45, 0.85, 1.0)}
 ## [clave, texto, icono]
-const PESTANAS := [["general", "General", "i_info"], ["diplomacia", "Diplomacia", "i_dipl"], ["militar", "Militar", "i_ejercito"],
-	["politica", "Política", "i_gob"], ["economia", "Economía", "i_eco"]]
+## 0.1.8.52 · Nueve secciones (antes cinco con un scroll larguísimo): cada una enseña pocas tarjetas y cabe sin desplazarse. Las claves de siempre se conservan:
+## «general» es el Resumen y «politica» es Gobierno.
+const PESTANAS := [["general", "Resumen", "i_info"], ["poblacion", "Población", "i_pob"], ["progreso", "Progreso", "i_prog"], ["economia", "Economía", "i_eco"],
+	["militar", "Militar", "i_ejercito"], ["diplomacia", "Diplomacia", "i_dipl"], ["politica", "Gobierno", "i_gob"], ["territorio", "Territorio", "i_terr"],
+	["cultura", "Cultura", "i_cult"]]
 ## Subsecciones de la pestaña Militar: [clave, texto]
 const SUBS_MILITAR := [["res", "Resumen"], ["reg", "Regimientos"], ["rec", "Reclutar"], ["bat", "Batallas"]]
-const TITULO_SECCION := {"general": "Información general", "diplomacia": "Diplomacia y guerras", "militar": "Fuerzas armadas",
-	"politica": "Política y gobierno", "economia": "Economía"}
+const TITULO_SECCION := {"general": "Resumen", "poblacion": "Población y sociedad", "progreso": "Progreso y conocimiento", "economia": "Economía",
+	"militar": "Fuerzas armadas", "diplomacia": "Diplomacia y guerras", "politica": "Gobierno", "territorio": "Territorio y construcciones", "cultura": "Cultura y pueblos"}
 
 var main: Node
 var fuente: Font
@@ -944,10 +947,10 @@ func pestanas_de(tipo: String, con_tropas := false) -> Array:
 		"libre":
 			return ["general", "militar"] if con_tropas else ["general"]       # 0.1.8.39a: tierras sin reclamar: sin gobierno, diplomacia ni economía
 		"continente":
-			return ["general", "militar", "economia"]
+			return ["general", "poblacion", "economia", "militar", "territorio", "cultura"]
 		"pais":
-			return ["general", "diplomacia", "militar", "politica", "economia"]
-	return ["general", "militar", "politica", "economia"]
+			return ["general", "poblacion", "progreso", "economia", "militar", "diplomacia", "politica", "territorio", "cultura"]
+	return ["general", "poblacion", "economia", "militar", "politica", "territorio", "cultura"]
 
 
 func _hay_ctx() -> bool:
@@ -1188,6 +1191,14 @@ func _dibujar() -> void:
 			_tab_politica()
 		"economia":
 			_tab_economia()
+		"poblacion":
+			_tab_poblacion()
+		"progreso":
+			_tab_progreso()
+		"territorio":
+			_tab_territorio()
+		"cultura":
+			_tab_cultura()
 	_sin_foco(cuerpo)
 	_ult_cols = _columnas_tarjetas()
 	_ajustar_alto()
@@ -1556,37 +1567,69 @@ func _d() -> Dictionary:
 	return datos.get("d", {})
 
 
-## GENERAL: naturaleza, descripción, población, etnias y ciudades (lo que antes estaba repartido entre General y Demografía).
+## RESUMEN (clave «general»): la pintura, la descripción y lo esencial de un vistazo. El detalle vive en las demás secciones.
 func _tab_general() -> void:
 	var d := _d()
 	_card_pintura()
 	_card_grupo()
+	var sd := _seccion("Descripción")
+	for par in datos.get("desc", []):
+		_fila(sd, String(par[2]) if par.size() > 2 else "i_info", String(par[0]), String(par[1]), String(par[3]) if par.size() > 3 else "")
+	if String(datos.get("tipo", "")) == "libre":                      # 0.1.8.39a: tierras sin reclamar: sin población, etnias, ciudades ni economía
+		_nota(sd, "Nadie gobierna esta zona: no tiene población registrada, ejército, diplomacia ni economía.")
+		_card_naturaleza(d)
+		return
+	_card_vistazo(d)
+
+
+## «De un vistazo»: las cifras que más importan de lo elegido, con la sección donde se amplía cada una.
+func _card_vistazo(d: Dictionary) -> void:
+	if d.is_empty():
+		return
+	var sec := _seccion("De un vistazo")
+	var pob := float(d["pob"])
+	_fila(sec, "i_pob", "Población (%d, est.)" % main.epoca, fmt_pob(pob), "pob")
+	_fila(sec, "i_area", "Superficie", "%s km² · %s hab/km²" % [fmt_num(float(d["area"])), fmt_num(pob / maxf(float(d["area"]), 1.0))], "area")
+	var m = main.mundo
+	var pais := String(main._pais_de_seleccion())
+	if String(datos.get("tipo", "")) == "pais" and m.paises.has(pais):
+		var e = m.paises[pais]
+		_fila(sec, "i_prov", "Provincias", "%d" % e.provincias.size())
+		_fila(sec, "i_ejercito", "Soldados", fmt_num(float(m.soldados_de_pais(pais))))
+		var mon := _moneda(pais)
+		var neto: float = m.ingreso_neto_diario_local(pais)
+		_fila(sec, main.materias.de_pais(pais) if main.materias != null else "i_moneda", "Entra a la tesorería", "%s por día" % main.fmt_dinero(neto, String(mon[0])))
+		if m.descubrimientos != null:
+			_fila(sec, "i_prog", "Descubrimientos", "%d de %d" % [m.descubrimientos.cantidad(int(e.tid)), m.descubrimientos.n])
+	_nota(sec, "El detalle de cada cosa está en su sección: Población, Progreso, Economía, Militar, Diplomacia, Gobierno, Territorio y Cultura.")
+
+
+## Naturaleza: vegetación, flora, fauna y altitud (sección Territorio; también se enseña en las tierras sin reclamar).
+func _card_naturaleza(d: Dictionary) -> void:
 	var biomas: Dictionary = main.info.get("biomas", {})
 	var bio: Array = d.get("bio", [])
 	var reino := String(d.get("reino", "PAL"))
 	var sec := _seccion("Naturaleza")
 	if d.is_empty():
 		_nota(sec, "Sin datos de naturaleza para esta entidad.")
-	else:
-		if bio.size() > 0 and biomas.has(bio[0][0]):
-			var cod := String(bio[0][0])
-			var b: Dictionary = biomas[cod]
-			_fila(sec, "i_veg", "Vegetación", "%s (%d%%)" % [b["n"], int(bio[0][1])], "veg", cod)
-			_fila(sec, "i_flora", "Flora", corto(String(b["flora"]), 70), "flora")
-			_fila(sec, "i_fauna", "Fauna", corto(String(b["fauna"].get(reino, "")), 70), "fauna")
-		_fila(sec, "i_alt", "Altitud", "media %s m · máx. ≈ %s m" % [fmt_num(float(d["alt"])), fmt_num(float(d["altmax"]))], "alt")
-	var sd := _seccion("Descripción")
-	for par in datos.get("desc", []):
-		_fila(sd, String(par[2]) if par.size() > 2 else "i_info", String(par[0]), String(par[1]), String(par[3]) if par.size() > 3 else "")
-	if String(datos.get("tipo", "")) == "libre":                      # 0.1.8.39a: tierras sin reclamar: sin población, etnias, ciudades ni economía
-		_nota(sd, "Nadie gobierna esta zona: no tiene población registrada, ejército, diplomacia ni economía.")
 		return
+	if bio.size() > 0 and biomas.has(bio[0][0]):
+		var cod := String(bio[0][0])
+		var b: Dictionary = biomas[cod]
+		_fila(sec, "i_veg", "Vegetación", "%s (%d%%)" % [b["n"], int(bio[0][1])], "veg", cod)
+		_fila(sec, "i_flora", "Flora", corto(String(b["flora"]), 70), "flora")
+		_fila(sec, "i_fauna", "Fauna", corto(String(b["fauna"].get(reino, "")), 70), "fauna")
+	_fila(sec, "i_alt", "Altitud", "media %s m · máx. ≈ %s m" % [fmt_num(float(d["alt"])), fmt_num(float(d["altmax"]))], "alt")
+
+
+## POBLACIÓN: cuánta gente hay, cómo vive, qué tan estable está y dónde se concentra.
+func _tab_poblacion() -> void:
+	var d := _d()
 	var sp := _seccion("Población")
 	if not d.is_empty():
 		var pob := float(d["pob"])
 		_fila(sp, "i_pob", "Población (%d, est.)" % main.epoca, fmt_pob(pob), "pob")
 		_fila(sp, "i_dens", "Densidad", "%s hab/km²" % fmt_num(pob / maxf(float(d["area"]), 1.0)), "pob")
-		_fila(sp, "i_area", "Superficie", "%s km²" % fmt_num(float(d["area"])), "area")
 		var padre: Dictionary = datos.get("padre", {})
 		if padre.has("pob"):
 			var cj := VBoxContainer.new()
@@ -1594,24 +1637,66 @@ func _tab_general() -> void:
 			sp.add_child(cj)
 			_nota(cj, "Peso en " + String(datos.get("padre_n", "")))
 			_barra(cj, "Población", 100.0 * pob / maxf(float(padre["pob"]), 1.0), C_BARRAS[0])
-			_barra(cj, "Superficie", 100.0 * float(d["area"]) / maxf(float(padre["area"]), 1.0), C_BARRAS[1])
 	else:
 		_nota(sp, "Sin datos de población.")
-	_tarjetas_provincia()
-	var etn: Array = datos.get("etn", [])
-	if not etn.is_empty() or not d.is_empty():
-		var se := _seccion("Etnias")
-		if etn.is_empty():
-			_nota(se, "Sin datos de etnias para esta entidad.")
-		else:
-			for i in etn.size():
-				_barra(se, String(etn[i][0]), float(etn[i][1]), C_BARRAS[i % C_BARRAS.size()])
-			_nota(se, "Composición nacional aproximada.")
+	var pc := _prov_ctx()
+	if bool(pc["ok"]):
+		_card_gente(pc["pis"], bool(pc["una"]))
+		if bool(pc["una"]):
+			_card_estabilidad(int(pc["pis"][0]))
 	var ciu: Array = datos.get("ciudades", [])
 	if ciu.size() > 0:
 		var sc := _seccion("Ciudades principales")
 		for c in ciu:
 			_fila(sc, "i_ciudad", String(c[0]), "%s hab." % fmt_num(float(c[1])))
+
+
+## PROGRESO: lo que sabe el país y cómo aprende: descubrimientos, escuela, investigación, saber social y oficios.
+func _tab_progreso() -> void:
+	_card_descubrimientos()
+	_cards_progreso()
+
+
+## Descubrimientos del país elegido: cuántos conoce por era y lo siguiente que tiene a mano; el botón abre la pantalla completa (tecla T).
+func _card_descubrimientos() -> void:
+	var m = main.mundo
+	var pais := String(main._pais_de_seleccion())
+	if m.descubrimientos == null or not m.paises.has(pais):
+		return
+	var ds = m.descubrimientos
+	var tid := int(m.paises[pais].tid)
+	var sec := _seccion("Descubrimientos")
+	_fila(sec, "i_prog", "Conocidos", "%d de %d" % [ds.cantidad(tid), ds.n])
+	var por: PackedInt32Array = ds.cantidad_por_era(tid)
+	var tot: PackedInt32Array = ds.total_por_era()
+	for e in mini(por.size(), tot.size()):
+		if tot[e] > 0 and por[e] > 0:
+			_barra(sec, "Era %d" % (e + 1), 100.0 * float(por[e]) / float(tot[e]), C_BARRAS[e % C_BARRAS.size()])
+	_boton(sec, "Abrir la pantalla de descubrimientos (T)", func(): main._abrir_descubrimientos())
+
+
+## TERRITORIO: naturaleza, construcciones, cores y subdivisiones.
+func _tab_territorio() -> void:
+	_card_naturaleza(_d())
+	var pc := _prov_ctx()
+	if not bool(pc["ok"]):
+		return
+	_card_edificios(pc["pis"], bool(pc["una"]))
+	_card_cores(pc["pis"], bool(pc["una"]))
+	if bool(pc["una"]):
+		_card_subdivisiones(int(pc["pis"][0]))
+
+
+## CULTURA: etnias y pueblos (la lengua, la religión y las artes llegan con la mecánica de cultura).
+func _tab_cultura() -> void:
+	var etn: Array = datos.get("etn", [])
+	var se := _seccion("Etnias")
+	if etn.is_empty():
+		_nota(se, "Sin datos de etnias para esta entidad.")
+	else:
+		for i in etn.size():
+			_barra(se, String(etn[i][0]), float(etn[i][1]), C_BARRAS[i % C_BARRAS.size()])
+		_nota(se, "Composición nacional aproximada.")
 
 
 # ───────────── 0.1.8.40 · tarjetas de provincia: Ingreso, Edificios, Cores, y el resumen de un grupo (Ctrl+clic) ─────────────
@@ -1708,20 +1793,12 @@ func _card_grupo() -> void:
 
 
 ## Ingreso, Edificios y Cores: de la provincia (o ciudad) elegida; o los totales si es un país, un estado o un grupo.
-func _tarjetas_provincia() -> void:
+func _prov_ctx() -> Dictionary:
 	var pis := _pis_ed()
 	var m = main.mundo
-	if pis.is_empty() or m.edificios == null:
-		return
 	var tipo := String(datos.get("tipo", ""))
 	var una := (tipo == "provincia" or tipo == "ciudad") and pis.size() == 1 and int(datos.get("multi", 0)) < 2
-	if una:
-		_card_ingreso(int(pis[0]))
-	_card_gente(pis, una)
-	_card_edificios(pis, una)
-	_card_cores(pis, una)
-	if una:
-		_card_subdivisiones(int(pis[0]))
+	return {"ok": not pis.is_empty() and m.edificios != null, "pis": pis, "una": una}
 
 
 ## 0.1.8.43 · Subdivisiones de la provincia: botón para abrirlas en el mapa y, abiertas, la lista de subprovincias reales con su superficie y su población estimada.
@@ -1785,7 +1862,14 @@ func _card_ingreso(pi: int) -> void:
 	var total: float = m.produccion_anual_usd(pais)
 	if total > 0.0 and pr.ocupante < 0:
 		_fila(sec, "i_pais", "Peso en los ingresos del país", pct(100.0 * rend / maxf(total, 1.0)))
-	_nota(sec, "Devastación %d %%: una tierra arrasada rinde menos. La estabilidad (abajo) también cuenta: ×(0,5 + estabilidad ÷ 100)." % int(roundf(pr.devastacion * 100.0)))
+	_nota(sec, "Devastación %d %%: una tierra arrasada rinde menos. La estabilidad (sección Población) también cuenta: ×(0,5 + estabilidad ÷ 100)." % int(roundf(pr.devastacion * 100.0)))
+
+
+## Estabilidad social de una provincia: el nivel, hacia dónde tiende y de qué se compone (sección Población).
+func _card_estabilidad(pi: int) -> void:
+	var m = main.mundo
+	var pr = m.provincias[pi]
+	var pais: String = pr.pais
 	if m.estabilidad != null and m.paises.has(pais) and pr.favorabilidad >= 0.0:
 		var ds: Dictionary = m.estabilidad.desglose(pi)
 		var se := _seccion("Estabilidad social")
@@ -1849,7 +1933,16 @@ func _cards_pueblo() -> void:
 	_nota(sp, "Cada partida es una parte de los impuestos que se descuenta antes de llegar a la tesorería. Con las partidas de referencia (educación 4 %, ciencia 1,5 %, obras 2,5 %, sanidad 2 %) todo rinde ×1; más gasto acelera la alfabetización, la investigación y la salud, menos la frena. Cuesta dinero y tarda años en notarse.")
 	if float(v["fatiga"]) >= 1.0:
 		_fila(sp, "i_devast", "Cansancio de guerra", "%d de 100: baja la estabilidad y las ganas de seguir peleando" % roundi(float(v["fatiga"])))
-	# ── educación e investigación ──
+
+
+## Educación, investigación, saber social y oficios del país elegido (sección Progreso).
+func _cards_progreso() -> void:
+	var v: Dictionary = main.pueblo_vista()
+	if v.is_empty():
+		return
+	var pais := String(v["pais"])
+	var propio := bool(v["propio"])
+	var res: Dictionary = v["res"]
 	var se := _seccion("Educación e investigación")
 	_fila(se, "i_info", "Alfabetización", "%d %% · %s años de escuela" % [roundi(100.0 * float(res["alfab"])), ("%.1f" % float(res["esc"])).replace(".", ",")])
 	_fila(se, "i_info", "Estudios", "%s %% con estudios superiores · %s %% con secundaria" % [("%.1f" % (100.0 * float(res["superiores"]))).replace(".", ","), ("%.1f" % (100.0 * float(res["secundaria"]))).replace(".", ",")])
@@ -2089,6 +2182,9 @@ static func produccion_principal(e: Dictionary) -> Dictionary:
 
 
 func _tab_economia() -> void:
+	var pc := _prov_ctx()
+	if bool(pc["ok"]) and bool(pc["una"]):
+		_card_ingreso(int(pc["pis"][0]))
 	if String(datos.get("tipo", "")) == "pais":
 		_cards_pueblo()
 	var fin: Array = datos.get("fin", [])

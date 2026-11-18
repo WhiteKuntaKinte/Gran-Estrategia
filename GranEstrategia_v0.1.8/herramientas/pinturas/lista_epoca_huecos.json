@@ -1,0 +1,65 @@
+{
+ "ayuda": "Huecos de las pinturas de epoca",
+ "entradas": [
+  {
+   "id": "1096/region_asia_sur",
+   "q": [
+    "Brihadisvara Temple Thanjavur",
+    "Chola bronze Nataraja",
+    "Khajuraho temple",
+    "Modhera Sun Temple",
+    "Ajanta cave painting",
+    "Kailasa temple Ellora"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_nilo",
+   "q": [
+    "Al-Azhar Mosque Cairo",
+    "Ibn Tulun Mosque",
+    "Bab al-Futuh Cairo",
+    "Fatimid lustre ceramic",
+    "Fatimid rock crystal",
+    "Coptic icon Egypt monastery"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_mesoamerica_caribe",
+   "q": [
+    "Chichen Itza El Castillo",
+    "Tula Atlantes",
+    "Bonampak mural",
+    "Tikal temple",
+    "Palenque Maya",
+    "Uxmal"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_maghreb",
+   "q": [
+    "Bou Inania Madrasa Fez",
+    "Great Mosque of Kairouan",
+    "Chellah Marinid",
+    "Marinid tombs Fez",
+    "Tlemcen mosque",
+    "Zitouna Mosque Tunis"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_sudamerica_este",
+   "q": [
+    "Marajoara pottery",
+    "Tapajonica pottery",
+    "Amazon geoglyph",
+    "Cave painting Brazil Serra da Capivara",
+    "Sambaqui",
+    "Terra preta"
+   ],
+   "max": 8
+  }
+ ]
+}
