@@ -4,8 +4,11 @@ name: Traer banderas históricas (Wikidata + Wikimedia Commons)
 # herramientas/banderas/commons_banderas.py busca, para cada estado de los escenarios históricos (herramientas/banderas/lista_banderas.json),
 # su bandera (o, si no hay, su escudo o su sello) y baja solo lo que es de dominio público o CC0. Publica en el Release "datos-banderas":
 #   banderas_hist.zip (img/<id>.png) y resultado.json (qué se encontró, de dónde, con qué licencia y qué se rechazó).
-# Se ejecuta a mano (workflow_dispatch). No toca el juego.
+# Se ejecuta a mano (workflow_dispatch) o cuando se sube un cambio a herramientas/banderas/disparar.txt (así lo lanza Claude). No toca el juego.
 on:
+  push:
+    branches: [v0.1.8-development]
+    paths: ['GranEstrategia_v0.1.8/herramientas/banderas/disparar.txt']
   workflow_dispatch:
     inputs:
       lista:
