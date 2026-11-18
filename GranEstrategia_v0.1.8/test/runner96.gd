@@ -188,7 +188,7 @@ func run() -> void:
 	ok(not capa.activa(), "elegir otra cosa cierra las subdivisiones")
 	main._seleccion_provincia(pm, main.mundo.continente_de_provincia(pm), Vector2(1200.0, 300.0))
 	await fotogramas(2)
-	main.hud.abrir_pestana("general")
+	main.hud.abrir_pestana("territorio")
 	await fotogramas(2)
 	ok(hay(main.hud.cuerpo, "SUBDIVISIONES") and hay(main.hud.cuerpo, "Ver subdivisiones en el mapa"), "la ficha de la provincia ofrece «Ver subdivisiones en el mapa»")
 	ok(hay(main.hud.cuerpo, "geoBoundaries") or hay(main.hud.cuerpo, "límites administrativos actuales"), "… y avisa de que los límites son los actuales")

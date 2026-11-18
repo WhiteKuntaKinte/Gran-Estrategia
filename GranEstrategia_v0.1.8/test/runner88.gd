@@ -197,6 +197,8 @@ func t_hud() -> void:
 	ed.dar(pi, e1, 3)
 	ed.dar(pi, e2, 1)
 	await elegir_provincia(pi)
+	main.hud.abrir_pestana("territorio")
+	await fotogramas(2)
 	var tex := texturas(main.hud.cuerpo)
 	var t1: Texture2D = main.icono("edificios/" + String(ed.slug[e1]))
 	var t2: Texture2D = main.icono("edificios/" + String(ed.slug[e2]))
@@ -218,6 +220,8 @@ func t_hud() -> void:
 	var r: Dictionary = ed.construir("España", pi, e3)
 	ok(bool(r["ok"]), "se empieza una obra para ver el icono en «En obra»")
 	await elegir_provincia(pi)
+	main.hud.abrir_pestana("territorio")
+	await fotogramas(2)
 	var t3: Texture2D = main.icono("edificios/" + String(ed.slug[e3]))
 	var n3 := 0
 	for tr in texturas(main.hud.cuerpo):

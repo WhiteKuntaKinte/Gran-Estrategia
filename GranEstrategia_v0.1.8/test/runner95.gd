@@ -778,7 +778,7 @@ func t_hud() -> void:
 	var pi: int = int(m.paises[jug].provincias[0])
 	main._seleccion_provincia(pi, "Asia", Vector2(1500, 300))
 	await esperar(0.2)
-	main.hud.abrir_pestana("general")
+	main.hud.abrir_pestana("poblacion")
 	await esperar(0.2)
 	var t2 := ""
 	var pila2: Array = [main.hud.panel]

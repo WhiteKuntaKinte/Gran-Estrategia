@@ -1,0 +1,36 @@
+# Ajustes por nombre (basta con que el nombre del país CONTENGA el texto): texto	régimen	[desde:hasta años donde vale, opcional]
+Estados Pontificios	teocracia
+Sacro Imperio	monarquia_electiva
+Imperio bizantino	imperio
+Reino de Polonia	monarquia_electiva	1400:1700
+Reino de Hungría	monarquia_electiva	1200:1700
+República de Venecia	aristocracia
+República de Pisa	aristocracia
+República de Génova	aristocracia
+Mancomunidad islandesa	asamblea
+Reino de Francia	monarquia_absoluta	1450:1700
+Reino de España	monarquia_absoluta	1470:1700
+Reino de Castilla	monarquia_absoluta	1450:1700
+Reino de Aragón	monarquia_feudal
+Inglaterra	monarquia_absoluta	1480:1700
+Reino de Portugal	monarquia_absoluta	1400:1700
+Imperio otomano	imperio
+Imperio ruso	imperio
+Principado de Moscú	monarquia_absoluta	1400:1700
+Ciudades-estado griegas	asamblea
+Imperio parto	monarquia_feudal
+Imperio kushán	monarquia_feudal
+Dinastía Han	imperio
+Dinastía Song	imperio
+Dinastía Ming	imperio
+Dinastía Liao	imperio
+Imperio mogol	imperio
+Imperio azteca	teocracia
+Imperio inca	imperio
+Triple Alianza	teocracia
+Reino de Aksum	monarquia_absoluta
+Japón Heian	monarquia_feudal
+Estado Tokugawa	monarquia_feudal
+Imperio de Mali	imperio
+Imperio songhai	imperio
+Imperio de Ghana	imperio

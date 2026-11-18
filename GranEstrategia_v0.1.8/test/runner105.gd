@@ -363,21 +363,26 @@ func t_hud() -> void:
 	await esperar(0.3)
 	var hud = main.hud
 	ok(main.sel_tipo == "pais" and hud.esta_abierto(), "un clic elige el país y abre el HUD (selección: %s)" % main.sel_tipo)
-	hud.abrir_pestana("general")
+	hud.abrir_pestana("poblacion")
 	await esperar(0.1)
 	var t: Array = []
 	etiquetas(hud.panel, t)
 	var todo: String = "\n".join(PackedStringArray(t)).to_upper()
-	ok(todo.contains("GENTE") and todo.contains("CRECIMIENTO") and todo.contains("EDADES") and todo.contains("CIUDAD Y CAMPO"), "General: tarjeta «Gente» con crecimiento, edades y ciudad")
+	ok(todo.contains("GENTE") and todo.contains("CRECIMIENTO") and todo.contains("EDADES") and todo.contains("CIUDAD Y CAMPO"), "Población: tarjeta «Gente» con crecimiento, edades y ciudad")
 	hud.abrir_pestana("economia")
 	await esperar(0.1)
 	var t2: Array = []
 	etiquetas(hud.panel, t2)
 	var todo2: String = "\n".join(PackedStringArray(t2)).to_upper()
 	ok(todo2.contains("PRESUPUESTO") and todo2.contains("LLEGA A LA TESORERÍA"), "Economía: tarjeta «Presupuesto» con lo que llega a la tesorería")
-	ok(todo2.contains("EDUCACIÓN E INVESTIGACIÓN") and todo2.contains("POLÍTICA DE INVESTIGACIÓN"), "Economía: tarjeta «Educación e investigación» con la política de investigación")
-	ok(todo2.contains("OFICIOS") and todo2.contains("EMPLEADO DE SERVICIOS"), "Economía: tarjeta «Oficios» con los más numerosos")
-	ok(todo2.contains("SABER SOCIAL") and todo2.contains("URBANISMO") and todo2.contains("AGRICULTURA"), "Economía: tarjeta «Saber social» con los 4 índices")
+	hud.abrir_pestana("progreso")
+	await esperar(0.1)
+	var t3: Array = []
+	etiquetas(hud.panel, t3)
+	var todo3: String = "\n".join(PackedStringArray(t3)).to_upper()
+	ok(todo3.contains("EDUCACIÓN E INVESTIGACIÓN") and todo3.contains("POLÍTICA DE INVESTIGACIÓN"), "Progreso: tarjeta «Educación e investigación» con la política de investigación")
+	ok(todo3.contains("OFICIOS") and todo3.contains("EMPLEADO DE SERVICIOS"), "Progreso: tarjeta «Oficios» con los más numerosos")
+	ok(todo3.contains("SABER SOCIAL") and todo3.contains("URBANISMO") and todo3.contains("AGRICULTURA"), "Progreso: tarjeta «Saber social» con los 4 índices")
 	var v: Dictionary = main.pueblo_vista()
 	ok(not v.is_empty() and String(v["pais"]) == "Colombia" and (v["oficios"] as Array).size() == 40 and not bool(v["propio"]), "pueblo_vista trae lo del país elegido (no es el tuyo)")
 	# el jugador mueve las partidas
@@ -395,16 +400,17 @@ func t_hud() -> void:
 	main.fijar_investigacion("Colombia", 10.0, 80.0, 10.0)
 	var pol: PackedFloat32Array = main.mundo.educacion.politica(int(p.tid))
 	ok(float(pol[1]) > 0.6, "fijar_investigacion reparte el esfuerzo (%.0f %% científico)" % (100.0 * float(pol[1])))
-	hud.abrir_pestana("economia")
-	await esperar(0.1)
 	var sliders := 0
-	var pila: Array = [hud.panel]
-	while not pila.is_empty():
-		var n: Node = pila.pop_back()
-		if n is HSlider:
-			sliders += 1
-		for h in n.get_children():
-			pila.append(h)
+	for tab in ["economia", "progreso"]:
+		hud.abrir_pestana(tab)
+		await esperar(0.1)
+		var pila: Array = [hud.panel]
+		while not pila.is_empty():
+			var n: Node = pila.pop_back()
+			if n is HSlider:
+				sliders += 1
+			for h in n.get_children():
+				pila.append(h)
 	ok(sliders >= 7, "en tu país el panel trae deslizadores: 4 partidas + 3 ramas de investigación (%d)" % sliders)
 	main.mundo.jugador = ""
 

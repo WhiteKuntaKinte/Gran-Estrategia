@@ -182,7 +182,7 @@ func t_seleccion_libre() -> void:
 	ok(main.hud.esta_abierto(), "el panel se abre")
 	ok(main.hud.pestanas_de("libre") == ["general"], "tierras sin reclamar: solo la pestaña General (sin Diplomacia, Militar, Política ni Economía)")
 	ok(main.hud.pestanas_de("libre", true) == ["general", "militar"], "salvo que tengas tropas ahí: entonces también Militar")
-	ok(main.hud.pestanas_de("pais").size() == 5 and main.hud.pestanas_de("provincia").size() == 4, "un país conserva sus 5 pestañas y una provincia suya sus 4")
+	ok(main.hud.pestanas_de("pais").size() == 9 and main.hud.pestanas_de("provincia").size() == 7, "un país conserva sus 9 pestañas y una provincia suya sus 7")
 	ok(main.hud.datos.get("tipo", "") == "libre", "el panel recibe el tipo «libre»")
 	ok(not main.hud.datos.has("ctx"), "sin contexto de tropas: no hay órdenes que dar a nadie")
 	ok(main._ctx_tropas().is_empty(), "_ctx_tropas() vacío en tierras sin reclamar")
@@ -218,7 +218,7 @@ func t_seleccion_libre() -> void:
 	main._seleccionar(mp(12.5, 41.9))
 	await esperar(0.2)
 	ok(main.pais_foco == "Imperio romano" and main.sel_tipo == "pais", "un clic en Roma sigue eligiendo y enfocando el Imperio romano (%s / %s)" % [main.pais_foco, main.sel_tipo])
-	ok(main.hud.pestanas_de(String(main.hud.datos.get("tipo", ""))).size() == 5, "con sus 5 pestañas")
+	ok(main.hud.pestanas_de(String(main.hud.datos.get("tipo", ""))).size() == 9, "con sus 9 pestañas")
 	# la ficha de la zona libre dice lo que hay
 	main._salir_foco()
 	main._limpiar_seleccion()

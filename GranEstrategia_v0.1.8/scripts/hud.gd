@@ -29,6 +29,7 @@ const ANCHO_PANEL_MIN := 372.0              # 0.1.8.3: HUD menos invasivo
 const ANCHO_PANEL_MAX := 420.0
 const ALTO_BARRA := 44.0                    # 0.1.8.37: la barra superior ocupa todo el ancho, pegada al borde de arriba
 const ALTO_PINTURA := 120.0                # 0.1.8.41: alto de la pintura que encabeza la pestaña General (el ancho es el de la tarjeta; se recorta al centro)
+const RESTO_PANEL := 220.0                 # lo que ocupan cabecera, migas, pestañas, título de sección y pie del panel (el cuerpo es lo que queda)
 const PANEL_Y := ALTO_BARRA + 8.0           # donde empiezan el panel de país y el de detalle (justo debajo de la barra)
 ## Entradas del menú VISTA: [clave, texto, disponible]. Las no disponibles salen apagadas con «próximamente».
 const VISTAS := [["tradicional", "Tradicional", true], ["relieve", "Relieve", true],
@@ -80,8 +81,7 @@ var datos: Dictionary = {}
 var pestana := "general"
 var sub_militar := "res"
 var det_clave := ""
-var secciones_abiertas := {"Naturaleza": true, "Descripción": true, "Población": true, "Etnias": false, "Ciudades principales": false,
-	"Historial de guerras": false}
+var secciones_abiertas := {}                    # título → abierta; lo que no está aquí sigue la regla «la primera de cada pestaña, abierta» (ver `_seccion`)
 var botones_pestana := {}
 var botones_sub := {}
 # Barra superior (0.1.7.9.1)
@@ -116,6 +116,7 @@ var _din_perdida := false                     # el ingreso diario es negativo
 var _din_deuda := false                       # el país está en deuda
 var _estilo_btns := {}                        # Button -> margen: los botones con estilo metálico propio (cambian con el tema)
 var marco_seccion: PanelContainer
+var _n_secc := 0                                # cuántas secciones lleva la pestaña dibujada (la primera viene abierta)
 var _alto_max := 470.0                        # alto máximo de la sección con scroll (según la altura de la ventana)
 var _ver_guerra := -1
 var _msg_paz := ""                            # último resultado de una propuesta de paz (se muestra en Diplomacia)
@@ -153,7 +154,7 @@ func construir(m: Node, f: Font, f_neg: Font = null) -> void:
 	raiz.theme = tema
 	capa.add_child(raiz)
 	var vp := raiz.get_viewport().get_visible_rect().size
-	_alto_max = clampf(vp.y * 0.36, 170.0, 460.0)             # 0.1.8.3: antes vp.y - 365 (el panel llegaba casi hasta abajo)
+	_alto_max = clampf(vp.y - PANEL_Y - RESTO_PANEL, 200.0, 640.0)   # 0.1.8.52: cada pestaña lleva poco (nueve secciones) y las secundarias vienen plegadas: el cuerpo llega casi hasta abajo sin salirse
 	ancho_panel = clampf(vp.x * 0.30, ANCHO_PANEL_MIN, ANCHO_PANEL_MAX)
 
 	# ── Panel principal ──
@@ -1166,6 +1167,7 @@ func _dibujar() -> void:
 	_items_cuerpo = []                                              # las tarjetas se anotan solas en `_seccion`
 	_cols_cuerpo = null
 	var tipo := String(datos.get("tipo", ""))
+	_n_secc = 0
 	var hay := _hay_ctx()
 	var en_tropas: bool = pestana == "militar" and hay and sub_militar != "res"
 	fila_sub.visible = pestana == "militar" and hay
@@ -1275,7 +1277,7 @@ func mover_panel(rel: Vector2) -> void:
 ## Devuelve el panel a su sitio, su ancho y su alto de siempre.
 func volver_panel() -> void:
 	var vp := raiz.get_viewport().get_visible_rect().size
-	_alto_max = clampf(vp.y * 0.36, 170.0, 460.0)
+	_alto_max = clampf(vp.y - PANEL_Y - RESTO_PANEL, 200.0, 640.0)
 	ancho_panel = clampf(vp.x * 0.30, ANCHO_PANEL_MIN, ANCHO_PANEL_MAX)
 	panel.custom_minimum_size.x = ancho_panel
 	panel.position = Vector2(14.0, PANEL_Y)
@@ -1451,7 +1453,8 @@ func _seccion(titulo: String) -> VBoxContainer:
 	var vb := VBoxContainer.new()
 	vb.add_theme_constant_override("separation", 4)
 	card.add_child(vb)
-	var abierta: bool = secciones_abiertas.get(titulo, true)
+	var abierta: bool = secciones_abiertas.get(titulo, _n_secc == 0)       # 0.1.8.52: de cada pestaña solo la primera sección viene abierta; las demás, plegadas (recuerda lo que abras)
+	_n_secc += 1
 	var cab := Button.new()
 	cab.flat = true
 	cab.alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -1572,14 +1575,15 @@ func _tab_general() -> void:
 	var d := _d()
 	_card_pintura()
 	_card_grupo()
+	var libre: bool = String(datos.get("tipo", "")) == "libre"
+	if not libre:
+		_card_vistazo(d)                                               # 0.1.8.52: lo que más importa va primero (abierto); la descripción viene plegada debajo
 	var sd := _seccion("Descripción")
 	for par in datos.get("desc", []):
 		_fila(sd, String(par[2]) if par.size() > 2 else "i_info", String(par[0]), String(par[1]), String(par[3]) if par.size() > 3 else "")
-	if String(datos.get("tipo", "")) == "libre":                      # 0.1.8.39a: tierras sin reclamar: sin población, etnias, ciudades ni economía
+	if libre:                                                          # 0.1.8.39a: tierras sin reclamar: sin población, etnias, ciudades ni economía
 		_nota(sd, "Nadie gobierna esta zona: no tiene población registrada, ejército, diplomacia ni economía.")
 		_card_naturaleza(d)
-		return
-	_card_vistazo(d)
 
 
 ## «De un vistazo»: las cifras que más importan de lo elegido, con la sección donde se amplía cada una.
@@ -1588,20 +1592,20 @@ func _card_vistazo(d: Dictionary) -> void:
 		return
 	var sec := _seccion("De un vistazo")
 	var pob := float(d["pob"])
-	_fila(sec, "i_pob", "Población (%d, est.)" % main.epoca, fmt_pob(pob), "pob")
-	_fila(sec, "i_area", "Superficie", "%s km² · %s hab/km²" % [fmt_num(float(d["area"])), fmt_num(pob / maxf(float(d["area"]), 1.0))], "area")
+	_linea(sec, "Población (%d, est.)" % main.epoca, fmt_pob(pob), Tema.ORO, "i_pob")
+	_linea(sec, "Superficie", "%s km² · %s hab/km²" % [fmt_num(float(d["area"])), fmt_num(pob / maxf(float(d["area"]), 1.0))], Tema.ORO, "i_area")
 	var m = main.mundo
 	var pais := String(main._pais_de_seleccion())
 	if String(datos.get("tipo", "")) == "pais" and m.paises.has(pais):
 		var e = m.paises[pais]
-		_fila(sec, "i_prov", "Provincias", "%d" % e.provincias.size())
-		_fila(sec, "i_ejercito", "Soldados", fmt_num(float(m.soldados_de_pais(pais))))
+		_linea(sec, "Provincias", "%d" % e.provincias.size(), Tema.ORO, "i_prov")
+		_linea(sec, "Soldados", fmt_num(float(m.soldados_de_pais(pais))), Tema.ORO, "i_ejercito")
 		var mon := _moneda(pais)
 		var neto: float = m.ingreso_neto_diario_local(pais)
-		_fila(sec, main.materias.de_pais(pais) if main.materias != null else "i_moneda", "Entra a la tesorería", "%s por día" % main.fmt_dinero(neto, String(mon[0])))
+		_linea(sec, "Entra a la tesorería", "%s por día" % main.fmt_dinero(neto, String(mon[0])), Tema.ORO, main.materias.de_pais(pais) if main.materias != null else "i_moneda")
 		if m.descubrimientos != null:
-			_fila(sec, "i_prog", "Descubrimientos", "%d de %d" % [m.descubrimientos.cantidad(int(e.tid)), m.descubrimientos.n])
-	_nota(sec, "El detalle de cada cosa está en su sección: Población, Progreso, Economía, Militar, Diplomacia, Gobierno, Territorio y Cultura.")
+			_linea(sec, "Descubrimientos", "%d de %d" % [m.descubrimientos.cantidad(int(e.tid)), m.descubrimientos.n], Tema.ORO, "i_prog")
+	_nota(sec, "El detalle está en cada sección: Población, Progreso, Economía, Militar, Diplomacia, Gobierno, Territorio y Cultura.")
 
 
 ## Naturaleza: vegetación, flora, fauna y altitud (sección Territorio; también se enseña en las tierras sin reclamar).
@@ -1669,9 +1673,12 @@ func _card_descubrimientos() -> void:
 	_fila(sec, "i_prog", "Conocidos", "%d de %d" % [ds.cantidad(tid), ds.n])
 	var por: PackedInt32Array = ds.cantidad_por_era(tid)
 	var tot: PackedInt32Array = ds.total_por_era()
+	var con_avance: Array = []
 	for e in mini(por.size(), tot.size()):
 		if tot[e] > 0 and por[e] > 0:
-			_barra(sec, "Era %d" % (e + 1), 100.0 * float(por[e]) / float(tot[e]), C_BARRAS[e % C_BARRAS.size()])
+			con_avance.append(e)
+	for e in con_avance.slice(maxi(con_avance.size() - 4, 0)):           # las cuatro eras más recientes con avance (todas están en la pantalla completa, tecla T)
+		_barra(sec, "Era %d" % (int(e) + 1), 100.0 * float(por[e]) / float(tot[e]), C_BARRAS[int(e) % C_BARRAS.size()])
 	_boton(sec, "Abrir la pantalla de descubrimientos (T)", func(): main._abrir_descubrimientos())
 
 

@@ -1,0 +1,24 @@
+# slug	nombre	desde	costo_dias	descripción	efectos (clave=valor;…)	facciones (nob/cle/eje/mer = cambio de contento)
+# efectos: reserva (+ fracción de la gente activa que se puede movilizar) · apoyo (apoyo a la guerra, 0-1) · moral · estab (puntos de estabilidad en todas las provincias) · bienestar · admin (capacidad administrativa, fracción) · lib/mando/central (mueven los ejes del régimen) · nat (± a la natalidad, fracción)
+leva_feudal	Leva feudal	-3000	20	Cada señor aporta hombres para la guerra.	reserva=0.015	nob=+8;mer=-2
+servicio_obligatorio	Servicio militar obligatorio	1790	40	Todos los varones sirven un tiempo en el ejército.	reserva=0.04;apoyo=0.05;moral=-2;lib=-0.03	eje=+10;mer=-8
+ejercito_profesional	Ejército profesional	1500	60	Soldados que viven de la guerra y se entrenan todo el año.	apoyo=0.05;moral=2	eje=+8;mer=-3
+movilizacion_total	Movilización total	1800	80	Toda la economía se pone al servicio de la guerra.	reserva=0.06;apoyo=0.10;moral=-4;bienestar=-3	eje=+10;mer=-8
+estado_excepcion	Estado de excepción	1500	30	Se suspenden garantías para imponer el orden y reclutar más rápido.	reserva=0.03;estab=4;lib=-0.10;moral=-3	eje=+8;mer=-6
+diezmo	Diezmo eclesiástico	300	30	Una décima parte de la cosecha va a la Iglesia.	estab=1;moral=-1	cle=+10;mer=-4;nob=-2
+religion_estado	Religión de Estado	-500	30	Una sola fe es la oficial y las demás se toleran poco.	estab=2;lib=-0.05	cle=+12;mer=-3
+libertad_culto	Libertad de culto	1550	40	Cada quien puede rezar como quiera.	lib=0.08;bienestar=1;moral=2	cle=-12;mer=+5
+codigo_comercio	Código de comercio	1100	50	Reglas claras para pesas, contratos y deudas.	admin=0.05	mer=+10;nob=-2
+censo_registro	Censo y registro civil	-300	50	Se cuenta a la gente y las tierras para cobrar y reclutar mejor.	admin=0.12	nob=-3;mer=+2
+correo_real	Correos y caminos reales	1500	70	Las órdenes y las cartas viajan rápido por todo el país.	admin=0.10	mer=+4
+asamblea_nobles	Asamblea de nobles (Cortes)	1100	30	Los nobles se reúnen a aconsejar al gobernante y aprobar impuestos.	mando=0.08;central=-0.04;estab=1	nob=+10;eje=-2
+carta_derechos	Carta de derechos	1215	60	Se escriben por ley los derechos de la gente y los límites del poder.	lib=0.12;mando=0.05;moral=2	nob=+3;eje=-3
+separacion_poderes	División de poderes	1750	80	Jueces, parlamento y gobierno se vigilan entre sí.	lib=0.05;central=-0.05;estab=1.5	eje=-4;nob=-2
+sufragio_censitario	Sufragio censitario	1780	60	Votan los varones con propiedades.	mando=0.15	mer=+8;nob=-3
+sufragio_universal	Sufragio universal	1850	80	Votan todos los adultos.	mando=0.25;moral=3	nob=-10;cle=-3;mer=+2
+prensa_libre	Libertad de prensa	1700	40	Se puede imprimir y criticar sin permiso del gobierno.	lib=0.10;estab=-0.5;moral=2	mer=+8;cle=-4;nob=-4
+censura	Censura de prensa	1450	30	Nada se imprime sin permiso del gobierno.	estab=1.5;lib=-0.08;moral=-1	cle=+4;mer=-4
+policia_politica	Policía política	1800	60	Una red de informantes vigila a quien critica.	estab=3;lib=-0.10;mando=-0.03;moral=-2	eje=+5;mer=-3
+reforma_agraria	Reforma agraria	1780	100	Las tierras grandes se reparten entre los campesinos.	bienestar=2.5;moral=2	nob=-14
+seguridad_social	Seguridad social	1880	150	Pensiones, atención a enfermos y ayuda a quien se queda sin trabajo.	bienestar=3;moral=3	mer=-5
+escuela_obligatoria	Escuela obligatoria	1800	120	Todos los niños van a la escuela.	bienestar=1;moral=1;nat=-0.02	cle=-4;mer=+3

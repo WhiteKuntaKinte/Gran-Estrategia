@@ -357,9 +357,17 @@ func t_hud() -> void:
 	await elegir_provincia(pi)
 	var hud = main.hud
 	ok(hud.datos.get("ed_pis", []) == [pi], "el mapa manda al HUD las provincias de la selección")
-	for tit in ["POBLACIÓN", "INGRESO", "EDIFICIOS", "CORES"]:
-		ok(hay_texto(hud.cuerpo, tit), "tarjeta «%s» en la pestaña General" % tit)
+	hud.abrir_pestana("poblacion")
+	await fotogramas(2)
+	ok(hay_texto(hud.cuerpo, "POBLACIÓN"), "tarjeta «POBLACIÓN» en la pestaña Población")
+	hud.abrir_pestana("economia")
+	await fotogramas(2)
+	ok(hay_texto(hud.cuerpo, "INGRESO"), "tarjeta «INGRESO» en la pestaña Economía")
 	ok(hay_texto(hud.cuerpo, "Producción anual") and hay_texto(hud.cuerpo, "Aporta a la tesorería"), "Ingreso: producción anual y aporte a la tesorería")
+	hud.abrir_pestana("territorio")
+	await fotogramas(2)
+	for tit in ["EDIFICIOS", "CORES"]:
+		ok(hay_texto(hud.cuerpo, tit), "tarjeta «%s» en la pestaña Territorio" % tit)
 	ok(hay_texto(hud.cuerpo, "Core nacional") and hay_texto(hud.cuerpo, "Core cultural") and hay_texto(hud.cuerpo, "tierra propia"), "Cores: nacional (propia) y cultural")
 	ok(hay_texto(hud.cuerpo, "Todavía no hay ningún edificio"), "Edificios: sin edificios todavía")
 	ok(hay_texto(hud.cuerpo, "Construir…"), "botón «Construir…»")
@@ -387,8 +395,12 @@ func t_hud() -> void:
 	main._seleccion_pais(pais, "Europa", Vector2(1200.0, 300.0))
 	await fotogramas(2)
 	ok(hud.datos.get("ed_pis", []).size() == m.paises[pais].provincias.size(), "país: ed_pis = todas sus provincias")
+	hud.abrir_pestana("territorio")
+	await fotogramas(2)
 	ok(hay_texto(hud.cuerpo, "EDIFICIOS") and hay_texto(hud.cuerpo, "CORES") and hay_texto(hud.cuerpo, "propias"), "país: tarjetas de totales de Edificios y Cores")
-	ok(not hay_texto(hud.cuerpo, "INGRESO"), "país: la tarjeta Ingreso es solo de provincia")
+	hud.abrir_pestana("economia")
+	await fotogramas(2)
+	ok(not hay_texto(hud.cuerpo, "Aporta a la tesorería"), "país: la tarjeta Ingreso es solo de provincia")
 	# tierras sin reclamar: nada de esto
 	await arrancar(1)
 	var libre := -1
@@ -550,6 +562,8 @@ func t_grupo() -> void:
 	ok(ed.en_obra(pa, e_ok) == 1 and ed.en_obra(pb, e_ok) == 1 and ed.en_obra(pc, e_ok) == 1, "orden de grupo: obra en cada una de las tres")
 	ok(absf((tes0 - m.paises[pais].tesoreria) - (ed.costo_local(pa, e_ok) + ed.costo_local(pb, e_ok) + ed.costo_local(pc, e_ok))) < 1.0e-3 * tes0 * 1.0e-6 + 1.0, "se cobra la suma de las tres")
 	ok(w.obras_mostradas == 3, "«Obras en curso» lista las 3 obras")
+	hud.abrir_pestana("territorio")
+	await fotogramas(2)
 	ok(hud.datos.get("ed_sig", 0) != 0 and hay_texto(hud.cuerpo, "EN OBRA (3)"), "el HUD de grupo muestra las 3 obras")
 	# un país entero cuenta como grupo (Ctrl+clic en países)
 	main._limpiar_seleccion()

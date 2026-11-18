@@ -68,7 +68,7 @@ func run() -> void:
 	await esperar(1.0)
 	await foto("02_panel_pais")
 	var hud = main.hud
-	for t in ["diplomacia", "militar", "politica", "economia"]:
+	for t in ["general", "poblacion", "progreso", "economia", "militar", "diplomacia", "politica", "territorio", "cultura"]:
 		hud.abrir_pestana(t) if hud.has_method("abrir_pestana") else null
 		await esperar(0.5)
 		await foto("03_pestana_" + t)
@@ -77,4 +77,8 @@ func run() -> void:
 	main._seleccion_provincia(int(m.paises["España"].provincias[0]), "Europa", mp(-3.7, 40.4))
 	await esperar(1.0)
 	await foto("04_panel_provincia")
+	for t in ["poblacion", "economia", "territorio"]:
+		hud.abrir_pestana(t)
+		await esperar(0.5)
+		await foto("05_prov_" + t)
 	get_tree().quit()

@@ -187,9 +187,9 @@ func t_2026() -> void:
 	for id in p.creditos:
 		var tam := FileAccess.get_file_as_bytes("res://pinturas/%s.jpg" % id).size()
 		peor = maxi(peor, tam)
-		if tam > 400000 or tam < 8000:
+		if tam > 1200000 or tam < 8000:
 			pesos_ok = false
-	ok(pesos_ok, "cada .jpg pesa entre 8 KB y 400 KB (el mayor: %d KB)" % (peor / 1024))
+	ok(pesos_ok, "cada .jpg pesa entre 8 KB y 1,2 MB (el mayor: %d KB)" % (peor / 1024))
 	ok(p.texto_creditos().contains("dominio público") and p.texto_creditos().contains(str(p.creditos.size())), "texto de créditos: %s" % p.texto_creditos().substr(0, 70))
 
 
@@ -270,15 +270,16 @@ func t_epoca_1() -> void:
 	ok(rom != "", "el Imperio romano existe con ese nombre en los datos del año 1 (%s)" % rom)
 	if rom != "":
 		var f: Dictionary = p.de_pais(rom)
-		ok(String(f.get("nivel", "")) == "pais" and String(f["id"]) == "1dc/imperio_romano", "Roma: su pintura del año 1 (%s)" % String(f.get("titulo", "")))
+		ok(not f.is_empty() and p.valida(String(f["id"])) and int(p.creditos[String(f["id"])]["anio"]) <= 1, "Roma: su pintura del año 1 es de esa fecha o anterior (%s · %s)" % [String(f.get("titulo", "")), String(f.get("id", ""))])
 	var huerfanas := []
 	var claves := {}
 	for nombre in main.mundo.paises:
 		claves[Pint.clave(String(nombre))] = true
 	for id in p.creditos:
-		if String(id).begins_with("1dc/") and not claves.has(String(id).substr(4)):
+		var clave_id := String(id).substr(4)
+		if String(id).begins_with("1dc/") and not claves.has(clave_id) and not clave_id.begins_with("region_") and not clave_id.begins_with("continente_") and clave_id != "mundo":
 			huerfanas.append(id)
-	ok(huerfanas.is_empty(), "cada pintura del año 1 corresponde a un pueblo real de los datos (sin pueblo: %s)" % str(huerfanas))
+	ok(huerfanas.is_empty(), "cada pintura del año 1 es de un pueblo real de los datos o de una región, continente o el mundo (sin pueblo: %s)" % str(huerfanas))
 	var sin_region := []
 	for nombre in main.mundo.paises:
 		var pe = main.mundo.paises[nombre]

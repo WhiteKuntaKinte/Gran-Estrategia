@@ -74,8 +74,8 @@ func clic(chip: Control) -> void:
 # ─────────────────────────────────────────────────────────────
 func t_iconos() -> void:
 	print("[T] ── Iconos de la interfaz en HD")
-	var nombres := ["alt", "area", "atras", "carne", "ciudad", "cont", "cultivo", "debug", "dens", "desc", "devast", "dipl", "eco", "editar", "ejercito", "estado", "estrella",
-		"etn", "fauna", "flora", "gob", "info", "lentes", "mineral", "moneda", "pais", "pausa", "pob", "prof", "prov", "tpausa", "veg", "vel1", "vel2", "vel3", "vel4", "vel5", "vel6", "vista"]
+	var nombres := ["alt", "area", "atras", "carne", "ciudad", "cont", "cult", "cultivo", "debug", "dens", "desc", "devast", "dipl", "eco", "editar", "ejercito", "estado", "estrella",
+		"etn", "fauna", "flora", "gob", "info", "lentes", "mineral", "moneda", "pais", "pausa", "pob", "prof", "prog", "prov", "terr", "tpausa", "veg", "vel1", "vel2", "vel3", "vel4", "vel5", "vel6", "vista"]
 	var mal := []
 	var vacios := []
 	var sin_mip := []

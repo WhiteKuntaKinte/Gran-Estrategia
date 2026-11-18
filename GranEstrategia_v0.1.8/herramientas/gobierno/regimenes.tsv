@@ -1,0 +1,18 @@
+# slug	nombre	mando	central	lib	suces	desde	descripción
+# mando: 0 = decide uno solo · 1 = decide el pueblo entero · central: 0 = poder disperso (señores locales) · 1 = todo sale de la capital · lib: libertades de la gente · suces: h hereditaria, e electiva, d designada (junta, partido, clero)
+# Los valores son provisionales: se corrigen aquí y se regenera con construir_gobierno.py
+monarquia_absoluta	Monarquía absoluta	0.05	0.85	0.10	h	-3000	El rey decide y la corte ejecuta; la corona pasa de padres a hijos.
+monarquia_feudal	Monarquía feudal	0.15	0.25	0.15	h	-800	El rey reina sobre señores que mandan en sus tierras y le deben tropas.
+imperio	Imperio autocrático	0.05	0.90	0.10	h	-3000	Un emperador y una administración extensa gobiernan pueblos muy distintos.
+monarquia_electiva	Monarquía electiva	0.25	0.45	0.25	e	-800	Los grandes del reino eligen al soberano cuando muere el anterior.
+aristocracia	República aristocrática	0.35	0.40	0.40	e	-600	Unas pocas familias ricas se turnan los cargos de gobierno.
+asamblea	Asamblea de ciudadanos	0.65	0.30	0.55	e	-600	Los ciudadanos con derechos votan las leyes y eligen magistrados.
+teocracia	Teocracia	0.10	0.70	0.05	d	-3000	Los sacerdotes gobiernan en nombre de la divinidad.
+cacicazgo	Jefatura tribal	0.30	0.15	0.30	e	-10000	Un jefe guía al pueblo con el apoyo de los clanes.
+consejo_ancianos	Consejo de ancianos	0.45	0.10	0.45	e	-10000	Los ancianos de cada clan deciden juntos por consenso.
+confederacion_nomada	Confederación nómada	0.20	0.20	0.30	e	-3000	Un kan o jefe supremo reúne a tribus que se mueven con sus rebaños.
+monarquia_constitucional	Monarquía constitucional	0.70	0.60	0.80	h	1680	El monarca reina pero manda un parlamento elegido.
+republica_democratica	República democrática	0.85	0.60	0.85	e	1780	Elecciones libres, parlamento, tribunales independientes y prensa libre.
+republica_autoritaria	República autoritaria	0.45	0.70	0.30	e	1780	Hay elecciones y presidente, pero el poder se concentra y la oposición lo tiene difícil.
+dictadura_militar	Junta militar	0.05	0.80	0.10	d	-500	Los jefes del ejército gobiernan sin elecciones.
+partido_unico	Estado de partido único	0.15	0.95	0.10	d	1917	Un solo partido controla el Estado, el ejército y la prensa.

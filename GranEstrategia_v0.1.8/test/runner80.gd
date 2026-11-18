@@ -109,6 +109,8 @@ func t_panel() -> void:
 	ok(h.ancho_panel <= vp().x - 16.0 + 0.01, "ni ensanchar más que la pantalla (%d de %d)" % [int(h.ancho_panel), int(vp().x)])
 	# alto
 	h.arrastrar_borde_panel(h.PB_DER, Vector2(-5000, 0))
+	h.arrastrar_borde_panel(h.PB_ABA, Vector2(0, -5000))                      # primero se baja el borde al mínimo: con el panel ya casi hasta abajo no hay a dónde crecer
+	await esperar(0.2)
 	var alto0: float = h._alto_max
 	h.arrastrar_borde_panel(h.PB_ABA, Vector2(0, 90))
 	await esperar(0.3)

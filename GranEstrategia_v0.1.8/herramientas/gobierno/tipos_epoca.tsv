@@ -1,0 +1,24 @@
+# Para los escenarios antiguos: el «tipo» de cada pueblo en los datos de la época → régimen. Después se aplican los ajustes por nombre.
+# tipo	régimen
+imperio	imperio
+reino	monarquia_feudal
+reinos	monarquia_feudal
+reino tribal	cacicazgo
+principado	monarquia_feudal
+condado	monarquia_feudal
+ducado	monarquia_feudal
+taifa	monarquia_absoluta
+emirato	monarquia_absoluta
+sultanato	monarquia_absoluta
+califato	teocracia
+khanato	confederacion_nomada
+electorado	monarquia_electiva
+república	aristocracia
+ciudades-estado	asamblea
+tribus	cacicazgo
+cultura	cacicazgo
+cazadores-recolectores	consejo_ancianos
+confederación	consejo_ancianos
+confederación tribal	consejo_ancianos
+repúblicas tribales	consejo_ancianos
+confederación nómada	confederacion_nomada

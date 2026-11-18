@@ -270,7 +270,8 @@ func t_epoca_1() -> void:
 	for nombre in main.mundo.paises:
 		cualquiera = String(nombre)
 		break
-	ok(mt.de_pais(cualquiera) == "i_moneda", "en el año 1 no hay monedas modernas: icono genérico (%s)" % mt.de_pais(cualquiera))
+	var ic_ano1: String = mt.de_pais(cualquiera)
+	ok(ic_ano1 == "i_moneda" or (ic_ano1.begins_with("divisas/d_") and main.icono(ic_ano1) != null), "en el año 1 la moneda es una histórica con su icono, o el genérico (%s)" % ic_ano1)
 	var pi: int = int(main.mundo.paises[cualquiera].provincias[0]) if main.mundo.paises[cualquiera].provincias.size() > 0 else -1
 	if pi >= 0:
 		main._seleccion_provincia(pi, main.mundo.continente_de_provincia(pi), Vector2(1200.0, 300.0))
