@@ -5,11 +5,15 @@ extends RefCounted
 ##   · `<carpeta>` = la época del escenario: «2026», «1dc» (año 1 d. C.), «1096» o «1500»; más «general» para las que valen en cualquier época.
 ##     (1096 y 1500 todavía no traen pinturas propias de cada nación: usan la de su región, su continente o el mundo.)
 ##   · `<clave>` = el nombre del país sin tildes, en minúsculas y con «_» (España → espana, Reino Unido → reino_unido).
-## CÓMO SE ELIGE (de lo más cercano a lo más lejano; la primera que exista gana):
+## CÓMO SE ELIGE (de lo más cercano a lo más lejano; la primera VÁLIDA gana):
 ##   1. la del propio país en la época activa          pinturas/2026/francia.jpg
-##   2. la de su región del mundo                      pinturas/general/region_europa_occidental.jpg
-##   3. la de su continente                            pinturas/general/continente_europa.jpg
-##   4. la del mundo                                   pinturas/general/mundo.jpg
+##   2. la de su región del mundo                      pinturas/<época>/region_europa_occidental.jpg, y si no, pinturas/general/region_europa_occidental.jpg
+##   3. la de su continente                            pinturas/<época>/continente_europa.jpg  (o general/)
+##   4. la del mundo                                   pinturas/<época>/mundo.jpg              (o general/)
+## 0.1.8.52 · REGLA DE ÉPOCA: en los escenarios históricos (año 1, 1096, 1500) una pintura solo vale si su campo `anio` en creditos.json es MENOR O IGUAL
+## que el año del escenario (nada de un cuadro de 1648 en 1500). Sin `anio` no vale. En 2026 vale cualquiera. Si ninguna es válida no sale tarjeta.
+## Las regiones del norte de África se separan en `region_maghreb` (Marruecos, Argelia, Túnez, Libia y el Sáhara) y `region_nilo` (Egipto y Sudán):
+## un monumento de un país ya no representa a toda la región.
 ## 0.1.8.43 · POR LUGAR: antes que la del país, una PROVINCIA puede tener su propia pintura y, en EE. UU., también su ESTADO (los condados son las provincias):
 ##   0. la de la provincia                             pinturas/2026/lugar_espana__toledo.jpg           (<país>__<provincia>, con el país de origen de la provincia)
 ##   0b. la de su estado (solo EE. UU.)                pinturas/2026/estado_estados_unidos__california.jpg
@@ -20,6 +24,7 @@ extends RefCounted
 
 const RAIZ := "res://pinturas/"
 const CARPETA_EPOCA := {2026: "2026", 1: "1dc", 1096: "1096", 1500: "1500"}
+const ANIO_EPOCA := {2026: 2026, 1: 1, 1096: 1096, 1500: 1500}   # año del escenario por época (0.1.8.52: tope de las pinturas históricas)
 const MAX_CACHE := 14                              # texturas en memoria a la vez (una de 1280 px pesa ~4 MB)
 const ANCHO_MAPA := 2400.0
 const ALTO_MAPA := 1200.0
@@ -72,6 +77,29 @@ func carpeta_epoca() -> String:
 	return String(CARPETA_EPOCA.get(e, "2026"))
 
 
+## 0.1.8.52 · ¿Sirve esta pintura en la época activa? En 2026 cualquiera; en las históricas solo si su `anio` es anterior o igual al del escenario.
+func valida(id: String) -> bool:
+	if not creditos.has(id):
+		return false
+	var e := int(main.epoca) if main != null else 2026
+	if e == 2026:
+		return true
+	var c: Dictionary = creditos[id]
+	if not c.has("anio"):
+		return false
+	return int(c["anio"]) <= int(ANIO_EPOCA.get(e, e))
+
+
+## La primera pintura válida de una lista de claves («region_x», «continente_x», «mundo»…): primero la de la época activa y luego la general.
+func _primera_valida(claves: Array, nivel: String) -> Dictionary:
+	var ep := carpeta_epoca() + "/"
+	for k in claves:
+		for id in [ep + String(k), "general/" + String(k)]:
+			if valida(id):
+				return _ficha(id, nivel)
+	return {}
+
+
 ## Región del mundo de un país: «region_europa_occidental», «region_asia_este»… ("" si no tiene: Antártida o sin datos).
 ## Sale del centro del bloque principal del país (lon/lat) y de su continente.
 func region_de(pais: String) -> String:
@@ -112,7 +140,9 @@ static func region_en(continente: String, lon: float, lat: float) -> String:
 				return "region_oriente_medio"
 			return "region_asia_este"
 		"África":
-			return "region_africa_norte" if lat >= 15.5 else "region_africa_subsahariana"
+			if lat < 15.5:
+				return "region_africa_subsahariana"
+			return "region_maghreb" if lon < 25.0 else "region_nilo"
 		"América del Norte":
 			return "region_mesoamerica_caribe" if lat < 25.5 else "region_norteamerica"
 		"América del Sur":
@@ -131,17 +161,18 @@ func de_pais(pais: String, region_prov := "") -> Dictionary:
 	var cont := ""
 	if main != null and main.mundo != null and main.mundo.paises.has(pais):
 		cont = String(main.mundo.paises[pais].continente)
-	var intentos := [
-		[carpeta_epoca() + "/" + clave(pais), "pais"],
-		["general/" + (region_prov if region_prov != "" else region_de(pais)), "region"],
-		["general/continente_" + clave(cont), "continente"],
-		["general/mundo", "mundo"],
-	]
-	for it in intentos:
-		var id: String = it[0]
-		if creditos.has(id):
-			return _ficha(id, String(it[1]))
-	return {}
+	var id_pais := carpeta_epoca() + "/" + clave(pais)
+	if valida(id_pais):
+		return _ficha(id_pais, "pais")
+	var reg := region_prov if region_prov != "" else region_de(pais)
+	if reg != "":
+		var f := _primera_valida([reg], "region")
+		if not f.is_empty():
+			return f
+	var f2 := _primera_valida(["continente_" + clave(cont)], "continente") if cont != "" else {}
+	if not f2.is_empty():
+		return f2
+	return _primera_valida(["mundo"], "mundo")
 
 
 ## 0.1.8.43 · La pintura de una PROVINCIA (índice de Mundo.provincias): la suya, la de su estado (EE. UU.) o la del país que la tiene (con la región según dónde cae).
@@ -154,11 +185,11 @@ func de_provincia(pi: int) -> Dictionary:
 	var origen := String(pr.pais_original) if String(pr.pais_original) != "" else String(pr.pais)
 	var ep := carpeta_epoca() + "/"
 	var id := ep + "lugar_" + clave(origen) + "__" + clave(String(pr.nombre))
-	if creditos.has(id):
+	if valida(id):
 		return _ficha(id, "lugar")
 	if String(pr.estado) != "":
 		id = ep + "estado_" + clave(origen) + "__" + clave(String(pr.estado))
-		if creditos.has(id):
+		if valida(id):
 			return _ficha(id, "estado")
 	return de_pais(String(pr.pais), _region_de_provincia(pr))
 
@@ -168,7 +199,7 @@ func de_estado(pais: String, estado: String) -> Dictionary:
 	if not listo:
 		return {}
 	var id := carpeta_epoca() + "/estado_" + clave(pais) + "__" + clave(estado)
-	if creditos.has(id):
+	if valida(id):
 		return _ficha(id, "estado")
 	return de_pais(pais)
 
@@ -187,10 +218,10 @@ func _region_de_provincia(pr) -> String:
 func de_continente(cont: String) -> Dictionary:
 	if not listo:
 		return {}
-	for it in [["general/continente_" + clave(cont), "continente"], ["general/mundo", "mundo"]]:
-		if creditos.has(String(it[0])):
-			return _ficha(String(it[0]), String(it[1]))
-	return {}
+	var f := _primera_valida(["continente_" + clave(cont)], "continente")
+	if not f.is_empty():
+		return f
+	return _primera_valida(["mundo"], "mundo")
 
 
 func _ficha(id: String, nivel: String) -> Dictionary:

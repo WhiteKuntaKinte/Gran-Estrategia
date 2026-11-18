@@ -7,7 +7,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Boadicea_Haranguing_the_Britons_(called_Boudicca,_or_Boadicea)_by_John_Opie.jpg",
   "archivo_commons": "File:Boadicea Haranguing the Britons (called Boudicca, or Boadicea) by John Opie.jpg",
   "ancho": 764,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1793
  },
  "1dc/catuvelaunos_y_britones_del_sureste": {
   "titulo": "Carataco ante el emperador Claudio",
@@ -17,7 +18,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Caractacus-Claudius-Birrell-Fuseli.jpeg",
   "archivo_commons": "File:Caractacus-Claudius-Birrell-Fuseli.jpeg",
   "ancho": 960,
-  "alto": 731
+  "alto": 731,
+  "anio": 1792
  },
  "1dc/cimbrios_anglos_y_daneses": {
   "titulo": "Mario vencedor de los cimbrios",
@@ -37,7 +39,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Le%C3%B3nidas_en_las_Term%C3%B3pilas,_por_Jacques-Louis_David.jpg",
   "archivo_commons": "File:Leónidas en las Termópilas, por Jacques-Louis David.jpg",
   "ancho": 960,
-  "alto": 712
+  "alto": 712,
+  "anio": 1814
  },
  "1dc/ciudades_estado_mayas": {
   "titulo": "Pozo y edificio en Sabacché, Yucatán",
@@ -47,7 +50,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Well_and_Building_at_Sabactsche_Yucatan_by_F_Catherwood_B.jpg",
   "archivo_commons": "File:Well and Building at Sabactsche Yucatan by F Catherwood B.jpg",
   "ancho": 960,
-  "alto": 718
+  "alto": 718,
+  "anio": 1844
  },
  "1dc/confederacion_xiongnu": {
   "titulo": "Corona de oro xiongnu",
@@ -57,7 +61,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Warring_States_Xiongnu_Gold_Crown_-_b.jpg",
   "archivo_commons": "File:Warring States Xiongnu Gold Crown - b.jpg",
   "ancho": 960,
-  "alto": 640
+  "alto": 640,
+  "anio": -300
  },
  "1dc/cultura_hopewell": {
   "titulo": "Danza de la lluvia entre los mandan",
@@ -67,7 +72,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:George_Catlin_-_Rainmaking_among_the_Mandan_-_1985.66.476_-_Smithsonian_American_Art_Museum.jpg",
   "archivo_commons": "File:George Catlin - Rainmaking among the Mandan - 1985.66.476 - Smithsonian American Art Museum.jpg",
   "ancho": 960,
-  "alto": 627
+  "alto": 627,
+  "anio": 1837
  },
  "1dc/dacios": {
   "titulo": "Columna de Trajano: las guerras dacias",
@@ -107,7 +113,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Caravan_(1883),_by_Gustavo_Simoni.jpg",
   "archivo_commons": "File:The Caravan (1883), by Gustavo Simoni.jpg",
   "ancho": 960,
-  "alto": 674
+  "alto": 674,
+  "anio": 1883
  },
  "1dc/getulos_y_pueblos_bereberes_del_atlas_y_el_sahara_septentrional": {
   "titulo": "Tiendas de la smala de Si-Hamed-Bel-Hadj, Sáhara",
@@ -117,7 +124,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Fromentin-Smala.JPG",
   "archivo_commons": "File:Fromentin-Smala.JPG",
   "ancho": 960,
-  "alto": 487
+  "alto": 487,
+  "anio": 1850
  },
  "1dc/godos_gutones_del_vistula": {
   "titulo": "Los visigodos atacan a Clodoveo, que mata a Alarico II",
@@ -127,7 +135,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Visigoths_Attacking_Clovis_I_as_He_Kills_Alaric_II_-_Edme_Bouchardon.jpg",
   "archivo_commons": "File:Visigoths Attacking Clovis I as He Kills Alaric II - Edme Bouchardon.jpg",
   "ancho": 960,
-  "alto": 453
+  "alto": 453,
+  "anio": 1738
  },
  "1dc/goguryeo": {
   "titulo": "Procesión de Dong Shou (mural de la tumba de Anak n.º 3)",
@@ -137,7 +146,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Dongshouprocessionmural.jpg",
   "archivo_commons": "File:Dongshouprocessionmural.jpg",
   "ancho": 960,
-  "alto": 468
+  "alto": 468,
+  "anio": 357
  },
  "1dc/hibernios_irlanda_gaelica": {
   "titulo": "Los hijos de Lir",
@@ -147,7 +157,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:John_Duncan_(1924)_Children_of_Lir.jpg",
   "archivo_commons": "File:John Duncan (1924) Children of Lir.jpg",
   "ancho": 960,
-  "alto": 970
+  "alto": 970,
+  "anio": 1924
  },
  "1dc/imperio_romano": {
   "titulo": "Cicerón denuncia a Catilina en el Senado",
@@ -157,7 +168,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Cicero_Denounces_Catiline_in_the_Roman_Senate_by_Cesare_Maccari.png",
   "archivo_commons": "File:Cicero Denounces Catiline in the Roman Senate by Cesare Maccari.png",
   "ancho": 960,
-  "alto": 625
+  "alto": 625,
+  "anio": 1889
  },
  "1dc/judea": {
   "titulo": "El asedio y la destrucción de Jerusalén por los romanos al mando de Tito",
@@ -167,7 +179,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_-_The_Siege_and_Destruction_of_Jerusalem_by_the_Romans_Under_the_Command_of_Titus,_A.D._70.jpg",
   "archivo_commons": "File:David Roberts - The Siege and Destruction of Jerusalem by the Romans Under the Command of Titus, A.D. 70.jpg",
   "ancho": 960,
-  "alto": 638
+  "alto": 638,
+  "anio": 1850
  },
  "1dc/magadha_y_bengala": {
   "titulo": "Las orillas del Ganges",
@@ -177,7 +190,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:William_Daniell_-_The_Banks_of_the_Ganges_-_Google_Art_Project.jpg",
   "archivo_commons": "File:William Daniell - The Banks of the Ganges - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 806
+  "alto": 806,
+  "anio": 1825
  },
  "1dc/marcomanos_y_cuados": {
   "titulo": "La batalla de Varo",
@@ -187,7 +201,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Otto_Albert_Koch_Varusschlacht_1909.jpg",
   "archivo_commons": "File:Otto Albert Koch Varusschlacht 1909.jpg",
   "ancho": 785,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1909
  },
  "1dc/melanesios_cultura_lapita_bismarck_salomon_y_vanuatu": {
   "titulo": "El desembarco en Erromango",
@@ -197,7 +212,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Landing_at_Erramanga_painting.jpg",
   "archivo_commons": "File:The Landing at Erramanga painting.jpg",
   "ancho": 960,
-  "alto": 723
+  "alto": 723,
+  "anio": 1776
  },
  "1dc/pueblos_aborigenes_del_sur_de_australia_murray_y_nullarbor": {
   "titulo": "Campamento aborigen",
@@ -207,7 +223,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Tyrwhitt_Balcombe_-_5e54834be1.jpg",
   "archivo_commons": "File:Thomas Tyrwhitt Balcombe - 5e54834be1.jpg",
   "ancho": 960,
-  "alto": 686
+  "alto": 686,
+  "anio": 1847
  },
  "1dc/pueblos_de_fiyi_tonga_y_samoa_cultura_lapita": {
   "titulo": "Vista de la bahía de Matavai, Tahití",
@@ -217,7 +234,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Hodges,_Resolution_and_Adventure_in_Matavai_Bay.jpg",
   "archivo_commons": "File:Hodges, Resolution and Adventure in Matavai Bay.jpg",
   "ancho": 960,
-  "alto": 680
+  "alto": 680,
+  "anio": 1776
  },
  "1dc/pueblos_de_java_bali_y_las_pequenas_sondas": {
   "titulo": "Templo javanés en ruinas",
@@ -227,7 +245,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Raden_Saleh_-_Javanese_Temple_in_Ruins_-_1985.66.328,263_-_Smithsonian_American_Art_Museum.jpg",
   "archivo_commons": "File:Raden Saleh - Javanese Temple in Ruins - 1985.66.328,263 - Smithsonian American Art Museum.jpg",
   "ancho": 960,
-  "alto": 536
+  "alto": 536,
+  "anio": 1860
  },
  "1dc/pueblos_de_la_costa_noroeste_tlingit_haida_y_salish": {
   "titulo": "Madre tótem, Kitwancool",
@@ -237,7 +256,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Emily_Carr_-_Totem_Mother.jpg",
   "archivo_commons": "File:Emily Carr - Totem Mother.jpg",
   "ancho": 686,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1928
  },
  "1dc/pueblos_de_las_grandes_llanuras_cazadores_de_bisontes": {
   "titulo": "Cacería de búfalos",
@@ -247,7 +267,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:George_Catlin_-_Buffalo_Hunt,_A_Numerous_Group.jpg",
   "archivo_commons": "File:George Catlin - Buffalo Hunt, A Numerous Group.jpg",
   "ancho": 960,
-  "alto": 638
+  "alto": 638,
+  "anio": 1844
  },
  "1dc/pueblos_khoisan_san_y_joikoi": {
   "titulo": "Arte rupestre de Spitzkoppe",
@@ -257,7 +278,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Spitzkoppeko_Pintura.JPG",
   "archivo_commons": "File:Spitzkoppeko Pintura.JPG",
   "ancho": 960,
-  "alto": 720
+  "alto": 720,
+  "anio": -1000
  },
  "1dc/pueblos_mon_y_de_suvarnabhumi": {
   "titulo": "Un lago sagrado en Birmania",
@@ -267,7 +289,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Eduard_Hildebrandt_-_Ein_heiliger_See_in_Birma_(1867).jpg",
   "archivo_commons": "File:Eduard Hildebrandt - Ein heiliger See in Birma (1867).jpg",
   "ancho": 960,
-  "alto": 614
+  "alto": 614,
+  "anio": 1867
  },
  "1dc/queruscos_catos_y_bructeros": {
   "titulo": "La batalla de Arminio en el bosque de Teutoburgo",
@@ -277,7 +300,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Wilhelm_Lindenschmit_d._%C3%84lt._-_Die_Hermannsschlacht_im_Teutoburger_Wald_(um_1840).jpg",
   "archivo_commons": "File:Wilhelm Lindenschmit d. Ält. - Die Hermannsschlacht im Teutoburger Wald (um 1840).jpg",
   "ancho": 960,
-  "alto": 716
+  "alto": 716,
+  "anio": 1840
  },
  "1dc/reino_de_aksum": {
   "titulo": "Icono de la Virgen con el Niño",
@@ -307,7 +331,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Aivazovsky_-_Descent_of_Noah_from_Ararat.jpg",
   "archivo_commons": "File:Aivazovsky - Descent of Noah from Ararat.jpg",
   "ancho": 960,
-  "alto": 565
+  "alto": 565,
+  "anio": 1889
  },
  "1dc/reino_de_himyar": {
   "titulo": "Bilqis, reina de Saba",
@@ -317,7 +342,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Bilqis,_Queen_of_Sheba,_painting,_album,_Safavid_dynasty,_Iran.jpg",
   "archivo_commons": "File:Bilqis, Queen of Sheba, painting, album, Safavid dynasty, Iran.jpg",
   "ancho": 960,
-  "alto": 561
+  "alto": 561,
+  "anio": 1590
  },
  "1dc/reino_de_kush_meroe": {
   "titulo": "El templo de Dendur, Nubia",
@@ -327,7 +353,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Temple_at_Dendur,_Nubia_MET_DP804892.jpg",
   "archivo_commons": "File:The Temple at Dendur, Nubia MET DP804892.jpg",
   "ancho": 960,
-  "alto": 699
+  "alto": 699,
+  "anio": 1848
  },
  "1dc/reino_del_bosforo": {
   "titulo": "Vista de Kerch",
@@ -337,7 +364,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Kerch_aivazovsky.jpg",
   "archivo_commons": "File:Kerch aivazovsky.jpg",
   "ancho": 960,
-  "alto": 704
+  "alto": 704,
+  "anio": 1839
  },
  "1dc/reino_del_ponto": {
   "titulo": "La tumba de Mitrídates",
@@ -347,7 +375,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B0%D1%80%D0%BB%D0%BE_%D0%91%D0%BE%D1%81%D1%81%D0%BE%D0%BB%D0%B8._%D0%9C%D0%BE%D0%B3%D0%B8%D0%BB%D0%B0_%D0%9C%D0%B8%D1%82%D1%80%D0%B8%D0%B4%D0%B0%D1%82%D0%B0.jpg",
   "archivo_commons": "File:Карло Боссоли. Могила Митридата.jpg",
   "ancho": 960,
-  "alto": 725
+  "alto": 725,
+  "anio": 1856
  },
  "1dc/reino_indoescita": {
   "titulo": "Pintura mural kushán de Shiva y Oesho",
@@ -367,7 +396,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_-_El_Deir_Petra_-_1927.141_-_Cleveland_Museum_of_Art.jpg",
   "archivo_commons": "File:David Roberts - El Deir Petra - 1927.141 - Cleveland Museum of Art.jpg",
   "ancho": 960,
-  "alto": 675
+  "alto": 675,
+  "anio": 1839
  },
  "1dc/sami_y_pueblos_de_la_fenoscandia_septentrional": {
   "titulo": "Sami de la costa en el Ulfsfjord",
@@ -387,7 +417,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Sarmatians_warriors_(reconstruction).jpg",
   "archivo_commons": "File:Sarmatians warriors (reconstruction).jpg",
   "ancho": 960,
-  "alto": 714
+  "alto": 714,
+  "anio": 1882
  },
  "1dc/teotihuacan_valle_de_mexico": {
   "titulo": "La Pirámide del Sol en Teotihuacán",
@@ -397,7 +428,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:La_Pir%C3%A1mide_del_Sol_en_Teotihuac%C3%A1n_-_1878_-_Jos%C3%A9_Mar%C3%ADa_Velasco_-_MUNAL.jpg",
   "archivo_commons": "File:La Pirámide del Sol en Teotihuacán - 1878 - José María Velasco - MUNAL.jpg",
   "ancho": 960,
-  "alto": 651
+  "alto": 651,
+  "anio": 1878
  },
  "1dc/tierras_sin_reclamar_de_europa": {
   "titulo": "Tumba megalítica en la nieve",
@@ -407,7 +439,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Cairn_in_Snow_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Caspar David Friedrich - Cairn in Snow - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 728
+  "alto": 728,
+  "anio": 1807
  },
  "1dc/tribus_arabes_de_neyed_y_hiyaz": {
   "titulo": "Un árabe en el desierto",
@@ -417,7 +450,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Charles-Philog%C3%A8ne_Tschaggeny_-_An_Arabian_in_the_desert.jpg",
   "archivo_commons": "File:Charles-Philogène Tschaggeny - An Arabian in the desert.jpg",
   "ancho": 960,
-  "alto": 721
+  "alto": 721,
+  "anio": 1858
  },
  "2026/afganistan": {
   "titulo": "Valle de Logar, mirando hacia Kabul",
@@ -427,7 +461,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:John_Frederick_Irwin_-_Logar_Valley,_Afghanistan._Looking_towards_Cabul,_showing_the_pass._Camp_Hisarak,_May_1880.jpg",
   "archivo_commons": "File:John Frederick Irwin - Logar Valley, Afghanistan. Looking towards Cabul, showing the pass. Camp Hisarak, May 1880.jpg",
   "ancho": 960,
-  "alto": 601
+  "alto": 601,
+  "anio": 1880
  },
  "2026/alemania": {
   "titulo": "El caminante sobre el mar de nubes",
@@ -437,7 +472,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg",
   "archivo_commons": "File:Caspar David Friedrich - Wanderer above the sea of fog.jpg",
   "ancho": 859,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1818
  },
  "2026/arabia_saudita": {
   "titulo": "Caravana camino de La Meca",
@@ -447,7 +483,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:F%C3%A9lix_Ziem_-_Caravane_en_route_vers_La_Mecque_-_PPP205_-_Mus%C3%A9e_des_Beaux-Arts_de_la_ville_de_Paris.jpg",
   "archivo_commons": "File:Félix Ziem - Caravane en route vers La Mecque - PPP205 - Musée des Beaux-Arts de la ville de Paris.jpg",
   "ancho": 960,
-  "alto": 596
+  "alto": 596,
+  "anio": 1880
  },
  "2026/argelia": {
   "titulo": "Mujeres de Argel en su apartamento",
@@ -457,7 +494,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Delacroix-femmes_d%27Alger.JPG",
   "archivo_commons": "File:Delacroix-femmes d'Alger.JPG",
   "ancho": 960,
-  "alto": 717
+  "alto": 717,
+  "anio": 1849
  },
  "2026/argentina": {
   "titulo": "Un alto en el campo",
@@ -467,7 +505,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Prilidiano_Pueyrredon_-_Un_alto_en_el_campo_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Prilidiano Pueyrredon - Un alto en el campo - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 428
+  "alto": 428,
+  "anio": 1861
  },
  "2026/armenia": {
   "titulo": "El arca de Noé sobre el monte Ararat",
@@ -477,7 +516,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Noah%27s_Ark_on_Mount_Ararat_by_Simon_de_Myle.jpg",
   "archivo_commons": "File:Noah's Ark on Mount Ararat by Simon de Myle.jpg",
   "ancho": 960,
-  "alto": 754
+  "alto": 754,
+  "anio": 1570
  },
  "2026/australia": {
   "titulo": "La esquila de los carneros",
@@ -487,7 +527,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tom_Roberts_-_Shearing_the_rams_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Tom Roberts - Shearing the rams - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 638
+  "alto": 638,
+  "anio": 1890
  },
  "2026/austria": {
   "titulo": "El beso",
@@ -497,7 +538,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg",
   "archivo_commons": "File:The Kiss - Gustav Klimt - Google Cultural Institute.jpg",
   "ancho": 960,
-  "alto": 963
+  "alto": 963,
+  "anio": 1908
  },
  "2026/azerbaiyan": {
   "titulo": "La Torre de la Doncella en Bakú, junto al Caspio",
@@ -507,7 +549,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Paul_von_Franken_-_Der_Jungfrauenturm_(Qiz_Qalasi)_in_Baku_(1880).jpg",
   "archivo_commons": "File:Paul von Franken - Der Jungfrauenturm (Qiz Qalasi) in Baku (1880).jpg",
   "ancho": 960,
-  "alto": 617
+  "alto": 617,
+  "anio": 1880
  },
  "2026/belgica": {
   "titulo": "Cazadores en la nieve",
@@ -517,7 +560,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_Hunters_in_the_Snow_(Winter)_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Pieter Bruegel the Elder - Hunters in the Snow (Winter) - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 683
+  "alto": 683,
+  "anio": 1565
  },
  "2026/brasil": {
   "titulo": "Independencia o muerte (el grito de Ipiranga)",
@@ -527,7 +571,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pedro_Am%C3%A9rico_-_Independ%C3%AAncia_ou_Morte_-_cores_ajustadas.jpg",
   "archivo_commons": "File:Pedro Américo - Independência ou Morte - cores ajustadas.jpg",
   "ancho": 960,
-  "alto": 519
+  "alto": 519,
+  "anio": 1888
  },
  "2026/canada": {
   "titulo": "El pino",
@@ -537,7 +582,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tom_Thomson_-_The_Jack_Pine_1916.jpg",
   "archivo_commons": "File:Tom Thomson - The Jack Pine 1916.jpg",
   "ancho": 960,
-  "alto": 878
+  "alto": 878,
+  "anio": 1916
  },
  "2026/chequia": {
   "titulo": "Los eslavos en su patria original",
@@ -547,7 +593,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Slovane_v_pravlasti_81x61m.jpg",
   "archivo_commons": "File:Slovane v pravlasti 81x61m.jpg",
   "ancho": 960,
-  "alto": 704
+  "alto": 704,
+  "anio": 1912
  },
  "2026/chile": {
   "titulo": "Huasos maulinos",
@@ -557,7 +604,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Huasos_Maulinos_-_Rugendas.jpg",
   "archivo_commons": "File:Huasos Maulinos - Rugendas.jpg",
   "ancho": 960,
-  "alto": 815
+  "alto": 815,
+  "anio": 1836
  },
  "2026/china": {
   "titulo": "A lo largo del río durante el Festival Qingming",
@@ -577,7 +625,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Vendedoras_de_Papas_by_Ram%C3%B3n_Torres_M%C3%A9ndez.jpg",
   "archivo_commons": "File:Vendedoras de Papas by Ramón Torres Méndez.jpg",
   "ancho": 960,
-  "alto": 755
+  "alto": 755,
+  "anio": 1860
  },
  "2026/corea_del_sur": {
   "titulo": "Danopungjeong (el festival de Dano)",
@@ -597,7 +646,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Anton_Perko_-_Alter_Palast_in_der_Ombla_bei_Gravosa.jpg",
   "archivo_commons": "File:Anton Perko - Alter Palast in der Ombla bei Gravosa.jpg",
   "ancho": 960,
-  "alto": 626
+  "alto": 626,
+  "anio": 1905
  },
  "2026/cuba": {
   "titulo": "Ingenio Flor de Cuba",
@@ -607,7 +657,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ingenio_Flor_de_Cuba_1857.jpg",
   "archivo_commons": "File:Ingenio Flor de Cuba 1857.jpg",
   "ancho": 960,
-  "alto": 554
+  "alto": 554,
+  "anio": 1857
  },
  "2026/dinamarca": {
   "titulo": "Tarde de verano en la playa sur de Skagen",
@@ -617,7 +668,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:P.S._Kr%C3%B8yer_-_Summer_evening_on_Skagen%27s_Beach._Anna_Ancher_and_Marie_Kr%C3%B8yer_walking_together._-_Google_Art_Project.jpg",
   "archivo_commons": "File:P.S. Krøyer - Summer evening on Skagen's Beach. Anna Ancher and Marie Krøyer walking together. - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 625
+  "alto": 625,
+  "anio": 1893
  },
  "2026/egipto": {
   "titulo": "La sala hipóstila del Gran Templo de Abu Simbel",
@@ -627,7 +679,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_-_The_Hypostyle_Hall_of_the_Great_Temple_at_Abu_Simbel,_Egypt_-_Google_Art_Project.jpg",
   "archivo_commons": "File:David Roberts - The Hypostyle Hall of the Great Temple at Abu Simbel, Egypt - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 683
+  "alto": 683,
+  "anio": 1849
  },
  "2026/eslovenia": {
   "titulo": "Verano",
@@ -637,7 +690,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ivana_Kobilca_-_Poletje.jpg",
   "archivo_commons": "File:Ivana Kobilca - Poletje.jpg",
   "ancho": 853,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1889
  },
  "2026/espana": {
   "titulo": "El 3 de mayo de 1808 en Madrid",
@@ -647,7 +701,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:El_tres_de_mayo_de_1808_en_Madrid.jpg",
   "archivo_commons": "File:El tres de mayo de 1808 en Madrid.jpg",
   "ancho": 960,
-  "alto": 733
+  "alto": 733,
+  "anio": 1814
  },
  "2026/estado_estados_unidos__alaska": {
   "titulo": "Monte McKinley",
@@ -657,7 +712,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Mount_McKinley_by_Sidney_Laurence,_1929,_oil_on_canvas,_Alaska_Airlines_Foundation.jpg",
   "archivo_commons": "File:Mount McKinley by Sidney Laurence, 1929, oil on canvas, Alaska Airlines Foundation.jpg",
   "ancho": 960,
-  "alto": 470
+  "alto": 470,
+  "anio": 1929
  },
  "2026/estado_estados_unidos__arizona": {
   "titulo": "Gran Cañón del río Colorado",
@@ -667,7 +723,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Moran,_American_(born_England)_-_Grand_Canyon_of_the_Colorado_River_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Thomas Moran, American (born England) - Grand Canyon of the Colorado River - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 541
+  "alto": 541,
+  "anio": 1908
  },
  "2026/estado_estados_unidos__california": {
   "titulo": "Mirando hacia el valle de Yosemite",
@@ -677,7 +734,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Looking_Down_Yosemite-Valley.jpg",
   "archivo_commons": "File:Looking Down Yosemite-Valley.jpg",
   "ancho": 960,
-  "alto": 638
+  "alto": 638,
+  "anio": 1865
  },
  "2026/estado_estados_unidos__colorado": {
   "titulo": "Tormenta en las Montañas Rocosas, monte Rosalie",
@@ -687,7 +745,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Albert_Bierstadt_-_A_Storm_in_the_Rocky_Mountains,_Mt._Rosalie_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Albert Bierstadt - A Storm in the Rocky Mountains, Mt. Rosalie - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 556
+  "alto": 556,
+  "anio": 1866
  },
  "2026/estado_estados_unidos__florida": {
   "titulo": "Camisa roja, Homosassa, Florida",
@@ -697,7 +756,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Winslow_Homer_-_Red_Shirt,_Homosassa,_Florida_(1904).jpg",
   "archivo_commons": "File:Winslow Homer - Red Shirt, Homosassa, Florida (1904).jpg",
   "ancho": 960,
-  "alto": 675
+  "alto": 675,
+  "anio": 1904
  },
  "2026/estado_estados_unidos__hawai": {
   "titulo": "Caldera del Kilauea",
@@ -707,7 +767,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jules_Tavernier_-_%27Kilauea_Caldera%27,_oil_on_canvas,_1885.jpg",
   "archivo_commons": "File:Jules Tavernier - 'Kilauea Caldera', oil on canvas, 1885.jpg",
   "ancho": 960,
-  "alto": 575
+  "alto": 575,
+  "anio": 1885
  },
  "2026/estado_estados_unidos__illinois": {
   "titulo": "La pradera en llamas",
@@ -717,7 +778,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Art_Institute_of_Chicago-1122.jpg",
   "archivo_commons": "File:Art Institute of Chicago-1122.jpg",
   "ancho": 960,
-  "alto": 731
+  "alto": 731,
+  "anio": 1827
  },
  "2026/estado_estados_unidos__luisiana": {
   "titulo": "Una oficina de algodón en Nueva Orleans",
@@ -727,7 +789,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Edgar_Germain_Hilaire_Degas_016.jpg",
   "archivo_commons": "File:Edgar Germain Hilaire Degas 016.jpg",
   "ancho": 960,
-  "alto": 758
+  "alto": 758,
+  "anio": 1873
  },
  "2026/estado_estados_unidos__massachusetts": {
   "titulo": "Vista desde el monte Holyoke (El meandro)",
@@ -737,7 +800,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Cole_Thomas_The_Oxbow_(The_Connecticut_River_near_Northampton_1836).jpg",
   "archivo_commons": "File:Cole Thomas The Oxbow (The Connecticut River near Northampton 1836).jpg",
   "ancho": 960,
-  "alto": 653
+  "alto": 653,
+  "anio": 1836
  },
  "2026/estado_estados_unidos__michigan": {
   "titulo": "Primera elección estatal en Detroit, Míchigan, 1837",
@@ -747,7 +811,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Mickell_Burnham_-_First_State_Election_in_Detroit,_Michigan,_1837_-_57.267_-_Detroit_Institute_of_Arts.jpg",
   "archivo_commons": "File:Thomas Mickell Burnham - First State Election in Detroit, Michigan, 1837 - 57.267 - Detroit Institute of Arts.jpg",
   "ancho": 960,
-  "alto": 750
+  "alto": 750,
+  "anio": 1837
  },
  "2026/estado_estados_unidos__misisipi": {
   "titulo": "En un aprieto, o balseros del Misisipi jugando a las cartas",
@@ -757,7 +822,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:George_Caleb_Bingham_-_In_a_Quandary,_or_Mississippi_Raftsmen_at_Cards.jpg",
   "archivo_commons": "File:George Caleb Bingham - In a Quandary, or Mississippi Raftsmen at Cards.jpg",
   "ancho": 960,
-  "alto": 776
+  "alto": 776,
+  "anio": 1851
  },
  "2026/estado_estados_unidos__montana": {
   "titulo": "Humo de un .45",
@@ -767,7 +833,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Charles_Marion_Russell_%E2%80%93_Smoke_of_a_.45_%E2%80%93_Google_Art_Project.jpg",
   "archivo_commons": "File:Charles Marion Russell – Smoke of a .45 – Google Art Project.jpg",
   "ancho": 960,
-  "alto": 638
+  "alto": 638,
+  "anio": 1908
  },
  "2026/estado_estados_unidos__nueva_york": {
   "titulo": "Cataratas del Niágara, desde el lado estadounidense",
@@ -777,7 +844,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Frederic_Edwin_Church_-_Niagara_Falls,_from_the_American_Side_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Frederic Edwin Church - Niagara Falls, from the American Side - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 1090
+  "alto": 1090,
+  "anio": 1867
  },
  "2026/estado_estados_unidos__oregon": {
   "titulo": "Monte Hood",
@@ -787,7 +855,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Mount_Hood_by_Albert_Bierstadt,_1869,_oil_on_canvas_-_Portland_Art_Museum_-_Portland,_Oregon_-_DSC08737.jpg",
   "archivo_commons": "File:Mount Hood by Albert Bierstadt, 1869, oil on canvas - Portland Art Museum - Portland, Oregon - DSC08737.jpg",
   "ancho": 960,
-  "alto": 577
+  "alto": 577,
+  "anio": 1869
  },
  "2026/estado_estados_unidos__pensilvania": {
   "titulo": "Washington cruzando el Delaware",
@@ -797,7 +866,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Washington_Crossing_the_Delaware_by_Emanuel_Leutze,_MMA-NYC,_1851.jpg",
   "archivo_commons": "File:Washington Crossing the Delaware by Emanuel Leutze, MMA-NYC, 1851.jpg",
   "ancho": 960,
-  "alto": 615
+  "alto": 615,
+  "anio": 1851
  },
  "2026/estado_estados_unidos__texas": {
   "titulo": "Un pony tejano",
@@ -807,7 +877,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Frederic_Remington_-_A_Texas_Pony_-_1975.115.1_-_Yale_University_Art_Gallery.jpg",
   "archivo_commons": "File:Frederic Remington - A Texas Pony - 1975.115.1 - Yale University Art Gallery.jpg",
   "ancho": 960,
-  "alto": 1042
+  "alto": 1042,
+  "anio": 1889
  },
  "2026/estado_estados_unidos__utah": {
   "titulo": "Shin-Au-Av-Tu-Weap, cañón de Zion",
@@ -827,7 +898,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Mount_Rainier_by_Cleveland_S._Rockwell,_1891.jpg",
   "archivo_commons": "File:Mount Rainier by Cleveland S. Rockwell, 1891.jpg",
   "ancho": 960,
-  "alto": 626
+  "alto": 626,
+  "anio": 1891
  },
  "2026/estado_estados_unidos__wyoming": {
   "titulo": "Las Montañas Rocosas, el pico Lander",
@@ -837,7 +909,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Albert_Bierstadt_-_The_Rocky_Mountains,_Lander%27s_Peak.jpg",
   "archivo_commons": "File:Albert Bierstadt - The Rocky Mountains, Lander's Peak.jpg",
   "ancho": 960,
-  "alto": 575
+  "alto": 575,
+  "anio": 1863
  },
  "2026/estados_unidos": {
   "titulo": "Washington cruzando el Delaware",
@@ -847,7 +920,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Washington_Crossing_the_Delaware_by_Emanuel_Leutze,_MMA-NYC,_1851.jpg",
   "archivo_commons": "File:Washington Crossing the Delaware by Emanuel Leutze, MMA-NYC, 1851.jpg",
   "ancho": 960,
-  "alto": 615
+  "alto": 615,
+  "anio": 1851
  },
  "2026/etiopia": {
   "titulo": "Jinetes y mártires (iglesia de Abbas Antonios)",
@@ -867,7 +941,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Spoliarium.jpg",
   "archivo_commons": "File:Spoliarium.jpg",
   "ancho": 960,
-  "alto": 518
+  "alto": 518,
+  "anio": 1884
  },
  "2026/finlandia": {
   "titulo": "Tríptico del mito de Aino",
@@ -877,7 +952,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Gallen_Kallela_The_Aino_Triptych.jpg",
   "archivo_commons": "File:Gallen Kallela The Aino Triptych.jpg",
   "ancho": 960,
-  "alto": 463
+  "alto": 463,
+  "anio": 1891
  },
  "2026/francia": {
   "titulo": "La libertad guiando al pueblo",
@@ -887,7 +963,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg",
   "archivo_commons": "File:Eugène Delacroix - La liberté guidant le peuple.jpg",
   "ancho": 960,
-  "alto": 760
+  "alto": 760,
+  "anio": 1830
  },
  "2026/georgia": {
   "titulo": "Banquete a la orilla",
@@ -907,7 +984,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ashanti_Yam_Ceremony_1817.jpg",
   "archivo_commons": "File:Ashanti Yam Ceremony 1817.jpg",
   "ancho": 960,
-  "alto": 643
+  "alto": 643,
+  "anio": 1817
  },
  "2026/grecia": {
   "titulo": "Grecia sobre las ruinas de Mesolongi",
@@ -917,7 +995,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Eug%C3%A8ne_Delacroix_-_La_Gr%C3%A8ce_sur_les_ruines_de_Missolonghi,_1826.jpg",
   "archivo_commons": "File:Eugène Delacroix - La Grèce sur les ruines de Missolonghi, 1826.jpg",
   "ancho": 740,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1826
  },
  "2026/hungria": {
   "titulo": "La conquista (Honfoglalás)",
@@ -927,7 +1006,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Munk_csy_Honfoglal_s.jpg",
   "archivo_commons": "File:Munk csy Honfoglal s.jpg",
   "ancho": 960,
-  "alto": 313
+  "alto": 313,
+  "anio": 1893
  },
  "2026/india": {
   "titulo": "Shakuntala escribiendo una carta",
@@ -947,7 +1027,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Raden_Saleh_-_Diponegoro_arrest.jpg",
   "archivo_commons": "File:Raden Saleh - Diponegoro arrest.jpg",
   "ancho": 960,
-  "alto": 605
+  "alto": 605,
+  "anio": 1857
  },
  "2026/irak": {
   "titulo": "Harún al-Rashid recibe a una embajada de Carlomagno en Bagdad",
@@ -957,7 +1038,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Calife_Abbasside_Charlemagne.jpg",
   "archivo_commons": "File:Calife Abbasside Charlemagne.jpg",
   "ancho": 960,
-  "alto": 510
+  "alto": 510,
+  "anio": 1864
  },
  "2026/iran": {
   "titulo": "La Sala de los Espejos",
@@ -977,7 +1059,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Marriage_of_strongbow_and_aoife.jpg",
   "archivo_commons": "File:Marriage of strongbow and aoife.jpg",
   "ancho": 960,
-  "alto": 585
+  "alto": 585,
+  "anio": 1854
  },
  "2026/islandia": {
   "titulo": "Þingvellir",
@@ -987,7 +1070,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thorarinn_thingvellir.jpg",
   "archivo_commons": "File:Thorarinn thingvellir.jpg",
   "ancho": 960,
-  "alto": 658
+  "alto": 658,
+  "anio": 1900
  },
  "2026/israel": {
   "titulo": "Jerusalén desde el monte de los Olivos",
@@ -997,7 +1081,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_-_Jerusalem_from_the_Mount_of_Olives_-_1927.124_-_Cleveland_Museum_of_Art.jpg",
   "archivo_commons": "File:David Roberts - Jerusalem from the Mount of Olives - 1927.124 - Cleveland Museum of Art.jpg",
   "ancho": 960,
-  "alto": 641
+  "alto": 641,
+  "anio": 1839
  },
  "2026/italia": {
   "titulo": "La escuela de Atenas",
@@ -1007,7 +1092,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Raphael_School_of_Athens.jpg",
   "archivo_commons": "File:Raphael School of Athens.jpg",
   "ancho": 960,
-  "alto": 627
+  "alto": 627,
+  "anio": 1511
  },
  "2026/japon": {
   "titulo": "La gran ola de Kanagawa",
@@ -1017,7 +1103,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tsunami_by_hokusai_19th_century.jpg",
   "archivo_commons": "File:Tsunami by hokusai 19th century.jpg",
   "ancho": 960,
-  "alto": 645
+  "alto": 645,
+  "anio": 1831
  },
  "2026/kazajistan": {
   "titulo": "Junto a la muralla de la fortaleza: «¡Que pasen!»",
@@ -1027,7 +1114,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:1871_Vereshchagin_In_der_Stadtmauer_anagoria.JPG",
   "archivo_commons": "File:1871 Vereshchagin In der Stadtmauer anagoria.JPG",
   "ancho": 960,
-  "alto": 565
+  "alto": 565,
+  "anio": 1871
  },
  "2026/kenia": {
   "titulo": "Monte Kenia",
@@ -1037,7 +1125,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Akseli_Gallen-Kallela_-_Mount_Kenya_-_A_III_2179_-_Finnish_National_Gallery.jpg",
   "archivo_commons": "File:Akseli Gallen-Kallela - Mount Kenya - A III 2179 - Finnish National Gallery.jpg",
   "ancho": 960,
-  "alto": 737
+  "alto": 737,
+  "anio": 1909
  },
  "2026/libia": {
   "titulo": "Ruinas romanas en Leptis Magna",
@@ -1057,7 +1146,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Funeral_of_Grand_Duke_of_Lithuania_Gediminas,_painting_by_K._Alchimowicz,_1888.jpg",
   "archivo_commons": "File:Funeral of Grand Duke of Lithuania Gediminas, painting by K. Alchimowicz, 1888.jpg",
   "ancho": 960,
-  "alto": 602
+  "alto": 602,
+  "anio": 1888
  },
  "2026/lugar_alemania__baden_wurtemberg": {
   "titulo": "Paisaje de la Selva Negra",
@@ -1067,7 +1157,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Hans_Thoma_-_Schwarzwaldlandschaft_(1867)_-_Staatl._Kunsthalle_Karlsruhe.jpg",
   "archivo_commons": "File:Hans Thoma - Schwarzwaldlandschaft (1867) - Staatl. Kunsthalle Karlsruhe.jpg",
   "ancho": 960,
-  "alto": 722
+  "alto": 722,
+  "anio": 1867
  },
  "2026/lugar_alemania__baviera": {
   "titulo": "El pobre poeta",
@@ -1077,7 +1168,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Carl_Spitzweg_-_Der_arme_Poet_(Neue_Pinakothek).jpg",
   "archivo_commons": "File:Carl Spitzweg - Der arme Poet (Neue Pinakothek).jpg",
   "ancho": 960,
-  "alto": 751
+  "alto": 751,
+  "anio": 1839
  },
  "2026/lugar_alemania__berlin": {
   "titulo": "El ferrocarril Berlín-Potsdam",
@@ -1087,7 +1179,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Adolph_Menzel_-_Die_Berlin-Potsdamer_Bahn_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Adolph Menzel - Die Berlin-Potsdamer Bahn - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 792
+  "alto": 792,
+  "anio": 1847
  },
  "2026/lugar_alemania__mecklemburgo_pomerania_occidental": {
   "titulo": "Acantilados de tiza en Rügen",
@@ -1097,7 +1190,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich%27s_Chalk_Cliffs_on_R%C3%BCgen.jpg",
   "archivo_commons": "File:Caspar David Friedrich's Chalk Cliffs on Rügen.jpg",
   "ancho": 873,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1818
  },
  "2026/lugar_alemania__renania_del_norte_westfalia": {
   "titulo": "Altar de los Reyes Magos: Adoración de los Reyes",
@@ -1107,7 +1201,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Stefan_Lochner_003.jpg",
   "archivo_commons": "File:Stefan Lochner 003.jpg",
   "ancho": 960,
-  "alto": 875
+  "alto": 875,
+  "anio": 1440
  },
  "2026/lugar_alemania__sajonia": {
   "titulo": "Dresde desde la orilla derecha del Elba",
@@ -1117,7 +1212,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Bernardo_Bellotto,_il_Canaletto_-_Dresden_from_the_Right_Bank_of_the_Elbe,_above_the_Augustusbr%C3%BCcke_-_WGA01830.jpg",
   "archivo_commons": "File:Bernardo Bellotto, il Canaletto - Dresden from the Right Bank of the Elbe, above the Augustusbrücke - WGA01830.jpg",
   "ancho": 960,
-  "alto": 538
+  "alto": 538,
+  "anio": 1747
  },
  "2026/lugar_alemania__sajonia_anhalt": {
   "titulo": "Lutero y los reformadores de Wittenberg",
@@ -1127,7 +1223,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Lucas_Cranach_the_Younger_-_Martin_Luther_and_the_Wittenberg_Reformers_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Lucas Cranach the Younger - Martin Luther and the Wittenberg Reformers - Google Art Project.jpg",
   "ancho": 622,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1543
  },
  "2026/lugar_argelia__argel": {
   "titulo": "Mujeres de Argel en su apartamento",
@@ -1137,7 +1234,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Eug%C3%A8ne_Delacroix_-_The_Women_of_Algiers,_1834.jpg",
   "archivo_commons": "File:Eugène Delacroix - The Women of Algiers, 1834.jpg",
   "ancho": 960,
-  "alto": 751
+  "alto": 751,
+  "anio": 1834
  },
  "2026/lugar_argentina__buenos_aires": {
   "titulo": "Un alto en el campo",
@@ -1147,7 +1245,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Prilidiano_Pueyrredon_-_Un_alto_en_el_campo_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Prilidiano Pueyrredon - Un alto en el campo - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 428
+  "alto": 428,
+  "anio": 1861
  },
  "2026/lugar_australia__nueva_gales_del_sur": {
   "titulo": "¡Fuego!",
@@ -1157,7 +1256,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Arthur_Streeton_-_Fire%27s_on_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Arthur Streeton - Fire's on - Google Art Project.jpg",
   "ancho": 723,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1891
  },
  "2026/lugar_australia__tasmania": {
   "titulo": "Monte Wellington y Hobart Town desde Kangaroo Point",
@@ -1167,7 +1267,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:John_Glover_-_Mount_Wellington_and_Hobart_Town_from_Kangaroo_Point_-_Google_Art_Project.jpg",
   "archivo_commons": "File:John Glover - Mount Wellington and Hobart Town from Kangaroo Point - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 474
+  "alto": 474,
+  "anio": 1834
  },
  "2026/lugar_australia__victoria": {
   "titulo": "Esquilando los carneros",
@@ -1177,7 +1278,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tom_Roberts_-_Shearing_the_rams_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Tom Roberts - Shearing the rams - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 638
+  "alto": 638,
+  "anio": 1890
  },
  "2026/lugar_austria__salzburgo": {
   "titulo": "Paisaje cerca de Salzburgo",
@@ -1187,7 +1289,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:18.._Florian_Joseph_Altmann_Landschaft_bei_Salzburg_oil_on_painting_cardboard_circa_17_x_23_cm.jpg",
   "archivo_commons": "File:18.. Florian Joseph Altmann Landschaft bei Salzburg oil on painting cardboard circa 17 x 23 cm.jpg",
   "ancho": 960,
-  "alto": 713
+  "alto": 713,
+  "anio": 1850
  },
  "2026/lugar_austria__tirol": {
   "titulo": "La danza de la muerte de 1809",
@@ -1197,7 +1300,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Albin_Egger-Lienz_002.jpg",
   "archivo_commons": "File:Albin Egger-Lienz 002.jpg",
   "ancho": 960,
-  "alto": 877
+  "alto": 877,
+  "anio": 1908
  },
  "2026/lugar_austria__viena": {
   "titulo": "El beso",
@@ -1207,7 +1311,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg",
   "archivo_commons": "File:The Kiss - Gustav Klimt - Google Cultural Institute.jpg",
   "ancho": 960,
-  "alto": 963
+  "alto": 963,
+  "anio": 1908
  },
  "2026/lugar_brasil__bahia": {
   "titulo": "Iglesia del Hospicio de Nossa Senhora da Piedade, Bahía",
@@ -1217,7 +1322,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Rugendas_-_Igreja_do_Hosp%C3%ADcio_de_N._S._da_Piedade_da_Bahia_(2).jpg",
   "archivo_commons": "File:Rugendas - Igreja do Hospício de N. S. da Piedade da Bahia (2).jpg",
   "ancho": 960,
-  "alto": 650
+  "alto": 650,
+  "anio": 1850
  },
  "2026/lugar_brasil__estado_de_rio_de_janeiro": {
   "titulo": "Una familia brasileña en Río de Janeiro",
@@ -1227,7 +1333,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:A_Brazilian_family_in_Rio_de_Janeiro_by_Jean-Baptiste_Debret_1839.jpg",
   "archivo_commons": "File:A Brazilian family in Rio de Janeiro by Jean-Baptiste Debret 1839.jpg",
   "ancho": 960,
-  "alto": 692
+  "alto": 692,
+  "anio": 1830
  },
  "2026/lugar_brasil__estado_de_sao_paulo": {
   "titulo": "Independencia o muerte (el grito de Ipiranga)",
@@ -1237,7 +1344,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pedro_Am%C3%A9rico_-_Independ%C3%AAncia_ou_Morte_-_cores_ajustadas.jpg",
   "archivo_commons": "File:Pedro Américo - Independência ou Morte - cores ajustadas.jpg",
   "ancho": 960,
-  "alto": 519
+  "alto": 519,
+  "anio": 1888
  },
  "2026/lugar_brasil__minas_gerais": {
   "titulo": "Pico de Itacolomi, Ouro Preto",
@@ -1247,7 +1355,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Aur%C3%A9lio_de_Figueiredo_-_Pico_do_Itacolomi,_Ouro_Preto.jpg",
   "archivo_commons": "File:Aurélio de Figueiredo - Pico do Itacolomi, Ouro Preto.jpg",
   "ancho": 960,
-  "alto": 686
+  "alto": 686,
+  "anio": 1894
  },
  "2026/lugar_brasil__pernambuco": {
   "titulo": "Vista de Olinda, Brasil",
@@ -1257,7 +1366,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Frans_Post_-_Gezicht_op_Olinda,_Brazili%C3%AB.jpg",
   "archivo_commons": "File:Frans Post - Gezicht op Olinda, Brazilië.jpg",
   "ancho": 960,
-  "alto": 596
+  "alto": 596,
+  "anio": 1662
  },
  "2026/lugar_canada__alberta": {
   "titulo": "Montañas Rocosas canadienses (lago Louise)",
@@ -1267,7 +1377,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Canadian_Rockies_(Lake_Louise)_MET_DT7282.jpg",
   "archivo_commons": "File:Canadian Rockies (Lake Louise) MET DT7282.jpg",
   "ancho": 960,
-  "alto": 663
+  "alto": 663,
+  "anio": 1889
  },
  "2026/lugar_canada__columbia_britanica": {
   "titulo": "Cosas varias",
@@ -1277,7 +1388,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Emily_Carr_(1939)_Odds_and_Ends.jpg",
   "archivo_commons": "File:Emily Carr (1939) Odds and Ends.jpg",
   "ancho": 960,
-  "alto": 593
+  "alto": 593,
+  "anio": 1939
  },
  "2026/lugar_canada__ontario": {
   "titulo": "El pino",
@@ -1287,7 +1399,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tom_Thomson_-_The_Jack_Pine_1916.jpg",
   "archivo_commons": "File:Tom Thomson - The Jack Pine 1916.jpg",
   "ancho": 960,
-  "alto": 878
+  "alto": 878,
+  "anio": 1917
  },
  "2026/lugar_canada__quebec": {
   "titulo": "Cala de Sillery, Quebec",
@@ -1297,7 +1410,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Sillery_Cove,_Quebec_%E2%80%94Cornelius_Krieghoff_%E2%80%94_circa_1864.jpg",
   "archivo_commons": "File:Sillery Cove, Quebec —Cornelius Krieghoff — circa 1864.jpg",
   "ancho": 960,
-  "alto": 704
+  "alto": 704,
+  "anio": 1864
  },
  "2026/lugar_chequia__praga": {
   "titulo": "Apoteosis de los eslavos",
@@ -1307,7 +1421,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Mucha_Apoteoza.jpg",
   "archivo_commons": "File:Mucha Apoteoza.jpg",
   "ancho": 909,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1926
  },
  "2026/lugar_chile__santiago": {
   "titulo": "Vista de Santiago desde Peñalolén",
@@ -1317,7 +1432,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Vista_Santiago_desde_Pe%C3%B1alol%C3%A9n.jpg",
   "archivo_commons": "File:Vista Santiago desde Peñalolén.jpg",
   "ancho": 960,
-  "alto": 649
+  "alto": 649,
+  "anio": 1850
  },
  "2026/lugar_chile__valparaiso": {
   "titulo": "Valparaíso, Chile",
@@ -1327,7 +1443,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Somerscales_-_Valparaiso,_Chile_(1898).jpg",
   "archivo_commons": "File:Thomas Somerscales - Valparaiso, Chile (1898).jpg",
   "ancho": 960,
-  "alto": 401
+  "alto": 401,
+  "anio": 1898
  },
  "2026/lugar_china__guangdong": {
   "titulo": "Barcos en el río de las Perlas frente a la isla Honam, Cantón",
@@ -1357,7 +1474,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Garden_of_the_Humble_Administrator.jpg",
   "archivo_commons": "File:Garden of the Humble Administrator.jpg",
   "ancho": 960,
-  "alto": 914
+  "alto": 914,
+  "anio": 1551
  },
  "2026/lugar_china__pekin": {
   "titulo": "El emperador Qianlong con armadura ceremonial a caballo",
@@ -1367,7 +1485,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Qianlong_Emperor_in_Ceremonial_Armour_on_Horseback.jpg",
   "archivo_commons": "File:The Qianlong Emperor in Ceremonial Armour on Horseback.jpg",
   "ancho": 788,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1739
  },
  "2026/lugar_china__shaanxi": {
   "titulo": "Mural de una tumba Tang",
@@ -1397,7 +1516,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Huang_Gongwang._Dwelling_in_the_Fuchun_Mountains._detail._National_Palace_Museum,_Taipei.jpg",
   "archivo_commons": "File:Huang Gongwang. Dwelling in the Fuchun Mountains. detail. National Palace Museum, Taipei.jpg",
   "ancho": 960,
-  "alto": 351
+  "alto": 351,
+  "anio": 1350
  },
  "2026/lugar_colombia__antioquia": {
   "titulo": "Paso de Vencedores",
@@ -1417,7 +1537,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Plaza_Mayor_de_Bogot%C3%A1,_1846.JPG",
   "archivo_commons": "File:Plaza Mayor de Bogotá, 1846.JPG",
   "ancho": 960,
-  "alto": 564
+  "alto": 564,
+  "anio": 1846
  },
  "2026/lugar_colombia__bolivar": {
   "titulo": "Criollo de Cartagena de Indias",
@@ -1427,7 +1548,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Criollo_of_Cartagena_de_Indias_(Colombia)_circa_1796.jpg",
   "archivo_commons": "File:Criollo of Cartagena de Indias (Colombia) circa 1796.jpg",
   "ancho": 649,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1796
  },
  "2026/lugar_colombia__boyaca": {
   "titulo": "Batalla de Boyacá",
@@ -1437,7 +1559,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Museo_Nacional_-_Batalla_de_Boyac%C3%A1.JPG",
   "archivo_commons": "File:Museo Nacional - Batalla de Boyacá.JPG",
   "ancho": 960,
-  "alto": 570
+  "alto": 570,
+  "anio": 1890
  },
  "2026/lugar_corea_del_sur__seul": {
   "titulo": "Después de la lluvia en el monte Inwang",
@@ -1447,7 +1570,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Inwangjesaekdo.jpg",
   "archivo_commons": "File:Inwangjesaekdo.jpg",
   "ancho": 960,
-  "alto": 557
+  "alto": 557,
+  "anio": 1751
  },
  "2026/lugar_dinamarca__capital": {
   "titulo": "El terrible bombardeo de Copenhague",
@@ -1457,7 +1581,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Copenhagen_on_fire_1807_by_CW_Eckersberg.jpg",
   "archivo_commons": "File:Copenhagen on fire 1807 by CW Eckersberg.jpg",
   "ancho": 855,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1807
  },
  "2026/lugar_dinamarca__jutlandia_septentrional": {
   "titulo": "Tarde de verano en la playa de Skagen",
@@ -1467,7 +1592,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Summer_Evening_on_the_Beach_at_Skagen_(Peder_Severin_Kr%C3%B8yer)_-_Nationalmuseum_-_24124.tif",
   "archivo_commons": "File:Summer Evening on the Beach at Skagen (Peder Severin Krøyer) - Nationalmuseum - 24124.tif",
   "ancho": 960,
-  "alto": 685
+  "alto": 685,
+  "anio": 1884
  },
  "2026/lugar_egipto__asuan": {
   "titulo": "El templo de la isla de Filae",
@@ -1477,7 +1603,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_Temple_Island_Philae.jpg",
   "archivo_commons": "File:David Roberts Temple Island Philae.jpg",
   "ancho": 960,
-  "alto": 695
+  "alto": 695,
+  "anio": 1838
  },
  "2026/lugar_egipto__el_cairo": {
   "titulo": "Puerta de los Metwaleys, El Cairo",
@@ -1487,7 +1614,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Louis_Haghe_-_Egypt_and_Nubia,_Volume_III-_Gate_of_the_Metwaleys,_Cairo_-_2012.229_-_Cleveland_Museum_of_Art.tif",
   "archivo_commons": "File:Louis Haghe - Egypt and Nubia, Volume III- Gate of the Metwaleys, Cairo - 2012.229 - Cleveland Museum of Art.tif",
   "ancho": 786,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1848
  },
  "2026/lugar_egipto__fayun": {
   "titulo": "Retrato de joven del tipo del Fayum",
@@ -1507,7 +1635,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Great_Sphinx,_Pyramids_of_Gizeh-1839)_by_David_Roberts,_RA.jpg",
   "archivo_commons": "File:The Great Sphinx, Pyramids of Gizeh-1839) by David Roberts, RA.jpg",
   "ancho": 960,
-  "alto": 610
+  "alto": 610,
+  "anio": 1838
  },
  "2026/lugar_egipto__luxor": {
   "titulo": "El gran templo de Amón en Karnak, la sala hipóstila",
@@ -1517,7 +1646,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_-_The_Great_Temple_of_Amon_Karnak,_The_Hypostyle_Hall_-_Google_Art_Project.jpg",
   "archivo_commons": "File:David Roberts - The Great Temple of Amon Karnak, The Hypostyle Hall - Google Art Project.jpg",
   "ancho": 735,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1838
  },
  "2026/lugar_espana__asturias": {
   "titulo": "El rey Don Pelayo en Covadonga",
@@ -1527,7 +1657,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:El_rey_Don_Pelayo_en_Covadonga_(Museo_del_Prado).jpg",
   "archivo_commons": "File:El rey Don Pelayo en Covadonga (Museo del Prado).jpg",
   "ancho": 852,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1855
  },
  "2026/lugar_espana__barcelona": {
   "titulo": "Corpus. Salida de la procesión de Santa María del Mar",
@@ -1537,7 +1668,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:(Barcelona)_Corpus._Sortida_de_la_process%C3%B3_de_l%27esgl%C3%A9sia_de_Santa_Maria_by_Ramon_Casas_-_MNAC.jpg",
   "archivo_commons": "File:(Barcelona) Corpus. Sortida de la processó de l'església de Santa Maria by Ramon Casas - MNAC.jpg",
   "ancho": 960,
-  "alto": 554
+  "alto": 554,
+  "anio": 1898
  },
  "2026/lugar_espana__granada": {
   "titulo": "La Alhambra y el Albaicín",
@@ -1557,7 +1689,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Las_Meninas_01.jpg",
   "archivo_commons": "File:Las Meninas 01.jpg",
   "ancho": 956,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1656
  },
  "2026/lugar_espana__segovia": {
   "titulo": "Tipo de Segovia",
@@ -1567,7 +1700,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ignacio_Zuloaga_-_Tipo_de_Segovia_-_1906.jpg",
   "archivo_commons": "File:Ignacio Zuloaga - Tipo de Segovia - 1906.jpg",
   "ancho": 741,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1906
  },
  "2026/lugar_espana__sevilla": {
   "titulo": "Visión de San Agustín",
@@ -1577,7 +1711,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Murillo-san_agustin-sevilla-mba.JPG",
   "archivo_commons": "File:Murillo-san agustin-sevilla-mba.JPG",
   "ancho": 593,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1664
  },
  "2026/lugar_espana__toledo": {
   "titulo": "Vista de Toledo",
@@ -1587,7 +1722,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:View_of_Toledo_MET_DP349564.jpg",
   "archivo_commons": "File:View of Toledo MET DP349564.jpg",
   "ancho": 960,
-  "alto": 1085
+  "alto": 1085,
+  "anio": 1599
  },
  "2026/lugar_espana__valencia": {
   "titulo": "Paseo a orillas del mar",
@@ -1597,7 +1733,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Joaquin_Sorolla_-_Paseo_a_la_orillas_del_mar.jpg",
   "archivo_commons": "File:Joaquin Sorolla - Paseo a la orillas del mar.jpg",
   "ancho": 960,
-  "alto": 994
+  "alto": 994,
+  "anio": 1909
  },
  "2026/lugar_filipinas__gran_manila": {
   "titulo": "Spoliarium",
@@ -1607,7 +1744,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Juan_Luna_Spoliarium.jpg",
   "archivo_commons": "File:Juan Luna Spoliarium.jpg",
   "ancho": 960,
-  "alto": 536
+  "alto": 536,
+  "anio": 1884
  },
  "2026/lugar_finlandia__carelia_del_norte": {
   "titulo": "Tríptico de Aino",
@@ -1617,7 +1755,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Gallen_Kallela_The_Aino_Triptych.jpg",
   "archivo_commons": "File:Gallen Kallela The Aino Triptych.jpg",
   "ancho": 960,
-  "alto": 463
+  "alto": 463,
+  "anio": 1891
  },
  "2026/lugar_finlandia__uusimaa": {
   "titulo": "El puerto del Club Náutico Nyländska en Helsinki",
@@ -1627,7 +1766,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Albert_Edelfelt_-_The_Nyl%C3%A4ndska_Jaktklubben_Harbour_in_Helsinki_-_A_II_782-7_-_Finnish_National_Gallery.jpg",
   "archivo_commons": "File:Albert Edelfelt - The Nyländska Jaktklubben Harbour in Helsinki - A II 782-7 - Finnish National Gallery.jpg",
   "ancho": 960,
-  "alto": 681
+  "alto": 681,
+  "anio": 1899
  },
  "2026/lugar_francia__bocas_del_rodano": {
   "titulo": "Noche estrellada sobre el Ródano",
@@ -1637,7 +1777,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Starry_Night_Over_the_Rhone.jpg",
   "archivo_commons": "File:Starry Night Over the Rhone.jpg",
   "ancho": 960,
-  "alto": 744
+  "alto": 744,
+  "anio": 1888
  },
  "2026/lugar_francia__paris": {
   "titulo": "Calle de París, día de lluvia",
@@ -1647,7 +1788,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Gustave_Caillebotte_-_Paris_Street;_Rainy_Day_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Gustave Caillebotte - Paris Street; Rainy Day - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 728
+  "alto": 728,
+  "anio": 1877
  },
  "2026/lugar_francia__sena_maritimo": {
   "titulo": "Catedral de Ruan, fachada (puesta de sol)",
@@ -1657,7 +1799,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Rouen_Cathedral,_Facade_(Sunset).JPG",
   "archivo_commons": "File:Claude Monet - Rouen Cathedral, Facade (Sunset).JPG",
   "ancho": 705,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1892
  },
  "2026/lugar_francia__sena_y_marne": {
   "titulo": "El Ángelus",
@@ -1667,7 +1810,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jean-Fran%C3%A7ois_Millet_(II)_001.jpg",
   "archivo_commons": "File:Jean-François Millet (II) 001.jpg",
   "ancho": 960,
-  "alto": 798
+  "alto": 798,
+  "anio": 1859
  },
  "2026/lugar_francia__vaucluse": {
   "titulo": "Vista de Aviñón y del puente de Saint-Bénézet",
@@ -1677,7 +1821,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:DAGNAN_Vue_d%E2%80%99Avignon_et_du_Pont_saint_B%C3%A9nezet.jpg",
   "archivo_commons": "File:DAGNAN Vue d’Avignon et du Pont saint Bénezet.jpg",
   "ancho": 960,
-  "alto": 641
+  "alto": 641,
+  "anio": 1833
  },
  "2026/lugar_francia__yvelines": {
   "titulo": "Vista de Versalles",
@@ -1687,7 +1832,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pierre-Denis_Martin_-_View_of_Versailles_-_WGA14152.jpg",
   "archivo_commons": "File:Pierre-Denis Martin - View of Versailles - WGA14152.jpg",
   "ancho": 960,
-  "alto": 844
+  "alto": 844,
+  "anio": 1722
  },
  "2026/lugar_grecia__atica": {
   "titulo": "Pintura de la Acrópolis (siglo XIX)",
@@ -1707,7 +1853,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Cretan_School_-_Icon_with_the_Virgin_and_Child_(Virgin_Eleousa)_-_152_-_Campion_Hall.jpg",
   "archivo_commons": "File:Cretan School - Icon with the Virgin and Child (Virgin Eleousa) - 152 - Campion Hall.jpg",
   "ancho": 886,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1600
  },
  "2026/lugar_grecia__monte_athos": {
   "titulo": "Refectorio de un monasterio griego (Monte Athos)",
@@ -1717,7 +1864,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Refectory_in_a_Greek_Monastery_(Mount_Athos).png",
   "archivo_commons": "File:Refectory in a Greek Monastery (Mount Athos).png",
   "ancho": 960,
-  "alto": 703
+  "alto": 703,
+  "anio": 1885
  },
  "2026/lugar_hungria__budapest": {
   "titulo": "Vista de Buda y Pest desde el monte Gellért",
@@ -1727,7 +1875,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:View_of_Buda_and_Pest_from_the_Gellert_Hill.jpg",
   "archivo_commons": "File:View of Buda and Pest from the Gellert Hill.jpg",
   "ancho": 960,
-  "alto": 635
+  "alto": 635,
+  "anio": 1835
  },
  "2026/lugar_india__delhi": {
   "titulo": "La entrada oficial en Delhi",
@@ -1737,7 +1886,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:1903_DELHI_DURBAR_PARADE_(22317678808).jpg",
   "archivo_commons": "File:1903 DELHI DURBAR PARADE (22317678808).jpg",
   "ancho": 960,
-  "alto": 720
+  "alto": 720,
+  "anio": 1907
  },
  "2026/lugar_india__kerala": {
   "titulo": "Vasantika",
@@ -1747,7 +1897,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Raja_Ravi_Varma,_Vasantika_(oleographic_print).jpg",
   "archivo_commons": "File:Raja Ravi Varma, Vasantika (oleographic print).jpg",
   "ancho": 782,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1910
  },
  "2026/lugar_india__maharashtra": {
   "titulo": "Bodhisattva Padmapani, cueva 1 de Ajanta",
@@ -1767,7 +1918,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:1854_Golden_temple_painting_by_William_Carpenter.jpg",
   "archivo_commons": "File:1854 Golden temple painting by William Carpenter.jpg",
   "ancho": 960,
-  "alto": 647
+  "alto": 647,
+  "anio": 1854
  },
  "2026/lugar_india__rajastan": {
   "titulo": "Radha (Bani Thani), Kishangarh",
@@ -1777,7 +1929,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:4_Radha_(Bani_Thani),_Kishangarh,_ca._1750,_National_Museum_New_Delhi.jpg",
   "archivo_commons": "File:4 Radha (Bani Thani), Kishangarh, ca. 1750, National Museum New Delhi.jpg",
   "ancho": 800,
-  "alto": 1065
+  "alto": 1065,
+  "anio": 1750
  },
  "2026/lugar_india__uttar_pradesh": {
   "titulo": "El Taj Mahal a la luz de la luna",
@@ -1787,7 +1940,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Taj_Mahal_bij_maanlicht_Rijksmuseum_SK-A-3629.jpeg",
   "archivo_commons": "File:Taj Mahal bij maanlicht Rijksmuseum SK-A-3629.jpeg",
   "ancho": 960,
-  "alto": 828
+  "alto": 828,
+  "anio": 1900
  },
  "2026/lugar_indonesia__java_central": {
   "titulo": "La captura de Diponegoro",
@@ -1797,7 +1951,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Raden_Saleh_-_Diponegoro_arrest.jpg",
   "archivo_commons": "File:Raden Saleh - Diponegoro arrest.jpg",
   "ancho": 960,
-  "alto": 605
+  "alto": 605,
+  "anio": 1857
  },
  "2026/lugar_iran__fars": {
   "titulo": "Tais pide a Alejandro Magno que incendie el palacio de Persépolis",
@@ -1817,7 +1972,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Battle_of_Merv_(1510),_between_Ismail_I_and_Shaybani_Khan._Chehel_Sotoun,_Isfahan,_painted_circa_1647.jpg",
   "archivo_commons": "File:Battle of Merv (1510), between Ismail I and Shaybani Khan. Chehel Sotoun, Isfahan, painted circa 1647.jpg",
   "ancho": 960,
-  "alto": 568
+  "alto": 568,
+  "anio": 1647
  },
  "2026/lugar_iran__teheran": {
   "titulo": "La fuente de Shahrestanak",
@@ -1827,7 +1983,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Paintings_by_Kamal-ol-molk_in_the_Golestan_Palace_by_Mardetanha_7827_16.jpg",
   "archivo_commons": "File:Paintings by Kamal-ol-molk in the Golestan Palace by Mardetanha 7827 16.jpg",
   "ancho": 960,
-  "alto": 720
+  "alto": 720,
+  "anio": 1912
  },
  "2026/lugar_islandia__su_urland": {
   "titulo": "Þingvellir",
@@ -1837,7 +1994,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thorarinn_thingvellir.jpg",
   "archivo_commons": "File:Thorarinn thingvellir.jpg",
   "ancho": 960,
-  "alto": 658
+  "alto": 658,
+  "anio": 1900
  },
  "2026/lugar_israel__jerusalen": {
   "titulo": "Jerusalén desde el monte de los Olivos",
@@ -1847,7 +2005,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_-_Jerusalem_from_the_Mount_of_Olives_-_1927.118_-_Cleveland_Museum_of_Art.tif",
   "archivo_commons": "File:David Roberts - Jerusalem from the Mount of Olives - 1927.118 - Cleveland Museum of Art.tif",
   "ancho": 960,
-  "alto": 629
+  "alto": 629,
+  "anio": 1839
  },
  "2026/lugar_italia__florencia": {
   "titulo": "El nacimiento de Venus",
@@ -1857,7 +2016,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Birth_of_Venus_(Botticelli)_1.jpg",
   "archivo_commons": "File:The Birth of Venus (Botticelli) 1.jpg",
   "ancho": 960,
-  "alto": 572
+  "alto": 572,
+  "anio": 1485
  },
  "2026/lugar_italia__milan": {
   "titulo": "La Última Cena",
@@ -1867,7 +2027,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Leonardo_da_Vinci_(1452-1519)_-_The_Last_Supper_(1495-1498).jpg",
   "archivo_commons": "File:Leonardo da Vinci (1452-1519) - The Last Supper (1495-1498).jpg",
   "ancho": 960,
-  "alto": 500
+  "alto": 500,
+  "anio": 1498
  },
  "2026/lugar_italia__napoles": {
   "titulo": "El Vesubio visto desde Posillipo, Nápoles",
@@ -1877,7 +2038,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Joseph_WRIGHT_of_Derby_-_A_view_of_Vesuvius_from_Posillipo,_Naples_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Joseph WRIGHT of Derby - A view of Vesuvius from Posillipo, Naples - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 665
+  "alto": 665,
+  "anio": 1789
  },
  "2026/lugar_italia__padua": {
   "titulo": "Lamentación sobre Cristo muerto",
@@ -1887,7 +2049,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Giotto_-_Scrovegni_-_-36-_-_Lamentation_(The_Mourning_of_Christ)_adj.jpg",
   "archivo_commons": "File:Giotto - Scrovegni - -36- - Lamentation (The Mourning of Christ) adj.jpg",
   "ancho": 960,
-  "alto": 888
+  "alto": 888,
+  "anio": 1305
  },
  "2026/lugar_italia__palermo": {
   "titulo": "El triunfo de la muerte (detalle)",
@@ -1897,7 +2060,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Palermo_-_Palazzo_Abatellis_2371.jpg",
   "archivo_commons": "File:Palermo - Palazzo Abatellis 2371.jpg",
   "ancho": 960,
-  "alto": 640
+  "alto": 640,
+  "anio": 1446
  },
  "2026/lugar_italia__perugia": {
   "titulo": "Leyenda de San Francisco: la estigmatización",
@@ -1907,7 +2071,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Giotto_di_Bondone_-_Legend_of_St_Francis_-_19._Stigmatization_of_St_Francis_-_WGA09145.jpg",
   "archivo_commons": "File:Giotto di Bondone - Legend of St Francis - 19. Stigmatization of St Francis - WGA09145.jpg",
   "ancho": 959,
-  "alto": 1001
+  "alto": 1001,
+  "anio": 1297
  },
  "2026/lugar_italia__roma": {
   "titulo": "Galería imaginaria de arte romano antiguo",
@@ -1917,7 +2082,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Giovanni_Paolo_Panini_%E2%80%93_Ancient_Rome.jpg",
   "archivo_commons": "File:Giovanni Paolo Panini – Ancient Rome.jpg",
   "ancho": 960,
-  "alto": 742
+  "alto": 742,
+  "anio": 1757
  },
  "2026/lugar_italia__siena": {
   "titulo": "Alegoría del Buen Gobierno",
@@ -1927,7 +2093,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ambrogio_Lorenzetti_-_Allegory_of_Good_Government_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Ambrogio Lorenzetti - Allegory of Good Government - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 519
+  "alto": 519,
+  "anio": 1339
  },
  "2026/lugar_italia__venecia": {
   "titulo": "Venecia: el Gran Canal mirando a Santa Croce",
@@ -1937,7 +2104,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Canaletto_(follower_of)_-_Venice,_Upper_Reaches_of_the_Grand_Canal_facing_Santa_Croce.jpg",
   "archivo_commons": "File:Canaletto (follower of) - Venice, Upper Reaches of the Grand Canal facing Santa Croce.jpg",
   "ancho": 960,
-  "alto": 787
+  "alto": 787,
+  "anio": 1738
  },
  "2026/lugar_japon__kanagawa": {
   "titulo": "La gran ola de Kanagawa",
@@ -1947,7 +2115,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tsunami_by_hokusai_19th_century.jpg",
   "archivo_commons": "File:Tsunami by hokusai 19th century.jpg",
   "ancho": 960,
-  "alto": 645
+  "alto": 645,
+  "anio": 1831
  },
  "2026/lugar_japon__kioto": {
   "titulo": "Vistas dentro y fuera de Kioto (Rakuchū rakugai-zu)",
@@ -1977,7 +2146,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Print,_Yui,_Summit_of_Mount_Satta,_in_The_Fifty-Three_Stations_of_the_Tokaido_Road_(Tokaido_Gojusan_Tsugi-no_Uchi),_ca._1834_(CH_18608835).jpg",
   "archivo_commons": "File:Print, Yui, Summit of Mount Satta, in The Fifty-Three Stations of the Tokaido Road (Tokaido Gojusan Tsugi-no Uchi), ca. 1834 (CH 18608835).jpg",
   "ancho": 960,
-  "alto": 624
+  "alto": 624,
+  "anio": 1834
  },
  "2026/lugar_japon__tokio": {
   "titulo": "Aguacero repentino sobre el puente Shin-Ōhashi y Atake",
@@ -1987,7 +2157,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Hiroshige,_Sudden_shower_over_Shin-%C5%8Chashi_bridge_and_Atake,_1857.jpg",
   "archivo_commons": "File:Hiroshige, Sudden shower over Shin-Ōhashi bridge and Atake, 1857.jpg",
   "ancho": 726,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1857
  },
  "2026/lugar_japon__yamanashi": {
   "titulo": "Kajikazawa, en la provincia de Kai",
@@ -1997,7 +2168,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:%E5%86%A8%E5%B6%BD%E4%B8%89%E5%8D%81%E5%85%AD%E6%99%AF_%E7%94%B2%E5%B7%9E%E7%9F%B3%E7%8F%AD%E6%B2%A2-Kajikazawa_in_Kai_Province_(K%C5%8Dsh%C5%AB_Kajikazawa),_from_the_series_Thirty-six_Views_of_Mount_Fuji_(Fugaku_sanj%C5%ABrokkei)_MET_DP140973.jpg",
   "archivo_commons": "File:冨嶽三十六景 甲州石班沢-Kajikazawa in Kai Province (Kōshū Kajikazawa), from the series Thirty-six Views of Mount Fuji (Fugaku sanjūrokkei) MET DP140973.jpg",
   "ancho": 960,
-  "alto": 637
+  "alto": 637,
+  "anio": 1830
  },
  "2026/lugar_mexico__chiapas": {
   "titulo": "El artista llevado en silla por Chiapas",
@@ -2007,7 +2179,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jean-Fr%C3%A9d%C3%A9ric_Waldeck_-_The_Artist_Carried_in_a_Sillero_over_the_Chiapas_from_Palenque_to_Ocosingo,_Mexico_-_2014-147_-_Princeton_University_Art_Museum.jpg",
   "archivo_commons": "File:Jean-Frédéric Waldeck - The Artist Carried in a Sillero over the Chiapas from Palenque to Ocosingo, Mexico - 2014-147 - Princeton University Art Museum.jpg",
   "ancho": 914,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1833
  },
  "2026/lugar_mexico__guanajuato": {
   "titulo": "Bodegón con frutas (con alacrán y rana)",
@@ -2017,7 +2190,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Hermenegildo_Bustos_-_Still_life_with_fruit_(with_scorpion_and_frog)_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Hermenegildo Bustos - Still life with fruit (with scorpion and frog) - Google Art Project.jpg",
   "ancho": 905,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1874
  },
  "2026/lugar_mexico__mexico": {
   "titulo": "Valle de México",
@@ -2027,7 +2201,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jos%C3%A9_Mar%C3%ADa_Velasco_-_Valle_de_M%C3%A9xico_-_1877_-_Museo_Nacional_de_Arte_-_MUNAL.jpg",
   "archivo_commons": "File:José María Velasco - Valle de México - 1877 - Museo Nacional de Arte - MUNAL.jpg",
   "ancho": 960,
-  "alto": 659
+  "alto": 659,
+  "anio": 1877
  },
  "2026/lugar_mexico__yucatan": {
   "titulo": "Portada del Gran Teocalli, Uxmal",
@@ -2047,7 +2222,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Johan_Christian_Dahl_-_View_from_Stalheim_-_NG.M.01060_-_National_Museum_of_Art,_Architecture_and_Design.jpg",
   "archivo_commons": "File:Johan Christian Dahl - View from Stalheim - NG.M.01060 - National Museum of Art, Architecture and Design.jpg",
   "ancho": 960,
-  "alto": 740
+  "alto": 740,
+  "anio": 1842
  },
  "2026/lugar_noruega__oslo": {
   "titulo": "El grito",
@@ -2057,7 +2233,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Edvard_Munch_-_The_Scream_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Edvard Munch - The Scream - Google Art Project.jpg",
   "ancho": 870,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1910
  },
  "2026/lugar_nueva_zelanda__auckland": {
   "titulo": "Ensueño (Hinemoa, Te Arawa)",
@@ -2067,7 +2244,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Charles_Frederick_Goldie_-_Reverie.jpg",
   "archivo_commons": "File:Charles Frederick Goldie - Reverie.jpg",
   "ancho": 920,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1932
  },
  "2026/lugar_nueva_zelanda__west_coast": {
   "titulo": "Arroyo de montaña, garganta de Otira",
@@ -2077,7 +2255,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Petrus_van_der_Velden_-_Mountain_Stream,_Otira_Gorge_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Petrus van der Velden - Mountain Stream, Otira Gorge - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 627
+  "alto": 627,
+  "anio": 1893
  },
  "2026/lugar_paises_bajos__brabante_septentrional": {
   "titulo": "Los comedores de patatas",
@@ -2087,7 +2266,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Potato_Eaters_-_Vincent_Van_Gogh.jpg",
   "archivo_commons": "File:The Potato Eaters - Vincent Van Gogh.jpg",
   "ancho": 960,
-  "alto": 728
+  "alto": 728,
+  "anio": 1885
  },
  "2026/lugar_paises_bajos__frisia": {
   "titulo": "Paisaje invernal con patinadores (detalle)",
@@ -2097,7 +2277,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Hendrick_Avercamp_-_Winter_Landscape_with_Skaters_(detail)_-_WGA1078.jpg",
   "archivo_commons": "File:Hendrick Avercamp - Winter Landscape with Skaters (detail) - WGA1078.jpg",
   "ancho": 929,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1608
  },
  "2026/lugar_paises_bajos__holanda_meridional": {
   "titulo": "Vista de Delft",
@@ -2107,7 +2288,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:View_of_Delft,_by_Johannes_Vermeer.jpg",
   "archivo_commons": "File:View of Delft, by Johannes Vermeer.jpg",
   "ancho": 960,
-  "alto": 797
+  "alto": 797,
+  "anio": 1660
  },
  "2026/lugar_paises_bajos__holanda_septentrional": {
   "titulo": "El ayuntamiento en la plaza Dam, Ámsterdam",
@@ -2117,7 +2299,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Het_stadhuis_op_de_Dam_in_Amsterdam_Rijksmuseum_SK-A-34.jpeg",
   "archivo_commons": "File:Het stadhuis op de Dam in Amsterdam Rijksmuseum SK-A-34.jpeg",
   "ancho": 960,
-  "alto": 787
+  "alto": 787,
+  "anio": 1672
  },
  "2026/lugar_paises_bajos__zelanda": {
   "titulo": "Torre de iglesia de Zelanda",
@@ -2127,7 +2310,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Zeeuwsche_kerktoren,_Mondriaan,_1911.jpg",
   "archivo_commons": "File:Zeeuwsche kerktoren, Mondriaan, 1911.jpg",
   "ancho": 717,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1911
  },
  "2026/lugar_peru__cusco": {
   "titulo": "Virgen de Belén",
@@ -2137,7 +2321,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Cuzque%C3%B1a2.jpg",
   "archivo_commons": "File:Cuzqueña2.jpg",
   "ancho": 780,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1750
  },
  "2026/lugar_peru__lima": {
   "titulo": "Samba limeña a caballo",
@@ -2147,7 +2332,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Una_samba_lime%C3%B1a_a_cavallo_-_Pancho_Fierro.jpg",
   "archivo_commons": "File:Una samba limeña a cavallo - Pancho Fierro.jpg",
   "ancho": 668,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1850
  },
  "2026/lugar_polonia__voivodato_de_mazovia": {
   "titulo": "Vista de Varsovia desde la terraza del Castillo Real",
@@ -2157,7 +2343,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Bernardo_Bellotto_-_View_of_Warsaw_from_the_Terrace_of_the_Royal_Castle_-_MP_228_-_National_Museum_in_Warsaw.jpg",
   "archivo_commons": "File:Bernardo Bellotto - View of Warsaw from the Terrace of the Royal Castle - MP 228 - National Museum in Warsaw.jpg",
   "ancho": 960,
-  "alto": 578
+  "alto": 578,
+  "anio": 1773
  },
  "2026/lugar_polonia__voivodato_de_pequena_polonia": {
   "titulo": "Stańczyk",
@@ -2167,7 +2354,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jan_Matejko,_Sta%C5%84czyk.jpg",
   "archivo_commons": "File:Jan Matejko, Stańczyk.jpg",
   "ancho": 960,
-  "alto": 714
+  "alto": 714,
+  "anio": 1862
  },
  "2026/lugar_reino_unido__argyll_and_bute": {
   "titulo": "Staffa, la gruta de Fingal",
@@ -2177,7 +2365,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Joseph_Mallord_William_Turner_-_Staffa,_Fingal%27s_Cave_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Joseph Mallord William Turner - Staffa, Fingal's Cave - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 710
+  "alto": 710,
+  "anio": 1832
  },
  "2026/lugar_reino_unido__birmingham": {
   "titulo": "La estrella de Belén",
@@ -2187,7 +2376,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Edward_Burne-Jones_-_The_Star_of_Bethlehem_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Edward Burne-Jones - The Star of Bethlehem - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 629
+  "alto": 629,
+  "anio": 1890
  },
  "2026/lugar_reino_unido__cornualles": {
   "titulo": "Venta de pescado en una playa de Cornualles",
@@ -2197,7 +2387,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Stanhope_Forbes_-_A_Fish_Sale_on_a_Cornish_Beach.jpg",
   "archivo_commons": "File:Stanhope Forbes - A Fish Sale on a Cornish Beach.jpg",
   "ancho": 960,
-  "alto": 692
+  "alto": 692,
+  "anio": 1885
  },
  "2026/lugar_reino_unido__cumbria": {
   "titulo": "Lago Buttermere, con parte de Cromackwater",
@@ -2207,7 +2398,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:(Barcelona)_Buttermere_Lake,_with_Park_of_Cromackwater,_Cumberland,_a_Shower_-_William_Turner_in_Tate_Britain.jpg",
   "archivo_commons": "File:(Barcelona) Buttermere Lake, with Park of Cromackwater, Cumberland, a Shower - William Turner in Tate Britain.jpg",
   "ancho": 960,
-  "alto": 725
+  "alto": 725,
+  "anio": 1798
  },
  "2026/lugar_reino_unido__dorset": {
   "titulo": "Bahía de Weymouth",
@@ -2217,7 +2409,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:John_Constable_-_Weymouth_Bay,_c._1816.jpg",
   "archivo_commons": "File:John Constable - Weymouth Bay, c. 1816.jpg",
   "ancho": 960,
-  "alto": 672
+  "alto": 672,
+  "anio": 1816
  },
  "2026/lugar_reino_unido__edimburgo": {
   "titulo": "Vista del castillo de Edimburgo",
@@ -2237,7 +2430,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Claude_Monet,_Houses_of_Parliament,_London,_1900-1903,_1933.1164,_Art_Institute_of_Chicago.jpg",
   "archivo_commons": "File:Claude Monet, Houses of Parliament, London, 1900-1903, 1933.1164, Art Institute of Chicago.jpg",
   "ancho": 960,
-  "alto": 839
+  "alto": 839,
+  "anio": 1900
  },
  "2026/lugar_reino_unido__suffolk": {
   "titulo": "El carro de heno",
@@ -2247,7 +2441,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:John_Constable_-_The_Hay_Wain_(1821).jpg",
   "archivo_commons": "File:John Constable - The Hay Wain (1821).jpg",
   "ancho": 960,
-  "alto": 662
+  "alto": 662,
+  "anio": 1821
  },
  "2026/lugar_reino_unido__wiltshire": {
   "titulo": "La catedral de Salisbury vista desde los prados",
@@ -2257,7 +2452,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Constable_Salisbury_meadows.jpg",
   "archivo_commons": "File:Constable Salisbury meadows.jpg",
   "ancho": 960,
-  "alto": 768
+  "alto": 768,
+  "anio": 1831
  },
  "2026/lugar_rusia__briansk": {
   "titulo": "Mañana en un bosque de pinos",
@@ -2267,7 +2463,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Shishkin,_Ivan_-_Morning_in_a_Pine_Forest.jpg",
   "archivo_commons": "File:Shishkin, Ivan - Morning in a Pine Forest.jpg",
   "ancho": 960,
-  "alto": 650
+  "alto": 650,
+  "anio": 1889
  },
  "2026/lugar_rusia__ivanovo": {
   "titulo": "Después de la lluvia. Plyos",
@@ -2277,7 +2474,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:%D0%9B%D0%B5%D0%B2%D0%B8%D1%82%D0%B0%D0%BD_%D0%9F%D0%BE%D1%81%D0%BB%D0%B5_%D0%B4%D0%BE%D0%B6%D0%B4%D1%8F.jpg",
   "archivo_commons": "File:Левитан После дождя.jpg",
   "ancho": 960,
-  "alto": 626
+  "alto": 626,
+  "anio": 1889
  },
  "2026/lugar_rusia__moscu": {
   "titulo": "Patio moscovita",
@@ -2287,7 +2485,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Moscow_Courtyard_(Polenov,_1878)_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Moscow Courtyard (Polenov, 1878) - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 791
+  "alto": 791,
+  "anio": 1878
  },
  "2026/lugar_rusia__pskov": {
   "titulo": "Antiguo Pskov",
@@ -2307,7 +2506,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%B8%D0%B4_%D0%B2_%D0%9A%D1%80%D1%8B%D0%BC%D1%83_%D0%BF%D1%80%D0%B8_%D0%B7%D0%B0%D0%BA%D0%B0%D1%82%D0%B5_%D1%81%D0%BE%D0%BB%D0%BD%D1%86%D0%B0_%D0%90%D0%B9%D0%B2%D0%B0%D0%B7%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B9.jpg",
   "archivo_commons": "File:Вид в Крыму при закате солнца Айвазовский.jpg",
   "ancho": 960,
-  "alto": 686
+  "alto": 686,
+  "anio": 1862
  },
  "2026/lugar_rusia__san_petersburgo": {
   "titulo": "La estatua ecuestre de Pedro I y la plaza del Senado",
@@ -2317,7 +2517,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Paterssen_View_Senate_Square_with_Monument_of_Peter_the_Great_1799.jpg",
   "archivo_commons": "File:Paterssen View Senate Square with Monument of Peter the Great 1799.jpg",
   "ancho": 960,
-  "alto": 670
+  "alto": 670,
+  "anio": 1799
  },
  "2026/lugar_sudafrica__occidental_del_cabo": {
   "titulo": "Ciudad del Cabo desde la playa de Woodstock",
@@ -2327,7 +2528,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Baines-Cape_Town_from_Woodstock_beach-0645.jpg",
   "archivo_commons": "File:Thomas Baines-Cape Town from Woodstock beach-0645.jpg",
   "ancho": 960,
-  "alto": 758
+  "alto": 758,
+  "anio": 1847
  },
  "2026/lugar_suecia__dalarna": {
   "titulo": "Baile de San Juan",
@@ -2337,7 +2539,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Midsummer_Dance_(Anders_Zorn)_-_Nationalmuseum_-_18607.tif",
   "archivo_commons": "File:Midsummer Dance (Anders Zorn) - Nationalmuseum - 18607.tif",
   "ancho": 807,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1897
  },
  "2026/lugar_suecia__estocolmo": {
   "titulo": "Sacrificio de pleno invierno",
@@ -2347,7 +2550,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Midvinterblot_(Carl_Larsson)_-_Nationalmuseum_-_edited.jpg",
   "archivo_commons": "File:Midvinterblot (Carl Larsson) - Nationalmuseum - edited.jpg",
   "ancho": 960,
-  "alto": 452
+  "alto": 452,
+  "anio": 1915
  },
  "2026/lugar_suiza__berna": {
   "titulo": "El lago Thun y los montes Stockhorn",
@@ -2357,7 +2561,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Lake_Thun_and_the_Stockhornmountains_by_Ferdinand_Hodler_(ca.1913).jpg",
   "archivo_commons": "File:Lake Thun and the Stockhornmountains by Ferdinand Hodler (ca.1913).jpg",
   "ancho": 960,
-  "alto": 691
+  "alto": 691,
+  "anio": 1913
  },
  "2026/lugar_suiza__ginebra": {
   "titulo": "El lago Lemán y el Mont Blanc al amanecer",
@@ -2367,7 +2572,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Lake_Geneva_and_Mont_Blanc_at_sunrise_(1918)_by_Ferdinand_Hodler.jpg",
   "archivo_commons": "File:Lake Geneva and Mont Blanc at sunrise (1918) by Ferdinand Hodler.jpg",
   "ancho": 960,
-  "alto": 468
+  "alto": 468,
+  "anio": 1918
  },
  "2026/lugar_suiza__los_grisones": {
   "titulo": "Paisaje alpino al atardecer",
@@ -2377,7 +2583,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Alpine_Landscape_at_Sunset_(SM_1559).png",
   "archivo_commons": "File:Alpine Landscape at Sunset (SM 1559).png",
   "ancho": 960,
-  "alto": 608
+  "alto": 608,
+  "anio": 1897
  },
  "2026/lugar_suiza__lucerna": {
   "titulo": "Lago de Lucerna: la bahía de Uri desde arriba de Brunnen",
@@ -2387,7 +2594,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:(Barcelona)_Lake_Lucerne_;_the_Bay_of_Uri_from_above_Brunnen_-_William_Turner_-_Tate_Britain.jpg",
   "archivo_commons": "File:(Barcelona) Lake Lucerne ; the Bay of Uri from above Brunnen - William Turner - Tate Britain.jpg",
   "ancho": 960,
-  "alto": 696
+  "alto": 696,
+  "anio": 1810
  },
  "2026/lugar_turquia__estambul": {
   "titulo": "Atardecer en el Cuerno de Oro",
@@ -2397,7 +2605,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ivan_Constantinovich_Aivazovsky_-_Dusk_on_the_Golden_Horn.JPG",
   "archivo_commons": "File:Ivan Constantinovich Aivazovsky - Dusk on the Golden Horn.JPG",
   "ancho": 960,
-  "alto": 691
+  "alto": 691,
+  "anio": 1845
  },
  "2026/lugar_ucrania__kiev": {
   "titulo": "Noche de luna en el Dniéper",
@@ -2407,7 +2616,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Kuindzhi_Moonlit_night_on_the_Dnieper_1880_grm_x2.jpg",
   "archivo_commons": "File:Kuindzhi Moonlit night on the Dnieper 1880 grm x2.jpg",
   "ancho": 960,
-  "alto": 697
+  "alto": 697,
+  "anio": 1880
  },
  "2026/lugar_ucrania__odesa": {
   "titulo": "Vista de Odesa en una noche de luna",
@@ -2417,7 +2627,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Aivasovsky_Ivan_Constantinovich_The_Harbor_At_Odessa_On_The_Black_Sea.jpg",
   "archivo_commons": "File:Aivasovsky Ivan Constantinovich The Harbor At Odessa On The Black Sea.jpg",
   "ancho": 960,
-  "alto": 584
+  "alto": 584,
+  "anio": 1855
  },
  "2026/lugar_uzbekistan__samarcanda": {
   "titulo": "Mausoleo de Gur-Emir, Samarcanda",
@@ -2427,7 +2638,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B0%D0%B2%D0%B7%D0%BE%D0%BB%D0%B5%D0%B9_%D0%93%D1%83%D1%80-%D0%AD%D0%BC%D0%B8%D1%80._%D0%A1%D0%B0%D0%BC%D0%B0%D1%80%D0%BA%D0%B0%D0%BD%D0%B4.jpg",
   "archivo_commons": "File:Мавзолей Гур-Эмир. Самарканд.jpg",
   "ancho": 785,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1870
  },
  "2026/lugar_venezuela__capital": {
   "titulo": "Miranda en La Carraca",
@@ -2437,7 +2649,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Miranda_en_la_Carraca_by_Arturo_Michelena.jpg",
   "archivo_commons": "File:Miranda en la Carraca by Arturo Michelena.jpg",
   "ancho": 960,
-  "alto": 746
+  "alto": 746,
+  "anio": 1896
  },
  "2026/lugar_venezuela__carabobo": {
   "titulo": "Boceto para la Batalla de Carabobo",
@@ -2457,7 +2670,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Fortuny_Fantasia_%C3%A0rab.jpg",
   "archivo_commons": "File:Fortuny Fantasia àrab.jpg",
   "ancho": 960,
-  "alto": 717
+  "alto": 717,
+  "anio": 1867
  },
  "2026/mexico": {
   "titulo": "El valle de México desde el cerro de Santa Isabel",
@@ -2467,7 +2681,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jos%C3%A9_Mar%C3%ADa_Velasco_-_The_Valley_of_Mexico_from_the_Santa_Isabel_Mountain_Range_-_Google_Art_Project.jpg",
   "archivo_commons": "File:José María Velasco - The Valley of Mexico from the Santa Isabel Mountain Range - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 659
+  "alto": 659,
+  "anio": 1875
  },
  "2026/mongolia": {
   "titulo": "Retrato de Gengis Kan",
@@ -2487,7 +2702,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Adolph_Tidemand_%26_Hans_Gude_-_Bridal_Procession_on_the_Hardangerfjord_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Adolph Tidemand & Hans Gude - Bridal Procession on the Hardangerfjord - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 686
+  "alto": 686,
+  "anio": 1848
  },
  "2026/nueva_zelanda": {
   "titulo": "Tamati Waka Nene",
@@ -2497,7 +2713,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Gottfried_Lindauer_-_Tamati_Waka_Nene_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Gottfried Lindauer - Tamati Waka Nene - Google Art Project.jpg",
   "ancho": 871,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1890
  },
  "2026/paises_bajos": {
   "titulo": "La ronda de noche",
@@ -2507,7 +2724,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:La_ronda_de_noche,_por_Rembrandt_van_Rijn.jpg",
   "archivo_commons": "File:La ronda de noche, por Rembrandt van Rijn.jpg",
   "ancho": 960,
-  "alto": 781
+  "alto": 781,
+  "anio": 1642
  },
  "2026/pakistan": {
   "titulo": "Los sijs ante Lahore",
@@ -2537,7 +2755,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jan_Matejko_-_Battle_of_Grunwald_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Jan Matejko - Battle of Grunwald - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 415
+  "alto": 415,
+  "anio": 1878
  },
  "2026/portugal": {
   "titulo": "Paneles de San Vicente de Fora",
@@ -2557,7 +2776,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:The_Fighting_Temeraire,_JMW_Turner,_National_Gallery.jpg",
   "archivo_commons": "File:The Fighting Temeraire, JMW Turner, National Gallery.jpg",
   "ancho": 960,
-  "alto": 713
+  "alto": 713,
+  "anio": 1839
  },
  "2026/republica_democratica_del_congo": {
   "titulo": "Padrão erigido por los portugueses en la desembocadura del Zaire",
@@ -2567,7 +2787,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Padr%C3%A3o_Erguido_pelos_Portugueses_na_Foz_do_Zaire_(Roque_Gameiro,_Quadros_da_Hist%C3%B3ria_de_Portugal,_1917).png",
   "archivo_commons": "File:Padrão Erguido pelos Portugueses na Foz do Zaire (Roque Gameiro, Quadros da História de Portugal, 1917).png",
   "ancho": 960,
-  "alto": 557
+  "alto": 557,
+  "anio": 1917
  },
  "2026/rumania": {
   "titulo": "Retrato de campesina",
@@ -2587,7 +2808,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ilia_Efimovich_Repin_(1844-1930)_-_Volga_Boatmen_(1870-1873).jpg",
   "archivo_commons": "File:Ilia Efimovich Repin (1844-1930) - Volga Boatmen (1870-1873).jpg",
   "ancho": 960,
-  "alto": 444
+  "alto": 444,
+  "anio": 1873
  },
  "2026/senegal": {
   "titulo": "El puerto de Dakar con la isla de Gorée al fondo",
@@ -2597,7 +2819,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Christian_Benjamin_Olsen_-_Parti_fra_fra_Dakar_Havn_med_%C3%B8en_Gor%C3%A9e_i_baggrunden.png",
   "archivo_commons": "File:Christian Benjamin Olsen - Parti fra fra Dakar Havn med øen Gorée i baggrunden.png",
   "ancho": 960,
-  "alto": 593
+  "alto": 593,
+  "anio": 1891
  },
  "2026/serbia": {
   "titulo": "La migración de los serbios",
@@ -2607,7 +2830,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Serbmigra.jpg",
   "archivo_commons": "File:Serbmigra.jpg",
   "ancho": 960,
-  "alto": 621
+  "alto": 621,
+  "anio": 1896
  },
  "2026/siria": {
   "titulo": "Una calle de Damasco",
@@ -2617,7 +2841,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Gustav_Bauernfeind_-_A_Street_Scene,_Damascus_(Sotheby%27s,_ShafikGabrCollection)_001l2010.jpg",
   "archivo_commons": "File:Gustav Bauernfeind - A Street Scene, Damascus (Sotheby's, ShafikGabrCollection) 001l2010.jpg",
   "ancho": 960,
-  "alto": 725
+  "alto": 725,
+  "anio": 1890
  },
  "2026/sudafrica": {
   "titulo": "Carreta cruzando un vado, Natal",
@@ -2627,7 +2852,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Baines_-_Wagon_Crossing_a_Drift_-_Natal_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Thomas Baines - Wagon Crossing a Drift - Natal - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 740
+  "alto": 740,
+  "anio": 1874
  },
  "2026/suecia": {
   "titulo": "Midvinterblot (el sacrificio de pleno invierno)",
@@ -2637,7 +2863,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Midvinterblot_(Carl_Larsson)_-_Nationalmuseum_-_edited.jpg",
   "archivo_commons": "File:Midvinterblot (Carl Larsson) - Nationalmuseum - edited.jpg",
   "ancho": 960,
-  "alto": 452
+  "alto": 452,
+  "anio": 1915
  },
  "2026/suiza": {
   "titulo": "El lago de Thun con Blüemlisalp y Niesen",
@@ -2677,7 +2904,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Osman_Hamdi_Bey_-_The_Tortoise_Trainer.jpg",
   "archivo_commons": "File:Osman Hamdi Bey - The Tortoise Trainer.jpg",
   "ancho": 593,
-  "alto": 1100
+  "alto": 1100,
+  "anio": 1906
  },
  "2026/ucrania": {
   "titulo": "Los cosacos zaporogos escriben una carta al sultán de Turquía",
@@ -2687,7 +2915,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Repin_Cossacks.jpg",
   "archivo_commons": "File:Repin Cossacks.jpg",
   "ancho": 960,
-  "alto": 567
+  "alto": 567,
+  "anio": 1891
  },
  "2026/uzbekistan": {
   "titulo": "La madrasa Shir-Dor en la plaza Registán de Samarcanda",
@@ -2697,7 +2926,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B5%D0%B4%D1%80%D0%B5%D1%81%D0%B5_%D0%A8%D0%B8%D1%80-%D0%94%D0%BE%D1%80_%D0%BD%D0%B0_%D0%BF%D0%BB%D0%BE%D1%89%D0%B0%D0%B4%D0%B8_%D0%A0%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D0%B0%D0%BD_%D0%B2_%D0%A1%D0%B0%D0%BC%D0%B0%D1%80%D0%BA%D0%B0%D0%BD%D0%B4%D0%B5.jpg",
   "archivo_commons": "File:Медресе Шир-Дор на площади Регистан в Самарканде.jpg",
   "ancho": 960,
-  "alto": 691
+  "alto": 691,
+  "anio": 1869
  },
  "2026/venezuela": {
   "titulo": "Miranda en La Carraca",
@@ -2707,7 +2937,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Miranda_en_la_Carraca,_Arturo_Michelena.jpg",
   "archivo_commons": "File:Miranda en la Carraca, Arturo Michelena.jpg",
   "ancho": 960,
-  "alto": 735
+  "alto": 735,
+  "anio": 1896
  },
  "2026/vietnam": {
   "titulo": "Phù Đổng Thiên Vương",
@@ -2727,7 +2958,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:David_Roberts_Temple_Island_Philae.jpg",
   "archivo_commons": "File:David Roberts Temple Island Philae.jpg",
   "ancho": 960,
-  "alto": 695
+  "alto": 695,
+  "anio": 1838
  },
  "general/continente_america_del_norte": {
   "titulo": "Tormenta en las Montañas Rocosas, monte Rosalie",
@@ -2737,7 +2969,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Albert_Bierstadt_-_A_Storm_in_the_Rocky_Mountains,_Mt._Rosalie_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Albert Bierstadt - A Storm in the Rocky Mountains, Mt. Rosalie - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 556
+  "alto": 556,
+  "anio": 1866
  },
  "general/continente_america_del_sur": {
   "titulo": "El corazón de los Andes",
@@ -2747,7 +2980,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Church_Heart_of_the_Andes.jpg",
   "archivo_commons": "File:Church Heart of the Andes.jpg",
   "ancho": 960,
-  "alto": 526
+  "alto": 526,
+  "anio": 1859
  },
  "general/continente_antartida": {
   "titulo": "Los buques Erebus y Terror en el mar de Ross",
@@ -2757,7 +2991,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:H.M._Ships_Erebus_and_Terror_in_the_Ross_Sea_(by_John_Edward_Davis).jpg",
   "archivo_commons": "File:H.M. Ships Erebus and Terror in the Ross Sea (by John Edward Davis).jpg",
   "ancho": 960,
-  "alto": 623
+  "alto": 623,
+  "anio": 1850
  },
  "general/continente_asia": {
   "titulo": "A lo largo del río durante el Festival Qingming",
@@ -2777,7 +3012,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Rembrandt_-_De_Staalmeesters-_het_college_van_staalmeesters_(waardijns)_van_het_Amsterdamse_lakenbereidersgilde_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Rembrandt - De Staalmeesters- het college van staalmeesters (waardijns) van het Amsterdamse lakenbereidersgilde - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 649
+  "alto": 649,
+  "anio": 1662
  },
  "general/continente_oceania": {
   "titulo": "Sydney Heads",
@@ -2787,7 +3023,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Eugene_von_Gu%C3%A9rard_-_Sydney_Heads_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Eugene von Guérard - Sydney Heads - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 570
+  "alto": 570,
+  "anio": 1865
  },
  "general/mundo": {
   "titulo": "La torre de Babel",
@@ -2797,17 +3034,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_d._%C3%84.,_Kunsthistorisches_Museum_Wien,_Gem%C3%A4ldegalerie_-_Turmbau_zu_Babel_-_GG_1026_-_Kunsthistorisches_Museum.jpg",
   "archivo_commons": "File:Pieter Bruegel d. Ä., Kunsthistorisches Museum Wien, Gemäldegalerie - Turmbau zu Babel - GG 1026 - Kunsthistorisches Museum.jpg",
   "ancho": 960,
-  "alto": 707
- },
- "general/region_africa_norte": {
-  "titulo": "La Gran Esfinge y las pirámides de Guiza",
-  "artista": "David Roberts",
-  "fecha": "1839",
-  "licencia": "Public domain",
-  "url": "https://commons.wikimedia.org/wiki/File:The_Great_Sphinx,_Pyramids_of_Gizeh-1839)_by_David_Roberts,_RA.jpg",
-  "archivo_commons": "File:The Great Sphinx, Pyramids of Gizeh-1839) by David Roberts, RA.jpg",
-  "ancho": 960,
-  "alto": 610
+  "alto": 707,
+  "anio": 1563
  },
  "general/region_africa_subsahariana": {
   "titulo": "Baobab, Sudáfrica",
@@ -2817,7 +3045,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Thomas_Baines_Baobab.jpg",
   "archivo_commons": "File:Thomas Baines Baobab.jpg",
   "ancho": 960,
-  "alto": 678
+  "alto": 678,
+  "anio": 1861
  },
  "general/region_asia_central": {
   "titulo": "Triunfantes",
@@ -2827,7 +3056,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:1872_Vereshchagin_Triumphierend_anagoria.JPG",
   "archivo_commons": "File:1872 Vereshchagin Triumphierend anagoria.JPG",
   "ancho": 960,
-  "alto": 716
+  "alto": 716,
+  "anio": 1872
  },
  "general/region_asia_este": {
   "titulo": "Viento sur, cielo claro (el Fuji rojo)",
@@ -2837,7 +3067,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Red_Fuji_southern_wind_clear_morning.jpg",
   "archivo_commons": "File:Red Fuji southern wind clear morning.jpg",
   "ancho": 960,
-  "alto": 641
+  "alto": 641,
+  "anio": 1831
  },
  "general/region_asia_sur": {
   "titulo": "Aldeanos en Rania (Haryana)",
@@ -2847,7 +3078,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Painting_of_villagers_at_Rania_(located_in_modern-day_Haryana),_circa_1816._Painted_by_the_company_artists_Ghulam_%E2%80%98Ali_Khan_and_others.jpg",
   "archivo_commons": "File:Painting of villagers at Rania (located in modern-day Haryana), circa 1816. Painted by the company artists Ghulam ‘Ali Khan and others.jpg",
   "ancho": 960,
-  "alto": 685
+  "alto": 685,
+  "anio": 1816
  },
  "general/region_europa_este": {
   "titulo": "Mañana en un bosque de pinos",
@@ -2857,7 +3089,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Shishkin,_Ivan_-_Morning_in_a_Pine_Forest.jpg",
   "archivo_commons": "File:Shishkin, Ivan - Morning in a Pine Forest.jpg",
   "ancho": 960,
-  "alto": 650
+  "alto": 650,
+  "anio": 1889
  },
  "general/region_europa_norte": {
   "titulo": "El monje junto al mar",
@@ -2867,7 +3100,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Friedrich,_Caspar_David_-_M%C3%B6nch_am_Meer_-_Alte_Nationalgalerie_in_Berlin.jpg",
   "archivo_commons": "File:Friedrich, Caspar David - Mönch am Meer - Alte Nationalgalerie in Berlin.jpg",
   "ancho": 960,
-  "alto": 617
+  "alto": 617,
+  "anio": 1810
  },
  "general/region_europa_occidental": {
   "titulo": "El carro de heno",
@@ -2877,7 +3111,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:John_Constable_-_The_Hay_Wain_(1821).jpg",
   "archivo_commons": "File:John Constable - The Hay Wain (1821).jpg",
   "ancho": 960,
-  "alto": 662
+  "alto": 662,
+  "anio": 1821
  },
  "general/region_mediterraneo": {
   "titulo": "Puerto con el embarque de la reina de Saba",
@@ -2887,7 +3122,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Claude_Lorrain_-_Seaport_with_the_Embarkation_of_the_Queen_of_Sheba_-_WGA05002.jpg",
   "archivo_commons": "File:Claude Lorrain - Seaport with the Embarkation of the Queen of Sheba - WGA05002.jpg",
   "ancho": 960,
-  "alto": 730
+  "alto": 730,
+  "anio": 1648
  },
  "general/region_mesoamerica_caribe": {
   "titulo": "El valle de México desde el cerro del Tepeyac",
@@ -2897,7 +3133,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Valle_de_M%C3%A9xico_desde_el_cerro_del_Tepeyac,_de_Jos%C3%A9_Mar%C3%ADa_Velasco,_en_el_MUNAL_05.jpg",
   "archivo_commons": "File:Valle de México desde el cerro del Tepeyac, de José María Velasco, en el MUNAL 05.jpg",
   "ancho": 960,
-  "alto": 641
+  "alto": 641,
+  "anio": 1883
  },
  "general/region_norteamerica": {
   "titulo": "Las Montañas Rocosas, pico de Lander",
@@ -2907,7 +3144,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Albert_Bierstadt_-_The_Rocky_Mountains,_Lander%27s_Peak.jpg",
   "archivo_commons": "File:Albert Bierstadt - The Rocky Mountains, Lander's Peak.jpg",
   "ancho": 960,
-  "alto": 575
+  "alto": 575,
+  "anio": 1863
  },
  "general/region_oceania": {
   "titulo": "Cordillera Dandenong desde «Beleura»",
@@ -2917,7 +3155,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Eugene_VON_GU%C3%89Rard_-_Dandenong_Ranges_from_%3FBeleura%3F_-_Google_Art_Project.jpg",
   "archivo_commons": "File:Eugene VON GUÉRard - Dandenong Ranges from ?Beleura? - Google Art Project.jpg",
   "ancho": 960,
-  "alto": 619
+  "alto": 619,
+  "anio": 1870
  },
  "general/region_oriente_medio": {
   "titulo": "Oración de la tarde en El Cairo",
@@ -2927,7 +3166,8 @@
   "url": "https://commons.wikimedia.org/wiki/File:Jean-L%C3%A9on_G%C3%A9r%C3%B4me_-_Evening_Prayer,_Cairo_(1865).jpg",
   "archivo_commons": "File:Jean-Léon Gérôme - Evening Prayer, Cairo (1865).jpg",
   "ancho": 960,
-  "alto": 574
+  "alto": 574,
+  "anio": 1865
  },
  "general/region_sudamerica_este": {
   "titulo": "Piña, sandías y otras frutas de Brasil",
@@ -2947,6 +3187,18 @@
   "url": "https://commons.wikimedia.org/wiki/File:Raden_Saleh_-_hunt.jpg",
   "archivo_commons": "File:Raden Saleh - hunt.jpg",
   "ancho": 960,
-  "alto": 578
+  "alto": 578,
+  "anio": 1846
+ },
+ "general/region_nilo": {
+  "titulo": "La Gran Esfinge y las pirámides de Guiza",
+  "artista": "David Roberts",
+  "fecha": "1839",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:The_Great_Sphinx,_Pyramids_of_Gizeh-1839)_by_David_Roberts,_RA.jpg",
+  "archivo_commons": "File:The Great Sphinx, Pyramids of Gizeh-1839) by David Roberts, RA.jpg",
+  "ancho": 960,
+  "alto": 610,
+  "anio": 1839
  }
 }
