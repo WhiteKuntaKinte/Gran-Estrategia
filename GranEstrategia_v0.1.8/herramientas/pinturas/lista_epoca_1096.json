@@ -1,0 +1,245 @@
+{
+ "ayuda": "Consultas de pinturas de epoca 1096",
+ "entradas": [
+  {
+   "id": "1096/region_europa_occidental",
+   "q": [
+    "Bayeux Tapestry",
+    "Book of Kells",
+    "Beatus manuscript Spain",
+    "Utrecht Psalter"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_europa_norte",
+   "q": [
+    "Oseberg ship",
+    "Urnes stave church",
+    "Viking runestone Uppland",
+    "Gokstad ship"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_europa_este",
+   "q": [
+    "Saint Sophia Kyiv fresco Oranta",
+    "Kievan Rus mosaic Saint Michael",
+    "Ostromir Gospels",
+    "Saint Sophia Novgorod fresco"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_mediterraneo",
+   "q": [
+    "San Vitale mosaic Ravenna",
+    "San Clemente fresco Rome",
+    "Sant'Angelo in Formis fresco",
+    "Codex Purpureus Rossanensis"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_oriente_medio",
+   "q": [
+    "Dome of the Rock mosaic",
+    "Samarra fresco",
+    "Qusayr Amra fresco",
+    "Seljuk tile"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_asia_central",
+   "q": [
+    "Afrasiab murals Samarkand",
+    "Bamiyan Buddha mural",
+    "Kyzil cave painting",
+    "Bezeklik mural"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_asia_este",
+   "q": [
+    "Guo Xi Early Spring",
+    "Fan Kuan Travelers among mountains and streams",
+    "Night Revels of Han Xizai",
+    "Dunhuang Mogao mural"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_asia_sur",
+   "q": [
+    "Brihadisvara temple fresco",
+    "Pala Ashtasahasrika Prajnaparamita manuscript",
+    "Khajuraho temple",
+    "Chola bronze"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_sudeste_asiatico",
+   "q": [
+    "Borobudur relief",
+    "Prambanan relief",
+    "Pagan temple mural",
+    "Dieng"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_maghreb",
+   "q": [
+    "Blue Quran Kairouan",
+    "Great Mosque of Kairouan",
+    "Qur'an Kairouan manuscript",
+    "Almoravid"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_nilo",
+   "q": [
+    "Fatimid lustre ceramic",
+    "Coptic icon Sinai",
+    "Coptic manuscript",
+    "Fatimid"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_africa_subsahariana",
+   "q": [
+    "Garima Gospels",
+    "Igbo-Ukwu bronze",
+    "Aksum stele",
+    "Ethiopian illuminated manuscript"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_norteamerica",
+   "q": [
+    "Mimbres pottery",
+    "Cahokia Monks Mound",
+    "Chaco Canyon Pueblo Bonito",
+    "Mississippian culture"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_mesoamerica_caribe",
+   "q": [
+    "Dresden Codex",
+    "Bonampak mural",
+    "Cacaxtla mural",
+    "Codex Zouche-Nuttall"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_sudamerica_andes",
+   "q": [
+    "Wari textile",
+    "Tiwanaku Gateway of the Sun",
+    "Moche pottery",
+    "Tiwanaku"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_sudamerica_este",
+   "q": [
+    "Marajoara urn",
+    "Serra da Capivara rock painting",
+    "Tapajonica",
+    "Santarem pottery"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/region_oceania",
+   "q": [
+    "Rapa Nui moai",
+    "Aboriginal rock art",
+    "Lapita pottery",
+    "Nan Madol"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/continente_europa",
+   "q": [
+    "Bayeux Tapestry",
+    "Book of Kells",
+    "Hereford Mappa Mundi",
+    "Beatus Osma"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/continente_asia",
+   "q": [
+    "Guo Xi Early Spring",
+    "Fan Kuan",
+    "Dunhuang mural",
+    "Night Revels of Han Xizai"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/continente_africa",
+   "q": [
+    "Garima Gospels",
+    "Blue Quran",
+    "Igbo-Ukwu",
+    "Aksum"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/continente_america_del_norte",
+   "q": [
+    "Mimbres pottery",
+    "Cahokia",
+    "Chaco Canyon",
+    "Mississippian"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/continente_america_del_sur",
+   "q": [
+    "Wari textile",
+    "Tiwanaku",
+    "Moche",
+    "Marajoara"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/continente_oceania",
+   "q": [
+    "Rapa Nui moai",
+    "Aboriginal rock art",
+    "Nan Madol",
+    "Lapita"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1096/mundo",
+   "q": [
+    "Beatus Osma mappa mundi",
+    "Bayeux Tapestry",
+    "Mappa mundi Beatus",
+    "Tabula Peutingeriana"
+   ],
+   "max": 8
+  }
+ ]
+}

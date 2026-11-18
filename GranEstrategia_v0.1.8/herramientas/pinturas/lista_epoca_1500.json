@@ -1,0 +1,245 @@
+{
+ "ayuda": "Consultas de pinturas de epoca 1500",
+ "entradas": [
+  {
+   "id": "1500/region_europa_occidental",
+   "q": [
+    "Limbourg Tres Riches Heures",
+    "Van Eyck Arnolfini Portrait",
+    "Durer Four Horsemen",
+    "Unicorn Tapestries"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_europa_norte",
+   "q": [
+    "Albertus Pictor church painting",
+    "Uppsala cathedral medieval fresco",
+    "Kalmar Union Margaret",
+    "Bernt Notke Saint George"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_europa_este",
+   "q": [
+    "Andrei Rublev Trinity",
+    "Rublev Zvenigorod Spas",
+    "Voronet monastery fresco",
+    "Wit Stwosz altarpiece"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_mediterraneo",
+   "q": [
+    "Botticelli Birth of Venus",
+    "Leonardo Last Supper",
+    "Mantegna Camera degli Sposi",
+    "Nuno Goncalves Panels"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_oriente_medio",
+   "q": [
+    "Behzad Seduction of Yusuf",
+    "Gentile Bellini Mehmed II",
+    "Miraj Nameh Timurid",
+    "Topkapi Timurid album"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_asia_central",
+   "q": [
+    "Zafarnama Timur manuscript",
+    "Bihzad Herat painting",
+    "Timurid miniature",
+    "Bibi-Khanym Samarkand"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_asia_este",
+   "q": [
+    "Shen Zhou Poet on a Mountain",
+    "Sesshu Long Scroll",
+    "Dai Jin Ming painting",
+    "Ming dynasty hanging scroll"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_asia_sur",
+   "q": [
+    "Kalpasutra manuscript Jain",
+    "Vijayanagara Hampi",
+    "Gita Govinda manuscript",
+    "Bahmani"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_sudeste_asiatico",
+   "q": [
+    "Angkor Wat bas-relief",
+    "Majapahit relief",
+    "Ayutthaya mural",
+    "Borobudur relief"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_maghreb",
+   "q": [
+    "Catalan Atlas Mansa Musa",
+    "Catalan Atlas North Africa",
+    "Marinid madrasa Fez",
+    "Nasrid Alhambra tile"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_nilo",
+   "q": [
+    "Mamluk Qur'an manuscript",
+    "Mamluk Cairo mosque lamp",
+    "Sultan Hasan mosque",
+    "Mamluk illuminated"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_africa_subsahariana",
+   "q": [
+    "Catalan Atlas Mansa Musa",
+    "Ife bronze head",
+    "Ethiopian manuscript Gospel",
+    "Great Zimbabwe"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_norteamerica",
+   "q": [
+    "Mesa Verde cliff palace",
+    "Etowah mounds",
+    "Mississippian shell gorget",
+    "Cahokia"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_mesoamerica_caribe",
+   "q": [
+    "Codex Borgia",
+    "Codex Zouche-Nuttall",
+    "Aztec Sun Stone",
+    "Codex Fejervary-Mayer"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_sudamerica_andes",
+   "q": [
+    "Machu Picchu",
+    "Inca quipu",
+    "Chimu textile",
+    "Inca tunic"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_sudamerica_este",
+   "q": [
+    "Marajoara urn",
+    "Tapajonica",
+    "Serra da Capivara rock painting",
+    "Santarem pottery"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/region_oceania",
+   "q": [
+    "Rapa Nui moai",
+    "Nan Madol",
+    "Polynesian tapa",
+    "Maori carving"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/continente_europa",
+   "q": [
+    "Limbourg Tres Riches Heures",
+    "Van Eyck Arnolfini",
+    "Botticelli Birth of Venus",
+    "Hereford Mappa Mundi"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/continente_asia",
+   "q": [
+    "Shen Zhou",
+    "Sesshu",
+    "Behzad",
+    "Ming dynasty scroll"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/continente_africa",
+   "q": [
+    "Catalan Atlas Mansa Musa",
+    "Ife bronze head",
+    "Mamluk manuscript",
+    "Ethiopian manuscript"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/continente_america_del_norte",
+   "q": [
+    "Mesa Verde",
+    "Etowah",
+    "Cahokia",
+    "Mississippian"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/continente_america_del_sur",
+   "q": [
+    "Machu Picchu",
+    "Inca",
+    "Chimu textile",
+    "Quipu"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/continente_oceania",
+   "q": [
+    "Rapa Nui moai",
+    "Nan Madol",
+    "Polynesian tapa",
+    "Maori carving"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1500/mundo",
+   "q": [
+    "Catalan Atlas",
+    "Fra Mauro map",
+    "Hereford Mappa Mundi",
+    "Martellus world map"
+   ],
+   "max": 8
+  }
+ ]
+}

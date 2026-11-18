@@ -1,0 +1,245 @@
+{
+ "ayuda": "Consultas de pinturas de epoca 1dc",
+ "entradas": [
+  {
+   "id": "1dc/region_europa_occidental",
+   "q": [
+    "Gundestrup cauldron",
+    "Celtic La Tene art",
+    "Vix krater",
+    "Hochdorf Celtic"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_europa_norte",
+   "q": [
+    "Bronze Age rock carvings Tanum",
+    "Nordic Bronze Age rock art",
+    "Trundholm sun chariot",
+    "Hjortspring boat"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_europa_este",
+   "q": [
+    "Kazanlak tomb mural",
+    "Thracian tomb fresco",
+    "Scythian gold plaque",
+    "Panagyurishte treasure"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_mediterraneo",
+   "q": [
+    "Villa of Livia garden fresco",
+    "Alexander Mosaic Pompeii",
+    "Villa of the Mysteries fresco",
+    "Etruscan tomb painting Tarquinia"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_oriente_medio",
+   "q": [
+    "Ishtar Gate Babylon",
+    "Persepolis relief",
+    "Lachish relief Assyrian",
+    "Nimrud relief Assyrian"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_asia_central",
+   "q": [
+    "Pazyryk felt",
+    "Scythian gold stag",
+    "Saka gold",
+    "Pazyryk carpet"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_asia_este",
+   "q": [
+    "Mawangdui silk banner",
+    "Han dynasty tomb mural",
+    "Terracotta Army",
+    "Western Han painting"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_asia_sur",
+   "q": [
+    "Sanchi stupa relief",
+    "Bharhut stupa relief",
+    "Ajanta cave 10 painting",
+    "Ashoka pillar Sarnath"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_sudeste_asiatico",
+   "q": [
+    "Dong Son drum",
+    "Ban Chiang pottery",
+    "Dong Son bronze",
+    "Oc Eo"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_maghreb",
+   "q": [
+    "Tassili n'Ajjer rock art",
+    "Carthage mosaic Punic",
+    "Punic stele Carthage",
+    "Numidian Massinissa"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_nilo",
+   "q": [
+    "Book of the Dead Hunefer",
+    "Tomb of Nakht painting",
+    "Nebamun tomb painting",
+    "Meidum geese"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_africa_subsahariana",
+   "q": [
+    "Nok terracotta",
+    "Brandberg White Lady rock painting",
+    "San rock painting",
+    "Drakensberg rock art"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_norteamerica",
+   "q": [
+    "Hopewell mica hand",
+    "Hopewell effigy pipe",
+    "Serpent Mound",
+    "Basketmaker rock art"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_mesoamerica_caribe",
+   "q": [
+    "San Bartolo mural",
+    "Monte Alban Danzante",
+    "Olmec colossal head",
+    "Izapa stela"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_sudamerica_andes",
+   "q": [
+    "Paracas textile mantle",
+    "Chavin de Huantar Lanzon",
+    "Nazca lines hummingbird",
+    "Paracas Necropolis"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_sudamerica_este",
+   "q": [
+    "Serra da Capivara rock painting",
+    "Marajoara pottery",
+    "Lagoa Santa",
+    "Pedra Furada"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/region_oceania",
+   "q": [
+    "Kakadu rock art",
+    "Lapita pottery",
+    "Gwion Gwion rock painting",
+    "Aboriginal rock art"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/continente_europa",
+   "q": [
+    "Lascaux Hall of the Bulls",
+    "Altamira bison",
+    "Roman fresco Pompeii",
+    "Etruscan fresco"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/continente_asia",
+   "q": [
+    "Mawangdui",
+    "Terracotta Army",
+    "Persepolis",
+    "Sanchi"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/continente_africa",
+   "q": [
+    "Tassili n'Ajjer rock art",
+    "Egyptian tomb painting",
+    "Tomb of Nakht",
+    "Nok sculpture"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/continente_america_del_norte",
+   "q": [
+    "Hopewell",
+    "petroglyph rock art North America",
+    "Serpent Mound",
+    "Pueblo rock art"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/continente_america_del_sur",
+   "q": [
+    "Paracas textile",
+    "Nazca lines",
+    "Chavin",
+    "Serra da Capivara"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/continente_oceania",
+   "q": [
+    "Kakadu rock art",
+    "Lapita",
+    "Aboriginal rock painting",
+    "Gwion Gwion"
+   ],
+   "max": 8
+  },
+  {
+   "id": "1dc/mundo",
+   "q": [
+    "Lascaux",
+    "Altamira",
+    "Chauvet cave",
+    "Alexander Mosaic"
+   ],
+   "max": 8
+  }
+ ]
+}
