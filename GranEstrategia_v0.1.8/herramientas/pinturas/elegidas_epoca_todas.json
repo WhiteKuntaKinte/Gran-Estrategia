@@ -1,0 +1,428 @@
+{
+ "1dc/region_europa_occidental": {
+  "archivo": "File:Gundestrupkedlen- 00054 (cropped).jpg",
+  "anio": -1,
+  "titulo": "El caldero de Gundestrup: placa de Cernunnos",
+  "artista": "Artesanos celtas (c. 150–1 a. C.)"
+ },
+ "1dc/region_europa_norte": {
+  "archivo": "File:Aspberget rock carving Sweden 1.jpg",
+  "anio": -1000,
+  "titulo": "Grabados rupestres de Aspberget (Tanum, Suecia)",
+  "artista": "Pueblos de la Edad del Bronce nórdica"
+ },
+ "1dc/region_europa_este": {
+  "archivo": "File:Stag plaque, 400-300 BCE, gold, Scythian, Cleveland Museum of Art.JPG",
+  "anio": -300,
+  "titulo": "Placa de ciervo en oro escita",
+  "artista": "Orfebres escitas"
+ },
+ "1dc/region_mediterraneo": {
+  "archivo": "File:Villa of Livia - Frescos - detail 015.jpg",
+  "anio": -20,
+  "titulo": "Jardín de la Villa de Livia (fresco)",
+  "artista": "Pintor romano anónimo"
+ },
+ "1dc/region_oriente_medio": {
+  "archivo": "File:Processional Way, Babylon - Google Art Project.jpg",
+  "anio": -562,
+  "titulo": "El león de la Vía Procesional de Babilonia",
+  "artista": "Artesanos neobabilonios"
+ },
+ "1dc/region_asia_central": {
+  "archivo": "File:Pazyryk felt carpet.jpg",
+  "anio": -400,
+  "titulo": "Alfombra de fieltro de Pazyryk",
+  "artista": "Pueblo saka del Altái"
+ },
+ "1dc/region_asia_este": {
+  "archivo": "File:Banière funéraire, peinture sur soie, Chine.jpg",
+  "anio": -168,
+  "titulo": "Estandarte funerario de seda de Mawangdui",
+  "artista": "Artesanos de los Han Occidentales"
+ },
+ "1dc/region_asia_sur": {
+  "archivo": "File:KITLV 87926 - Unknown - Relief on the Bharhut stupa in British India - 1897.tif",
+  "anio": -100,
+  "titulo": "Relieve del estupa de Bharhut",
+  "artista": "Escultores indios antiguos"
+ },
+ "1dc/region_sudeste_asiatico": {
+  "archivo": "File:Tambour-song-da2.jpg",
+  "anio": -300,
+  "titulo": "Tambor de bronce de Dong Son",
+  "artista": "Cultura Dong Son"
+ },
+ "1dc/region_maghreb": {
+  "archivo": "File:Rock carving from the Tassili n'Ajjer mountains.jpg",
+  "anio": -3000,
+  "titulo": "Grabado rupestre del Tassili n'Ajjer",
+  "artista": "Pueblos prehistóricos del Sáhara"
+ },
+ "1dc/region_nilo": {
+  "archivo": "File:Book of the Dead of Hunefer sheet 3.jpg",
+  "anio": -1275,
+  "titulo": "Papiro de Hunefer: el juicio de Osiris",
+  "artista": "Escriba egipcio"
+ },
+ "1dc/region_africa_subsahariana": {
+  "archivo": "File:Head, Nok culture, terracotta, Honolulu Museum of Art, 8349.1.JPG",
+  "anio": -300,
+  "titulo": "Cabeza de terracota de la cultura Nok",
+  "artista": "Cultura Nok"
+ },
+ "1dc/region_norteamerica": {
+  "archivo": "File:Owl effigy pipe, Hopewell people, Dayton Art Institute.JPG",
+  "anio": 0,
+  "titulo": "Pipa en forma de búho (cultura hopewell)",
+  "artista": "Pueblo hopewell"
+ },
+ "1dc/region_mesoamerica_caribe": {
+  "archivo": "File:Mural de San Bartolo.jpg",
+  "anio": -100,
+  "titulo": "Mural de San Bartolo",
+  "artista": "Pintores mayas"
+ },
+ "1dc/region_sudamerica_andes": {
+  "archivo": "File:Mantle Fragment MET DP18459.jpg",
+  "anio": -200,
+  "titulo": "Fragmento de manto de Paracas",
+  "artista": "Textileros de la cultura Paracas"
+ },
+ "1dc/region_oceania": {
+  "archivo": "File:Aboriginal rock art.jpg",
+  "anio": 0,
+  "titulo": "Arte rupestre aborigen",
+  "artista": "Pueblos aborígenes de Australia"
+ },
+ "1dc/continente_europa": {
+  "archivo": "File:Altamira, bison.jpg",
+  "anio": -15000,
+  "titulo": "El bisonte de Altamira",
+  "artista": "Pintores del Paleolítico"
+ },
+ "1dc/continente_asia": {
+  "archivo": "File:Mawangdui Han Second Coffin from Tomb -1 (10113245853).jpg",
+  "anio": -168,
+  "titulo": "Ataúd lacado de Mawangdui",
+  "artista": "Artesanos de los Han Occidentales"
+ },
+ "1dc/continente_africa": {
+  "archivo": "File:Cave painting from the Tassili n'Ajjer mountains.jpg",
+  "anio": -6000,
+  "titulo": "Pintura rupestre del Tassili n'Ajjer",
+  "artista": "Pueblos prehistóricos del Sáhara"
+ },
+ "1dc/continente_america_del_norte": {
+  "archivo": "File:Adena Burial Mound at Serpent Mound.jpg",
+  "anio": -200,
+  "titulo": "Túmulo funerario de la cultura adena",
+  "artista": "Pueblo adena"
+ },
+ "1dc/continente_america_del_sur": {
+  "archivo": "File:Mantle Fragment MET DP18455.jpg",
+  "anio": -200,
+  "titulo": "Fragmento de manto de Paracas",
+  "artista": "Textileros de la cultura Paracas"
+ },
+ "1dc/continente_oceania": {
+  "archivo": "File:Aboriginal rock art (42948138285).jpg",
+  "anio": 0,
+  "titulo": "Arte rupestre aborigen",
+  "artista": "Pueblos aborígenes de Australia"
+ },
+ "1dc/mundo": {
+  "archivo": "File:Lascaux, replica 03.JPG",
+  "anio": -15000,
+  "titulo": "Toro rojo de Lascaux (réplica)",
+  "artista": "Pintores del Paleolítico"
+ },
+ "1096/region_europa_occidental": {
+  "archivo": "File:Bayeux Tapestry scene57 Harold death.jpg",
+  "anio": 1077,
+  "titulo": "La muerte de Harold (Tapiz de Bayeux)",
+  "artista": "Taller anglonormando, hacia 1070"
+ },
+ "1096/region_europa_norte": {
+  "archivo": "File:Oseberg ship - IMG 9186.jpg",
+  "anio": 834,
+  "titulo": "El barco vikingo de Oseberg",
+  "artista": "Constructores vikingos (hacia 834)"
+ },
+ "1096/region_europa_este": {
+  "archivo": "File:Ostromir luke.jpg",
+  "anio": 1057,
+  "titulo": "San Lucas del Evangelio de Ostromir",
+  "artista": "Escribas de la Rus de Kiev (1056–1057)"
+ },
+ "1096/region_mediterraneo": {
+  "archivo": "File:San clemente fresco.jpg",
+  "anio": 1090,
+  "titulo": "Traslado del cuerpo de san Clemente (fresco de San Clemente, Roma)",
+  "artista": "Pintor romano anónimo (finales del siglo XI)"
+ },
+ "1096/region_oriente_medio": {
+  "archivo": "File:Jerusalem (El-Kouds). Mosque of Omar (i.e., Dome of the Rock), interior, showing mosaics in drum LOC matpc.06640.jpg",
+  "anio": 692,
+  "titulo": "Mosaicos de la Cúpula de la Roca (Jerusalén)",
+  "artista": "Artesanos omeyas (692)"
+ },
+ "1096/region_asia_central": {
+  "archivo": "File:Afrasiab - details from The Ambassadors' Painting 3 - great procession.JPG",
+  "anio": 650,
+  "titulo": "La gran procesión (mural de Afrasiab, Samarcanda)",
+  "artista": "Pintores sogdianos (hacia 650)"
+ },
+ "1096/region_asia_este": {
+  "archivo": "File:Guo Xi - Early Spring (large).jpg",
+  "anio": 1072,
+  "titulo": "Primavera temprana",
+  "artista": "Guo Xi (1072)"
+ },
+ "1096/region_sudeste_asiatico": {
+  "archivo": "File:KITLV 84598 - Kassian Céphas - Relief on the first gallery of Borobudur near Magelang - Around 1888.tif",
+  "anio": 800,
+  "titulo": "Relieves de Borobudur",
+  "artista": "Constructores sailendra (hacia 800)"
+ },
+ "1096/region_maghreb": {
+  "archivo": "File:Der blaue Koran,Kairouan.JPG",
+  "anio": 950,
+  "titulo": "El Corán Azul (Raqqada, Túnez)",
+  "artista": "Calígrafos de Ifriqiya (siglo X)"
+ },
+ "1096/region_africa_subsahariana": {
+  "archivo": "File:Garima-Gospels-completed-project-2.jpg",
+  "anio": 550,
+  "titulo": "Evangelios de Garima (Etiopía)",
+  "artista": "Escribas de Aksum (siglo VI)"
+ },
+ "1096/region_norteamerica": {
+  "archivo": "File:Classic Mimbres Black-on-white bowl.jpg",
+  "anio": 1050,
+  "titulo": "Cuenco mimbres en blanco y negro",
+  "artista": "Alfareros mimbres (1000–1150)"
+ },
+ "1096/region_sudamerica_andes": {
+  "archivo": "File:Wari textile 3.jpg",
+  "anio": 700,
+  "titulo": "Tejido de la cultura wari",
+  "artista": "Tejedores wari (600–700)"
+ },
+ "1096/region_sudamerica_este": {
+  "archivo": "File:Burian urn, AD 1000-1250, Marajoara culture - AMNH - DSC06177 b.jpg",
+  "anio": 1050,
+  "titulo": "Urna funeraria marajoara",
+  "artista": "Cultura marajoara (1000–1250)"
+ },
+ "1096/region_oceania": {
+  "archivo": "File:Aboriginal rock art.jpg",
+  "anio": -500,
+  "titulo": "Arte rupestre aborigen",
+  "artista": "Pueblos aborígenes de Australia"
+ },
+ "1096/continente_europa": {
+  "archivo": "File:Bayeux Tapestry scene1 EDWARD REX.jpg",
+  "anio": 1077,
+  "titulo": "El rey Eduardo (Tapiz de Bayeux)",
+  "artista": "Taller anglonormando, hacia 1070"
+ },
+ "1096/continente_asia": {
+  "archivo": "File:Guo Xi - Early Spring (large).jpg",
+  "anio": 1072,
+  "titulo": "Primavera temprana",
+  "artista": "Guo Xi (1072)"
+ },
+ "1096/continente_africa": {
+  "archivo": "File:Garima-Gospels-completed-project-3.jpg",
+  "anio": 550,
+  "titulo": "Evangelios de Garima (Etiopía)",
+  "artista": "Escribas de Aksum (siglo VI)"
+ },
+ "1096/continente_america_del_norte": {
+  "archivo": "File:Mimbres Bowl with bighorn sheep and geometrical design 224 DMA 1990-215-FA.jpg",
+  "anio": 1050,
+  "titulo": "Cuenco mimbres con carnero cimarrón",
+  "artista": "Alfareros mimbres (1000–1150)"
+ },
+ "1096/continente_america_del_sur": {
+  "archivo": "File:Wari textile - 2.jpg",
+  "anio": 800,
+  "titulo": "Tejido de la cultura wari",
+  "artista": "Tejedores wari (hacia 800)"
+ },
+ "1096/continente_oceania": {
+  "archivo": "File:Aboriginal rock art (42948138855).jpg",
+  "anio": -500,
+  "titulo": "Arte rupestre aborigen",
+  "artista": "Pueblos aborígenes de Australia"
+ },
+ "1096/mundo": {
+  "archivo": "File:Beato de Liebana Burgo de Osma 1086.jpg",
+  "anio": 1086,
+  "titulo": "Mapamundi del Beato de Liébana (Burgo de Osma)",
+  "artista": "Escriptorio mozárabe (1086)"
+ },
+ "1096/region_asia_sur": {
+  "archivo": "File:Shiva as the Lord of Dance LACMA edit.jpg",
+  "anio": 1000,
+  "titulo": "Shiva Nataraja, bronce de la dinastía chola",
+  "artista": "Taller chola de Tamil Nadu (hacia 950–1000)"
+ },
+ "1096/region_nilo": {
+  "archivo": "File:Ibn Tulun Mosque, Cairo26.jpg",
+  "anio": 879,
+  "titulo": "Mezquita de Ibn Tulún, El Cairo (879)",
+  "artista": "Obra de Ahmad ibn Tulún (879); fotografía de ولاء"
+ },
+ "1096/region_mesoamerica_caribe": {
+  "archivo": "File:Atlante (Stone Warrior) from Temple of Tlahuizcalpantecuhtli, Tula, Hidalgo, Early Postclassic, 4.6 Meters.jpg",
+  "anio": 1000,
+  "titulo": "Atlante de Tula (guerrero de piedra tolteca)",
+  "artista": "Escultores toltecas (hacia 900–1150); fotografía de Gary Todd, CC0"
+ },
+ "1500/region_europa_occidental": {
+  "archivo": "File:Les Très Riches Heures du duc de Berry - Janvier.jpg",
+  "anio": 1416,
+  "titulo": "Las muy ricas horas del duque de Berry: enero",
+  "artista": "Hermanos Limbourg (1412–1416)"
+ },
+ "1500/region_europa_norte": {
+  "archivo": "File:Dancing peasants by Albertus Pictor 1480.jpg",
+  "anio": 1480,
+  "titulo": "Campesinos bailando (pintura de iglesia sueca)",
+  "artista": "Albertus Pictor (hacia 1480)"
+ },
+ "1500/region_europa_este": {
+  "archivo": "File:Andrey Rublev - Св. Троица - Google Art Project.jpg",
+  "anio": 1411,
+  "titulo": "La Trinidad de Rublev",
+  "artista": "Andréi Rublev (1411)"
+ },
+ "1500/region_mediterraneo": {
+  "archivo": "File:La nascita di Venere (Botticelli).jpg",
+  "anio": 1485,
+  "titulo": "El nacimiento de Venus",
+  "artista": "Sandro Botticelli (1485)"
+ },
+ "1500/region_oriente_medio": {
+  "archivo": "File:Yusuf fleeing the Advances of Zulaikha.jpg",
+  "anio": 1488,
+  "titulo": "La seducción de Yusuf",
+  "artista": "Kamal ud-Din Behzad (1488)"
+ },
+ "1500/region_asia_central": {
+  "archivo": "File:\"Timur before Battle\", Folio from a Dispersed Copy of the Zafarnama (Book of Victories) of Sharaf al-din 'Ali Yazdi MET DP164663.jpg",
+  "anio": 1436,
+  "titulo": "Timur ante la batalla",
+  "artista": "Escuela timúrida (1436)"
+ },
+ "1500/region_asia_este": {
+  "archivo": "File:Shen Zhou Lofty Mountain.jpg",
+  "anio": 1467,
+  "titulo": "El elevado monte Lu",
+  "artista": "Shen Zhou (1467)"
+ },
+ "1500/region_asia_sur": {
+  "archivo": "File:Indian - Two Illustrated Pages from a \"Kalpasutra\" Manuscript - Walters W910.jpg",
+  "anio": 1450,
+  "titulo": "Kalpasutra: páginas ilustradas",
+  "artista": "Escribas jainistas de la India occidental (hacia 1450)"
+ },
+ "1500/region_sudeste_asiatico": {
+  "archivo": "File:Angkor Wat, details - Angkor1168.jpg",
+  "anio": 1150,
+  "titulo": "Relieves de Angkor Wat",
+  "artista": "Escultores del imperio jemer (siglo XII)"
+ },
+ "1500/region_nilo": {
+  "archivo": "File:Closing folios from a Mamluk Qur'an (CBL Is 1628).jpg",
+  "anio": 1380,
+  "titulo": "Corán mameluco: folios finales",
+  "artista": "Iluminadores mamelucos (1360–1380)"
+ },
+ "1500/region_africa_subsahariana": {
+  "archivo": "File:British Museum Room 25 Head of a king Ife 17022019 5147.jpg",
+  "anio": 1400,
+  "titulo": "Cabeza de un rey de Ife",
+  "artista": "Fundidores yoruba de Ife (siglos XIV–XV)"
+ },
+ "1500/region_norteamerica": {
+  "archivo": "File:Mesa-Verde---Cliff-Palace-in 1891 - edit1.jpg",
+  "anio": 1250,
+  "titulo": "El Palacio del Acantilado (Mesa Verde)",
+  "artista": "Pueblo ancestral (hacia 1250)"
+ },
+ "1500/region_mesoamerica_caribe": {
+  "archivo": "File:Codex Borgia page 58.jpg",
+  "anio": 1450,
+  "titulo": "Códice Borgia",
+  "artista": "Escribas del centro de México (siglo XV)"
+ },
+ "1500/region_sudamerica_andes": {
+  "archivo": "File:Inca. Quipu.jpg",
+  "anio": 1450,
+  "titulo": "Quipu inca",
+  "artista": "Contadores incas (siglo XV)"
+ },
+ "1500/region_sudamerica_este": {
+  "archivo": "File:Burian urn, AD 1000-1250, Marajoara culture - AMNH - DSC06177 b.jpg",
+  "anio": 1050,
+  "titulo": "Urna funeraria marajoara",
+  "artista": "Cultura marajoara (1000–1250)"
+ },
+ "1500/region_oceania": {
+  "archivo": "File:Moai Rano raraku.jpg",
+  "anio": 1400,
+  "titulo": "Moáis de Rano Raraku",
+  "artista": "Escultores rapanui (1250–1500)"
+ },
+ "1500/continente_europa": {
+  "archivo": "File:Frères Limbourg - Très Riches Heures du duc de Berry - mois de mai - Google Art Project.jpg",
+  "anio": 1416,
+  "titulo": "Las muy ricas horas del duque de Berry",
+  "artista": "Hermanos Limbourg (1412–1416)"
+ },
+ "1500/continente_asia": {
+  "archivo": "File:Shen Zhou. Poet on a Mountaintop. Detail.Nelson-Atkins Museum, Kansas City.jpg",
+  "anio": 1496,
+  "titulo": "Poeta sobre la cima de una montaña",
+  "artista": "Shen Zhou (siglo XV)"
+ },
+ "1500/continente_africa": {
+  "archivo": "File:Catalan Atlas BNF Sheet 6 Mansa Musa (cropped).jpg",
+  "anio": 1375,
+  "titulo": "Mansa Musa en el Atlas Catalán",
+  "artista": "Abraham Cresques (1375)"
+ },
+ "1500/continente_america_del_norte": {
+  "archivo": "File:Mesa Verde-Cliff Palace vertical of tower Aat05.jpg",
+  "anio": 1250,
+  "titulo": "El Palacio del Acantilado (Mesa Verde)",
+  "artista": "Pueblo ancestral (hacia 1250)"
+ },
+ "1500/continente_america_del_sur": {
+  "archivo": "File:Machu Picchu.png",
+  "anio": 1450,
+  "titulo": "Machu Picchu",
+  "artista": "Constructores incas (hacia 1450)"
+ },
+ "1500/continente_oceania": {
+  "archivo": "File:Moai from Rapa Nui.jpg",
+  "anio": 1400,
+  "titulo": "Moái de la isla de Pascua",
+  "artista": "Escultores rapanui (1250–1500)"
+ },
+ "1500/mundo": {
+  "archivo": "File:1375 Atlas Catalan Abraham Cresques.jpg",
+  "anio": 1375,
+  "titulo": "El Atlas Catalán",
+  "artista": "Abraham Cresques (1375)"
+ },
+ "1500/region_maghreb": {
+  "archivo": "File:Marinid Tombs in April 2016 1.jpg",
+  "anio": 1350,
+  "titulo": "Tumbas meriníes de Fez",
+  "artista": "Dinastía meriní (siglo XIV); fotografía de Mx. Granger, CC0"
+ }
+}

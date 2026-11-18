@@ -1,1 +1,1 @@
-buscar lista_epoca_huecos.json
+bajar elegidas_epoca_todas.json

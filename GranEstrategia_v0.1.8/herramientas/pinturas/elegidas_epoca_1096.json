@@ -124,5 +124,23 @@
   "anio": 1086,
   "titulo": "Mapamundi del Beato de Liébana (Burgo de Osma)",
   "artista": "Escriptorio mozárabe (1086)"
+ },
+ "1096/region_asia_sur": {
+  "archivo": "File:Shiva as the Lord of Dance LACMA edit.jpg",
+  "anio": 1000,
+  "titulo": "Shiva Nataraja, bronce de la dinastía chola",
+  "artista": "Taller chola de Tamil Nadu (hacia 950–1000)"
+ },
+ "1096/region_nilo": {
+  "archivo": "File:Ibn Tulun Mosque, Cairo26.jpg",
+  "anio": 879,
+  "titulo": "Mezquita de Ibn Tulún, El Cairo (879)",
+  "artista": "Obra de Ahmad ibn Tulún (879); fotografía de ولاء"
+ },
+ "1096/region_mesoamerica_caribe": {
+  "archivo": "File:Atlante (Stone Warrior) from Temple of Tlahuizcalpantecuhtli, Tula, Hidalgo, Early Postclassic, 4.6 Meters.jpg",
+  "anio": 1000,
+  "titulo": "Atlante de Tula (guerrero de piedra tolteca)",
+  "artista": "Escultores toltecas (hacia 900–1150); fotografía de Gary Todd, CC0"
  }
 }
