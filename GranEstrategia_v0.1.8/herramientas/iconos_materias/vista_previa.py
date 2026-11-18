@@ -40,7 +40,7 @@ def main():
             print('ERROR', k, e)
             raise
         x, y = (i % cols) * celda + 10, (i // cols) * (celda + 14) + 4
-        hoja.alpha_composite(c.im.resize((N, N), Image.LANCZOS), (x, y))
+        hoja.alpha_composite(c.con_sombra().resize((N, N), Image.LANCZOS), (x, y))
         d.text((x, y + N + 1), k, fill=(255, 255, 255, 255) if fondo[0] < 100 else (30, 30, 30, 255), font=fuente)
     hoja.save(salida)
     print(len(items), 'iconos ->', salida)

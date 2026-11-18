@@ -91,9 +91,9 @@ func de_divisa(codigo: String) -> String:
 	return k if existe.has(k) else ICONO_MONEDA
 
 
-## Moneda de un país: la de su divisa. En el año 1 no hay monedas modernas: se queda el icono genérico.
+## Moneda de un país: la de su divisa (en los escenarios antiguos, la de su época: denario, besante, dinar, florín, wen, cauríes...).
 func de_pais(pais: String) -> String:
-	if main == null or main.mundo == null or main.epoca != main.EPOCA_ACTUAL:
+	if main == null or main.mundo == null:
 		return ICONO_MONEDA
 	var dv = main.mundo.divisa_de(pais)
 	return de_divisa(String(dv.codigo)) if dv != null else ICONO_MONEDA

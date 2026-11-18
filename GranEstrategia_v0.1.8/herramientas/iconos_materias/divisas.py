@@ -68,39 +68,59 @@ def texto_de_moneda(codigo, simbolo):
     return s
 
 
+# monedas bimetálicas (anillo, centro) y de 12 lados, como las reales de esas divisas
+BIMETAL = {'EUR': ('oro', 'plata'), 'GBP': ('oro', 'plata'), 'MXN': ('plata', 'oro'), 'TRY': ('plata', 'oro'), 'THB': ('plata', 'oro'), 'BRL': ('oro', 'plata'),
+           'CAD': ('plata', 'oro'), 'PLN': ('oro', 'plata'), 'CZK': ('plata', 'oro'), 'COP': ('plata', 'oro'), 'ZAR': ('oro', 'plata'), 'INR': ('plata', 'oro')}
+DOCE_LADOS = ('GBP', 'AUD')
+
+
 def moneda(c, codigo, simbolo, metal=None):
-    borde, cara, aro, grab = METALES[metal or metal_de(codigo)]
+    bi = BIMETAL.get(codigo)
+    borde, cara, aro, grab = METALES[bi[0] if bi else (metal or metal_de(codigo))]
+    if bi:
+        _, cara_c, aro_c, grab = METALES[bi[1]]
+    else:
+        cara_c, aro_c = cara, aro
     h = _hash(codigo)
-    # sombra suave en el suelo
-    c.elip(64, 118, 40, 5, (0, 0, 0, 55))
-    c.cuerpo_elip(64, 62, 58, 58, col=borde, sombra=0.3, luz=0.0, d=3.0)
+    # cuerpo exterior: círculo, o dodecágono (libra, dólar australiano)
+    if codigo in DOCE_LADOS:
+        c.cuerpo(regular(64, 62, 59, 12, -90.0), borde, sombra=0.3, luz=0.0, d=3.0)
+    else:
+        c.cuerpo_elip(64, 62, 58, 58, col=borde, sombra=0.3, luz=0.0, d=3.0)
     # borde con muescas o puntos (distinto según el código)
     estilo = h % 3
-    if estilo == 0:
+    if estilo == 0 and codigo not in DOCE_LADOS:
         for i in range(36):
             a = math.radians(i * 10)
             c.linea([(64 + 55 * math.cos(a), 62 + 55 * math.sin(a)), (64 + 51 * math.cos(a), 62 + 51 * math.sin(a))], 1.8, claro(borde, 0.25))
-    elif estilo == 1:
+    elif estilo == 1 and codigo not in DOCE_LADOS:
         for i in range(24):
             a = math.radians(i * 15)
             c.punto(64 + 53 * math.cos(a), 62 + 53 * math.sin(a), 1.7, claro(borde, 0.4))
-    c.elip(64, 62, 48, 48, cara)
-    c.elip(64, 62, 43.5, 43.5, aro)
-    c.elip(64, 62, 41, 41, cara)
+    c.cuerpo_elip(64, 62, 48, 48, col=cara, sombra=0.2, luz=0.25, d=2.2)
+    if bi:
+        # el centro de otro metal encajado en el anillo
+        c.cuerpo_elip(64, 62, 36, 36, col=METALES[bi[1]][0], sombra=0.25, luz=0.2, d=1.8)
+        c.cuerpo_elip(64, 62, 33.5, 33.5, col=cara_c, sombra=0.2, luz=0.25, d=1.8)
+        txt_r = 33.5
+    else:
+        c.elip(64, 62, 43.5, 43.5, aro)
+        c.cuerpo_elip(64, 62, 41, 41, col=cara, sombra=0.14, luz=0.12, d=1.8)
+        txt_r = 41
     # media luna de luz arriba a la izquierda
-    c.recortada(c._mascara(elipse(64, 62, 41, 41)), lambda t: t.elip(44, 38, 40, 22, (255, 255, 255, 70), -38))
+    c.recortada(c._mascara(elipse(64, 62, txt_r, txt_r)), lambda t: t.elip(44, 38, 40, 22, (255, 255, 255, 70), -38))
     # símbolo grabado
     txt = texto_de_moneda(codigo, simbolo)
     K_ = K
-    caja = 62 * K_
-    alto = (28 if len(txt) <= 2 else 22) * K_
+    caja = (62 if not bi else 46) * K_
+    alto = ((28 if len(txt) <= 2 else 22) if not bi else (22 if len(txt) <= 2 else 16)) * K_
     f = _texto_ajustado(txt, caja, alto)
     m = Image.new('L', (c.t, c.t), 0)
     d = ImageDraw.Draw(m)
     cx, cy = 64 * K_, 63 * K_
     d.text((cx, cy), txt, font=f, fill=255, anchor='mm')
     luz = ImageChops.offset(m, int(1.6 * K_), int(1.6 * K_))
-    c._poner(luz, claro(cara, 0.55))
+    c._poner(luz, claro(cara_c, 0.55))
     c._poner(m, grab)
 
 

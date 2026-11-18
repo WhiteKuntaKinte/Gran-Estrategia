@@ -59,6 +59,7 @@ def area(c):
 
 
 def atras(c):
+    c.plano = True
     c.poly([(12, 64), (56, 22), (56, 46), (116, 46), (116, 82), (56, 82), (56, 106)], TINTA)
 
 
@@ -101,18 +102,36 @@ def cultivo(c):
 
 
 def debug(c):
-    c.linea([(52, 28), (36, 12)], 4, hexa('2f8d57'))
-    c.linea([(76, 28), (92, 12)], 4, hexa('2f8d57'))
-    for k, y in enumerate((56, 74, 92)):
-        c.linea([(40, y), (14, y - 10 + k * 12)], 4.5, hexa('2f8d57'))
-        c.linea([(88, y), (114, y - 10 + k * 12)], 4.5, hexa('2f8d57'))
-    c.cuerpo_elip(64, 76, 28, 38, col=hexa('5fd085'), sombra=0.26, luz=0.25, d=3.2)
-    c.cuerpo_elip(64, 34, 18, 16, col=hexa('4cbf72'), sombra=0.26, luz=0.25, d=2.8)
-    c.linea([(64, 44), (64, 114)], 3, hexa('2f8d57'))
-    c.punto(56, 30, 3.4, hexa('1f3a2a'))
-    c.punto(72, 30, 3.4, hexa('1f3a2a'))
-    for (x, y) in ((50, 66), (78, 66), (50, 88), (78, 88)):
-        c.punto(x, y, 4.4, hexa('2f8d57'))
+    """Escarabajo-bicho de revisión: caparazón verde brillante con dos élitros, collar, cabeza con ojos, patas articuladas y antenas con bulbo."""
+    pata = hexa('24724a')
+    # patas: muslo + espinilla con articulación redonda y garra
+    for k, y in enumerate((60, 78, 96)):
+        for lado in (-1, 1):
+            x0 = 64 + lado * 24
+            codo = (64 + lado * 46, y - 8 + k * 3)
+            pie = (64 + lado * (58 - k * 2), y + 8 + k * 9)
+            c.linea([(x0, y), codo], 5.6, pata)
+            c.linea([codo, pie], 4.4, pata)
+            c.punto(codo[0], codo[1], 3.6, claro(pata, 0.25))
+            c.punto(pie[0], pie[1], 2.6, oscuro(pata, 0.2))
+    # antenas con bulbo
+    for lado in (-1, 1):
+        c.linea(bezier((64 + lado * 7, 20), (64 + lado * 12, 6), (64 + lado * 26, 6), 14), 3.2, pata)
+        c.cuerpo_elip(64 + lado * 27, 7, 4.6, 4.6, col=hexa('8fe6ad'), sombra=0.25, luz=0.3, d=1.6)
+    # caparazón (dos élitros)
+    c.cuerpo_elip(64, 82, 31, 37, col=hexa('45c878'), sombra=0.34, luz=0.3, d=3.6)
+    c.recortada(c._mascara(elipse(64, 82, 31, 37)), lambda t: (t.linea([(64, 40), (64, 122)], 3.2, hexa('1b5a38')),
+                                                            t.elip(50, 62, 8, 20, (255, 255, 255, 70), 12), t.elip(80, 66, 6, 14, (255, 255, 255, 38), -12)))
+    for (x, y, r) in ((50, 74, 6.2), (78, 74, 6.2), (47, 94, 5.2), (81, 94, 5.2), (56, 108, 4.0), (72, 108, 4.0)):
+        c.cuerpo_elip(x, y, r, r, col=hexa('1f7a47'), sombra=0.3, luz=0.35, d=1.8)
+    # collar y cabeza
+    c.cuerpo_elip(64, 50, 22, 11, col=hexa('2fa862'), sombra=0.3, luz=0.3, d=2.4)
+    c.cuerpo_elip(64, 33, 19, 16, col=hexa('37b86d'), sombra=0.3, luz=0.35, d=2.6)
+    for lado in (-1, 1):
+        c.cuerpo_elip(64 + lado * 8.5, 31, 6.2, 6.6, col=hexa('f4fbf6'), sombra=0.2, luz=0.0, d=1.6)
+        c.punto(64 + lado * 8.0, 32, 3.3, hexa('142a1f'))
+        c.punto(64 + lado * 8.0 - 1.1, 30.6, 1.2, (255, 255, 255, 240))
+    c.linea([(57, 42), (64, 45), (71, 42)], 2.4, hexa('1b5a38'))
 
 
 def dens(c):
@@ -231,6 +250,7 @@ def info(c):
 
 
 def lentes(c):
+    c.plano = True
     c.linea(elipse(52, 52, 36, 36) + [elipse(52, 52, 36, 36)[0]], 12, TINTA)
     c.linea([(80, 80), (112, 112)], 17, TINTA)
     c.linea(spline([(30, 40), (36, 32), (46, 28)], cerrada=False), 5, (240, 244, 255, 190))
@@ -257,6 +277,7 @@ def pais(c):
 
 
 def pausa(c):
+    c.plano = True
     c.rect(26, 14, 54, 114, TINTA, r=5)
     c.rect(74, 14, 102, 114, TINTA, r=5)
 
@@ -283,6 +304,7 @@ def prov(c):
 
 
 def tpausa(c):
+    c.plano = True
     c.linea(elipse(64, 64, 50, 50) + [elipse(64, 64, 50, 50)[0]], 11, TINTA)
     c.rect(44, 38, 58, 90, TINTA, r=3)
     c.rect(70, 38, 84, 90, TINTA, r=3)
@@ -298,6 +320,7 @@ def veg(c):
 
 def _vel(n):
     def f(c):
+        c.plano = True
         ancho = 100.0 / n
         for i in range(n):
             x0 = 14 + i * ancho
@@ -307,6 +330,7 @@ def _vel(n):
 
 def _vel_chevron(n):
     def f(c):
+        c.plano = True
         paso = 100.0 / n
         for i in range(n):
             x0 = 10 + i * paso

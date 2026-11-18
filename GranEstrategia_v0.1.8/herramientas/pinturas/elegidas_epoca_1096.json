@@ -1,0 +1,128 @@
+{
+ "1096/region_europa_occidental": {
+  "archivo": "File:Bayeux Tapestry scene57 Harold death.jpg",
+  "anio": 1077,
+  "titulo": "La muerte de Harold (Tapiz de Bayeux)",
+  "artista": "Taller anglonormando, hacia 1070"
+ },
+ "1096/region_europa_norte": {
+  "archivo": "File:Oseberg ship - IMG 9186.jpg",
+  "anio": 834,
+  "titulo": "El barco vikingo de Oseberg",
+  "artista": "Constructores vikingos (hacia 834)"
+ },
+ "1096/region_europa_este": {
+  "archivo": "File:Ostromir luke.jpg",
+  "anio": 1057,
+  "titulo": "San Lucas del Evangelio de Ostromir",
+  "artista": "Escribas de la Rus de Kiev (1056–1057)"
+ },
+ "1096/region_mediterraneo": {
+  "archivo": "File:San clemente fresco.jpg",
+  "anio": 1090,
+  "titulo": "Traslado del cuerpo de san Clemente (fresco de San Clemente, Roma)",
+  "artista": "Pintor romano anónimo (finales del siglo XI)"
+ },
+ "1096/region_oriente_medio": {
+  "archivo": "File:Jerusalem (El-Kouds). Mosque of Omar (i.e., Dome of the Rock), interior, showing mosaics in drum LOC matpc.06640.jpg",
+  "anio": 692,
+  "titulo": "Mosaicos de la Cúpula de la Roca (Jerusalén)",
+  "artista": "Artesanos omeyas (692)"
+ },
+ "1096/region_asia_central": {
+  "archivo": "File:Afrasiab - details from The Ambassadors' Painting 3 - great procession.JPG",
+  "anio": 650,
+  "titulo": "La gran procesión (mural de Afrasiab, Samarcanda)",
+  "artista": "Pintores sogdianos (hacia 650)"
+ },
+ "1096/region_asia_este": {
+  "archivo": "File:Guo Xi - Early Spring (large).jpg",
+  "anio": 1072,
+  "titulo": "Primavera temprana",
+  "artista": "Guo Xi (1072)"
+ },
+ "1096/region_sudeste_asiatico": {
+  "archivo": "File:KITLV 84598 - Kassian Céphas - Relief on the first gallery of Borobudur near Magelang - Around 1888.tif",
+  "anio": 800,
+  "titulo": "Relieves de Borobudur",
+  "artista": "Constructores sailendra (hacia 800)"
+ },
+ "1096/region_maghreb": {
+  "archivo": "File:Der blaue Koran,Kairouan.JPG",
+  "anio": 950,
+  "titulo": "El Corán Azul (Raqqada, Túnez)",
+  "artista": "Calígrafos de Ifriqiya (siglo X)"
+ },
+ "1096/region_africa_subsahariana": {
+  "archivo": "File:Garima-Gospels-completed-project-2.jpg",
+  "anio": 550,
+  "titulo": "Evangelios de Garima (Etiopía)",
+  "artista": "Escribas de Aksum (siglo VI)"
+ },
+ "1096/region_norteamerica": {
+  "archivo": "File:Classic Mimbres Black-on-white bowl.jpg",
+  "anio": 1050,
+  "titulo": "Cuenco mimbres en blanco y negro",
+  "artista": "Alfareros mimbres (1000–1150)"
+ },
+ "1096/region_sudamerica_andes": {
+  "archivo": "File:Wari textile 3.jpg",
+  "anio": 700,
+  "titulo": "Tejido de la cultura wari",
+  "artista": "Tejedores wari (600–700)"
+ },
+ "1096/region_sudamerica_este": {
+  "archivo": "File:Burian urn, AD 1000-1250, Marajoara culture - AMNH - DSC06177 b.jpg",
+  "anio": 1050,
+  "titulo": "Urna funeraria marajoara",
+  "artista": "Cultura marajoara (1000–1250)"
+ },
+ "1096/region_oceania": {
+  "archivo": "File:Aboriginal rock art.jpg",
+  "anio": -500,
+  "titulo": "Arte rupestre aborigen",
+  "artista": "Pueblos aborígenes de Australia"
+ },
+ "1096/continente_europa": {
+  "archivo": "File:Bayeux Tapestry scene1 EDWARD REX.jpg",
+  "anio": 1077,
+  "titulo": "El rey Eduardo (Tapiz de Bayeux)",
+  "artista": "Taller anglonormando, hacia 1070"
+ },
+ "1096/continente_asia": {
+  "archivo": "File:Guo Xi - Early Spring (large).jpg",
+  "anio": 1072,
+  "titulo": "Primavera temprana",
+  "artista": "Guo Xi (1072)"
+ },
+ "1096/continente_africa": {
+  "archivo": "File:Garima-Gospels-completed-project-3.jpg",
+  "anio": 550,
+  "titulo": "Evangelios de Garima (Etiopía)",
+  "artista": "Escribas de Aksum (siglo VI)"
+ },
+ "1096/continente_america_del_norte": {
+  "archivo": "File:Mimbres Bowl with bighorn sheep and geometrical design 224 DMA 1990-215-FA.jpg",
+  "anio": 1050,
+  "titulo": "Cuenco mimbres con carnero cimarrón",
+  "artista": "Alfareros mimbres (1000–1150)"
+ },
+ "1096/continente_america_del_sur": {
+  "archivo": "File:Wari textile - 2.jpg",
+  "anio": 800,
+  "titulo": "Tejido de la cultura wari",
+  "artista": "Tejedores wari (hacia 800)"
+ },
+ "1096/continente_oceania": {
+  "archivo": "File:Aboriginal rock art (42948138855).jpg",
+  "anio": -500,
+  "titulo": "Arte rupestre aborigen",
+  "artista": "Pueblos aborígenes de Australia"
+ },
+ "1096/mundo": {
+  "archivo": "File:Beato de Liebana Burgo de Osma 1086.jpg",
+  "anio": 1086,
+  "titulo": "Mapamundi del Beato de Liébana (Burgo de Osma)",
+  "artista": "Escriptorio mozárabe (1086)"
+ }
+}

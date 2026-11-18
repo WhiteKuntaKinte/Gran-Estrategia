@@ -2,10 +2,12 @@
 Lienzo de dibujo plano para los iconos de materias primas, sectores y divisas (0.1.8.41).
 
 Todo se dibuja en coordenadas lógicas 0..128 sobre un lienzo 4 veces mayor y se reduce con LANCZOS, así los bordes quedan suaves.
-Estilo: formas planas sin contorno, con una media luna oscura abajo a la derecha y otra clara arriba a la izquierda (`cuerpo`).
+Estilo (0.1.8.52): formas con volumen, sin contorno: degradado de luz arriba a la izquierda a sombra abajo a la derecha, brillo suave,
+borde interior oscuro, media luna de sombra y de luz (`cuerpo`) y una sombra proyectada suave bajo todo el icono (`guardar`).
 Dibujado desde cero para el juego: sin imágenes ni iconos de terceros. Solo pillow.
 """
 import math
+import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 N = 128          # tamaño final del icono (px)
@@ -162,6 +164,7 @@ class Lienzo:
     def __init__(self):
         self.t = N * K
         self.im = Image.new('RGBA', (self.t, self.t), (0, 0, 0, 0))
+        self.plano = False       # True = icono de una sola tinta (el HUD lo tiñe): sin sombra proyectada
 
     def _px(self, pts):
         return [(x * K, y * K) for x, y in pts]
@@ -210,21 +213,65 @@ class Lienzo:
     def punto(self, x, y, r, col):
         self.elip(x, y, r, r, col)
 
-    # formas con volumen: color base + media luna oscura (abajo-derecha) + luz (arriba-izquierda)
+    # formas con volumen: degradado (luz arriba-izquierda, sombra abajo-derecha) + brillo + borde interior + medias lunas
+    def _degradado(self, m, col, luz, sombra):
+        """Pinta dentro de la máscara `m` un degradado diagonal de `col`: claro -> color -> oscuro."""
+        bb = m.getbbox()
+        if bb is None:
+            return None
+        x0, y0, x1, y1 = bb
+        w, h = max(1, x1 - x0), max(1, y1 - y0)
+        u = (np.arange(w, dtype=np.float32) / w)[None, :]
+        v = (np.arange(h, dtype=np.float32) / h)[:, None]
+        t = np.clip(0.40 * u + 0.60 * v, 0.0, 1.0)          # 0 arriba-izquierda, 1 abajo-derecha
+        c_luz = np.array(claro(col, min(0.55, luz * 1.5 + 0.12))[:3], dtype=np.float32)
+        c_med = np.array(col[:3], dtype=np.float32)
+        c_osc = np.array(oscuro(col, min(0.6, sombra * 2.1 + 0.10))[:3], dtype=np.float32)
+        t1 = np.clip(t / 0.45, 0.0, 1.0)[..., None]
+        t2 = np.clip((t - 0.45) / 0.55, 0.0, 1.0)[..., None]
+        rgb = np.where(t[..., None] < 0.45, c_luz + (c_med - c_luz) * t1, c_med + (c_osc - c_med) * t2)
+        capa = Image.fromarray(rgb.astype(np.uint8), 'RGB').convert('RGBA')
+        a = m.crop(bb)
+        if len(col) > 3 and col[3] < 255:
+            a = a.point(lambda q: q * col[3] // 255)
+        capa.putalpha(a)
+        self.im.alpha_composite(capa, (x0, y0))
+        return bb
+
     def cuerpo(self, pts, col, sombra=0.22, luz=0.30, d=3.2, col_sombra=None, col_luz=None):
         m = self._mascara(pts)
-        self._poner(m, col)
+        bb = self._degradado(m, col, luz, sombra) if (len(col) < 4 or col[3] >= 200) else None
+        if bb is None:
+            self._poner(m, col)
+            bb = m.getbbox()
         dk = int(d * K)
         if sombra > 0:
             m2 = ImageChops.offset(m, -dk, -dk)
-            cres = ImageChops.subtract(m, m2)
+            cres = ImageChops.subtract(m, m2).point(lambda q: q * 3 // 5)          # la media luna oscura se funde con el degradado
             self._poner(cres, col_sombra if col_sombra is not None else oscuro(col, sombra * 1.6))
         if luz > 0:
             m3 = ImageChops.offset(m, dk, dk)
             cres2 = ImageChops.subtract(m, m3)
-            # la luz es más fina que la sombra
-            cres2 = cres2.filter(ImageFilter.MinFilter(3))
+            cres2 = cres2.filter(ImageFilter.MinFilter(3)).point(lambda q: q * 3 // 4)
             self._poner(cres2, col_luz if col_luz is not None else claro(col, luz))
+        if bb is not None:
+            w, h = (bb[2] - bb[0]) / K, (bb[3] - bb[1]) / K
+            if w >= 12 and h >= 12 and luz > 0:
+                # brillo especular suave arriba a la izquierda, recortado a la forma
+                br = Image.new('L', (self.t, self.t), 0)
+                dr = ImageDraw.Draw(br)
+                cx, cy = bb[0] + (bb[2] - bb[0]) * 0.34, bb[1] + (bb[3] - bb[1]) * 0.26
+                rx, ry = (bb[2] - bb[0]) * 0.20, (bb[3] - bb[1]) * 0.10
+                pts_b = elipse(cx, cy, rx, ry, -35.0, 24)
+                dr.polygon(pts_b, fill=255)
+                br = br.filter(ImageFilter.GaussianBlur(max(1.0, min(rx, ry) * 0.55)))
+                br = ImageChops.multiply(br, m).point(lambda q: q * 85 // 255)
+                self._poner(br, (255, 255, 255, 255))
+            if w >= 9 and h >= 9:
+                # borde interior oscuro y fino: separa la forma del fondo sin dibujar un contorno
+                er = m.filter(ImageFilter.MinFilter(3))
+                borde = ImageChops.subtract(m, er).point(lambda q: q * 2 // 5)
+                self._poner(borde, oscuro(col, 0.55))
         return m
 
     def cuerpo_elip(self, cx, cy, rx, ry=None, col=ORO, ang=0.0, **kw):
@@ -241,6 +288,17 @@ class Lienzo:
         tmp.im.putalpha(a)
         self.im.alpha_composite(tmp.im)
 
+    def con_sombra(self):
+        """Imagen final con una sombra proyectada suave debajo (profundidad en fondos oscuros y claros)."""
+        if self.plano:
+            return self.im
+        a = self.im.getchannel('A').filter(ImageFilter.GaussianBlur(2.6 * K))
+        a = ImageChops.offset(a, int(0.8 * K), int(2.2 * K)).point(lambda q: q * 70 // 255)
+        sombra = Image.new('RGBA', self.im.size, (8, 10, 22, 255))
+        sombra.putalpha(a)
+        sombra.alpha_composite(self.im)
+        return sombra
+
     def guardar(self, ruta):
-        self.im.resize((N, N), Image.LANCZOS).save(ruta, optimize=True)
+        self.con_sombra().resize((N, N), Image.LANCZOS).save(ruta, optimize=True)
         return ruta

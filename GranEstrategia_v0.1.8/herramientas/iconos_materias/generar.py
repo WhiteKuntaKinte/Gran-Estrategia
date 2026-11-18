@@ -26,6 +26,7 @@ import divisas
 import edificios
 import interfaz
 import minerales
+import monedas_historicas
 import sectores
 from lienzo import Lienzo
 
@@ -107,7 +108,9 @@ def todos_los_iconos():
     mat = {}
     for mod in (cultivos, animales, minerales):
         mat.update(mod.ICONOS)
-    return mat, sectores.ICONOS, divisas.ICONOS
+    div = dict(divisas.ICONOS)
+    div.update(monedas_historicas.ICONOS)            # las monedas de los escenarios antiguos (denario, besante, dinar...)
+    return mat, sectores.ICONOS, div
 
 
 def escribir(carpeta, fns):
@@ -156,7 +159,7 @@ def tabla(mat):
         'nota': 'Generado por herramientas/iconos_materias/generar.py; no editar a mano.',
         'alias': alias,
         'reglas': reglas,
-        'existentes': {'materias': sorted(mat), 'sectores': sorted(sectores.ICONOS), 'divisas': sorted(k[2:] for k in divisas.ICONOS)},
+        'existentes': {'materias': sorted(mat), 'sectores': sorted(sectores.ICONOS), 'divisas': sorted(k[2:] for k in list(divisas.ICONOS) + list(monedas_historicas.ICONOS))},
     }
 
 
