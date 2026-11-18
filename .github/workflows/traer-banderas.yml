@@ -1,0 +1,52 @@
+name: Traer banderas históricas (Wikidata + Wikimedia Commons)
+
+# Wikidata y Wikimedia Commons no son alcanzables desde el entorno donde Claude escribe el juego, pero sí desde los servidores de GitHub.
+# herramientas/banderas/commons_banderas.py busca, para cada estado de los escenarios históricos (herramientas/banderas/lista_banderas.json),
+# su bandera (o, si no hay, su escudo o su sello) y baja solo lo que es de dominio público o CC0. Publica en el Release "datos-banderas":
+#   banderas_hist.zip (img/<id>.png) y resultado.json (qué se encontró, de dónde, con qué licencia y qué se rechazó).
+# Se ejecuta a mano (workflow_dispatch). No toca el juego.
+on:
+  workflow_dispatch:
+    inputs:
+      lista:
+        description: 'lista de estados'
+        required: false
+        default: 'lista_banderas.json'
+      manual:
+        description: 'correcciones a mano'
+        required: false
+        default: 'banderas_manual.json'
+      etiqueta:
+        description: 'etiqueta del Release'
+        required: false
+        default: 'datos-banderas'
+
+permissions:
+  contents: write
+
+jobs:
+  banderas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.1.8-development
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: Buscar y bajar
+        working-directory: GranEstrategia_v0.1.8/herramientas/banderas
+        run: |
+          python3 commons_banderas.py ${{ github.event.inputs.lista || 'lista_banderas.json' }} ${{ github.event.inputs.manual || 'banderas_manual.json' }} /tmp/banderas
+          (cd /tmp/banderas && zip -qr /tmp/banderas_hist.zip img && du -sh /tmp/banderas_hist.zip)
+      - name: Publicar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete ${{ github.event.inputs.etiqueta || 'datos-banderas' }} --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create ${{ github.event.inputs.etiqueta || 'datos-banderas' }} /tmp/banderas_hist.zip /tmp/banderas/resultado.json \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Banderas históricas (Wikidata + Commons, dominio público)" \
+            --notes "Banderas, escudos y sellos de dominio público de los estados de los escenarios históricos, con licencia y origen (resultado.json). Insumo del juego; se arman con herramientas/banderas/armar_banderas.py."

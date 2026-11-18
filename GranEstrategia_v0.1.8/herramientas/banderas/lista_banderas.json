@@ -1,0 +1,2712 @@
+[
+ {
+  "id": "e1_kingdom_of_kush",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Kush",
+  "nombre_es": "Reino de Kush (Meroe)",
+  "qid": "Q241790",
+  "anio": 1,
+  "desde": -630,
+  "hasta": 337
+ },
+ {
+  "id": "e1_hadhramaut",
+  "epoca": "1dc",
+  "nombre_en": "Hadhramaut",
+  "nombre_es": "Reino de Hadramaut",
+  "qid": "Q1517159",
+  "anio": 1,
+  "desde": -350,
+  "hasta": 183
+ },
+ {
+  "id": "e1_early_cheras",
+  "epoca": "1dc",
+  "nombre_en": "Early Cheras",
+  "nombre_es": "Primeros chera",
+  "qid": "Q877155",
+  "anio": 1,
+  "desde": -291,
+  "hasta": 298
+ },
+ {
+  "id": "e1_early_pandyas",
+  "epoca": "1dc",
+  "nombre_en": "Early Pandyas",
+  "nombre_es": "Primeros pandya",
+  "qid": "Q3532152",
+  "anio": 1,
+  "desde": -291,
+  "hasta": 298
+ },
+ {
+  "id": "e1_anuradhapura",
+  "epoca": "1dc",
+  "nombre_en": "Anurādhapura",
+  "nombre_es": "Reino de Anuradhapura",
+  "qid": "Q5724",
+  "anio": 1,
+  "desde": -291,
+  "hasta": 77
+ },
+ {
+  "id": "e1_early_cholas",
+  "epoca": "1dc",
+  "nombre_en": "Early Cholas",
+  "nombre_es": "Primeros chola",
+  "qid": "Q3532146",
+  "anio": 1,
+  "desde": -291,
+  "hasta": 298
+ },
+ {
+  "id": "e1_mayan_city_states",
+  "epoca": "1dc",
+  "nombre_en": "Mayan City-States",
+  "nombre_es": "Ciudades-estado mayas",
+  "qid": "Q28567",
+  "anio": 1,
+  "desde": -247,
+  "hasta": 259
+ },
+ {
+  "id": "e1_byeonhan",
+  "epoca": "1dc",
+  "nombre_en": "Byeonhan",
+  "nombre_es": "Confederación de Byeonhan",
+  "qid": "Q1378584",
+  "anio": 1,
+  "desde": -91,
+  "hasta": 533
+ },
+ {
+  "id": "e1_jinhan",
+  "epoca": "1dc",
+  "nombre_en": "Jinhan",
+  "nombre_es": "Confederación de Jinhan",
+  "qid": "Q701273",
+  "anio": 1,
+  "desde": -91,
+  "hasta": 372
+ },
+ {
+  "id": "e1_mahan",
+  "epoca": "1dc",
+  "nombre_en": "Mahan",
+  "nombre_es": "Confederación de Mahan",
+  "qid": "Q421372",
+  "anio": 1,
+  "desde": -91,
+  "hasta": 337
+ },
+ {
+  "id": "e1_zapotec_civilization",
+  "epoca": "1dc",
+  "nombre_en": "Zapotec Civilization",
+  "nombre_es": "Civilización zapoteca",
+  "qid": "Q844750",
+  "anio": 1,
+  "desde": -91,
+  "hasta": 206
+ },
+ {
+  "id": "e1_caucasian_iberia",
+  "epoca": "1dc",
+  "nombre_en": "Caucasian Iberia",
+  "nombre_es": "Iberia caucásica (Cartli)",
+  "qid": "Q19083",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 67
+ },
+ {
+  "id": "e1_kingdom_of_armenia",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Armenia",
+  "nombre_es": "Reino de Armenia",
+  "qid": "Q208404",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 59
+ },
+ {
+  "id": "e1_caucasian_albania",
+  "epoca": "1dc",
+  "nombre_en": "Caucasian Albania",
+  "nombre_es": "Albania caucásica",
+  "qid": "Q177076",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 59
+ },
+ {
+  "id": "e1_kingdom_of_gordyene",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Gordyene",
+  "nombre_es": "Reino de Gordiene",
+  "qid": "Q29237",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 113
+ },
+ {
+  "id": "e1_kingdom_of_commagene",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Commagene",
+  "nombre_es": "Reino de Comagene",
+  "qid": "Q332137",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 22
+ },
+ {
+  "id": "e1_kingdom_of_sophene",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Sophene",
+  "nombre_es": "Reino de Sófene",
+  "qid": "Q2626105",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 22
+ },
+ {
+  "id": "e1_lazica",
+  "epoca": "1dc",
+  "nombre_en": "Lazica",
+  "nombre_es": "Cólquida (Lázica)",
+  "qid": "Q136884",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 67
+ },
+ {
+  "id": "e1_cimmerian_bosporus",
+  "epoca": "1dc",
+  "nombre_en": "Cimmerian Bosporus",
+  "nombre_es": "Reino del Bósforo",
+  "qid": "Q321371",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 67
+ },
+ {
+  "id": "e1_kingdom_of_adiabene",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Adiabene",
+  "nombre_es": "Reino de Adiabene",
+  "qid": "Q149747",
+  "anio": 1,
+  "desde": -63,
+  "hasta": 116
+ },
+ {
+  "id": "e1_teotihuacan",
+  "epoca": "1dc",
+  "nombre_en": "Teotihuacan",
+  "nombre_es": "Teotihuacán (Valle de México)",
+  "qid": "Q172613",
+  "anio": 1,
+  "desde": -50,
+  "hasta": 105
+ },
+ {
+  "id": "e1_kingdom_of_axum",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Axum",
+  "nombre_es": "Reino de Aksum",
+  "qid": "Q139377",
+  "anio": 1,
+  "desde": -50,
+  "hasta": 237
+ },
+ {
+  "id": "e1_great_yuan",
+  "epoca": "1dc",
+  "nombre_en": "Great Yuan",
+  "nombre_es": "Dayuan (Fergana)",
+  "qid": "Q7313",
+  "anio": 1,
+  "desde": -50,
+  "hasta": 42
+ },
+ {
+  "id": "e1_wusun",
+  "epoca": "1dc",
+  "nombre_en": "Wusun",
+  "nombre_es": "Reino wusun",
+  "qid": "Q854062",
+  "anio": 1,
+  "desde": -50,
+  "hasta": 5
+ },
+ {
+  "id": "e1_greek_city_states",
+  "epoca": "1dc",
+  "nombre_en": "Greek City-States",
+  "nombre_es": "Ciudades-estado griegas",
+  "qid": "Q148837",
+  "anio": 1,
+  "desde": -42,
+  "hasta": 77
+ },
+ {
+  "id": "e1_xiongnu",
+  "epoca": "1dc",
+  "nombre_en": "Xiongnu",
+  "nombre_es": "Confederación Xiongnu",
+  "qid": "Q188836",
+  "anio": 1,
+  "desde": -40,
+  "hasta": 5
+ },
+ {
+  "id": "e1_kingdom_of_osroene",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Osroene",
+  "nombre_es": "Reino de Osroene",
+  "qid": "Q237234",
+  "anio": 1,
+  "desde": -36,
+  "hasta": 22
+ },
+ {
+  "id": "e1_han_dynasty",
+  "epoca": "1dc",
+  "nombre_en": "Han Dynasty",
+  "nombre_es": "Dinastía Han",
+  "qid": "Q1068371",
+  "anio": 1,
+  "desde": -36,
+  "hasta": 5
+ },
+ {
+  "id": "e1_goguryeo",
+  "epoca": "1dc",
+  "nombre_en": "Goguryeo",
+  "nombre_es": "Goguryeo",
+  "qid": "Q28370",
+  "anio": 1,
+  "desde": -36,
+  "hasta": 22
+ },
+ {
+  "id": "e1_dongye",
+  "epoca": "1dc",
+  "nombre_en": "Dongye",
+  "nombre_es": "Dongye",
+  "qid": "Q105946539",
+  "anio": 1,
+  "desde": -36,
+  "hasta": 312
+ },
+ {
+  "id": "e1_dong_okjeo",
+  "epoca": "1dc",
+  "nombre_en": "Dong-okjeo",
+  "nombre_es": "Okjeo oriental",
+  "qid": "Q713393",
+  "anio": 1,
+  "desde": -36,
+  "hasta": 22
+ },
+ {
+  "id": "e1_mauretania",
+  "epoca": "1dc",
+  "nombre_en": "Mauretania",
+  "nombre_es": "Reino de Mauretania",
+  "qid": "Q309272",
+  "anio": 1,
+  "desde": -27,
+  "hasta": 29
+ },
+ {
+  "id": "e1_thracian_kingdom",
+  "epoca": "1dc",
+  "nombre_en": "Thracian Kingdom",
+  "nombre_es": "Reino odrisio (Tracia)",
+  "qid": "Q104815700",
+  "anio": 1,
+  "desde": -27,
+  "hasta": 42
+ },
+ {
+  "id": "e1_satavahana_dynasty",
+  "epoca": "1dc",
+  "nombre_en": "Satavahana Dynasty",
+  "nombre_es": "Dinastía Satavahana",
+  "qid": "Q5257",
+  "anio": 1,
+  "desde": -27,
+  "hasta": 105
+ },
+ {
+  "id": "e1_kingdom_of_pontus",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Pontus",
+  "nombre_es": "Reino del Ponto",
+  "qid": "Q7380487",
+  "anio": 1,
+  "desde": -25,
+  "hasta": 22
+ },
+ {
+  "id": "e1_kingdom_of_cappadocia",
+  "epoca": "1dc",
+  "nombre_en": "Kingdom of Cappadocia",
+  "nombre_es": "Reino de Capadocia",
+  "qid": "Q29654286",
+  "anio": 1,
+  "desde": -25,
+  "hasta": 13
+ },
+ {
+  "id": "e1_nabataeans",
+  "epoca": "1dc",
+  "nombre_en": "Nabataeans",
+  "nombre_es": "Reino nabateo",
+  "qid": "Q220594",
+  "anio": 1,
+  "desde": -19,
+  "hasta": 5
+ },
+ {
+  "id": "e1_himyarite_kingdom",
+  "epoca": "1dc",
+  "nombre_en": "Himyarite Kingdom",
+  "nombre_es": "Reino de Himyar",
+  "qid": "Q289577",
+  "anio": 1,
+  "desde": -19,
+  "hasta": 105
+ },
+ {
+  "id": "e1_yuezhi",
+  "epoca": "1dc",
+  "nombre_en": "Yuezhi",
+  "nombre_es": "Gran Yuezhi (Bactria)",
+  "qid": "Q467985",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 13
+ },
+ {
+  "id": "e1_indo_scythians",
+  "epoca": "1dc",
+  "nombre_en": "Indo-Scythians",
+  "nombre_es": "Reino indoescita",
+  "qid": "Q240123",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 13
+ },
+ {
+  "id": "e1_parthian_empire",
+  "epoca": "1dc",
+  "nombre_en": "Parthian Empire",
+  "nombre_es": "Imperio parto",
+  "qid": "Q1986139",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 42
+ },
+ {
+  "id": "e1_judea",
+  "epoca": "1dc",
+  "nombre_en": "Judea",
+  "nombre_es": "Judea",
+  "qid": "Q104028",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 5
+ },
+ {
+  "id": "e1_indo_parthians",
+  "epoca": "1dc",
+  "nombre_en": "Indo-Parthians",
+  "nombre_es": "Reino indoparto",
+  "qid": "Q1255614",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 13
+ },
+ {
+  "id": "e1_roman_empire",
+  "epoca": "1dc",
+  "nombre_en": "Roman Empire",
+  "nombre_es": "Imperio romano",
+  "qid": "Q12544",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 5
+ },
+ {
+  "id": "e1_indo_greeks",
+  "epoca": "1dc",
+  "nombre_en": "Indo-Greeks",
+  "nombre_es": "Reino indogriego",
+  "qid": "Q215643",
+  "anio": 1,
+  "desde": 1,
+  "hasta": 8
+ },
+ {
+  "id": "e1096_great_seljuk_empire",
+  "epoca": "1096",
+  "nombre_en": "Great Seljuk Empire",
+  "nombre_es": "Gran Imperio selyúcida",
+  "qid": "Q3708094",
+  "anio": 1096,
+  "desde": 1040,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_kimek_kipchak_confederation",
+  "epoca": "1096",
+  "nombre_en": "Kimek-Kipchak confederation",
+  "nombre_es": "Confederación kimek-kipchak",
+  "qid": "Q2477776",
+  "anio": 1096,
+  "desde": 750,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_northern_song",
+  "epoca": "1096",
+  "nombre_en": "Northern Song",
+  "nombre_es": "Dinastía Song del Norte",
+  "qid": "Q7462",
+  "anio": 1096,
+  "desde": 961,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_liao_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Liao Dynasty",
+  "nombre_es": "Dinastía Liao (kitán)",
+  "qid": "Q4958",
+  "anio": 1096,
+  "desde": 911,
+  "hasta": 1125
+ },
+ {
+  "id": "e1096_almoravid_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Almoravid Dynasty",
+  "nombre_es": "Imperio almorávide",
+  "qid": "Q75613",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1205
+ },
+ {
+  "id": "e1096_tibetans",
+  "epoca": "1096",
+  "nombre_en": "Tibetans",
+  "nombre_es": "Reinos tibetanos",
+  "qid": "Q187985",
+  "anio": 1096,
+  "desde": 850,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_ghaznavid_empire",
+  "epoca": "1096",
+  "nombre_en": "Ghaznavid Empire",
+  "nombre_es": "Imperio gaznávida",
+  "qid": "Q12844800",
+  "anio": 1096,
+  "desde": 962,
+  "hasta": 1209
+ },
+ {
+  "id": "e1096_fatimid_caliphate",
+  "epoca": "1096",
+  "nombre_en": "Fatimid Caliphate",
+  "nombre_es": "Califato fatimí",
+  "qid": "Q160307",
+  "anio": 1096,
+  "desde": 911,
+  "hasta": 1176
+ },
+ {
+  "id": "e1096_eastern_kara_khanids",
+  "epoca": "1096",
+  "nombre_en": "Eastern Kara-Khanids",
+  "nombre_es": "Janato karajánida oriental",
+  "qid": "Q494354",
+  "anio": 1096,
+  "desde": 1046,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_holy_roman_empire",
+  "epoca": "1096",
+  "nombre_en": "Holy Roman Empire",
+  "nombre_es": "Sacro Imperio Romano Germánico",
+  "qid": "Q12548",
+  "anio": 1096,
+  "desde": 962,
+  "hasta": 1621
+ },
+ {
+  "id": "e1096_qocho_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Qocho Kingdom",
+  "nombre_es": "Reino uigur de Qocho",
+  "qid": "Q2662180",
+  "anio": 1096,
+  "desde": 860,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_western_chalukya_empire",
+  "epoca": "1096",
+  "nombre_en": "Western Chalukya Empire",
+  "nombre_es": "Imperio chalukya occidental",
+  "qid": "Q14624218",
+  "anio": 1096,
+  "desde": 980,
+  "hasta": 1187
+ },
+ {
+  "id": "e1096_khwarezmid_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Khwarezmid Dynasty",
+  "nombre_es": "Dinastía joremsiana",
+  "qid": "Q486918",
+  "anio": 1096,
+  "desde": 1094,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_srivijaya",
+  "epoca": "1096",
+  "nombre_en": "Srivijaya",
+  "nombre_es": "Imperio de Srivijaya",
+  "qid": "Q234197",
+  "anio": 1096,
+  "desde": 674,
+  "hasta": 1293
+ },
+ {
+  "id": "e1096_byzantine_empire",
+  "epoca": "1096",
+  "nombre_en": "Byzantine Empire",
+  "nombre_es": "Imperio bizantino",
+  "qid": "Q112039853",
+  "anio": 1096,
+  "desde": 633,
+  "hasta": 1474
+ },
+ {
+  "id": "e1096_western_xia",
+  "epoca": "1096",
+  "nombre_en": "Western Xia",
+  "nombre_es": "Xia Occidental (tangut)",
+  "qid": "Q7427",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1226
+ },
+ {
+  "id": "e1096_pagan_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Pagan Kingdom",
+  "nombre_es": "Reino de Pagan",
+  "qid": "Q888574",
+  "anio": 1096,
+  "desde": 850,
+  "hasta": 1293
+ },
+ {
+  "id": "e1096_yenisei_kyrgyz",
+  "epoca": "1096",
+  "nombre_en": "Yenisei Kyrgyz",
+  "nombre_es": "Kirguises del Yeniséi",
+  "qid": "Q83142",
+  "anio": 1096,
+  "desde": 555,
+  "hasta": 1219
+ },
+ {
+  "id": "e1096_halych_volhynia_occupation",
+  "epoca": "1096",
+  "nombre_en": "Halych-Volhynia occupation",
+  "nombre_es": "Tierras de los cumanos (estepa póntica)",
+  "qid": "Q239502",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1240
+ },
+ {
+  "id": "e1096_khmer_empire",
+  "epoca": "1096",
+  "nombre_en": "Khmer Empire",
+  "nombre_es": "Imperio jemer",
+  "qid": "Q201705",
+  "anio": 1096,
+  "desde": 800,
+  "hasta": 1867
+ },
+ {
+  "id": "e1096_novgorod_republic",
+  "epoca": "1096",
+  "nombre_en": "Novgorod Republic",
+  "nombre_es": "República de Nóvgorod",
+  "qid": "Q151536",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1481
+ },
+ {
+  "id": "e1096_chola_empire",
+  "epoca": "1096",
+  "nombre_en": "Chola Empire",
+  "nombre_es": "Imperio chola",
+  "qid": "Q6806806",
+  "anio": 1096,
+  "desde": 850,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_sultanate_of_rum",
+  "epoca": "1096",
+  "nombre_en": "Sultanate of Rum",
+  "nombre_es": "Sultanato de Rum",
+  "qid": "Q975405",
+  "anio": 1096,
+  "desde": 1094,
+  "hasta": 1313
+ },
+ {
+  "id": "e1096_kingdom_of_dali",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Dali",
+  "nombre_es": "Reino de Dali",
+  "qid": "Q26472",
+  "anio": 1096,
+  "desde": 947,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_kingdom_of_hungary",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Hungary",
+  "nombre_es": "Reino de Hungría",
+  "qid": "Q171150",
+  "anio": 1096,
+  "desde": 1000,
+  "hasta": 1546
+ },
+ {
+  "id": "e1096_old_kingdom_of_norway",
+  "epoca": "1096",
+  "nombre_en": "Old Kingdom of Norway",
+  "nombre_es": "Reino de Noruega",
+  "qid": "Q202266",
+  "anio": 1096,
+  "desde": 866,
+  "hasta": 1401
+ },
+ {
+  "id": "e1096_sena_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Sena Dynasty",
+  "nombre_es": "Dinastía Sena (Bengala)",
+  "qid": "Q2428714",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_kingdom_of_castile",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Castile",
+  "nombre_es": "Reino de Castilla y León",
+  "qid": "Q179293",
+  "anio": 1096,
+  "desde": 961,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_heian_japan",
+  "epoca": "1096",
+  "nombre_en": "Heian Japan",
+  "nombre_es": "Japón Heian",
+  "qid": "Q193292",
+  "anio": 1096,
+  "desde": 793,
+  "hasta": 1187
+ },
+ {
+  "id": "e1096_hamdanid_emirates",
+  "epoca": "1096",
+  "nombre_en": "Hamdanid Emirates",
+  "nombre_es": "Emiratos de la Alta Mesopotamia",
+  "qid": "Q837187",
+  "anio": 1096,
+  "desde": 936,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_sind_habbari_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Sind-Habbari Dynasty",
+  "nombre_es": "Emirato habárida de Sind",
+  "qid": "Q5636647",
+  "anio": 1096,
+  "desde": 860,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_lohara_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Lohara Dynasty",
+  "nombre_es": "Reino de Cachemira (dinastía Lohara)",
+  "qid": "Q1315339",
+  "anio": 1096,
+  "desde": 1003,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_gahadavala_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Gahadavala Dynasty",
+  "nombre_es": "Dinastía Gahadavala",
+  "qid": "Q1147823",
+  "anio": 1096,
+  "desde": 1085,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_makuria",
+  "epoca": "1096",
+  "nombre_en": "Makuria",
+  "nombre_es": "Reino de Makuria",
+  "qid": "Q829356",
+  "anio": 1096,
+  "desde": 347,
+  "hasta": 1414
+ },
+ {
+  "id": "e1096_ghana_empire",
+  "epoca": "1096",
+  "nombre_en": "Ghana Empire",
+  "nombre_es": "Imperio de Ghana",
+  "qid": "Q206789",
+  "anio": 1096,
+  "desde": 793,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_najahid_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Najahid Dynasty",
+  "nombre_es": "Emirato najáhida (Yemen)",
+  "qid": "Q1411866",
+  "anio": 1096,
+  "desde": 1066,
+  "hasta": 1168
+ },
+ {
+  "id": "e1096_paramara_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Paramara Dynasty",
+  "nombre_es": "Dinastía Paramara (Malwa)",
+  "qid": "Q7135130",
+  "anio": 1096,
+  "desde": 980,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_kingdom_of_poland",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Poland",
+  "nombre_es": "Reino de Polonia",
+  "qid": "Q577867",
+  "anio": 1096,
+  "desde": 962,
+  "hasta": 1449
+ },
+ {
+  "id": "e1096_principality_of_chernigov",
+  "epoca": "1096",
+  "nombre_en": "Principality of Chernigov",
+  "nombre_es": "Principado de Chernígov",
+  "qid": "Q1322662",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1240
+ },
+ {
+  "id": "e1096_chaulukya_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Chaulukya Dynasty",
+  "nombre_es": "Dinastía chaulukya (Gujarat)",
+  "qid": "Q18211496",
+  "anio": 1096,
+  "desde": 947,
+  "hasta": 1249
+ },
+ {
+  "id": "e1096_norman_england",
+  "epoca": "1096",
+  "nombre_en": "Norman England",
+  "nombre_es": "Inglaterra normanda",
+  "qid": "Q200485",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1168
+ },
+ {
+  "id": "e1096_kamarupa_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Kamarupa Kingdom",
+  "nombre_es": "Reino de Kamarupa",
+  "qid": "Q1194765",
+  "anio": 1096,
+  "desde": 353,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_principality_of_rostov_suzdal",
+  "epoca": "1096",
+  "nombre_en": "Principality of Rostov-Suzdal",
+  "nombre_es": "Principado de Rostov-Súzdal",
+  "qid": "Q83546",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1240
+ },
+ {
+  "id": "e1096_eastern_ganga_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Eastern Ganga Kingdom",
+  "nombre_es": "Gangas orientales (Kalinga)",
+  "qid": "Q250515",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1351
+ },
+ {
+  "id": "e1096_chauhan_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Chauhan Dynasty",
+  "nombre_es": "Dinastía chauhan (Sakambhari)",
+  "qid": "Q1068371",
+  "anio": 1096,
+  "desde": 980,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_principality_of_kiev",
+  "epoca": "1096",
+  "nombre_en": "Principality of Kiev",
+  "nombre_es": "Principado de Kiev",
+  "qid": "Q1483430",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1240
+ },
+ {
+  "id": "e1096_kingdom_of_sweden",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Sweden",
+  "nombre_es": "Reino de Suecia",
+  "qid": "Q34",
+  "anio": 1096,
+  "desde": 980,
+  "hasta": 2024
+ },
+ {
+  "id": "e1096_goryeo",
+  "epoca": "1096",
+  "nombre_en": "Goryeo",
+  "nombre_es": "Goryeo",
+  "qid": "Q28208",
+  "anio": 1096,
+  "desde": 922,
+  "hasta": 1394
+ },
+ {
+  "id": "e1096_haripunjaya",
+  "epoca": "1096",
+  "nombre_en": "Haripuñjaya",
+  "nombre_es": "Reino de Haripuñjaya",
+  "qid": "Q255931",
+  "anio": 1096,
+  "desde": 661,
+  "hasta": 1293
+ },
+ {
+  "id": "e1096_duchy_of_aquitaine",
+  "epoca": "1096",
+  "nombre_en": "Duchy of Aquitaine",
+  "nombre_es": "Ducado de Aquitania",
+  "qid": "Q7703611",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1439
+ },
+ {
+  "id": "e1096_lavo_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Lavo Kingdom",
+  "nombre_es": "Reino de Lavo",
+  "qid": "Q1332305",
+  "anio": 1096,
+  "desde": 638,
+  "hasta": 1394
+ },
+ {
+  "id": "e1096_ngo_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Ngô Dynasty",
+  "nombre_es": "Đại Việt (dinastía Lý)",
+  "qid": "Q703919",
+  "anio": 1096,
+  "desde": 947,
+  "hasta": 1406
+ },
+ {
+  "id": "e1096_later_mayan_city_states",
+  "epoca": "1096",
+  "nombre_en": "Later Mayan City-States",
+  "nombre_es": "Ciudades-estado mayas",
+  "qid": "Q28567",
+  "anio": 1096,
+  "desde": 850,
+  "hasta": 1546
+ },
+ {
+  "id": "e1096_principality_of_polotsky",
+  "epoca": "1096",
+  "nombre_en": "Principality of Polotsky",
+  "nombre_es": "Principado de Pólotsk",
+  "qid": "Q200797",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1249
+ },
+ {
+  "id": "e1096_alodia",
+  "epoca": "1096",
+  "nombre_en": "Alodia",
+  "nombre_es": "Reino de Alodia",
+  "qid": "Q449639",
+  "anio": 1096,
+  "desde": 347,
+  "hasta": 1506
+ },
+ {
+  "id": "e1096_champa",
+  "epoca": "1096",
+  "nombre_en": "Chámpa",
+  "nombre_es": "Champa",
+  "qid": "Q216786",
+  "anio": 1096,
+  "desde": 207,
+  "hasta": 1652
+ },
+ {
+  "id": "e1096_principality_of_smolensk",
+  "epoca": "1096",
+  "nombre_en": "Principality of Smolensk",
+  "nombre_es": "Principado de Smolensk",
+  "qid": "Q1483495",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1406
+ },
+ {
+  "id": "e1096_icelandic_commonwealth",
+  "epoca": "1096",
+  "nombre_en": "Icelandic Commonwealth",
+  "nombre_es": "Mancomunidad islandesa",
+  "qid": "Q62389",
+  "anio": 1096,
+  "desde": 936,
+  "hasta": 1271
+ },
+ {
+  "id": "e1096_principality_of_pereyaslavl",
+  "epoca": "1096",
+  "nombre_en": "Principality of Pereyaslavl",
+  "nombre_es": "Principado de Pereyáslav",
+  "qid": "Q1261908",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1240
+ },
+ {
+  "id": "e1096_pala_empire",
+  "epoca": "1096",
+  "nombre_en": "Pala Empire",
+  "nombre_es": "Imperio pala",
+  "qid": "Q668412",
+  "anio": 1096,
+  "desde": 750,
+  "hasta": 1168
+ },
+ {
+  "id": "e1096_kashmir",
+  "epoca": "1096",
+  "nombre_en": "Kashmir",
+  "nombre_es": "Valle de Cachemira",
+  "qid": "Q43100",
+  "anio": 1096,
+  "desde": 626,
+  "hasta": 1343
+ },
+ {
+  "id": "e1096_kingdom_of_denmark",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Denmark",
+  "nombre_es": "Reino de Dinamarca",
+  "qid": "Q756617",
+  "anio": 1096,
+  "desde": 936,
+  "hasta": 1406
+ },
+ {
+  "id": "e1096_principality_of_volhynia",
+  "epoca": "1096",
+  "nombre_en": "Principality of Volhynia",
+  "nombre_es": "Principado de Volinia",
+  "qid": "Q680472",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1201
+ },
+ {
+  "id": "e1096_norman_italy",
+  "epoca": "1096",
+  "nombre_en": "Norman Italy",
+  "nombre_es": "Italia normanda (Apulia y Sicilia)",
+  "qid": "Q74011",
+  "anio": 1096,
+  "desde": 1034,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_takrur",
+  "epoca": "1096",
+  "nombre_en": "Takrur",
+  "nombre_es": "Reino de Takrur",
+  "qid": "Q2272880",
+  "anio": 1096,
+  "desde": 1040,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_chandela_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Chandela Kingdom",
+  "nombre_es": "Reino chandela",
+  "qid": "Q2039087",
+  "anio": 1096,
+  "desde": 960,
+  "hasta": 1313
+ },
+ {
+  "id": "e1096_kingdom_of_polonnaruwa",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Polonnaruwa",
+  "nombre_es": "Reino de Polonnaruwa",
+  "qid": "Q3167772",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_uyunid_emirate",
+  "epoca": "1096",
+  "nombre_en": "Uyunid Emirate",
+  "nombre_es": "Emirato uyúnida (Bahréin)",
+  "qid": "Q1448688",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_principality_of_ryazan",
+  "epoca": "1096",
+  "nombre_en": "Principality of Ryazan",
+  "nombre_es": "Principado de Riazán",
+  "qid": "Q269109",
+  "anio": 1096,
+  "desde": 1094,
+  "hasta": 1240
+ },
+ {
+  "id": "e1096_puebloans___chaco_regional_system",
+  "epoca": "1096",
+  "nombre_en": "Puebloans - Chaco Regional System",
+  "nombre_es": "Sistema regional del Cañón del Chaco",
+  "qid": "Q478805",
+  "anio": 1096,
+  "desde": 850,
+  "hasta": 1151
+ },
+ {
+  "id": "e1096_sunda_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Sunda Kingdom",
+  "nombre_es": "Reino de Sunda",
+  "qid": "Q1469742",
+  "anio": 1096,
+  "desde": 674,
+  "hasta": 1578
+ },
+ {
+  "id": "e1096_danishmendids",
+  "epoca": "1096",
+  "nombre_en": "Danishmendids",
+  "nombre_es": "Emirato danishmendí",
+  "qid": "Q846670",
+  "anio": 1096,
+  "desde": 1094,
+  "hasta": 1187
+ },
+ {
+  "id": "e1096_kingdom_of_alba",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Alba",
+  "nombre_es": "Reino de Alba (Escocia)",
+  "qid": "Q1991742",
+  "anio": 1096,
+  "desde": 900,
+  "hasta": 1293
+ },
+ {
+  "id": "e1096_principality_of_terebovlia",
+  "epoca": "1096",
+  "nombre_en": "Principality of Terebovlia",
+  "nombre_es": "Principado de Terebovlia",
+  "qid": "Q680530",
+  "anio": 1096,
+  "desde": 1085,
+  "hasta": 1146
+ },
+ {
+  "id": "e1096_county_of_toulouse",
+  "epoca": "1096",
+  "nombre_en": "County of Toulouse",
+  "nombre_es": "Condado de Tolosa",
+  "qid": "Q1334322",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1249
+ },
+ {
+  "id": "e1096_principality_of_peremyshl",
+  "epoca": "1096",
+  "nombre_en": "Principality of Peremyshl",
+  "nombre_es": "Principado de Peremyshl",
+  "qid": "Q4350658",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1146
+ },
+ {
+  "id": "e1096_viking_settlements",
+  "epoca": "1096",
+  "nombre_en": "Viking settlements",
+  "nombre_es": "Asentamientos nórdicos (Danelaw e islas)",
+  "qid": "Q12567",
+  "anio": 1096,
+  "desde": 793,
+  "hasta": 1332
+ },
+ {
+  "id": "e1096_northern_fujiwara",
+  "epoca": "1096",
+  "nombre_en": "Northern Fujiwara",
+  "nombre_es": "Fujiwara del Norte (Hiraizumi)",
+  "qid": "Q1050942",
+  "anio": 1096,
+  "desde": 1094,
+  "hasta": 1191
+ },
+ {
+  "id": "e1096_volga_bulgaria",
+  "epoca": "1096",
+  "nombre_en": "Volga Bulgaria",
+  "nombre_es": "Bulgaria del Volga",
+  "qid": "Q185488",
+  "anio": 1096,
+  "desde": 674,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_kediri_kingdom",
+  "epoca": "1096",
+  "nombre_en": "Kediri Kingdom",
+  "nombre_es": "Reino de Kediri",
+  "qid": "Q756895",
+  "anio": 1096,
+  "desde": 1046,
+  "hasta": 1226
+ },
+ {
+  "id": "e1096_duchy_of_brittany",
+  "epoca": "1096",
+  "nombre_en": "Duchy of Brittany",
+  "nombre_es": "Ducado de Bretaña",
+  "qid": "Q71747",
+  "anio": 1096,
+  "desde": 947,
+  "hasta": 1491
+ },
+ {
+  "id": "e1096_kingdom_of_croatia",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Croatia",
+  "nombre_es": "Reino de Croacia",
+  "qid": "Q858841",
+  "anio": 1096,
+  "desde": 926,
+  "hasta": 1098
+ },
+ {
+  "id": "e1096_kingdom_of_janggala",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Janggala",
+  "nombre_es": "Reino de Janggala",
+  "qid": "Q13093931",
+  "anio": 1096,
+  "desde": 1046,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_county_of_blois",
+  "epoca": "1096",
+  "nombre_en": "County of Blôis",
+  "nombre_es": "Condado de Blois",
+  "qid": "Q19336869",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1401
+ },
+ {
+  "id": "e1096_hammadid_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Hammadid Dynasty",
+  "nombre_es": "Dinastía hamádida",
+  "qid": "Q588672",
+  "anio": 1096,
+  "desde": 1018,
+  "hasta": 1151
+ },
+ {
+  "id": "e1096_taifa_of_zaragoza",
+  "epoca": "1096",
+  "nombre_en": "Taifa of Zaragoza",
+  "nombre_es": "Taifa de Zaragoza",
+  "qid": "Q33061",
+  "anio": 1096,
+  "desde": 1015,
+  "hasta": 1110
+ },
+ {
+  "id": "e1096_zirid_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Zirid dynasty",
+  "nombre_es": "Dinastía zirí (Ifriqiya)",
+  "qid": "Q205718",
+  "anio": 1096,
+  "desde": 1056,
+  "hasta": 1151
+ },
+ {
+  "id": "e1096_norse_greenland",
+  "epoca": "1096",
+  "nombre_en": "Norse Greenland",
+  "nombre_es": "Groenlandia nórdica",
+  "qid": "Q582948",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1384
+ },
+ {
+  "id": "e1096_jaemtland",
+  "epoca": "1096",
+  "nombre_en": "Jaemtland",
+  "nombre_es": "Jämtland",
+  "qid": "Q211661",
+  "anio": 1096,
+  "desde": 947,
+  "hasta": 1187
+ },
+ {
+  "id": "e1096_county_of_champagne",
+  "epoca": "1096",
+  "nombre_en": "County of Champagne",
+  "nombre_es": "Condado de Champaña",
+  "qid": "Q546266",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1284
+ },
+ {
+  "id": "e1096_kingdom_of_france",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of France",
+  "nombre_es": "Reino de Francia (dominio real)",
+  "qid": "Q207162",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1791
+ },
+ {
+  "id": "e1096_taifa_of_denia",
+  "epoca": "1096",
+  "nombre_en": "Taifa of Dénia",
+  "nombre_es": "Taifa de Denia y Baleares",
+  "qid": "Q252323",
+  "anio": 1096,
+  "desde": 1010,
+  "hasta": 1249
+ },
+ {
+  "id": "e1096_kingdom_of_georgia",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Georgia",
+  "nombre_es": "Reino de Georgia",
+  "qid": "Q154667",
+  "anio": 1096,
+  "desde": 1010,
+  "hasta": 1802
+ },
+ {
+  "id": "e1096_empire_of_kanem",
+  "epoca": "1096",
+  "nombre_en": "Empire of Kanem",
+  "nombre_es": "Imperio de Kanem",
+  "qid": "Q1139762",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1384
+ },
+ {
+  "id": "e1096_grand_principality_of_serbia",
+  "epoca": "1096",
+  "nombre_en": "Grand Principality of Serbia",
+  "nombre_es": "Gran Principado de Serbia (Raška)",
+  "qid": "Q1311990",
+  "anio": 1096,
+  "desde": 1094,
+  "hasta": 1168
+ },
+ {
+  "id": "e1096_county_of_vermandois",
+  "epoca": "1096",
+  "nombre_en": "County of Vermandois",
+  "nombre_es": "Condado de Vermandois",
+  "qid": "Q26385",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1215
+ },
+ {
+  "id": "e1096_kingdom_of_aragon",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Aragon",
+  "nombre_es": "Reino de Aragón",
+  "qid": "Q199442",
+  "anio": 1096,
+  "desde": 1015,
+  "hasta": 1168
+ },
+ {
+  "id": "e1096_classic_veracruz_culture",
+  "epoca": "1096",
+  "nombre_en": "Classic Veracruz Culture",
+  "nombre_es": "Cultura del Veracruz clásico (totonacas)",
+  "qid": "Q2379418",
+  "anio": 1096,
+  "desde": 555,
+  "hasta": 1235
+ },
+ {
+  "id": "e1096_kingdom_of_arles",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Arles",
+  "nombre_es": "Reino de Arlés (Borgoña)",
+  "qid": "Q3271735",
+  "anio": 1096,
+  "desde": 936,
+  "hasta": 1384
+ },
+ {
+  "id": "e1096_county_of_flanders",
+  "epoca": "1096",
+  "nombre_en": "County of Flanders",
+  "nombre_es": "Condado de Flandes",
+  "qid": "Q157070",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1384
+ },
+ {
+  "id": "e1096_papal_states",
+  "epoca": "1096",
+  "nombre_en": "Papal States",
+  "nombre_es": "Estados Pontificios",
+  "qid": "Q170174",
+  "anio": 1096,
+  "desde": 755,
+  "hasta": 1870
+ },
+ {
+  "id": "e1096_kingdom_of_the_isles",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of the Isles",
+  "nombre_es": "Reino de las Islas",
+  "qid": "Q459188",
+  "anio": 1096,
+  "desde": 1085,
+  "hasta": 1176
+ },
+ {
+  "id": "e1096_zagwe_dynasty",
+  "epoca": "1096",
+  "nombre_en": "Zagwe dynasty",
+  "nombre_es": "Dinastía Zagüe",
+  "qid": "Q140446",
+  "anio": 1096,
+  "desde": 947,
+  "hasta": 1271
+ },
+ {
+  "id": "e1096_republic_of_pisa",
+  "epoca": "1096",
+  "nombre_en": "Republic of Pisa",
+  "nombre_es": "República de Pisa",
+  "qid": "Q1365493",
+  "anio": 1096,
+  "desde": 1010,
+  "hasta": 1401
+ },
+ {
+  "id": "e1096_county_of_maine",
+  "epoca": "1096",
+  "nombre_en": "County of Maine",
+  "nombre_es": "Condado del Maine",
+  "qid": "Q732738",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1481
+ },
+ {
+  "id": "e1096_county_of_anjou",
+  "epoca": "1096",
+  "nombre_en": "County of Anjou",
+  "nombre_es": "Condado de Anjou",
+  "qid": "Q2991084",
+  "anio": 1096,
+  "desde": 990,
+  "hasta": 1332
+ },
+ {
+  "id": "e1096_county_of_nevers",
+  "epoca": "1096",
+  "nombre_en": "County of Nevers",
+  "nombre_es": "Condado de Nevers",
+  "qid": "Q2070440",
+  "anio": 1096,
+  "desde": 1010,
+  "hasta": 1520
+ },
+ {
+  "id": "e1096_taifa_of_valencia",
+  "epoca": "1096",
+  "nombre_en": "Taifa of Valencia",
+  "nombre_es": "Taifa de Valencia",
+  "qid": "Q676811",
+  "anio": 1096,
+  "desde": 1010,
+  "hasta": 1249
+ },
+ {
+  "id": "e1096_giudicato_of_cagliari",
+  "epoca": "1096",
+  "nombre_en": "Giudicato of Cagliari",
+  "nombre_es": "Judicado de Cagliari",
+  "qid": "Q2297073",
+  "anio": 1096,
+  "desde": 866,
+  "hasta": 1187
+ },
+ {
+  "id": "e1096_taifa_of_tortosa",
+  "epoca": "1096",
+  "nombre_en": "Taifa of Tortosa",
+  "nombre_es": "Taifa de Tortosa",
+  "qid": "Q605930",
+  "anio": 1096,
+  "desde": 1010,
+  "hasta": 1110
+ },
+ {
+  "id": "e1096_kingdom_of_duklja",
+  "epoca": "1096",
+  "nombre_en": "Kingdom of Duklja",
+  "nombre_es": "Reino de Duklja",
+  "qid": "Q1252942",
+  "anio": 1096,
+  "desde": 1072,
+  "hasta": 1138
+ },
+ {
+  "id": "e1096_taifa_of_albarracin",
+  "epoca": "1096",
+  "nombre_en": "Taifa of Albarracín",
+  "nombre_es": "Taifa de Albarracín",
+  "qid": "Q2060937",
+  "anio": 1096,
+  "desde": 1015,
+  "hasta": 1110
+ },
+ {
+  "id": "e1096_giudicato_of_logudoro",
+  "epoca": "1096",
+  "nombre_en": "Giudicato of Logudoro",
+  "nombre_es": "Judicado de Logudoro",
+  "qid": "Q1761381",
+  "anio": 1096,
+  "desde": 866,
+  "hasta": 1259
+ },
+ {
+  "id": "e1096_early_balinese_kingdoms",
+  "epoca": "1096",
+  "nombre_en": "Early Balinese Kingdoms",
+  "nombre_es": "Reinos de Bali",
+  "qid": "Q12491027",
+  "anio": 1096,
+  "desde": 922,
+  "hasta": 1343
+ },
+ {
+  "id": "e1096_county_of_barcelona",
+  "epoca": "1096",
+  "nombre_en": "County of Barcelona",
+  "nombre_es": "Condado de Barcelona",
+  "qid": "Q7038",
+  "anio": 1096,
+  "desde": 898,
+  "hasta": 1168
+ },
+ {
+  "id": "e1096_republic_of_venice",
+  "epoca": "1096",
+  "nombre_en": "Republic of Venice",
+  "nombre_es": "República de Venecia",
+  "qid": "Q4948",
+  "anio": 1096,
+  "desde": 705,
+  "hasta": 1796
+ },
+ {
+  "id": "e1500_mongol_khanate",
+  "epoca": "1500",
+  "nombre_en": "Mongol Khanate",
+  "nombre_es": "Janato mongol oriental (Dayán Kan)",
+  "qid": "Q19927420",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1635
+ },
+ {
+  "id": "e1500_ming_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Ming Dynasty",
+  "nombre_es": "Dinastía Ming",
+  "qid": "Q9903",
+  "anio": 1500,
+  "desde": 1375,
+  "hasta": 1644
+ },
+ {
+  "id": "e1500_khanate_of_sibir",
+  "epoca": "1500",
+  "nombre_en": "Khanate of Sibir",
+  "nombre_es": "Janato de Sibir",
+  "qid": "Q190513",
+  "anio": 1500,
+  "desde": 1429,
+  "hasta": 1587
+ },
+ {
+  "id": "e1500_grand_principality_of_moscow",
+  "epoca": "1500",
+  "nombre_en": "Grand Principality of Moscow",
+  "nombre_es": "Gran Principado de Moscú",
+  "qid": "Q170770",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1546
+ },
+ {
+  "id": "e1500_inca_empire",
+  "epoca": "1500",
+  "nombre_en": "Inca Empire",
+  "nombre_es": "Imperio inca",
+  "qid": "Q28573",
+  "anio": 1500,
+  "desde": 1440,
+  "hasta": 1571
+ },
+ {
+  "id": "e1500_timurid_empire",
+  "epoca": "1500",
+  "nombre_en": "Timurid Empire",
+  "nombre_es": "Imperio timúrida (Jorasán y Transoxiana)",
+  "qid": "Q484195",
+  "anio": 1500,
+  "desde": 1375,
+  "hasta": 1528
+ },
+ {
+  "id": "e1500_kazakh_khanate",
+  "epoca": "1500",
+  "nombre_en": "Kazakh Khanate",
+  "nombre_es": "Janato kazajo",
+  "qid": "Q1433867",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1847
+ },
+ {
+  "id": "e1500_aq_qoyunlu",
+  "epoca": "1500",
+  "nombre_en": "Aq Qoyunlu",
+  "nombre_es": "Imperio de los Aq Qoyunlu",
+  "qid": "Q555994",
+  "anio": 1500,
+  "desde": 1407,
+  "hasta": 1511
+ },
+ {
+  "id": "e1500_tibet",
+  "epoca": "1500",
+  "nombre_en": "Tibet",
+  "nombre_es": "Tíbet (Phagmodrupa y Rinpungpa)",
+  "qid": "Q521263",
+  "anio": 1500,
+  "desde": 1363,
+  "hasta": 1952
+ },
+ {
+  "id": "e1500_mamluk_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Mamluk Sultanate",
+  "nombre_es": "Sultanato mameluco",
+  "qid": "Q282428",
+  "anio": 1500,
+  "desde": 1241,
+  "hasta": 1518
+ },
+ {
+  "id": "e1500_kalmar_union",
+  "epoca": "1500",
+  "nombre_en": "Kalmar Union",
+  "nombre_es": "Unión de Kalmar",
+  "qid": "Q62623",
+  "anio": 1500,
+  "desde": 1402,
+  "hasta": 1525
+ },
+ {
+  "id": "e1500_moghulistan",
+  "epoca": "1500",
+  "nombre_en": "Moghulistan",
+  "nombre_es": "Moguliztán",
+  "qid": "Q1191125",
+  "anio": 1500,
+  "desde": 1463,
+  "hasta": 1518
+ },
+ {
+  "id": "e1500_house_of_jagiellon",
+  "epoca": "1500",
+  "nombre_en": "House of Jagiellon",
+  "nombre_es": "Polonia-Lituania (Jagellones)",
+  "qid": "Q194355",
+  "anio": 1500,
+  "desde": 1450,
+  "hasta": 1571
+ },
+ {
+  "id": "e1500_ottoman_empire",
+  "epoca": "1500",
+  "nombre_en": "Ottoman Empire",
+  "nombre_es": "Imperio otomano",
+  "qid": "Q12560",
+  "anio": 1500,
+  "desde": 1305,
+  "hasta": 1923
+ },
+ {
+  "id": "e1500_nogai_horde",
+  "epoca": "1500",
+  "nombre_en": "Nogai Horde",
+  "nombre_es": "Horda Nogai",
+  "qid": "Q631210",
+  "anio": 1500,
+  "desde": 1450,
+  "hasta": 1563
+ },
+ {
+  "id": "e1500_songhai_empire",
+  "epoca": "1500",
+  "nombre_en": "Songhai Empire",
+  "nombre_es": "Imperio songhai",
+  "qid": "Q202687",
+  "anio": 1500,
+  "desde": 1463,
+  "hasta": 1608
+ },
+ {
+  "id": "e1500_golden_horde",
+  "epoca": "1500",
+  "nombre_en": "Golden Horde",
+  "nombre_es": "Gran Horda",
+  "qid": "Q79965",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1695
+ },
+ {
+  "id": "e1500_vijayanagara_empire",
+  "epoca": "1500",
+  "nombre_en": "Vijayanagara Empire",
+  "nombre_es": "Imperio de Vijayanagara",
+  "qid": "Q167639",
+  "anio": 1500,
+  "desde": 1344,
+  "hasta": 1571
+ },
+ {
+  "id": "e1500_lodi_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Lodi Dynasty",
+  "nombre_es": "Sultanato de Delhi (dinastía Lodi)",
+  "qid": "Q11709",
+  "anio": 1500,
+  "desde": 1453,
+  "hasta": 1528
+ },
+ {
+  "id": "e1500_crown_of_castile",
+  "epoca": "1500",
+  "nombre_en": "Crown of Castile",
+  "nombre_es": "Corona de Castilla",
+  "qid": "Q217196",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1515
+ },
+ {
+  "id": "e1500_shaybanids",
+  "epoca": "1500",
+  "nombre_en": "Shaybanids",
+  "nombre_es": "Janato shaybánida (uzbekos)",
+  "qid": "Q856361",
+  "anio": 1500,
+  "desde": 1497,
+  "hasta": 1511
+ },
+ {
+  "id": "e1500_ayutthaya_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Ayutthaya Kingdom",
+  "nombre_es": "Reino de Ayutthaya",
+  "qid": "Q841364",
+  "anio": 1500,
+  "desde": 1352,
+  "hasta": 1768
+ },
+ {
+  "id": "e1500_ethiopian_empire",
+  "epoca": "1500",
+  "nombre_en": "Ethiopian Empire",
+  "nombre_es": "Imperio etíope",
+  "qid": "Q207521",
+  "anio": 1500,
+  "desde": 1272,
+  "hasta": 1935
+ },
+ {
+  "id": "e1500_wattasid_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Wattasid dynasty",
+  "nombre_es": "Dinastía wattásida (Marruecos)",
+  "qid": "Q970799",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1555
+ },
+ {
+  "id": "e1500_tahirid_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Tahirid Sultanate",
+  "nombre_es": "Sultanato tahirí (Yemen)",
+  "qid": "Q373981",
+  "anio": 1500,
+  "desde": 1459,
+  "hasta": 1515
+ },
+ {
+  "id": "e1500_lan_xang",
+  "epoca": "1500",
+  "nombre_en": "Lan Xang",
+  "nombre_es": "Reino de Lan Xang",
+  "qid": "Q853477",
+  "anio": 1500,
+  "desde": 1363,
+  "hasta": 1708
+ },
+ {
+  "id": "e1500_kingdom_of_france",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of France",
+  "nombre_es": "Reino de Francia",
+  "qid": "Q207162",
+  "anio": 1500,
+  "desde": 990,
+  "hasta": 1791
+ },
+ {
+  "id": "e1500_mali_empire",
+  "epoca": "1500",
+  "nombre_en": "Mali Empire",
+  "nombre_es": "Imperio de Malí (en declive)",
+  "qid": "Q184536",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1611
+ },
+ {
+  "id": "e1500_holy_roman_empire_minor_states",
+  "epoca": "1500",
+  "nombre_en": "Holy Roman Empire Minor States",
+  "nombre_es": "Sacro Imperio (principados y ciudades libres)",
+  "qid": "Q12548",
+  "anio": 1500,
+  "desde": 1260,
+  "hasta": 1806
+ },
+ {
+  "id": "e1500_kingdom_of_hungary",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Hungary",
+  "nombre_es": "Reino de Hungría",
+  "qid": "Q171150",
+  "anio": 1500,
+  "desde": 1000,
+  "hasta": 1546
+ },
+ {
+  "id": "e1500_sultanate_of_bengal",
+  "epoca": "1500",
+  "nombre_en": "Sultanate of Bengal",
+  "nombre_es": "Sultanato de Bengala",
+  "qid": "Q4083686",
+  "anio": 1500,
+  "desde": 1344,
+  "hasta": 1533
+ },
+ {
+  "id": "e1500_warring_states_japan",
+  "epoca": "1500",
+  "nombre_en": "Warring States Japan",
+  "nombre_es": "Japón (periodo Sengoku)",
+  "qid": "Q204023",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1601
+ },
+ {
+  "id": "e1500_eastern_chagatai_khanate",
+  "epoca": "1500",
+  "nombre_en": "Eastern Chagatai Khanate",
+  "nombre_es": "Janato de Chagatai oriental (Yarkand)",
+  "qid": "Q1191125",
+  "anio": 1500,
+  "desde": 1492,
+  "hasta": 1511
+ },
+ {
+  "id": "e1500_khmer_empire",
+  "epoca": "1500",
+  "nombre_en": "Khmer Empire",
+  "nombre_es": "Imperio jemer (en declive)",
+  "qid": "Q201705",
+  "anio": 1500,
+  "desde": 800,
+  "hasta": 1867
+ },
+ {
+  "id": "e1500_shan_states",
+  "epoca": "1500",
+  "nombre_en": "Shan States",
+  "nombre_es": "Estados shan",
+  "qid": "Q4765854",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1563
+ },
+ {
+  "id": "e1500_joseon",
+  "epoca": "1500",
+  "nombre_en": "Joseon",
+  "nombre_es": "Joseon",
+  "qid": "Q28405",
+  "anio": 1500,
+  "desde": 1395,
+  "hasta": 1897
+ },
+ {
+  "id": "e1500_hafsid_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Hafsid Dynasty",
+  "nombre_es": "Dinastía hafsí",
+  "qid": "Q752662",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1571
+ },
+ {
+  "id": "e1500_makuria_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Makuria Kingdom",
+  "nombre_es": "Reino de Makuria (residual)",
+  "qid": "Q829356",
+  "anio": 1500,
+  "desde": 1415,
+  "hasta": 1518
+ },
+ {
+  "id": "e1500_bornu_empire",
+  "epoca": "1500",
+  "nombre_en": "Bornu Empire",
+  "nombre_es": "Imperio de Bornu",
+  "qid": "Q1139762",
+  "anio": 1500,
+  "desde": 1385,
+  "hasta": 1894
+ },
+ {
+  "id": "e1500_le_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Lê Dynasty",
+  "nombre_es": "Đại Việt (dinastía Lê)",
+  "qid": "Q10800789",
+  "anio": 1500,
+  "desde": 1429,
+  "hasta": 1571
+ },
+ {
+  "id": "e1500_later_mayan_city_states",
+  "epoca": "1500",
+  "nombre_en": "Later Mayan City-States",
+  "nombre_es": "Ciudades-estado mayas (Yucatán)",
+  "qid": "Q28567",
+  "anio": 1500,
+  "desde": 850,
+  "hasta": 1546
+ },
+ {
+  "id": "e1500_aztec_triple_alliance",
+  "epoca": "1500",
+  "nombre_en": "Aztec Triple Alliance",
+  "nombre_es": "Triple Alianza azteca",
+  "qid": "Q2608489",
+  "anio": 1500,
+  "desde": 1429,
+  "hasta": 1520
+ },
+ {
+  "id": "e1500_ava_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Ava Kingdom",
+  "nombre_es": "Reino de Ava",
+  "qid": "Q2500952",
+  "anio": 1500,
+  "desde": 1375,
+  "hasta": 1528
+ },
+ {
+  "id": "e1500_khanate_of_kazan",
+  "epoca": "1500",
+  "nombre_en": "Khanate of Kazan",
+  "nombre_es": "Janato de Kazán",
+  "qid": "Q186537",
+  "anio": 1500,
+  "desde": 1440,
+  "hasta": 1551
+ },
+ {
+  "id": "e1500_kingdom_of_england",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of England",
+  "nombre_es": "Reino de Inglaterra",
+  "qid": "Q179876",
+  "anio": 1500,
+  "desde": 936,
+  "hasta": 1708
+ },
+ {
+  "id": "e1500_astrakhan_khanate",
+  "epoca": "1500",
+  "nombre_en": "Astrakhan Khanate",
+  "nombre_es": "Janato de Astracán",
+  "qid": "Q210163",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1768
+ },
+ {
+  "id": "e1500_crown_of_aragon",
+  "epoca": "1500",
+  "nombre_en": "Crown of Aragon",
+  "nombre_es": "Corona de Aragón",
+  "qid": "Q204920",
+  "anio": 1500,
+  "desde": 1169,
+  "hasta": 1515
+ },
+ {
+  "id": "e1500_kashmiri_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Kashmiri Sultanate",
+  "nombre_es": "Sultanato de Cachemira",
+  "qid": "Q123027565",
+  "anio": 1500,
+  "desde": 1344,
+  "hasta": 1587
+ },
+ {
+  "id": "e1500_adal_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Adal Sultanate",
+  "nombre_es": "Sultanato de Adal",
+  "qid": "Q2365048",
+  "anio": 1500,
+  "desde": 1415,
+  "hasta": 1546
+ },
+ {
+  "id": "e1500_crimean_khanate",
+  "epoca": "1500",
+  "nombre_en": "Crimean Khanate",
+  "nombre_es": "Janato de Crimea",
+  "qid": "Q160440",
+  "anio": 1500,
+  "desde": 1450,
+  "hasta": 1782
+ },
+ {
+  "id": "e1500_kingdom_of_kongo",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Kongo",
+  "nombre_es": "Reino del Congo",
+  "qid": "Q796583",
+  "anio": 1500,
+  "desde": 1440,
+  "hasta": 1669
+ },
+ {
+  "id": "e1500_kingdom_of_bohemia",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Bohemia",
+  "nombre_es": "Reino de Bohemia",
+  "qid": "Q42585",
+  "anio": 1500,
+  "desde": 1202,
+  "hasta": 1528
+ },
+ {
+  "id": "e1500_zayyanid_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Zayyanid dynasty",
+  "nombre_es": "Dinastía zayyání (Tremecén)",
+  "qid": "Q307697",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1555
+ },
+ {
+  "id": "e1500_alodia",
+  "epoca": "1500",
+  "nombre_en": "Alodia",
+  "nombre_es": "Reino de Alodia (últimos años)",
+  "qid": "Q449639",
+  "anio": 1500,
+  "desde": 347,
+  "hasta": 1506
+ },
+ {
+  "id": "e1500_sind_samma_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Sind-Samma Dynasty",
+  "nombre_es": "Dinastía Samma (Sind)",
+  "qid": "Q27260",
+  "anio": 1500,
+  "desde": 1344,
+  "hasta": 1525
+ },
+ {
+  "id": "e1500_bijapur_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Bijapur Sultanate",
+  "nombre_es": "Sultanato de Bijapur",
+  "qid": "Q83821",
+  "anio": 1500,
+  "desde": 1492,
+  "hasta": 1686
+ },
+ {
+  "id": "e1500_kapisa",
+  "epoca": "1500",
+  "nombre_en": "Kapisa",
+  "nombre_es": "Principado de Kabul",
+  "qid": "Q28336424",
+  "anio": 1500,
+  "desde": 1475,
+  "hasta": 1506
+ },
+ {
+  "id": "e1500_livonian_conference",
+  "epoca": "1500",
+  "nombre_en": "Livonian Conference",
+  "nombre_es": "Confederación de Livonia",
+  "qid": "Q33698",
+  "anio": 1500,
+  "desde": 1422,
+  "hasta": 1563
+ },
+ {
+  "id": "e1500_kingdom_of_portugal",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Portugal",
+  "nombre_es": "Reino de Portugal",
+  "qid": "Q45670",
+  "anio": 1500,
+  "desde": 1147,
+  "hasta": 1911
+ },
+ {
+  "id": "e1500_house_of_habsburg",
+  "epoca": "1500",
+  "nombre_en": "House of Habsburg",
+  "nombre_es": "Casa de Habsburgo (Austria)",
+  "qid": "Q65968",
+  "anio": 1500,
+  "desde": 1260,
+  "hasta": 1515
+ },
+ {
+  "id": "e1500_kingdom_of_scotland",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Scotland",
+  "nombre_es": "Reino de Escocia",
+  "qid": "Q230791",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1608
+ },
+ {
+  "id": "e1500_majapahit",
+  "epoca": "1500",
+  "nombre_en": "Majapahit",
+  "nombre_es": "Majapahit (en declive)",
+  "qid": "Q49326",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1518
+ },
+ {
+  "id": "e1500_kingdom_of_mrauk_u",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Mrauk U",
+  "nombre_es": "Reino de Mrauk U (Arakán)",
+  "qid": "Q10791211",
+  "anio": 1500,
+  "desde": 1429,
+  "hasta": 1787
+ },
+ {
+  "id": "e1500_principality_of_moldavia",
+  "epoca": "1500",
+  "nombre_en": "Principality of Moldavia",
+  "nombre_es": "Principado de Moldavia",
+  "qid": "Q10957559",
+  "anio": 1500,
+  "desde": 1363,
+  "hasta": 1858
+ },
+ {
+  "id": "e1500_berar_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Berar Sultanate",
+  "nombre_es": "Sultanato de Berar",
+  "qid": "Q818666",
+  "anio": 1500,
+  "desde": 1492,
+  "hasta": 1578
+ },
+ {
+  "id": "e1500_hanthawaddy_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Hanthawaddy Kingdom",
+  "nombre_es": "Reino de Hanthawaddy (Pegú)",
+  "qid": "Q1572529",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1546
+ },
+ {
+  "id": "e1500_sultanate_of_palembang",
+  "epoca": "1500",
+  "nombre_en": "Sultanate of Palembang",
+  "nombre_es": "Palembang",
+  "qid": "Q3503555",
+  "anio": 1500,
+  "desde": 1459,
+  "hasta": 1821
+ },
+ {
+  "id": "e1500_principality_of_wallachia",
+  "epoca": "1500",
+  "nombre_en": "Principality of Wallachia",
+  "nombre_es": "Principado de Valaquia",
+  "qid": "Q171393",
+  "anio": 1500,
+  "desde": 1314,
+  "hasta": 1858
+ },
+ {
+  "id": "e1500_ahmadnagar_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Ahmadnagar Sultanate",
+  "nombre_es": "Sultanato de Ahmadnagar",
+  "qid": "Q400998",
+  "anio": 1500,
+  "desde": 1492,
+  "hasta": 1652
+ },
+ {
+  "id": "e1500_michoacan",
+  "epoca": "1500",
+  "nombre_en": "Michoacán",
+  "nombre_es": "Imperio purépecha (Michoacán)",
+  "qid": "Q79861",
+  "anio": 1500,
+  "desde": 1305,
+  "hasta": 1533
+ },
+ {
+  "id": "e1500_haudenosaunee",
+  "epoca": "1500",
+  "nombre_en": "Haudenosaunee",
+  "nombre_es": "Confederación Haudenosaunee",
+  "qid": "Q68518",
+  "anio": 1500,
+  "desde": 1450,
+  "hasta": 1782
+ },
+ {
+  "id": "e1500_habsburg_monarchy",
+  "epoca": "1500",
+  "nombre_en": "Habsburg Monarchy",
+  "nombre_es": "Países Bajos borgoñones (Habsburgo)",
+  "qid": "Q66504140",
+  "anio": 1500,
+  "desde": 1487,
+  "hasta": 1805
+ },
+ {
+  "id": "e1500_bahrani_dynasty",
+  "epoca": "1500",
+  "nombre_en": "Bahrani Dynasty",
+  "nombre_es": "Emirato de Bahréin",
+  "qid": "Q311341",
+  "anio": 1500,
+  "desde": 1260,
+  "hasta": 1520
+ },
+ {
+  "id": "e1500_kingdom_of_naples",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Naples",
+  "nombre_es": "Reino de Nápoles",
+  "qid": "Q173065",
+  "anio": 1500,
+  "desde": 1285,
+  "hasta": 1501
+ },
+ {
+  "id": "e1500_republic_of_venice",
+  "epoca": "1500",
+  "nombre_en": "Republic of Venice",
+  "nombre_es": "República de Venecia",
+  "qid": "Q4948",
+  "anio": 1500,
+  "desde": 705,
+  "hasta": 1796
+ },
+ {
+  "id": "e1500_bidar_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Bidar Sultanate",
+  "nombre_es": "Sultanato de Bidar",
+  "qid": "Q669317",
+  "anio": 1500,
+  "desde": 1492,
+  "hasta": 1618
+ },
+ {
+  "id": "e1500_ceylon",
+  "epoca": "1500",
+  "nombre_en": "Ceylon",
+  "nombre_es": "Reino de Kotte (Ceilán)",
+  "qid": "Q918153",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1506
+ },
+ {
+  "id": "e1500_sunda_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Sunda Kingdom",
+  "nombre_es": "Reino de Sunda",
+  "qid": "Q1469742",
+  "anio": 1500,
+  "desde": 674,
+  "hasta": 1578
+ },
+ {
+  "id": "e1500_lan_na_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Lan Na Kingdom",
+  "nombre_es": "Reino de Lan Na",
+  "qid": "Q1059707",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 1563
+ },
+ {
+  "id": "e1500_sultanate_of_brunei",
+  "epoca": "1500",
+  "nombre_en": "Sultanate of Brunei",
+  "nombre_es": "Sultanato de Brunéi",
+  "qid": "Q887803",
+  "anio": 1500,
+  "desde": 1363,
+  "hasta": 2024
+ },
+ {
+  "id": "e1500_shirvan",
+  "epoca": "1500",
+  "nombre_en": "Shirvan",
+  "nombre_es": "Shirvanshahs",
+  "qid": "Q638064",
+  "anio": 1500,
+  "desde": 825,
+  "hasta": 1539
+ },
+ {
+  "id": "e1500_county_of_foix",
+  "epoca": "1500",
+  "nombre_en": "County of Foix",
+  "nombre_es": "Condado de Foix y Bearne",
+  "qid": "Q1481436",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1555
+ },
+ {
+  "id": "e1500_house_of_bourbon",
+  "epoca": "1500",
+  "nombre_en": "House of Bourbon",
+  "nombre_es": "Ducado de Borbón",
+  "qid": "Q58389",
+  "anio": 1500,
+  "desde": 1333,
+  "hasta": 1594
+ },
+ {
+  "id": "e1500_samtskhe_saatabago",
+  "epoca": "1500",
+  "nombre_en": "Samtskhe-Saatabago",
+  "nombre_es": "Samtsjé-Saatabago",
+  "qid": "Q2029317",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1506
+ },
+ {
+  "id": "e1500_electorate_of_brandenburg",
+  "epoca": "1500",
+  "nombre_en": "Electorate of Brandenburg",
+  "nombre_es": "Electorado de Brandeburgo",
+  "qid": "Q148499",
+  "anio": 1500,
+  "desde": 1422,
+  "hasta": 1618
+ },
+ {
+  "id": "e1500_papal_states",
+  "epoca": "1500",
+  "nombre_en": "Papal States",
+  "nombre_es": "Estados Pontificios",
+  "qid": "Q170174",
+  "anio": 1500,
+  "desde": 755,
+  "hasta": 1870
+ },
+ {
+  "id": "e1500_teutonic_order",
+  "epoca": "1500",
+  "nombre_en": "Teutonic Order",
+  "nombre_es": "Estado de la Orden Teutónica (Prusia)",
+  "qid": "Q48189",
+  "anio": 1500,
+  "desde": 1236,
+  "hasta": 1525
+ },
+ {
+  "id": "e1500_duchy_of_bavaria",
+  "epoca": "1500",
+  "nombre_en": "Duchy of Bavaria",
+  "nombre_es": "Ducado de Baviera",
+  "qid": "Q47261",
+  "anio": 1500,
+  "desde": 1260,
+  "hasta": 1805
+ },
+ {
+  "id": "e1500_county_of_savoy",
+  "epoca": "1500",
+  "nombre_en": "County of Savoy",
+  "nombre_es": "Condado (Ducado) de Saboya",
+  "qid": "Q1232887",
+  "anio": 1500,
+  "desde": 1260,
+  "hasta": 1539
+ },
+ {
+  "id": "e1500_electorate_of_saxony",
+  "epoca": "1500",
+  "nombre_en": "Electorate of Saxony",
+  "nombre_es": "Electorado de Sajonia",
+  "qid": "Q156199",
+  "anio": 1500,
+  "desde": 1363,
+  "hasta": 1805
+ },
+ {
+  "id": "e1500_duchy_of_milan",
+  "epoca": "1500",
+  "nombre_en": "Duchy of Milan",
+  "nombre_es": "Ducado de Milán",
+  "qid": "Q153529",
+  "anio": 1500,
+  "desde": 1402,
+  "hasta": 1539
+ },
+ {
+  "id": "e1500_beylik_of_dulkadir",
+  "epoca": "1500",
+  "nombre_en": "Beylik of Dulkadir",
+  "nombre_es": "Beylicato de Dulkadir",
+  "qid": "Q1264808",
+  "anio": 1500,
+  "desde": 1344,
+  "hasta": 1515
+ },
+ {
+  "id": "e1500_kingdom_of_georgia",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Georgia",
+  "nombre_es": "Reino de Georgia (Kartli)",
+  "qid": "Q154667",
+  "anio": 1500,
+  "desde": 1010,
+  "hasta": 1802
+ },
+ {
+  "id": "e1500_republic_of_genoa",
+  "epoca": "1500",
+  "nombre_en": "Republic of Genoa",
+  "nombre_es": "República de Génova",
+  "qid": "Q174306",
+  "anio": 1500,
+  "desde": 1010,
+  "hasta": 1795
+ },
+ {
+  "id": "e1500_ramadanid_emirate",
+  "epoca": "1500",
+  "nombre_en": "Ramadanid Emirate",
+  "nombre_es": "Emirato ramadánida",
+  "qid": "Q2261321",
+  "anio": 1500,
+  "desde": 1385,
+  "hasta": 1515
+ },
+ {
+  "id": "e1500_kingdom_of_kakheti",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Kakheti",
+  "nombre_es": "Reino de Kajetia",
+  "qid": "Q1209822",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1762
+ },
+ {
+  "id": "e1500_swiss_confederation",
+  "epoca": "1500",
+  "nombre_en": "Swiss Confederation",
+  "nombre_es": "Confederación Suiza",
+  "qid": "Q39",
+  "anio": 1500,
+  "desde": 1294,
+  "hasta": 2024
+ },
+ {
+  "id": "e1500_pskov_republic",
+  "epoca": "1500",
+  "nombre_en": "Pskov Republic",
+  "nombre_es": "República de Pskov",
+  "qid": "Q317078",
+  "anio": 1500,
+  "desde": 1285,
+  "hasta": 1511
+ },
+ {
+  "id": "e1500_prome_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Prome Kingdom",
+  "nombre_es": "Reino de Prome",
+  "qid": "Q13576027",
+  "anio": 1500,
+  "desde": 1482,
+  "hasta": 1546
+ },
+ {
+  "id": "e1500_duchy_of_lorraine",
+  "epoca": "1500",
+  "nombre_en": "Duchy of Lorraine",
+  "nombre_es": "Ducado de Lorena",
+  "qid": "Q155019",
+  "anio": 1500,
+  "desde": 1431,
+  "hasta": 1768
+ },
+ {
+  "id": "e1500_electorate_of_trier",
+  "epoca": "1500",
+  "nombre_en": "Electorate of Trier",
+  "nombre_es": "Electorado de Tréveris",
+  "qid": "Q1794352",
+  "anio": 1500,
+  "desde": 1333,
+  "hasta": 1618
+ },
+ {
+  "id": "e1500_ryazan",
+  "epoca": "1500",
+  "nombre_en": "Ryazan",
+  "nombre_es": "Gran Ducado de Riazán",
+  "qid": "Q269109",
+  "anio": 1500,
+  "desde": 1453,
+  "hasta": 1520
+ },
+ {
+  "id": "e1500_county_of_nevers",
+  "epoca": "1500",
+  "nombre_en": "County of Nevers",
+  "nombre_es": "Condado de Nevers",
+  "qid": "Q2070440",
+  "anio": 1500,
+  "desde": 1010,
+  "hasta": 1520
+ },
+ {
+  "id": "e1500_sultanate_of_kedah",
+  "epoca": "1500",
+  "nombre_en": "Sultanate of Kedah",
+  "nombre_es": "Sultanato de Kedah",
+  "qid": "Q1317579",
+  "anio": 1500,
+  "desde": 1139,
+  "hasta": 1910
+ },
+ {
+  "id": "e1500_principality_of_mingrelia",
+  "epoca": "1500",
+  "nombre_en": "Principality of Mingrelia",
+  "nombre_es": "Principado de Mingrelia",
+  "qid": "Q2907860",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1810
+ },
+ {
+  "id": "e1500_republic_of_florence",
+  "epoca": "1500",
+  "nombre_en": "Republic of Florence",
+  "nombre_es": "República de Florencia",
+  "qid": "Q148540",
+  "anio": 1500,
+  "desde": 1260,
+  "hasta": 1737
+ },
+ {
+  "id": "e1500_jaffna_kingdom",
+  "epoca": "1500",
+  "nombre_en": "Jaffna kingdom",
+  "nombre_es": "Reino de Jaffna",
+  "qid": "Q1311219",
+  "anio": 1500,
+  "desde": 1314,
+  "hasta": 1594
+ },
+ {
+  "id": "e1500_kingdom_of_imereti",
+  "epoca": "1500",
+  "nombre_en": "Kingdom of Imereti",
+  "nombre_es": "Reino de Imericia",
+  "qid": "Q1069959",
+  "anio": 1500,
+  "desde": 1468,
+  "hasta": 1810
+ },
+ {
+  "id": "e1500_samudera_pasai_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Samudera Pasai Sultanate",
+  "nombre_es": "Sultanato de Samudera Pasai",
+  "qid": "Q3284315",
+  "anio": 1500,
+  "desde": 1272,
+  "hasta": 1520
+ },
+ {
+  "id": "e1500_demak_sultanate",
+  "epoca": "1500",
+  "nombre_en": "Demak Sultanate",
+  "nombre_es": "Sultanato de Demak",
+  "qid": "Q49322",
+  "anio": 1500,
+  "desde": 1475,
+  "hasta": 1551
+ }
+]
