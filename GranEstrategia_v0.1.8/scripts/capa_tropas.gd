@@ -25,7 +25,8 @@ const LoteScript := preload("res://scripts/lote_dibujo.gd")
 const ANCHO := 2400.0
 const ALTO_M := 28.0                 # alto de cada cuadro (píxeles de pantalla)
 const SEPARA := 3.0                  # hueco entre cuadros apilados
-const MAX_APILADOS := 4              # regimientos que se dibujan en una provincia (el resto se resume en «+N»)
+const MAX_APILADOS := 4              # regimientos que se dibujan en una provincia ELEGIDA (el resto se resume en «+N»)
+const ZOOM_TROPAS_PAIS := 2.4        # 0.1.8.52: con la cámara más lejos que esto, UN solo cuadro por país (el total de sus soldados); más cerca, uno por provincia
 const FUENTE_PX := 15
 const BANDERA_W := 30.0
 const BANDERA_H := 20.0
@@ -174,6 +175,9 @@ var _vision_clave: Array = []
 var _hostiles: PackedInt32Array = PackedInt32Array()   # pilas enemigas dentro del campo de visión, de más a menos soldados
 var n_hostiles := 0                 # cuadros de tropas enemigas dibujados en el último dibujo (para las pruebas)
 var _de_pais := {}                  # ID de país -> índices (en el mismo orden)
+var _tot_pais := {}                 # 0.1.8.52: ID de país -> soldados en sus pilas quietas (el cuadro único de «zoom lejos» le suma los que van en marcha)
+var _ancla_pais := {}               # ... y la pila donde se pone ese cuadro: la más cercana al centro de gravedad de sus tropas
+var n_cajas_pais := 0               # cuadros de país dibujados en el último dibujo (para las pruebas)
 
 
 func iniciar(m: Node, f: Font) -> void:
@@ -393,6 +397,19 @@ func _columna_hostil_visible(m: Dictionary) -> bool:
 	return false
 
 
+## Soldados con punto de millar a partir de 10.000 (900000 → «900.000»): en un cuadro, una cifra larga sin separar no se lee de un vistazo.
+static func fmt_sold(n: int) -> String:
+	var t := str(absi(n))
+	if t.length() < 5:
+		return str(n)
+	var out := ""
+	for i in range(t.length() - 1, -1, -1):
+		out = t[i] + out
+		if (t.length() - i) % 3 == 0 and i > 0:
+			out = "." + out
+	return ("-" if n < 0 else "") + out
+
+
 func _ancho_de_caja(txt: String, marcha := false) -> float:
 	return 5.0 + (13.0 if marcha else 0.0) + BANDERA_W + 6.0 + _ancho_txt(txt) + 6.0
 
@@ -447,11 +464,7 @@ func _preparar_pilas(ej) -> void:
 		var pi: int = p["pi"]
 		_pi[i] = pi
 		_pos[i] = red.centros[pi]
-		var w := 0.0
-		var visibles: int = mini((p["regs"] as Array).size(), MAX_APILADOS)
-		for j in visibles:
-			w = maxf(w, _ancho_de_caja(str(int(p["regs"][j][1]))))
-		_ancho_caja[i] = maxf(w, _ancho_de_caja("+99"))
+		_ancho_caja[i] = maxf(_ancho_de_caja(fmt_sold(int(p["total"]))), _ancho_de_caja("+99"))      # el total es la cifra más larga de la pila: sirve también si se abre en regimientos
 		if not por_prov.has(pi):
 			por_prov[pi] = []
 		por_prov[pi].append(i)
@@ -478,6 +491,32 @@ func _preparar_pilas(ej) -> void:
 			_de_pais[pa] = []
 		_de_pais[pa].append(i3)
 	_de_pi = por_prov
+	_tot_pais.clear()                                        # 0.1.8.52: total y pila-ancla de cada país (el cuadro único de «zoom lejos»)
+	_ancla_pais.clear()
+	for pa2 in _de_pais:
+		var lst: Array = _de_pais[pa2]
+		var base: Vector2 = red.centros[_pi[lst[0]]]
+		var tot_p := 0
+		var sx := 0.0
+		var sy := 0.0
+		for i4 in lst:
+			var t4 := int(_pilas[i4]["total"])
+			var c4: Vector2 = red.centros[_pi[i4]]
+			tot_p += t4
+			sx += (base.x + RedScript.dx_corto(base.x, c4.x)) * float(t4)
+			sy += c4.y * float(t4)
+		var ancla: int = lst[0]
+		if lst.size() > 1 and tot_p > 0:
+			var cen := Vector2(sx / float(tot_p), sy / float(tot_p))
+			var mejor := 1.0e18
+			for i5 in lst:
+				var c5: Vector2 = red.centros[_pi[i5]]
+				var d5 := Vector2(base.x + RedScript.dx_corto(base.x, c5.x), c5.y).distance_squared_to(cen)
+				if d5 < mejor:
+					mejor = d5
+					ancla = i5
+		_tot_pais[pa2] = tot_p
+		_ancla_pais[pa2] = ancla
 	PerfilScript.anotar(prof, "1d ordenar pilas", t_q)
 	_vision_clave = []                                       # las pilas cambiaron: hay que recalcular el campo de visión
 	ms_pilas = float(Time.get_ticks_usec() - t0) / 1000.0
@@ -686,6 +725,8 @@ static func compacto(n: int) -> String:
 
 
 func _ancho_txt(t: String) -> float:
+	if _anchos.size() > 3000:
+		_anchos.clear()                                    # los totales cambian a cada rato: la caché de anchos no puede crecer sin fin
 	if not _anchos.has(t):
 		_anchos[t] = fuente.get_string_size(t, HORIZONTAL_ALIGNMENT_LEFT, -1, FUENTE_PX).x
 	return float(_anchos[t])
@@ -740,6 +781,7 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 	n_dibujos_pilas += 1
 	_dib_pilas = []
 	n_marcas = 0
+	n_cajas_pais = 0
 	if main == null or main.mundo == null:
 		return
 	var ej = main.mundo.ejercito
@@ -781,6 +823,23 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 						break
 			if i_sel >= 0:
 				break
+	if main.camara.zoom.x < ZOOM_TROPAS_PAIS:                # 0.1.8.52: zoom lejos = UN cuadro por país con el total de sus soldados (sin tabla de regimientos)
+		_pintar_paises(ci, ej, vis, zr, k, vr, foco, fs, cx_vista, ancho_vista, copias, i_sel)
+		ci.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		_unir_dibujados()
+		ms_dibujo = float(Time.get_ticks_usec() - t0) / 1000.0
+		return
+	# Una pila se abre en regimientos SOLO si tiene alguno elegido; si no, es UN cuadro con su total (0.1.8.52: nada de 3 cuadros para 900.000 soldados).
+	var abiertas := {}
+	if i_sel >= 0:
+		abiertas[i_sel] = true
+	if not sel_regs.is_empty():
+		for i in n:
+			if vis.has(int(_pilas[i]["pais"])) or _enemigos.has(int(_pilas[i]["pais"])):
+				for rr in _pilas[i]["regs"]:
+					if sel_regs.has(int(rr[0])):
+						abiertas[i] = true
+						break
 	# Nombres de provincia que se leen ahora (rectángulos en píxeles «mundo × zoom real»): los cuadros se apartan de TODOS, no solo del suyo.
 	var nombres_vis: Array = []
 	if foco != "":
@@ -840,7 +899,7 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 			if c.y < vr.position.y - 60.0 / zr or c.y > vr.end.y + 60.0 / zr:
 				continue
 			var xb := c.x + roundf((cx_vista - c.x) / ANCHO) * ANCHO
-			var nb: int = mini((_pilas[i]["regs"] as Array).size(), MAX_APILADOS)
+			var nb: int = mini((_pilas[i]["regs"] as Array).size(), MAX_APILADOS) if abiertas.has(i) else 1
 			var alto_pila := float(nb) * ALTO_M + float(nb - 1) * SEPARA
 			var w := _ancho_caja[i]
 			for dxc in copias:
@@ -877,7 +936,8 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 		var pa := int(p["pais"])
 		var pais := String(_nombre_pais.get(pa, ""))
 		var regs: Array = p["regs"]
-		var nb2: int = mini(regs.size(), MAX_APILADOS)
+		var abierta: bool = abiertas.has(i2) or regs.size() == 1
+		var nb2: int = mini(regs.size(), MAX_APILADOS) if abierta else 1
 		var en_combate: bool = _combate.has(int(p["prov"]))
 		var w2 := _ancho_caja[i2]
 		var alto2 := float(nb2) * ALTO_M + float(nb2 - 1) * SEPARA
@@ -887,7 +947,11 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 			var es_sel: bool = int(rr[0]) == reg_sel or sel_regs.has(int(rr[0]))
 			var txt: String
 			var datos: Dictionary
-			if regs.size() > MAX_APILADOS and b == nb2 - 1:
+			if not abierta:                                   # UN cuadro con el total de la pila; al pulsarlo se abre el panel de órdenes de esa provincia
+				txt = fmt_sold(int(p["total"]))
+				datos = {"t": "mas", "prov": int(p["prov"]), "pais": pa, "n": regs.size(), "sold": int(p["total"])}
+				_encolar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, false, en_combate, false, not vis.has(pa))
+			elif regs.size() > MAX_APILADOS and b == nb2 - 1:
 				var resto := 0
 				for q in range(nb2 - 1, regs.size()):
 					resto += int(regs[q][1])
@@ -895,7 +959,7 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 				datos = {"t": "mas", "prov": int(p["prov"]), "pais": pa, "n": regs.size() - nb2 + 1, "sold": resto}
 				_encolar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, false, en_combate, true, not vis.has(pa))
 			else:
-				txt = str(int(rr[1]))
+				txt = fmt_sold(int(rr[1]))
 				datos = {"t": "reg", "reg": int(rr[0]), "prov": int(p["prov"]), "pais": pa, "sold": int(rr[1]), "pel": int(rr[2])}
 				_encolar_caja(ci, k, acept_c[j], _off[i2] + acept_dx[j], cy, w2, txt, pais, false, 0.0, es_sel, en_combate, false, not vis.has(pa))
 			var rect := Rect2(acept_c[j].x * zr + _off[i2] + acept_dx[j] - w2 * 0.5, acept_c[j].y * zr + cy - ALTO_M * 0.5, w2, ALTO_M)
@@ -910,6 +974,83 @@ func _pintar_pilas(ci: CanvasItem) -> void:
 	ci.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 	_unir_dibujados()
 	ms_dibujo = float(Time.get_ticks_usec() - t0) / 1000.0
+
+
+## CUADRO ÚNICO POR PAÍS (0.1.8.52). Con la cámara lejos (menos de ZOOM_TROPAS_PAIS) no se dibujan pilas ni regimientos: cada país con tropas a la vista tiene UN
+## cuadro con la bandera y el TOTAL de sus soldados (quietos y en marcha), puesto en la pila más cercana al centro de gravedad de su ejército. De los países en
+## guerra contigo solo cuenta lo que ves. Van de más a menos soldados; si un cuadro pisa a otro prueba un escalón arriba y uno abajo antes de rendirse (se ve al acercar).
+func _pintar_paises(ci: CanvasItem, ej, vis: PackedInt32Array, zr: float, k: float, vr: Rect2, foco: String, fs: float, cx_vista: float, ancho_vista: float, copias: Array, i_sel: int) -> void:
+	var en_marcha := {}
+	for mid in ej.marchas:
+		var m: Dictionary = ej.marchas[mid]
+		var pm := int(m["pais"])
+		if vis.has(pm):
+			en_marcha[pm] = int(en_marcha.get(pm, 0)) + int(ej.soldados_marcha(m))
+	var c_pa: Array = []                                     # candidatos: [país, pila-ancla, total, hostil]
+	for pa in vis:
+		if _ancla_pais.has(pa):
+			c_pa.append([int(pa), int(_ancla_pais[pa]), int(_tot_pais[pa]) + int(en_marcha.get(pa, 0)), false])
+	var hostiles := {}
+	for ih in _hostiles:                                     # ya vienen de más a menos soldados: la primera pila de cada país es su ancla
+		var ph := int(_pilas[ih]["pais"])
+		if vis.has(ph):
+			continue
+		if not hostiles.has(ph):
+			hostiles[ph] = [ph, int(ih), 0, true]
+		hostiles[ph][2] = int(hostiles[ph][2]) + int(_pilas[ih]["total"])
+	for ph2 in hostiles:
+		c_pa.append(hostiles[ph2])
+	var pa_sel := int(_pilas[i_sel]["pais"]) if i_sel >= 0 else -1
+	var claves: Array = []                                   # soldados (alto) e índice (bajo): ordenación nativa; el país con tropas elegidas va el primero
+	for j in c_pa.size():
+		var t_j := int(c_pa[j][2])
+		if int(c_pa[j][0]) == pa_sel:
+			t_j = 1 << 40
+		claves.append((t_j << 20) | j)
+	claves.sort()
+	var grid := {}
+	var n_hostil := 0
+	for q in range(claves.size() - 1, -1, -1):
+		var e: Array = c_pa[int(claves[q]) & 0xFFFFF]
+		var pa2 := int(e[0])
+		var i: int = int(e[1])
+		var tot := int(e[2])
+		if tot <= 0:
+			continue
+		var c: Vector2 = _pos[i]
+		if foco != "":
+			c = _vista(_pi[i], foco, fs)
+		if c.y < vr.position.y - 60.0 / zr or c.y > vr.end.y + 60.0 / zr:
+			continue
+		var pais := String(_nombre_pais.get(pa2, ""))
+		var txt := fmt_sold(tot)
+		var w := _ancho_de_caja(txt)
+		var xb := c.x + roundf((cx_vista - c.x) / ANCHO) * ANCHO
+		var en_combate := false
+		for ip in _de_pais.get(pa2, []):
+			if _combate.has(int(_pilas[ip]["prov"])):
+				en_combate = true
+				break
+		for dxc in copias:
+			var cx: float = xb + float(dxc)
+			if absf(cx - cx_vista) > ancho_vista * 0.5:
+				continue
+			for dy in [0.0, ALTO_M + SEPARA, -(ALTO_M + SEPARA)]:
+				var r := Rect2(cx * zr - w * 0.5, c.y * zr + float(dy) - ALTO_M * 0.5, w, ALTO_M)
+				if not _libre(r, grid):
+					continue
+				_ocupar(r.grow(2.0), grid)
+				_encolar_caja(ci, k, Vector2(cx, c.y), 0.0, float(dy), w, txt, pais, false, 0.0, pa2 == pa_sel, en_combate, false, bool(e[3]))
+				_dib_pilas.append([r, {"t": "pais", "pais": pa2, "prov": int(_pilas[i]["prov"]), "sold": tot}])
+				n_cajas_pais += 1
+				if bool(e[3]):
+					n_hostil += 1
+				break
+		if n_cajas_pais >= MAX_MARCAS:
+			break
+	_vaciar_cajas(ci, k)
+	n_marcas = n_cajas_pais
+	n_hostiles = n_hostil
 
 
 func _unir_dibujados() -> void:
@@ -1059,6 +1200,7 @@ func _calc_marchas() -> void:
 	_actualizar_vision(ej)
 	var frac := _frac_dia()
 	var tid_j := _tid_jugador()
+	var lejos: bool = main.camara.zoom.x < ZOOM_TROPAS_PAIS
 	var obs_rutas: bool = main.mundo.ve_todo() and ej.marchas.size() <= OBS_RUTAS_MAX        # observador: rutas de todas las columnas mientras no sean demasiadas
 	_limpiar_colores(ej)
 	for mid in ej.marchas:
@@ -1071,6 +1213,8 @@ func _calc_marchas() -> void:
 			hostil = true
 		var rid := int(m.get("reg", -1))
 		var es_sel: bool = (sel.get("t", "") == "marcha" and int(sel.get("id", -1)) == int(mid)) or (rid >= 0 and sel_regs.has(rid))
+		if lejos and pa != tid_j and not es_sel and not hostil:
+			continue                                      # 0.1.8.52: con la cámara lejos solo se ven tus columnas, las elegidas y las enemigas (las de los demás van dentro del número de su país)
 		var pm: Array = _pos_marcha(m, frac, foco, fs)
 		var pos: Vector2 = pm[0]
 		var txt := str(ej.soldados_marcha(m))

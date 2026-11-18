@@ -6565,6 +6565,18 @@ func abrir_ordenes(prov_tid: int, pais_tid := -1, reg := -1) -> void:
 	hud.tropas.mostrar(prov_tid, pais_tid, reg)
 
 
+## Abre el HUD en la pestaña Militar del país dado (ID de territorio): lo que pasa al pulsar su cuadro único de tropas con el mapa lejos.
+func abrir_militar_de(pais_tid: int) -> void:
+	if mundo == null or en_menu or hud == null:
+		return
+	var nombre: String = mundo.bd.nombre_de(pais_tid)
+	if not mundo.paises.has(nombre):
+		return
+	_limpiar_seleccion()
+	_seleccion_pais(nombre, String(mundo.paises[nombre].continente), ultimo_p)
+	hud.abrir_pestana("militar")
+
+
 ## Suelta lo que estaba elegido en el mapa (regimientos, destino a medias). Lo llama el HUD al cerrarse.
 func _soltar_seleccion_tropas() -> void:
 	cancelar_destino()
@@ -6606,6 +6618,8 @@ func _clic_tropas(pos: Vector2) -> bool:
 			abrir_ordenes(int(mk["prov"]), int(mk["pais"]), int(mk["reg"]))
 	elif tipo == "mas":
 		abrir_ordenes(int(mk["prov"]), int(mk["pais"]))
+	elif tipo == "pais":                                   # el cuadro único de «zoom lejos»: abre la pestaña Militar de ese país
+		abrir_militar_de(int(mk["pais"]))
 	elif tipo == "marcha":
 		var m: Dictionary = mundo.ejercito.marchas.get(int(mk["id"]), {})
 		if not m.is_empty():
