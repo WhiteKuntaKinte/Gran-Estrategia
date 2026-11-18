@@ -1,0 +1,44 @@
+name: Segunda pasada de banderas (Commons)
+
+# Para los estados que Wikidata no resolvió (resultado.json del Release «datos-banderas»), busca en Wikimedia Commons banderas, escudos y estandartes
+# de dominio público por nombre y publica hojas de contacto en el Release «datos-banderas-cand». Se lanza al subir herramientas/banderas/disparar2.txt.
+on:
+  push:
+    branches: [v0.1.8-development]
+    paths: ['GranEstrategia_v0.1.8/herramientas/banderas/disparar2.txt']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  banderas2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v0.1.8-development
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: Bajar resultado.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download datos-banderas --repo "$GITHUB_REPOSITORY" --pattern resultado.json --dir /tmp/res
+      - name: Buscar
+        working-directory: GranEstrategia_v0.1.8/herramientas/banderas
+        run: |
+          python3 buscar_banderas_2.py /tmp/res/resultado.json /tmp/cand2
+          (cd /tmp/cand2 && zip -qr /tmp/hojas_banderas.zip hojas && ls -l /tmp/hojas_banderas.zip)
+      - name: Publicar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete datos-banderas-cand --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create datos-banderas-cand /tmp/hojas_banderas.zip /tmp/cand2/candidatos_banderas.json \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Candidatos de banderas (segunda pasada)" \
+            --notes "Hojas de contacto con banderas, escudos y estandartes de dominio público para los estados sin bandera en Wikidata. No es parte del juego."
